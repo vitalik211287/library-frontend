@@ -3,6 +3,7 @@ import "./App.css";
 import CatalogPage from "./pages/CatalogPage/CatalogPage.jsx";
 import AddBookPage from "./pages/AddBookPage/AddBookPage.jsx";
 import { Toaster } from "react-hot-toast";
+import ThemeToggle from "./components/ThemeToggle/ThemeToggle";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Toaster position="top-right" />
         {/* твій Router / сторінки */}
       </>
+      <ThemeToggle />
       <Routes>
         <Route path="/" element={<CatalogPage />} />
         <Route path="/add" element={<AddBookPage />} />
