@@ -80,6 +80,8 @@ function CatalogPage() {
           <option value="title">За назвою</option>
           <option value="author">За автором</option>
           <option value="year">За роком</option>
+          <option value="genre">За жанром</option>
+          <option value="isbn">За ISBN</option>
         </select>
       </div>
 
