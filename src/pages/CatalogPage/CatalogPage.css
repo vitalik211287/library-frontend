@@ -1,0 +1,264 @@
+.catalog-page {
+  width: 100%;
+  max-width: 1500px;
+  margin: 0 auto;
+  padding: 32px;
+  box-sizing: border-box;
+
+  background: #ffffff;
+  border-radius: 16px;
+}
+
+/* Заголовок */
+
+.catalog-page h1 {
+  margin: 0 0 10px;
+
+  font-size: 32px;
+  line-height: 1.2;
+}
+
+.books-count {
+  margin: 0 0 20px;
+
+  font-size: 15px;
+  color: #555555;
+}
+
+/* Пошук */
+
+.catalog-search {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 160px;
+  gap: 12px;
+
+  margin-bottom: 28px;
+}
+
+.catalog-search__input {
+  position: relative;
+  min-width: 0;
+}
+
+.catalog-search__input input {
+  width: 100%;
+  height: 48px;
+  box-sizing: border-box;
+
+  padding: 0 52px 0 16px;
+
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  font-family: inherit;
+  font-size: 16px;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.catalog-search__input input:hover {
+  border-color: #999999;
+}
+
+.catalog-search__input input:focus {
+  outline: none;
+
+  border-color: #555555;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+}
+
+/* Лупа */
+
+.catalog-search__input svg {
+  position: absolute;
+
+  top: 50%;
+  right: 16px;
+
+  width: 20px;
+  height: 20px;
+
+  transform: translateY(-50%);
+
+  fill: none;
+  stroke: #777777;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  pointer-events: none;
+}
+
+/* Select */
+
+.catalog-search select {
+  width: 100%;
+  height: 48px;
+
+  box-sizing: border-box;
+
+  padding: 0 12px;
+
+  border: 1px solid #d0d0d0;
+  border-radius: 10px;
+
+  background: #ffffff;
+
+  font-family: inherit;
+  font-size: 14px;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.catalog-search select:hover {
+  border-color: #999999;
+}
+
+.catalog-search select:focus {
+  outline: none;
+
+  border-color: #555555;
+  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+}
+
+/* Сітка книг */
+
+.books-grid {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+
+  gap: 20px;
+}
+
+
+/* Картка книги */
+
+.book-card {
+  min-width: 0;
+  padding: 14px;
+
+  background: #ffffff;
+  border: 1px solid #dddddd;
+  border-radius: 10px;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.book-card:hover {
+  transform: translateY(-4px);
+  border-color: #aaaaaa;
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+}
+
+/* Обкладинка */
+
+.book-cover {
+  display: block;
+
+  width: 100%;
+  height: 300px;
+
+  object-fit: cover;
+
+  margin-bottom: 14px;
+
+  border-radius: 6px;
+}
+
+/* Назва */
+
+.book-card h2 {
+  margin: 0 0 10px;
+
+  font-size: 17px;
+  line-height: 1.25;
+
+  overflow-wrap: anywhere;
+}
+
+/* Дані книги */
+
+.book-card p {
+  margin: 5px 0;
+
+  font-size: 14px;
+  line-height: 1.35;
+
+  overflow-wrap: anywhere;
+}
+
+/* Повідомлення про помилку */
+
+.catalog-message {
+  margin-bottom: 20px;
+
+  padding: 12px 14px;
+
+  border-radius: 8px;
+
+  background: #fff1f1;
+  color: #b42318;
+
+  font-size: 14px;
+}
+
+/* Адаптивність */
+
+@media (max-width: 1250px) {
+  .books-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 1000px) {
+  .books-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 750px) {
+  .catalog-page {
+    padding: 20px;
+  }
+
+  .catalog-page h1 {
+    font-size: 28px;
+  }
+
+  .catalog-search {
+    grid-template-columns: 1fr;
+  }
+
+  .books-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+
+@media (max-width: 480px) {
+  .catalog-page {
+    padding: 16px;
+  }
+
+  .books-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .book-cover {
+    height: auto;
+    max-height: 420px;
+  }
+}
