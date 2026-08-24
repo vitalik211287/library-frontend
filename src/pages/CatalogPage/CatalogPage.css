@@ -4,7 +4,9 @@
   padding: 16px;
   box-sizing: border-box;
 
-  background: #ffffff;
+  background: var(--bg);
+  color: var(--text);
+
   border-radius: 12px;
 }
 
@@ -15,13 +17,15 @@
 
   font-size: 28px;
   line-height: 1.2;
+
+  color: var(--text-h);
 }
 
 .books-count {
   margin: 0 0 20px;
 
   font-size: 15px;
-  color: #555555;
+  color: var(--text);
 }
 
 /* Пошук */
@@ -52,30 +56,36 @@
 
   padding: 0 52px 0 16px;
 
-  border: 1px solid #d0d0d0;
+  border: 1px solid #000000;
   border-radius: 10px;
 
-  background: #ffffff;
+  background: var(--surface);
+  color: var(--text-h);
 
   font-family: inherit;
   font-size: 16px;
 
   transition:
     border-color 0.2s ease,
-    box-shadow 0.2s ease;
+    box-shadow 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.catalog-search__input input::placeholder {
+  color: var(--text);
 }
 
 .catalog-search__input input:hover {
-  border-color: #999999;
+  border-color: #666666;
 }
 
 .catalog-search__input input:focus {
   outline: none;
 
-  border-color: #555555;
+  border-color: var(--accent);
 
-  box-shadow:
-    0 0 0 3px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 0 0 3px var(--accent-bg);
 }
 
 /* Лупа */
@@ -92,7 +102,7 @@
   transform: translateY(-50%);
 
   fill: none;
-  stroke: #777777;
+  stroke: var(--text);
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
@@ -112,10 +122,11 @@
 
   padding: 0 12px;
 
-  border: 1px solid #d0d0d0;
+  border: 1px solid #000000;
   border-radius: 10px;
 
-  background: #ffffff;
+  background: var(--surface);
+  color: var(--text-h);
 
   font-family: inherit;
   font-size: 14px;
@@ -124,20 +135,33 @@
 
   transition:
     border-color 0.2s ease,
-    box-shadow 0.2s ease;
+    box-shadow 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .catalog-search select:hover {
-  border-color: #999999;
+  border-color: #666666;
 }
 
 .catalog-search select:focus {
   outline: none;
 
-  border-color: #555555;
+  border-color: var(--accent);
 
-  box-shadow:
-    0 0 0 3px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+/* Темна тема для input та select */
+
+:root.dark .catalog-search__input input,
+:root.dark .catalog-search select {
+  border-color: #6b6e7d;
+}
+
+:root.dark .catalog-search__input input:hover,
+:root.dark .catalog-search select:hover {
+  border-color: #8b8e9d;
 }
 
 /* Сітка */
@@ -156,9 +180,10 @@
 
   padding: 14px;
 
-  background: #ffffff;
+  background: var(--surface);
+  color: var(--text);
 
-  border: 1px solid #dddddd;
+  border: 1px solid var(--border);
   border-radius: 10px;
 
   cursor: pointer;
@@ -166,16 +191,16 @@
   transition:
     transform 0.2s ease,
     box-shadow 0.2s ease,
-    border-color 0.2s ease;
+    border-color 0.2s ease,
+    background-color 0.2s ease;
 }
 
 .book-card:hover {
   transform: translateY(-3px);
 
-  border-color: #aaaaaa;
+  border-color: var(--border-hover);
 
-  box-shadow:
-    0 8px 22px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow);
 }
 
 /* Обкладинка */
@@ -194,7 +219,7 @@
 
   border-radius: 6px;
 
-  background: #f7f7f7;
+  background: var(--surface-secondary);
 }
 
 /* Назва */
@@ -204,6 +229,8 @@
 
   font-size: 18px;
   line-height: 1.25;
+
+  color: var(--text-h);
 
   overflow-wrap: anywhere;
 }
@@ -215,6 +242,8 @@
 
   font-size: 14px;
   line-height: 1.35;
+
+  color: var(--text);
 
   overflow-wrap: anywhere;
 }
@@ -228,8 +257,8 @@
 
   border-radius: 8px;
 
-  background: #fff1f1;
-  color: #b42318;
+  background: var(--error-bg, #fff1f1);
+  color: var(--error-text, #b42318);
 
   font-size: 14px;
 }

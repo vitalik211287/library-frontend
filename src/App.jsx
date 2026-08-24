@@ -7,7 +7,7 @@ import ThemeToggle from "./components/ThemeToggle/ThemeToggle";
 
 function App() {
   return (
-    <div className="container">
+    <>
       <header className="header">
         <nav className="nav">
           <NavLink to="/">Каталог</NavLink>
@@ -23,7 +23,7 @@ function App() {
         <Route path="/" element={<CatalogPage />} />
         <Route path="/add" element={<AddBookPage />} />
       </Routes>
-    </div>
+    </>
   );
 }
 
