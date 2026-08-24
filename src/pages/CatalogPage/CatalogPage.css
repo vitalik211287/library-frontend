@@ -1,12 +1,11 @@
 .catalog-page {
   width: 100%;
-  max-width: 1500px;
   margin: 0 auto;
-  padding: 32px;
+  padding: 16px;
   box-sizing: border-box;
 
   background: #ffffff;
-  border-radius: 16px;
+  border-radius: 12px;
 }
 
 /* Заголовок */
@@ -14,7 +13,7 @@
 .catalog-page h1 {
   margin: 0 0 10px;
 
-  font-size: 32px;
+  font-size: 28px;
   line-height: 1.2;
 }
 
@@ -29,20 +28,26 @@
 
 .catalog-search {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 160px;
-  gap: 12px;
+  grid-template-columns: 1fr;
+  gap: 10px;
 
-  margin-bottom: 28px;
+  width: 100%;
+  margin-bottom: 24px;
 }
 
 .catalog-search__input {
   position: relative;
+
+  width: 100%;
   min-width: 0;
 }
 
 .catalog-search__input input {
+  display: block;
+
   width: 100%;
   height: 48px;
+
   box-sizing: border-box;
 
   padding: 0 52px 0 16px;
@@ -68,7 +73,9 @@
   outline: none;
 
   border-color: #555555;
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+
+  box-shadow:
+    0 0 0 3px rgba(0, 0, 0, 0.06);
 }
 
 /* Лупа */
@@ -93,9 +100,11 @@
   pointer-events: none;
 }
 
-/* Select */
+/* Сортування */
 
 .catalog-search select {
+  display: block;
+
   width: 100%;
   height: 48px;
 
@@ -126,26 +135,29 @@
   outline: none;
 
   border-color: #555555;
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+
+  box-shadow:
+    0 0 0 3px rgba(0, 0, 0, 0.06);
 }
 
-/* Сітка книг */
+/* Сітка */
 
 .books-grid {
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: 1fr;
 
-  gap: 20px;
+  gap: 16px;
 }
 
-
-/* Картка книги */
+/* Картка */
 
 .book-card {
   min-width: 0;
+
   padding: 14px;
 
   background: #ffffff;
+
   border: 1px solid #dddddd;
   border-radius: 10px;
 
@@ -158,9 +170,12 @@
 }
 
 .book-card:hover {
-  transform: translateY(-4px);
+  transform: translateY(-3px);
+
   border-color: #aaaaaa;
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.12);
+
+  box-shadow:
+    0 8px 22px rgba(0, 0, 0, 0.1);
 }
 
 /* Обкладинка */
@@ -169,13 +184,17 @@
   display: block;
 
   width: 100%;
-  height: 300px;
+  height: auto;
 
-  object-fit: cover;
+  max-height: 520px;
+
+  object-fit: contain;
 
   margin-bottom: 14px;
 
   border-radius: 6px;
+
+  background: #f7f7f7;
 }
 
 /* Назва */
@@ -183,13 +202,13 @@
 .book-card h2 {
   margin: 0 0 10px;
 
-  font-size: 17px;
+  font-size: 18px;
   line-height: 1.25;
 
   overflow-wrap: anywhere;
 }
 
-/* Дані книги */
+/* Інформація */
 
 .book-card p {
   margin: 5px 0;
@@ -200,7 +219,7 @@
   overflow-wrap: anywhere;
 }
 
-/* Повідомлення про помилку */
+/* Помилка */
 
 .catalog-message {
   margin-bottom: 20px;
@@ -215,31 +234,11 @@
   font-size: 14px;
 }
 
-/* Адаптивність */
+/* TABLET */
 
-@media (max-width: 1250px) {
-  .books-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 1000px) {
-  .books-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
-
-@media (max-width: 750px) {
+@media (min-width: 600px) {
   .catalog-page {
     padding: 20px;
-  }
-
-  .catalog-page h1 {
-    font-size: 28px;
-  }
-
-  .catalog-search {
-    grid-template-columns: 1fr;
   }
 
   .books-grid {
@@ -247,18 +246,58 @@
   }
 }
 
-
-@media (max-width: 480px) {
+@media (min-width: 768px) {
   .catalog-page {
-    padding: 16px;
+    padding: 24px;
+  }
+
+  .catalog-search {
+    grid-template-columns: minmax(0, 1fr) 160px;
+    gap: 12px;
   }
 
   .books-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 18px;
   }
 
   .book-cover {
-    height: auto;
-    max-height: 420px;
+    height: 300px;
+
+    object-fit: cover;
+
+    background: transparent;
+  }
+}
+
+/* DESKTOP */
+
+@media (min-width: 1100px) {
+  .catalog-page {
+    max-width: 1500px;
+
+    padding: 32px;
+
+    border-radius: 16px;
+  }
+
+  .catalog-page h1 {
+    font-size: 32px;
+  }
+
+  .catalog-search {
+    margin-bottom: 28px;
+  }
+
+  .books-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+
+    gap: 20px;
+  }
+}
+
+@media (min-width: 1300px) {
+  .books-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 }

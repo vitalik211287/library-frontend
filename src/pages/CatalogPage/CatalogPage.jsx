@@ -58,7 +58,30 @@ function CatalogPage() {
 
       {message && <p className="catalog-message">{message}</p>}
 
-      <div className="catalog-search">{/* твій пошук */}</div>
+      <div className="catalog-search">
+        <div className="catalog-search__input">
+          <input
+            type="text"
+            placeholder="Пошук..."
+            value={search}
+            onChange={(event) => setSearch(event.target.value)}
+          />
+
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <circle cx="11" cy="11" r="7" />
+            <path d="M20 20L16.5 16.5" />
+          </svg>
+        </div>
+
+        <select
+          value={searchBy}
+          onChange={(event) => setSearchBy(event.target.value)}
+        >
+          <option value="title">За назвою</option>
+          <option value="author">За автором</option>
+          <option value="year">За роком</option>
+        </select>
+      </div>
 
       <div className="books-grid">
         {filteredBooks.map((book) => (
