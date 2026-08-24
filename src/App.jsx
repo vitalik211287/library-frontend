@@ -8,15 +8,17 @@ import ThemeToggle from "./components/ThemeToggle/ThemeToggle";
 function App() {
   return (
     <div className="container">
-      <nav>
-        <NavLink to="/">Каталог</NavLink>
-        <NavLink to="/add">Додати книгу</NavLink>
-      </nav>
-      <>
-        <Toaster position="top-right" />
-        {/* твій Router / сторінки */}
-      </>
-      <ThemeToggle />
+      <header className="header">
+        <nav className="nav">
+          <NavLink to="/">Каталог</NavLink>
+          <NavLink to="/add">Додати книгу</NavLink>
+        </nav>
+
+        <ThemeToggle />
+      </header>
+
+      <Toaster position="top-right" />
+
       <Routes>
         <Route path="/" element={<CatalogPage />} />
         <Route path="/add" element={<AddBookPage />} />
