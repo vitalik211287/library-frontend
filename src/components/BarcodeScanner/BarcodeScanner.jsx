@@ -44,34 +44,25 @@ function BarcodeScanner({ onScan, onClose }) {
   }, []);
 
   const { ref } = useZxing({
-    deviceId: selectedCamera || undefined,
+    constraints: {
+      video: {
+        facingMode: {
+          ideal: "environment",
+        },
+      },
+    },
 
     formats: ["ean_13"],
 
-    tryHarder: true,
-    trySkew: true,
-
     onDecodeResult(result) {
-      console.log("Результат сканування:", result);
-
       const isbn = result.rawValue;
 
-      if (!isbn) {
-        return;
-      }
-
-      console.log("Знайдений ISBN:", isbn);
-
-      if (/^97[89]\d{10}$/.test(isbn)) {
+      if (isbn) {
         onScan(isbn);
       }
     },
-
-    onError(error) {
-      console.error("Помилка сканера:", error);
-    },
   });
-
+  
   return (
     <div className="scanner-overlay" onClick={onClose}>
       <div
@@ -106,12 +97,7 @@ function BarcodeScanner({ onScan, onClose }) {
         )}
 
         <div className="scanner-camera">
-          <video
-            ref={ref}
-            className="scanner-video"
-            muted
-            playsInline
-          />
+          <video ref={ref} className="scanner-video" muted playsInline />
 
           <div className="scanner-frame" />
         </div>
