@@ -10,9 +10,8 @@ function BarcodeScanner({ onScan, onClose }) {
     const getCameras = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: "environment",
-          },
+          video: true,
+          audio: false,
         });
 
         stream.getTracks().forEach((track) => track.stop());
@@ -44,25 +43,35 @@ function BarcodeScanner({ onScan, onClose }) {
   }, []);
 
   const { ref } = useZxing({
-    constraints: {
-      video: {
-        facingMode: {
-          ideal: "environment",
-        },
-      },
-    },
+    paused: !selectedCamera,
+
+    deviceId: selectedCamera,
 
     formats: ["ean_13"],
 
+    trySkew: true,
+
+    timeBetweenDecodingAttempts: 150,
+
     onDecodeResult(result) {
+      console.log("Знайдено штрихкод:", result);
+
       const isbn = result.rawValue;
 
-      if (isbn) {
+      if (isbn?.length === 13) {
         onScan(isbn);
       }
     },
+
+    onDecodeError(error) {
+      console.error("Помилка декодування:", error);
+    },
+
+    onError(error) {
+      console.error("Помилка камери / ZXing:", error);
+    },
   });
-  
+
   return (
     <div className="scanner-overlay" onClick={onClose}>
       <div
@@ -86,10 +95,15 @@ function BarcodeScanner({ onScan, onClose }) {
           <select
             className="scanner-camera-select"
             value={selectedCamera}
-            onChange={(event) => setSelectedCamera(event.target.value)}
+            onChange={(event) =>
+              setSelectedCamera(event.target.value)
+            }
           >
             {cameras.map((camera, index) => (
-              <option key={camera.deviceId} value={camera.deviceId}>
+              <option
+                key={camera.deviceId}
+                value={camera.deviceId}
+              >
                 {camera.label || `Камера ${index + 1}`}
               </option>
             ))}
@@ -97,7 +111,12 @@ function BarcodeScanner({ onScan, onClose }) {
         )}
 
         <div className="scanner-camera">
-          <video ref={ref} className="scanner-video" muted playsInline />
+          <video
+            ref={ref}
+            className="scanner-video"
+            muted
+            playsInline
+          />
 
           <div className="scanner-frame" />
         </div>
