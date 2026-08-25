@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { useZxing } from "react-zxing";
-import { BarcodeFormat, DecodeHintType } from "@zxing/library";
 import "./BarcodeScanner.css";
 
 function BarcodeScanner({ onScan, onClose }) {
@@ -10,10 +9,10 @@ function BarcodeScanner({ onScan, onClose }) {
   useEffect(() => {
     const getCameras = async () => {
       try {
-        // Спочатку просимо доступ до камери,
-        // щоб браузер показав назви пристроїв
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
+          video: {
+            facingMode: "environment",
+          },
         });
 
         stream.getTracks().forEach((track) => track.stop());
@@ -26,14 +25,15 @@ function BarcodeScanner({ onScan, onClose }) {
 
         setCameras(videoDevices);
 
-        // За замовчуванням беремо останню задню камеру
         if (videoDevices.length > 0) {
-          const backCamera =
-            videoDevices.find((camera) =>
-              camera.label.toLowerCase().includes("back"),
-            ) || videoDevices[videoDevices.length - 1];
+          const backCameras = videoDevices.filter((camera) =>
+            camera.label.toLowerCase().includes("back"),
+          );
 
-          setSelectedCamera(backCamera.deviceId);
+          const defaultCamera =
+            backCameras[0] || videoDevices[videoDevices.length - 1];
+
+          setSelectedCamera(defaultCamera.deviceId);
         }
       } catch (error) {
         console.error("Помилка отримання камер:", error);
@@ -43,45 +43,32 @@ function BarcodeScanner({ onScan, onClose }) {
     getCameras();
   }, []);
 
-  const hints = new Map();
-
-  hints.set(DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.EAN_13]);
-
-  hints.set(DecodeHintType.TRY_HARDER, true);
-
   const { ref } = useZxing({
-    constraints: {
-      video: selectedCamera
-        ? {
-            deviceId: {
-              exact: selectedCamera,
-            },
-          }
-        : {
-            facingMode: "environment",
-          },
-    },
+    deviceId: selectedCamera || undefined,
 
-    hints,
+    formats: ["ean_13"],
+
+    tryHarder: true,
+    trySkew: true,
 
     onDecodeResult(result) {
-      const isbn = result.getText();
+      console.log("Результат сканування:", result);
 
-      console.log("Знайдено штрихкод:", isbn);
+      const isbn = result.rawValue;
 
-      // ISBN-13 повинен містити 13 цифр
-      if (/^\d{13}$/.test(isbn)) {
+      if (!isbn) {
+        return;
+      }
+
+      console.log("Знайдений ISBN:", isbn);
+
+      if (/^97[89]\d{10}$/.test(isbn)) {
         onScan(isbn);
       }
     },
 
-    onDecodeError(error) {
-      // NotFoundException виникає постійно,
-      // поки штрихкод ще не знайдено.
-      // Тому її в консоль не виводимо.
-      if (error?.name !== "NotFoundException") {
-        console.error("Помилка сканування:", error);
-      }
+    onError(error) {
+      console.error("Помилка сканера:", error);
     },
   });
 
@@ -119,7 +106,12 @@ function BarcodeScanner({ onScan, onClose }) {
         )}
 
         <div className="scanner-camera">
-          <video ref={ref} className="scanner-video" muted playsInline />
+          <video
+            ref={ref}
+            className="scanner-video"
+            muted
+            playsInline
+          />
 
           <div className="scanner-frame" />
         </div>
