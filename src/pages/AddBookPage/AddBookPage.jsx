@@ -212,7 +212,8 @@ function AddBookPage() {
         );
 
         if (!coverResponse.ok) {
-          const errorMessage = await getApiErrorMessage(coverResponse);
+          const errorMessage =
+            await getApiErrorMessage(coverResponse);
 
           toast.error(
             `Книгу додано, але обкладинку не завантажено: ${errorMessage}`,
@@ -241,34 +242,36 @@ function AddBookPage() {
       <h1>Додати книгу</h1>
 
       <form className="isbn-search" onSubmit={handleSubmit}>
-        <input
-          type="text"
-          placeholder="Введіть ISBN"
-          value={isbn}
-          onChange={(event) => setIsbn(event.target.value)}
-        />
+        <div className="isbn-search__field">
+          <input
+            type="text"
+            placeholder="Введіть ISBN"
+            value={isbn}
+            onChange={(event) => setIsbn(event.target.value)}
+          />
 
-        <button
-          type="submit"
-          className="isbn-search__button"
-          aria-label="Знайти книгу"
-          title="Знайти книгу"
-        >
-          <svg
-            viewBox="0 0 24 24"
-            width="20"
-            height="20"
-            aria-hidden="true"
+          <button
+            type="submit"
+            className="isbn-search__button"
+            aria-label="Знайти книгу"
+            title="Знайти книгу"
           >
-            <path
-              d="M21 21l-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-            />
-          </svg>
-        </button>
+            <svg
+              viewBox="0 0 24 24"
+              width="22"
+              height="22"
+              aria-hidden="true"
+            >
+              <path
+                d="M21 21l-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
+            </svg>
+          </button>
+        </div>
 
         <button
           type="button"
@@ -277,7 +280,37 @@ function AddBookPage() {
           aria-label="Сканувати ISBN"
           title="Сканувати ISBN"
         >
-          📷
+          <svg
+            viewBox="0 0 24 24"
+            width="24"
+            height="24"
+            aria-hidden="true"
+          >
+            <path
+              d="M4 7V5a1 1 0 0 1 1-1h2M17 4h2a1 1 0 0 1 1 1v2M20 17v2a1 1 0 0 1-1 1h-2M7 20H5a1 1 0 0 1-1-1v-2"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+            />
+
+            <rect
+              x="7"
+              y="8"
+              width="10"
+              height="8"
+              rx="1"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+            />
+
+            <path
+              d="M9 10v4M11 10v4M13 10v4M15 10v4"
+              stroke="currentColor"
+              strokeWidth="1.5"
+            />
+          </svg>
         </button>
       </form>
 
@@ -405,7 +438,10 @@ function AddBookPage() {
             </label>
 
             <div className="book-actions">
-              <button type="button" onClick={handleAddBook}>
+              <button
+                type="button"
+                onClick={handleAddBook}
+              >
                 Додати в бібліотеку
               </button>
             </div>
@@ -416,19 +452,28 @@ function AddBookPage() {
       <button
         className="manual-toggle"
         type="button"
-        onClick={() => setManualMode((current) => !current)}
+        onClick={() =>
+          setManualMode((current) => !current)
+        }
       >
-        {manualMode ? "Закрити ручне додавання" : "Додати вручну"}
+        {manualMode
+          ? "Закрити ручне додавання"
+          : "Додати вручну"}
       </button>
 
       {manualMode && (
-        <form className="manual-form" onSubmit={handleManualAdd}>
+        <form
+          className="manual-form"
+          onSubmit={handleManualAdd}
+        >
           <input
             type="text"
             name="isbn"
             placeholder="ISBN"
             value={isbn}
-            onChange={(event) => setIsbn(event.target.value)}
+            onChange={(event) =>
+              setIsbn(event.target.value)
+            }
           />
 
           <input

@@ -25,13 +25,22 @@
 ========================= */
 
 .isbn-search {
-  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 10px;
 
   width: 100%;
   margin-bottom: 32px;
 }
 
-.isbn-search input {
+.isbn-search__field {
+  position: relative;
+
+  flex: 1;
+  min-width: 0;
+}
+
+.isbn-search__field input {
   width: 100%;
   height: 48px;
 
@@ -55,15 +64,15 @@
     color 0.2s ease;
 }
 
-.isbn-search input::placeholder {
+.isbn-search__field input::placeholder {
   color: var(--text);
 }
 
-.isbn-search input:hover {
+.isbn-search__field input:hover {
   border-color: #666666;
 }
 
-.isbn-search input:focus {
+.isbn-search__field input:focus {
   outline: none;
 
   border-color: var(--accent);
@@ -71,11 +80,11 @@
   box-shadow: 0 0 0 3px var(--accent-bg);
 }
 
-:root.dark .isbn-search input {
+:root.dark .isbn-search__field input {
   border-color: #6b6e7d;
 }
 
-:root.dark .isbn-search input:hover {
+:root.dark .isbn-search__field input:hover {
   border-color: #8b8e9d;
 }
 
@@ -85,16 +94,16 @@
   position: absolute;
 
   top: 50%;
-  right: 12px;
-
-  width: 30px;
-  height: 30px;
-
-  padding: 0;
+  right: 10px;
 
   display: flex;
   align-items: center;
   justify-content: center;
+
+  width: 34px;
+  height: 34px;
+
+  padding: 0;
 
   transform: translateY(-50%);
 
@@ -127,10 +136,10 @@
 }
 
 .isbn-search__button svg {
-  width: 20px;
-  height: 20px;
-
   display: block;
+
+  width: 22px;
+  height: 22px;
 
   fill: none;
   stroke: currentColor;
@@ -138,6 +147,12 @@
   stroke-width: 2;
   stroke-linecap: round;
   stroke-linejoin: round;
+}
+
+/* Сканер: десктоп */
+
+.isbn-scan__button {
+  display: none;
 }
 
 /* =========================
@@ -168,8 +183,6 @@
 
   border-radius: 10px;
 }
-
-/* Якщо немає обкладинки */
 
 .no-cover {
   width: 100%;
@@ -337,8 +350,6 @@
   transform: scale(0.98);
 }
 
-/* Кнопки в темній темі */
-
 :root.dark .book-actions button,
 :root.dark .manual-toggle,
 :root.dark .manual-form button {
@@ -495,6 +506,64 @@
 }
 
 /* =========================
+   TABLET + MOBILE SCANNER
+========================= */
+
+@media (max-width: 1024px) {
+  .isbn-scan__button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    flex: 0 0 48px;
+
+    width: 48px;
+    height: 48px;
+
+    padding: 0;
+
+    border: 1px solid var(--border);
+    border-radius: 10px;
+
+    background: var(--surface);
+    color: var(--text-h);
+
+    cursor: pointer;
+
+    transition:
+      border-color 0.2s ease,
+      background-color 0.2s ease,
+      color 0.2s ease,
+      transform 0.15s ease;
+  }
+
+  .isbn-scan__button:hover {
+    border-color: var(--border-hover);
+    background: var(--surface-secondary);
+  }
+
+  .isbn-scan__button:active {
+    transform: scale(0.94);
+  }
+
+  .isbn-scan__button:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+  }
+
+  .isbn-scan__button svg {
+    width: 24px;
+    height: 24px;
+
+    fill: none;
+    stroke: currentColor;
+
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+}
+
+/* =========================
    TABLET
 ========================= */
 
@@ -527,6 +596,21 @@
     font-size: 28px;
   }
 
+  .isbn-search {
+    gap: 8px;
+  }
+
+  .isbn-search__field input {
+    height: 48px;
+  }
+
+  .isbn-scan__button {
+    flex-basis: 48px;
+
+    width: 48px;
+    height: 48px;
+  }
+
   .book-preview {
     grid-template-columns: 1fr;
   }
@@ -548,26 +632,27 @@
     grid-column: 1;
   }
 }
-.isbn-scan__button {
-  display: flex;
-  align-items: center;
-  justify-content: center;
 
-  min-width: 44px;
-  height: 44px;
+/* =========================
+   SMALL MOBILE
+========================= */
 
-  padding: 0 12px;
+@media (max-width: 420px) {
+  .add-book-page {
+    padding: 16px;
+  }
 
-  border: 1px solid var(--border);
-  border-radius: 10px;
+  .add-book-page h1 {
+    font-size: 26px;
+  }
 
-  background: var(--surface);
-  color: var(--text);
+  .isbn-search__field input {
+    padding-left: 14px;
 
-  font-size: 20px;
-  cursor: pointer;
-}
+    font-size: 15px;
+  }
 
-.isbn-scan__button:hover {
-  border-color: var(--border-hover);
+  .book-preview__cover {
+    width: 160px;
+  }
 }
