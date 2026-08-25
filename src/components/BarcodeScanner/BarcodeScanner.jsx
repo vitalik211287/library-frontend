@@ -1,16 +1,18 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useZxing } from "react-zxing";
 import "./BarcodeScanner.css";
 
 function BarcodeScanner({ onScan, onClose }) {
-  const [cameras, setCameras] = useState([]);
+  const [backCameras, setBackCameras] = useState([]);
   const [selectedCamera, setSelectedCamera] = useState("");
 
   useEffect(() => {
     const getCameras = async () => {
       try {
         const stream = await navigator.mediaDevices.getUserMedia({
-          video: true,
+          video: {
+            facingMode: "environment",
+          },
           audio: false,
         });
 
@@ -22,17 +24,41 @@ function BarcodeScanner({ onScan, onClose }) {
           (device) => device.kind === "videoinput",
         );
 
-        setCameras(videoDevices);
+        const rearCameras = videoDevices.filter((camera) => {
+          const label = camera.label.toLowerCase();
 
-        if (videoDevices.length > 0) {
-          const backCameras = videoDevices.filter((camera) =>
-            camera.label.toLowerCase().includes("back"),
+          return (
+            label.includes("back") ||
+            label.includes("rear") ||
+            label.includes("environment")
           );
+        });
 
-          const defaultCamera =
-            backCameras[0] || videoDevices[videoDevices.length - 1];
+        const availableBackCameras =
+          rearCameras.length > 0 ? rearCameras : videoDevices;
 
-          setSelectedCamera(defaultCamera.deviceId);
+        setBackCameras(availableBackCameras);
+
+        const savedCameraId = localStorage.getItem(
+          "library-scanner-camera",
+        );
+
+        const savedCamera = availableBackCameras.find(
+          (camera) => camera.deviceId === savedCameraId,
+        );
+
+        if (savedCamera) {
+          setSelectedCamera(savedCamera.deviceId);
+          return;
+        }
+
+        const preferredCamera =
+          availableBackCameras.find((camera) =>
+            camera.label.toLowerCase().includes("camera 0"),
+          ) || availableBackCameras[0];
+
+        if (preferredCamera) {
+          setSelectedCamera(preferredCamera.deviceId);
         }
       } catch (error) {
         console.error("Помилка отримання камер:", error);
@@ -41,6 +67,32 @@ function BarcodeScanner({ onScan, onClose }) {
 
     getCameras();
   }, []);
+
+  const currentCameraIndex = useMemo(() => {
+    return backCameras.findIndex(
+      (camera) => camera.deviceId === selectedCamera,
+    );
+  }, [backCameras, selectedCamera]);
+
+  const handleSwitchCamera = () => {
+    if (backCameras.length < 2) {
+      return;
+    }
+
+    const nextIndex =
+      currentCameraIndex === -1
+        ? 0
+        : (currentCameraIndex + 1) % backCameras.length;
+
+    const nextCamera = backCameras[nextIndex];
+
+    setSelectedCamera(nextCamera.deviceId);
+
+    localStorage.setItem(
+      "library-scanner-camera",
+      nextCamera.deviceId,
+    );
+  };
 
   const { ref } = useZxing({
     paused: !selectedCamera,
@@ -54,21 +106,20 @@ function BarcodeScanner({ onScan, onClose }) {
     timeBetweenDecodingAttempts: 150,
 
     onDecodeResult(result) {
-      console.log("Знайдено штрихкод:", result);
-
       const isbn = result.rawValue;
 
       if (isbn?.length === 13) {
+        localStorage.setItem(
+          "library-scanner-camera",
+          selectedCamera,
+        );
+
         onScan(isbn);
       }
     },
 
-    onDecodeError(error) {
-      console.error("Помилка декодування:", error);
-    },
-
     onError(error) {
-      console.error("Помилка камери / ZXing:", error);
+      console.error("Помилка сканера:", error);
     },
   });
 
@@ -91,25 +142,6 @@ function BarcodeScanner({ onScan, onClose }) {
 
         <p>Наведіть камеру на штрихкод книги</p>
 
-        {cameras.length > 1 && (
-          <select
-            className="scanner-camera-select"
-            value={selectedCamera}
-            onChange={(event) =>
-              setSelectedCamera(event.target.value)
-            }
-          >
-            {cameras.map((camera, index) => (
-              <option
-                key={camera.deviceId}
-                value={camera.deviceId}
-              >
-                {camera.label || `Камера ${index + 1}`}
-              </option>
-            ))}
-          </select>
-        )}
-
         <div className="scanner-camera">
           <video
             ref={ref}
@@ -119,6 +151,18 @@ function BarcodeScanner({ onScan, onClose }) {
           />
 
           <div className="scanner-frame" />
+
+          {backCameras.length > 1 && (
+            <button
+              type="button"
+              className="scanner-switch-camera"
+              onClick={handleSwitchCamera}
+              aria-label="Змінити камеру"
+              title="Змінити камеру"
+            >
+              ↻
+            </button>
+          )}
         </div>
       </div>
     </div>

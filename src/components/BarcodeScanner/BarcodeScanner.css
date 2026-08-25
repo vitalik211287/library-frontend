@@ -74,3 +74,38 @@
 
   font-size: 16px;
 }
+
+.scanner-camera {
+  position: relative;
+}
+
+.scanner-switch-camera {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 44px;
+  height: 44px;
+
+  padding: 0;
+
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  border-radius: 50%;
+
+  background: rgba(0, 0, 0, 0.55);
+  color: #ffffff;
+
+  font-size: 26px;
+  line-height: 1;
+
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+}
+
+.scanner-switch-camera:active {
+  transform: scale(0.94);
+}
