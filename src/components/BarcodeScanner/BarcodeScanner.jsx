@@ -10,6 +10,20 @@ function BarcodeScanner({ onScan, onClose }) {
         onScan(scannedValue);
       }
     },
+
+    constraints: {
+      video: {
+        facingMode: {
+          ideal: "environment",
+        },
+        width: {
+          ideal: 1920,
+        },
+        height: {
+          ideal: 1080,
+        },
+      },
+    },
   });
 
   return (
@@ -31,7 +45,17 @@ function BarcodeScanner({ onScan, onClose }) {
 
         <p>Наведіть камеру на штрихкод книги</p>
 
-        <video ref={ref} className="scanner-video" />
+        <div className="scanner-camera">
+          <video
+            ref={ref}
+            className="scanner-video"
+            autoPlay
+            muted
+            playsInline
+          />
+
+          <div className="scanner-frame" />
+        </div>
       </div>
     </div>
   );
