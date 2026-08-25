@@ -1,6 +1,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { getApiErrorMessage } from "../../utils/apiError";
+import BarcodeScanner from "../../components/BarcodeScanner/BarcodeScanner";
 import "./AddBookPage.css";
 
 const API_URL = "https://library-backend-production-5d60.up.railway.app";
@@ -9,12 +10,11 @@ function AddBookPage() {
   const [isbn, setIsbn] = useState("");
   const [book, setBook] = useState(null);
   const [manualMode, setManualMode] = useState(false);
+  const [scannerOpen, setScannerOpen] = useState(false);
 
   // Пошук книги за ISBN
-  const handleSubmit = async (event) => {
-    event.preventDefault();
-
-    const cleanIsbn = isbn.trim();
+  const lookupBook = async (isbnValue) => {
+    const cleanIsbn = isbnValue.trim();
 
     if (!cleanIsbn) {
       toast.error("Введіть ISBN");
@@ -24,7 +24,9 @@ function AddBookPage() {
     setBook(null);
 
     try {
-      const response = await fetch(`${API_URL}/api/books/lookup/${cleanIsbn}`);
+      const response = await fetch(
+        `${API_URL}/api/books/lookup/${cleanIsbn}`,
+      );
 
       if (!response.ok) {
         if (response.status === 404 || response.status === 500) {
@@ -33,6 +35,7 @@ function AddBookPage() {
         }
 
         const errorMessage = await getApiErrorMessage(response);
+
         toast.error(errorMessage);
         return;
       }
@@ -45,6 +48,21 @@ function AddBookPage() {
 
       toast.error("Не вдалося з'єднатися із сервером");
     }
+  };
+
+  // Ручний пошук через форму
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
+    await lookupBook(isbn);
+  };
+
+  // ISBN отриманий зі сканера
+  const handleScan = async (scannedIsbn) => {
+    setIsbn(scannedIsbn);
+    setScannerOpen(false);
+
+    await lookupBook(scannedIsbn);
   };
 
   // Додавання знайденої книги
@@ -236,7 +254,12 @@ function AddBookPage() {
           aria-label="Знайти книгу"
           title="Знайти книгу"
         >
-          <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+          <svg
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
+            aria-hidden="true"
+          >
             <path
               d="M21 21l-4.35-4.35m2.35-5.65a8 8 0 1 1-16 0 8 8 0 0 1 16 0Z"
               fill="none"
@@ -245,6 +268,16 @@ function AddBookPage() {
               strokeLinecap="round"
             />
           </svg>
+        </button>
+
+        <button
+          type="button"
+          className="isbn-scan__button"
+          onClick={() => setScannerOpen(true)}
+          aria-label="Сканувати ISBN"
+          title="Сканувати ISBN"
+        >
+          📷
         </button>
       </form>
 
@@ -394,18 +427,39 @@ function AddBookPage() {
             type="text"
             name="isbn"
             placeholder="ISBN"
-            defaultValue={isbn}
+            value={isbn}
+            onChange={(event) => setIsbn(event.target.value)}
           />
 
-          <input type="text" name="title" placeholder="Назва книги" />
+          <input
+            type="text"
+            name="title"
+            placeholder="Назва книги"
+          />
 
-          <input type="text" name="author" placeholder="Автор" />
+          <input
+            type="text"
+            name="author"
+            placeholder="Автор"
+          />
 
-          <input type="text" name="publisher" placeholder="Видавництво" />
+          <input
+            type="text"
+            name="publisher"
+            placeholder="Видавництво"
+          />
 
-          <input type="number" name="year" placeholder="Рік" />
+          <input
+            type="number"
+            name="year"
+            placeholder="Рік"
+          />
 
-          <input type="number" name="pages" placeholder="Кількість сторінок" />
+          <input
+            type="number"
+            name="pages"
+            placeholder="Кількість сторінок"
+          />
 
           <input
             type="text"
@@ -414,9 +468,16 @@ function AddBookPage() {
             defaultValue="Українська"
           />
 
-          <input type="text" name="genre" placeholder="Жанр" />
+          <input
+            type="text"
+            name="genre"
+            placeholder="Жанр"
+          />
 
-          <textarea name="description" placeholder="Опис" />
+          <textarea
+            name="description"
+            placeholder="Опис"
+          />
 
           <label className="cover-input">
             <span>Обкладинка</span>
@@ -428,8 +489,17 @@ function AddBookPage() {
             />
           </label>
 
-          <button type="submit">Зберегти книгу</button>
+          <button type="submit">
+            Зберегти книгу
+          </button>
         </form>
+      )}
+
+      {scannerOpen && (
+        <BarcodeScanner
+          onScan={handleScan}
+          onClose={() => setScannerOpen(false)}
+        />
       )}
     </div>
   );
