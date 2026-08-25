@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import "./CatalogPage.css";
 import EditBookModal from "../../components/EditBookModal/EditBookModal";
+import BarcodeScanner from "../../components/BarcodeScanner/BarcodeScanner";
 
 const API_URL = "https://library-backend-production-5d60.up.railway.app";
 
@@ -10,6 +11,7 @@ function CatalogPage() {
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState("title");
   const [selectedBook, setSelectedBook] = useState(null);
+  const [scannerOpen, setScannerOpen] = useState(false);
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -50,6 +52,12 @@ function CatalogPage() {
     return String(value).toLowerCase().includes(query);
   });
 
+  const handleScan = (isbn) => {
+    setSearchBy("isbn");
+    setSearch(isbn);
+    setScannerOpen(false);
+  };
+
   return (
     <div className="catalog-page">
       <h1>Каталог бібліотеки</h1>
@@ -83,6 +91,14 @@ function CatalogPage() {
           <option value="genre">За жанром</option>
           <option value="isbn">За ISBN</option>
         </select>
+
+        <button
+          type="button"
+          className="scan-button"
+          onClick={() => setScannerOpen(true)}
+        >
+          📷 Сканувати ISBN
+        </button>
       </div>
 
       <div className="books-grid">
@@ -126,6 +142,13 @@ function CatalogPage() {
 
             setSelectedBook(null);
           }}
+        />
+      )}
+
+      {scannerOpen && (
+        <BarcodeScanner
+          onScan={handleScan}
+          onClose={() => setScannerOpen(false)}
         />
       )}
     </div>

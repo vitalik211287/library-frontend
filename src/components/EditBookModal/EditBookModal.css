@@ -9,7 +9,7 @@
 
   padding: 24px;
 
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(3px);
 
   box-sizing: border-box;
@@ -23,13 +23,15 @@
   max-height: calc(100vh - 48px);
 
   padding: 28px;
-
   overflow-y: auto;
 
-  background: #ffffff;
+  background: var(--surface);
+  color: var(--text);
+
+  border: 1px solid var(--border);
   border-radius: 16px;
 
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow);
 
   box-sizing: border-box;
 }
@@ -39,7 +41,11 @@
 
   font-size: 26px;
   line-height: 1.2;
+
+  color: var(--text-h);
 }
+
+/* Закрити */
 
 .edit-modal__close {
   position: absolute;
@@ -60,7 +66,7 @@
   border-radius: 8px;
 
   background: transparent;
-  color: #555555;
+  color: var(--text);
 
   font-size: 28px;
   line-height: 1;
@@ -69,18 +75,18 @@
 }
 
 .edit-modal__close:hover {
-  background: #f2f2f2;
-  color: #111111;
+  background: var(--surface-secondary);
+  color: var(--text-h);
 }
 
 /* Основна частина */
 
 .edit-modal__layout {
   display: grid;
-
   grid-template-columns: 220px minmax(0, 1fr);
 
   gap: 28px;
+
   align-items: start;
 }
 
@@ -107,11 +113,11 @@
 
   box-sizing: border-box;
 
-  border: 1px solid #dddddd;
+  border: 1px solid var(--border);
   border-radius: 8px;
 
-  background: #f5f5f5;
-  color: #777777;
+  background: var(--surface-secondary);
+  color: var(--text);
 
   font-size: 14px;
 }
@@ -128,10 +134,11 @@
 
   box-sizing: border-box;
 
-  border: 1px solid #d0d0d0;
+  border: 1px solid var(--border);
   border-radius: 8px;
 
-  background: #ffffff;
+  background: var(--surface);
+  color: var(--text-h);
 
   font-size: 14px;
   font-weight: 500;
@@ -144,8 +151,8 @@
 }
 
 .edit-modal__cover-button:hover {
-  background: #f5f5f5;
-  border-color: #aaaaaa;
+  background: var(--surface-secondary);
+  border-color: var(--border-hover);
 }
 
 .edit-modal__cover-button input {
@@ -156,7 +163,8 @@
   margin: 8px 0 0;
 
   font-size: 12px;
-  color: #666666;
+
+  color: var(--text);
 
   overflow-wrap: anywhere;
 }
@@ -178,11 +186,12 @@
 
   font-size: 14px;
   font-weight: 500;
+
+  color: var(--text);
 }
 
 .edit-modal__row {
   display: grid;
-
   grid-template-columns: repeat(2, minmax(0, 1fr));
 
   gap: 14px;
@@ -196,17 +205,19 @@
 
   padding: 11px 12px;
 
-  border: 1px solid #d0d0d0;
+  border: 1px solid var(--border);
   border-radius: 8px;
 
-  background: #ffffff;
+  background: var(--surface);
+  color: var(--text-h);
 
   font-family: inherit;
   font-size: 15px;
 
   transition:
     border-color 0.2s ease,
-    box-shadow 0.2s ease;
+    box-shadow 0.2s ease,
+    background-color 0.2s ease;
 }
 
 .edit-modal__fields input {
@@ -223,16 +234,16 @@
 
 .edit-modal__fields input:hover,
 .edit-modal__fields textarea:hover {
-  border-color: #999999;
+  border-color: var(--border-hover);
 }
 
 .edit-modal__fields input:focus,
 .edit-modal__fields textarea:focus {
   outline: none;
 
-  border-color: #555555;
+  border-color: var(--accent);
 
-  box-shadow: 0 0 0 3px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 0 0 3px var(--accent-bg);
 }
 
 /* Кнопки */
@@ -246,7 +257,7 @@
   margin-top: 24px;
   padding-top: 20px;
 
-  border-top: 1px solid #eeeeee;
+  border-top: 1px solid var(--border);
 }
 
 .edit-modal__actions button {
@@ -264,25 +275,25 @@
 }
 
 .edit-modal__cancel {
-  border: 1px solid #d0d0d0;
+  border: 1px solid var(--border);
 
-  background: #ffffff;
-  color: #222222;
+  background: var(--surface);
+  color: var(--text-h);
 }
 
 .edit-modal__cancel:hover {
-  background: #f5f5f5;
+  background: var(--surface-secondary);
 }
 
 .edit-modal__save {
-  border: 1px solid #222222;
+  border: 1px solid var(--text-h);
 
-  background: #222222;
-  color: #ffffff;
+  background: var(--text-h);
+  color: var(--bg);
 }
 
 .edit-modal__save:hover {
-  background: #3a3a3a;
+  opacity: 0.85;
 }
 
 .edit-modal__save:disabled {
