@@ -286,8 +286,7 @@ function ReadingModal({ book, apiUrl, onClose }) {
 
         currentPage: page,
 
-        status:
-          current.pages && page >= current.pages ? "FINISHED" : "READING",
+        status: current.pages && page >= current.pages ? "FINISHED" : "READING",
       }));
 
       setActiveSession(null);
@@ -575,33 +574,34 @@ function ReadingModal({ book, apiUrl, onClose }) {
 
           {activeSession && (
             <div className="reading-modal__session">
-              <span className="reading-modal__session-label">
-                {isPaused ? "Читання на паузі" : "Читання активне"}
-              </span>
+              <div className="reading-modal__session-content">
+                <div className="reading-modal__timer">
+                  <span className="reading-modal__session-label">
+                    {isPaused ? "Читання на паузі" : "Читання активне"}
+                  </span>
+                  {formatTime(elapsedSeconds)}
+                </div>
 
-              <div className="reading-modal__timer">
-                {formatTime(elapsedSeconds)}
+                <div className="reading-modal__finish-form">
+                  <label htmlFor="reading-end-page">
+                    На якій сторінці зупинився?
+                  </label>
+
+                  <input
+                    id="reading-end-page"
+                    type="number"
+                    min={activeSession.startPage}
+                    max={currentBook.pages ?? undefined}
+                    value={endPage}
+                    onChange={(event) => setEndPage(event.target.value)}
+                    placeholder={`Наприклад, ${activeSession.startPage + 10}`}
+                  />
+
+                  <span className="reading-modal__session-page">
+                    Початкова сторінка: {activeSession.startPage}
+                  </span>
+                </div>
               </div>
-
-              <div className="reading-modal__finish-form">
-                <label htmlFor="reading-end-page">
-                  На якій сторінці зупинився?
-                </label>
-
-                <input
-                  id="reading-end-page"
-                  type="number"
-                  min={activeSession.startPage}
-                  max={currentBook.pages ?? undefined}
-                  value={endPage}
-                  onChange={(event) => setEndPage(event.target.value)}
-                  placeholder={`Наприклад, ${activeSession.startPage + 10}`}
-                />
-              </div>
-
-              <span className="reading-modal__session-page">
-                Початкова сторінка: {activeSession.startPage}
-              </span>
             </div>
           )}
         </div>
