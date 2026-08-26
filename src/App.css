@@ -19,7 +19,7 @@
   display: flex;
   align-items: center;
 
-  gap: 20px;
+  gap: 28px;
 }
 
 .nav a {
@@ -98,7 +98,7 @@
   }
 
   .nav {
-    gap: 20px;
+    gap: 16px;
   }
 
   .nav a {
@@ -122,7 +122,7 @@
   }
 
   .nav {
-    gap: 34px;
+    gap: 24px;
   }
 
   .nav a {
