@@ -1,0 +1,247 @@
+.reading-calendar-page {
+  width: 100%;
+  padding: 16px;
+  box-sizing: border-box;
+  color: var(--text);
+}
+
+.reading-calendar {
+  width: 100%;
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 18px 14px 22px;
+  box-sizing: border-box;
+
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 22px;
+}
+
+.reading-calendar__header {
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+
+  margin-bottom: 20px;
+}
+
+.reading-calendar__header div {
+  text-align: center;
+}
+
+.reading-calendar__header h1 {
+  margin: 0;
+
+  color: var(--text-h);
+
+  font-size: 22px;
+  line-height: 1.2;
+}
+
+.reading-calendar__header p {
+  margin: 4px 0 0;
+
+  color: var(--text);
+  font-size: 13px;
+}
+
+.reading-calendar__header button {
+  width: 40px;
+  height: 40px;
+
+  padding: 0;
+
+  border: none;
+  border-radius: 50%;
+
+  background: transparent;
+  color: var(--text-h);
+
+  font-size: 34px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.reading-calendar__weekdays,
+.reading-calendar__grid {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+
+  gap: 8px;
+}
+
+.reading-calendar__weekdays {
+  margin-bottom: 12px;
+}
+
+.reading-calendar__weekdays span {
+  text-align: center;
+
+  color: var(--text-h);
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.calendar-day {
+  min-width: 0;
+  min-height: 72px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 4px;
+}
+
+.calendar-day--empty {
+  visibility: hidden;
+}
+
+.calendar-day__media {
+  position: relative;
+
+  width: 100%;
+  aspect-ratio: 0.72;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  border-radius: 7px;
+}
+
+.calendar-day__media img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+.calendar-day__books-count {
+  position: absolute;
+  right: 3px;
+  bottom: 3px;
+
+  min-width: 20px;
+  height: 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 4px;
+
+  border-radius: 999px;
+
+  background: rgba(0, 0, 0, 0.75);
+  color: white;
+
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.calendar-day__number {
+  font-size: 15px;
+  line-height: 1;
+  color: var(--text);
+}
+
+.calendar-day--read .calendar-day__number {
+  color: #ffb020;
+}
+
+.calendar-day--10 .calendar-day__number {
+  color: #c23ee8;
+}
+
+.calendar-day--30 .calendar-day__number {
+  color: #6272ff;
+}
+
+.calendar-day--hour .calendar-day__number {
+  color: #2ec27e;
+}
+
+.reading-calendar__legend {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+
+  gap: 8px;
+
+  margin-top: 22px;
+  padding-top: 16px;
+
+  border-top: 1px solid var(--border);
+}
+
+.reading-calendar__legend div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 6px;
+
+  text-align: center;
+}
+
+.legend-dot {
+  width: 34px;
+  height: 34px;
+
+  border-radius: 10px;
+
+  background: var(--surface-secondary);
+}
+
+.legend-dot--read {
+  box-shadow: inset 0 0 0 10px #ffb020;
+}
+
+.legend-dot--10 {
+  box-shadow: inset 0 0 0 10px #c23ee8;
+}
+
+.legend-dot--30 {
+  box-shadow: inset 0 0 0 10px #6272ff;
+}
+
+.legend-dot--hour {
+  box-shadow: inset 0 0 0 10px #2ec27e;
+}
+
+.reading-calendar__legend small {
+  color: var(--text);
+
+  font-size: 11px;
+}
+
+.reading-calendar__message {
+  margin: 40px 0;
+
+  text-align: center;
+  color: var(--text);
+}
+
+@media (min-width: 600px) {
+  .reading-calendar-page {
+    padding: 28px;
+  }
+
+  .reading-calendar {
+    padding: 24px;
+  }
+
+  .reading-calendar__grid,
+  .reading-calendar__weekdays {
+    gap: 12px;
+  }
+
+  .calendar-day {
+    min-height: 90px;
+  }
+}

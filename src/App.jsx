@@ -1,4 +1,9 @@
-import { Routes, Route, NavLink } from "react-router-dom";
+import {
+  Routes,
+  Route,
+  NavLink,
+} from "react-router-dom";
+
 import { Toaster } from "react-hot-toast";
 
 import "./App.css";
@@ -7,6 +12,8 @@ import CatalogPage from "./pages/CatalogPage/CatalogPage.jsx";
 import AddBookPage from "./pages/AddBookPage/AddBookPage.jsx";
 import LoginPage from "./pages/LoginPage/LoginPage.jsx";
 import RegisterPage from "./pages/RegisterPage/RegisterPage.jsx";
+import ReadingCalendarPage from "./pages/ReadingCalendarPage/ReadingCalendarPage.jsx";
+
 import ThemeToggle from "./components/ThemeToggle/ThemeToggle";
 
 function App() {
@@ -14,11 +21,21 @@ function App() {
     <>
       <header className="header">
         <nav className="nav">
-          <NavLink to="/">Каталог</NavLink>
+          <NavLink to="/">
+            Каталог
+          </NavLink>
 
-          <NavLink to="/add">Додати книгу</NavLink>
+          <NavLink to="/add">
+            Додати книгу
+          </NavLink>
 
-          <NavLink to="/login">Увійти</NavLink>
+          <NavLink to="/calendar">
+            Календар
+          </NavLink>
+
+          <NavLink to="/login">
+            Увійти
+          </NavLink>
         </nav>
 
         <ThemeToggle />
@@ -27,11 +44,30 @@ function App() {
       <Toaster position="top-right" />
 
       <Routes>
-        <Route path="/" element={<CatalogPage />} />
+        <Route
+          path="/"
+          element={<CatalogPage />}
+        />
 
-        <Route path="/add" element={<AddBookPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/login" element={<LoginPage />} />
+        <Route
+          path="/add"
+          element={<AddBookPage />}
+        />
+
+        <Route
+          path="/calendar"
+          element={<ReadingCalendarPage />}
+        />
+
+        <Route
+          path="/register"
+          element={<RegisterPage />}
+        />
+
+        <Route
+          path="/login"
+          element={<LoginPage />}
+        />
       </Routes>
     </>
   );

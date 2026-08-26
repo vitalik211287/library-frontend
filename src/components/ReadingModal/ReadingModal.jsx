@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+
 import "./ReadingModal.css";
 
 function ReadingModal({ book, apiUrl, onClose }) {
@@ -12,14 +14,14 @@ function ReadingModal({ book, apiUrl, onClose }) {
   const [stats, setStats] = useState(null);
   const [ratingLoading, setRatingLoading] = useState(false);
 
+  const navigate = useNavigate();
+
   const token = localStorage.getItem("token");
 
   const progress =
     currentBook.pages && currentBook.pages > 0
       ? Math.round(
-          ((currentBook.currentPage ?? 0) /
-            currentBook.pages) *
-            1000,
+          ((currentBook.currentPage ?? 0) / currentBook.pages) * 1000,
         ) / 10
       : 0;
 
@@ -33,46 +35,19 @@ function ReadingModal({ book, apiUrl, onClose }) {
     }
   };
 
-  // =====================================================
-  // Отримання персональних даних книги
-  // =====================================================
-
   const fetchUserBook = async () => {
     try {
-      const response = await fetch(
-        `${apiUrl}/api/user-books/${book.id}`,
-        {
-          headers: getAuthHeaders(),
-        },
-      );
+      const response = await fetch(`${apiUrl}/api/user-books/${book.id}`, {
+        headers: getAuthHeaders(),
+      });
 
       const data = await response.json();
 
       if (!response.ok) {
-        setMessage(
-          data.message ||
-            "Не вдалося отримати дані читання",
-        );
+        setMessage(data.message || "Не вдалося отримати дані читання");
 
         return;
       }
-
-      /*
-        Backend повертає UserBook:
-
-        {
-          id,
-          userId,
-          bookId,
-          currentPage,
-          status,
-          rating,
-          book: {...}
-        }
-
-        Для існуючої верстки об'єднуємо
-        Book + UserBook.
-      */
 
       setCurrentBook({
         ...data.book,
@@ -81,16 +56,11 @@ function ReadingModal({ book, apiUrl, onClose }) {
         rating: data.rating ?? null,
       });
     } catch (error) {
-      console.error(
-        "Помилка отримання даних книги:",
-        error,
-      );
+      console.error("Помилка отримання даних книги:", error);
+
+      setMessage("Не вдалося отримати дані читання");
     }
   };
-
-  // =====================================================
-  // Статистика
-  // =====================================================
 
   const fetchReadingStats = async () => {
     try {
@@ -109,16 +79,9 @@ function ReadingModal({ book, apiUrl, onClose }) {
 
       setStats(data.stats);
     } catch (error) {
-      console.error(
-        "Помилка отримання статистики:",
-        error,
-      );
+      console.error("Помилка отримання статистики:", error);
     }
   };
-
-  // =====================================================
-  // Початок читання
-  // =====================================================
 
   const handleStartReading = async () => {
     try {
@@ -136,10 +99,7 @@ function ReadingModal({ book, apiUrl, onClose }) {
       const data = await response.json();
 
       if (!response.ok) {
-        setMessage(
-          data.message ||
-            "Не вдалося почати читання",
-        );
+        setMessage(data.message || "Не вдалося почати читання");
 
         return;
       }
@@ -154,10 +114,7 @@ function ReadingModal({ book, apiUrl, onClose }) {
 
       setMessage("Читання розпочато");
     } catch (error) {
-      console.error(
-        "Помилка запуску читання:",
-        error,
-      );
+      console.error("Помилка запуску читання:", error);
 
       setMessage("Не вдалося почати читання");
     } finally {
@@ -165,38 +122,28 @@ function ReadingModal({ book, apiUrl, onClose }) {
     }
   };
 
-  // =====================================================
-  // Рейтинг
-  // =====================================================
-
   const handleRatingChange = async (rating) => {
     try {
       setRatingLoading(true);
       setMessage("");
 
-      const response = await fetch(
-        `${apiUrl}/api/user-books/${book.id}`,
-        {
-          method: "PATCH",
+      const response = await fetch(`${apiUrl}/api/user-books/${book.id}`, {
+        method: "PATCH",
 
-          headers: {
-            ...getAuthHeaders(),
-            "Content-Type": "application/json",
-          },
-
-          body: JSON.stringify({
-            rating,
-          }),
+        headers: {
+          ...getAuthHeaders(),
+          "Content-Type": "application/json",
         },
-      );
+
+        body: JSON.stringify({
+          rating,
+        }),
+      });
 
       const data = await response.json();
 
       if (!response.ok) {
-        setMessage(
-          data.message ||
-            "Не вдалося зберегти оцінку",
-        );
+        setMessage(data.message || "Не вдалося зберегти оцінку");
 
         return;
       }
@@ -208,10 +155,7 @@ function ReadingModal({ book, apiUrl, onClose }) {
 
       setMessage("Оцінку збережено");
     } catch (error) {
-      console.error(
-        "Помилка збереження оцінки:",
-        error,
-      );
+      console.error("Помилка збереження оцінки:", error);
 
       setMessage("Не вдалося зберегти оцінку");
     } finally {
@@ -219,39 +163,23 @@ function ReadingModal({ book, apiUrl, onClose }) {
     }
   };
 
-  // =====================================================
-  // Завершення сесії
-  // =====================================================
-
   const handleFinishReading = async () => {
     const page = Number(endPage);
 
     if (!Number.isInteger(page)) {
-      setMessage(
-        "Вкажи коректний номер сторінки",
-      );
+      setMessage("Вкажи коректний номер сторінки");
 
       return;
     }
 
-    if (
-      activeSession &&
-      page < activeSession.startPage
-    ) {
-      setMessage(
-        `Сторінка не може бути меншою за ${activeSession.startPage}`,
-      );
+    if (activeSession && page < activeSession.startPage) {
+      setMessage(`Сторінка не може бути меншою за ${activeSession.startPage}`);
 
       return;
     }
 
-    if (
-      currentBook.pages &&
-      page > currentBook.pages
-    ) {
-      setMessage(
-        `У книзі всього ${currentBook.pages} сторінок`,
-      );
+    if (currentBook.pages && page > currentBook.pages) {
+      setMessage(`У книзі всього ${currentBook.pages} сторінок`);
 
       return;
     }
@@ -279,10 +207,7 @@ function ReadingModal({ book, apiUrl, onClose }) {
       const data = await response.json();
 
       if (!response.ok) {
-        setMessage(
-          data.message ||
-            "Не вдалося завершити читання",
-        );
+        setMessage(data.message || "Не вдалося завершити читання");
 
         return;
       }
@@ -292,11 +217,7 @@ function ReadingModal({ book, apiUrl, onClose }) {
 
         currentPage: page,
 
-        status:
-          current.pages &&
-          page >= current.pages
-            ? "FINISHED"
-            : "READING",
+        status: current.pages && page >= current.pages ? "FINISHED" : "READING",
       }));
 
       setActiveSession(null);
@@ -305,26 +226,21 @@ function ReadingModal({ book, apiUrl, onClose }) {
 
       await fetchReadingStats();
 
-      setMessage(
-        "Сесію читання завершено",
-      );
+      setMessage("Сесію читання завершено");
     } catch (error) {
-      console.error(
-        "Помилка завершення читання:",
-        error,
-      );
+      console.error("Помилка завершення читання:", error);
 
-      setMessage(
-        "Не вдалося завершити читання",
-      );
+      setMessage("Не вдалося завершити читання");
     } finally {
       setFinishing(false);
     }
   };
 
-  // =====================================================
-  // Таймер
-  // =====================================================
+  const handleOpenCalendar = () => {
+    onClose();
+
+    navigate(`/calendar?book=${book.id}`);
+  };
 
   useEffect(() => {
     if (!activeSession) {
@@ -332,19 +248,13 @@ function ReadingModal({ book, apiUrl, onClose }) {
     }
 
     const intervalId = setInterval(() => {
-      setElapsedSeconds(
-        (seconds) => seconds + 1,
-      );
+      setElapsedSeconds((seconds) => seconds + 1);
     }, 1000);
 
     return () => {
       clearInterval(intervalId);
     };
   }, [activeSession]);
-
-  // =====================================================
-  // Активна сесія
-  // =====================================================
 
   useEffect(() => {
     const fetchActiveSession = async () => {
@@ -363,9 +273,7 @@ function ReadingModal({ book, apiUrl, onClose }) {
         }
 
         if (data.session) {
-          setElapsedSeconds(
-            data.elapsedSeconds ?? 0,
-          );
+          setElapsedSeconds(data.elapsedSeconds ?? 0);
 
           setActiveSession(data.session);
 
@@ -375,74 +283,41 @@ function ReadingModal({ book, apiUrl, onClose }) {
           }));
         }
       } catch (error) {
-        console.error(
-          "Помилка отримання активної сесії:",
-          error,
-        );
+        console.error("Помилка отримання активної сесії:", error);
       }
     };
 
     fetchActiveSession();
   }, [apiUrl, book.id]);
 
-  // =====================================================
-  // Початкове завантаження UserBook
-  // =====================================================
-
   useEffect(() => {
     fetchUserBook();
   }, [apiUrl, book.id]);
-
-  // =====================================================
-  // Початкове завантаження статистики
-  // =====================================================
 
   useEffect(() => {
     fetchReadingStats();
   }, [apiUrl, book.id]);
 
-  // =====================================================
-  // Форматування часу
-  // =====================================================
-
   const formatTime = (totalSeconds) => {
-    const hours = Math.floor(
-      totalSeconds / 3600,
-    );
+    const hours = Math.floor(totalSeconds / 3600);
 
-    const minutes = Math.floor(
-      (totalSeconds % 3600) / 60,
-    );
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
 
-    const seconds =
-      totalSeconds % 60;
+    const seconds = totalSeconds % 60;
 
-    return [
-      hours,
-      minutes,
-      seconds,
-    ]
-      .map((value) =>
-        String(value).padStart(2, "0"),
-      )
+    return [hours, minutes, seconds]
+      .map((value) => String(value).padStart(2, "0"))
       .join(":");
   };
 
   const formatDuration = (totalSeconds) => {
-    if (
-      totalSeconds === null ||
-      totalSeconds === undefined
-    ) {
+    if (totalSeconds === null || totalSeconds === undefined) {
       return "—";
     }
 
-    const hours = Math.floor(
-      totalSeconds / 3600,
-    );
+    const hours = Math.floor(totalSeconds / 3600);
 
-    const minutes = Math.floor(
-      (totalSeconds % 3600) / 60,
-    );
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
 
     if (hours > 0) {
       return `${hours} год ${minutes} хв`;
@@ -451,20 +326,11 @@ function ReadingModal({ book, apiUrl, onClose }) {
     return `${minutes} хв`;
   };
 
-  // =====================================================
-  // JSX
-  // =====================================================
-
   return (
-    <div
-      className="reading-modal-overlay"
-      onMouseDown={handleOverlayClick}
-    >
+    <div className="reading-modal-overlay" onMouseDown={handleOverlayClick}>
       <div
         className="reading-modal"
-        onMouseDown={(event) =>
-          event.stopPropagation()
-        }
+        onMouseDown={(event) => event.stopPropagation()}
       >
         <button
           type="button"
@@ -478,16 +344,10 @@ function ReadingModal({ book, apiUrl, onClose }) {
         <div className="reading-modal__header">
           <h2>{currentBook.title}</h2>
 
-          <p className="reading-modal__author">
-            {currentBook.author}
-          </p>
+          <p className="reading-modal__author">{currentBook.author}</p>
         </div>
 
-        {message && (
-          <p className="reading-modal__message">
-            {message}
-          </p>
-        )}
+        {message && <p className="reading-modal__message">{message}</p>}
 
         <div className="reading-modal__layout">
           <div className="reading-modal__top">
@@ -495,18 +355,14 @@ function ReadingModal({ book, apiUrl, onClose }) {
               {currentBook.coverUrl ? (
                 <img
                   src={
-                    currentBook.coverUrl.startsWith(
-                      "/uploads",
-                    )
+                    currentBook.coverUrl.startsWith("/uploads")
                       ? `${apiUrl}${currentBook.coverUrl}`
                       : currentBook.coverUrl
                   }
                   alt={currentBook.title}
                 />
               ) : (
-                <div className="reading-modal__no-cover">
-                  Немає обкладинки
-                </div>
+                <div className="reading-modal__no-cover">Немає обкладинки</div>
               )}
             </div>
 
@@ -532,48 +388,30 @@ function ReadingModal({ book, apiUrl, onClose }) {
               </div>
 
               <div className="reading-modal__info-item">
-                <span className="reading-modal__info-label">
-                  Статус
-                </span>
+                <span className="reading-modal__info-label">Статус</span>
 
                 <span className="reading-modal__info-value">
-                  {activeSession
-                    ? "READING"
-                    : currentBook.status}
+                  {activeSession ? "READING" : currentBook.status}
                 </span>
               </div>
 
               <div className="reading-modal__info-item">
-                <span className="reading-modal__info-label">
-                  Оцінка
-                </span>
+                <span className="reading-modal__info-label">Оцінка</span>
 
                 <div className="reading-modal__rating">
-                  {[1, 2, 3, 4, 5].map(
-                    (value) => (
-                      <button
-                        key={value}
-                        type="button"
-                        className="reading-modal__star"
-                        onClick={() =>
-                          handleRatingChange(
-                            value,
-                          )
-                        }
-                        disabled={
-                          ratingLoading
-                        }
-                        aria-label={`Оцінити на ${value} з 5`}
-                        title={`${value} з 5`}
-                      >
-                        {value <=
-                        (currentBook.rating ??
-                          0)
-                          ? "★"
-                          : "☆"}
-                      </button>
-                    ),
-                  )}
+                  {[1, 2, 3, 4, 5].map((value) => (
+                    <button
+                      key={value}
+                      type="button"
+                      className="reading-modal__star"
+                      onClick={() => handleRatingChange(value)}
+                      disabled={ratingLoading}
+                      aria-label={`Оцінити на ${value} з 5`}
+                      title={`${value} з 5`}
+                    >
+                      {value <= (currentBook.rating ?? 0) ? "★" : "☆"}
+                    </button>
+                  ))}
                 </div>
               </div>
             </div>
@@ -581,9 +419,7 @@ function ReadingModal({ book, apiUrl, onClose }) {
 
           <div className="reading-modal__progress">
             <div className="reading-modal__progress-header">
-              <span>
-                Прогрес читання
-              </span>
+              <span>Прогрес читання</span>
 
               <span>{progress}%</span>
             </div>
@@ -592,10 +428,7 @@ function ReadingModal({ book, apiUrl, onClose }) {
               <div
                 className="reading-modal__progress-bar"
                 style={{
-                  width: `${Math.min(
-                    progress,
-                    100,
-                  )}%`,
+                  width: `${Math.min(progress, 100)}%`,
                 }}
               />
             </div>
@@ -609,16 +442,12 @@ function ReadingModal({ book, apiUrl, onClose }) {
                 </span>
 
                 <span className="reading-modal__stats-value">
-                  {formatDuration(
-                    stats.totalReadingSeconds,
-                  )}
+                  {formatDuration(stats.totalReadingSeconds)}
                 </span>
               </div>
 
               <div className="reading-modal__stats-item">
-                <span className="reading-modal__stats-label">
-                  Прочитано
-                </span>
+                <span className="reading-modal__stats-label">Прочитано</span>
 
                 <span className="reading-modal__stats-value">
                   {stats.pagesRead} стор.
@@ -626,9 +455,7 @@ function ReadingModal({ book, apiUrl, onClose }) {
               </div>
 
               <div className="reading-modal__stats-item">
-                <span className="reading-modal__stats-label">
-                  Швидкість
-                </span>
+                <span className="reading-modal__stats-label">Швидкість</span>
 
                 <span className="reading-modal__stats-value">
                   {stats.pagesPerHour} стор./год
@@ -636,13 +463,10 @@ function ReadingModal({ book, apiUrl, onClose }) {
               </div>
 
               <div className="reading-modal__stats-item">
-                <span className="reading-modal__stats-label">
-                  Залишилось
-                </span>
+                <span className="reading-modal__stats-label">Залишилось</span>
 
                 <span className="reading-modal__stats-value">
-                  {stats.remainingPages ?? "—"}{" "}
-                  стор.
+                  {stats.remainingPages ?? "—"} стор.
                 </span>
               </div>
 
@@ -652,21 +476,26 @@ function ReadingModal({ book, apiUrl, onClose }) {
                 </span>
 
                 <span className="reading-modal__stats-value">
-                  {formatDuration(
-                    stats.estimatedRemainingSeconds,
-                  )}
+                  {formatDuration(stats.estimatedRemainingSeconds)}
                 </span>
               </div>
 
-              <div className="reading-modal__stats-item">
-                <span className="reading-modal__stats-label">
-                  Сесій
-                </span>
+              <button
+                type="button"
+                className="reading-modal__stats-item reading-modal__stats-item--calendar"
+                onClick={handleOpenCalendar}
+                aria-label="Відкрити календар читання"
+              >
+                <span className="reading-modal__stats-label">Сесій</span>
 
-                <span className="reading-modal__stats-value">
-                  {stats.sessionsCount}
+                <span className="reading-modal__stats-calendar-row">
+                  <span className="reading-modal__stats-value">
+                    {stats.sessionsCount}
+                  </span>
+
+                  <span className="reading-modal__stats-calendar-arrow">→</span>
                 </span>
-              </div>
+              </button>
             </div>
           )}
 
@@ -688,29 +517,16 @@ function ReadingModal({ book, apiUrl, onClose }) {
                 <input
                   id="reading-end-page"
                   type="number"
-                  min={
-                    activeSession.startPage
-                  }
-                  max={
-                    currentBook.pages ??
-                    undefined
-                  }
+                  min={activeSession.startPage}
+                  max={currentBook.pages ?? undefined}
                   value={endPage}
-                  onChange={(event) =>
-                    setEndPage(
-                      event.target.value,
-                    )
-                  }
-                  placeholder={`Наприклад, ${
-                    activeSession.startPage +
-                    10
-                  }`}
+                  onChange={(event) => setEndPage(event.target.value)}
+                  placeholder={`Наприклад, ${activeSession.startPage + 10}`}
                 />
               </div>
 
               <span className="reading-modal__session-page">
-                Початкова сторінка:{" "}
-                {activeSession.startPage}
+                Початкова сторінка: {activeSession.startPage}
               </span>
             </div>
           )}
@@ -721,14 +537,10 @@ function ReadingModal({ book, apiUrl, onClose }) {
             <button
               type="button"
               className="reading-modal__start"
-              onClick={
-                handleStartReading
-              }
+              onClick={handleStartReading}
               disabled={loading}
             >
-              {loading
-                ? "Запускаємо..."
-                : "▶ Почати читання"}
+              {loading ? "Запускаємо..." : "▶ Почати читання"}
             </button>
           )}
 
@@ -736,17 +548,10 @@ function ReadingModal({ book, apiUrl, onClose }) {
             <button
               type="button"
               className="reading-modal__finish"
-              onClick={
-                handleFinishReading
-              }
-              disabled={
-                finishing ||
-                endPage === ""
-              }
+              onClick={handleFinishReading}
+              disabled={finishing || endPage === ""}
             >
-              {finishing
-                ? "Завершуємо..."
-                : "■ Завершити читання"}
+              {finishing ? "Завершуємо..." : "■ Завершити читання"}
             </button>
           )}
 
