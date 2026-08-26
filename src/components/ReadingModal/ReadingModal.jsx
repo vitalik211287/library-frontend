@@ -14,7 +14,9 @@ function ReadingModal({ book, apiUrl, onClose }) {
 
   const progress =
     currentBook.pages && currentBook.pages > 0
-      ? Math.round((currentBook.currentPage / currentBook.pages) * 1000) / 10
+      ? Math.round(
+          (currentBook.currentPage / currentBook.pages) * 1000,
+        ) / 10
       : 0;
 
   const handleOverlayClick = (event) => {
@@ -56,10 +58,13 @@ function ReadingModal({ book, apiUrl, onClose }) {
       const data = await response.json();
 
       if (!response.ok) {
-        setMessage(data.message || "Не вдалося почати читання");
+        setMessage(
+          data.message || "Не вдалося почати читання",
+        );
         return;
       }
 
+      setElapsedSeconds(0);
       setActiveSession(data.session);
 
       setCurrentBook((current) => ({
@@ -69,7 +74,10 @@ function ReadingModal({ book, apiUrl, onClose }) {
 
       setMessage("Читання розпочато");
     } catch (error) {
-      console.error("Помилка запуску читання:", error);
+      console.error(
+        "Помилка запуску читання:",
+        error,
+      );
 
       setMessage("Не вдалося почати читання");
     } finally {
@@ -98,7 +106,9 @@ function ReadingModal({ book, apiUrl, onClose }) {
       const data = await response.json();
 
       if (!response.ok) {
-        setMessage(data.message || "Не вдалося зберегти оцінку");
+        setMessage(
+          data.message || "Не вдалося зберегти оцінку",
+        );
         return;
       }
 
@@ -109,7 +119,10 @@ function ReadingModal({ book, apiUrl, onClose }) {
 
       setMessage("Оцінку збережено");
     } catch (error) {
-      console.error("Помилка збереження оцінки:", error);
+      console.error(
+        "Помилка збереження оцінки:",
+        error,
+      );
 
       setMessage("Не вдалося зберегти оцінку");
     } finally {
@@ -145,14 +158,19 @@ function ReadingModal({ book, apiUrl, onClose }) {
       const data = await response.json();
 
       if (!response.ok) {
-        setMessage(data.message || "Не вдалося завершити читання");
+        setMessage(
+          data.message || "Не вдалося завершити читання",
+        );
         return;
       }
 
       setCurrentBook((current) => ({
         ...current,
         currentPage: page,
-        status: current.pages && page >= current.pages ? "FINISHED" : "READING",
+        status:
+          current.pages && page >= current.pages
+            ? "FINISHED"
+            : "READING",
       }));
 
       setActiveSession(null);
@@ -163,9 +181,14 @@ function ReadingModal({ book, apiUrl, onClose }) {
 
       setMessage("Сесію читання завершено");
     } catch (error) {
-      console.error("Помилка завершення читання:", error);
+      console.error(
+        "Помилка завершення читання:",
+        error,
+      );
 
-      setMessage("Не вдалося завершити читання");
+      setMessage(
+        "Не вдалося завершити читання",
+      );
     } finally {
       setFinishing(false);
     }
@@ -173,23 +196,12 @@ function ReadingModal({ book, apiUrl, onClose }) {
 
   useEffect(() => {
     if (!activeSession) {
-      setElapsedSeconds(0);
       return;
     }
 
-    const updateTimer = () => {
-      const startedAt = new Date(activeSession.startedAt).getTime();
-
-      const now = Date.now();
-
-      const seconds = Math.max(Math.floor((now - startedAt) / 1000), 0);
-
-      setElapsedSeconds(seconds);
-    };
-
-    updateTimer();
-
-    const intervalId = setInterval(updateTimer, 1000);
+    const intervalId = setInterval(() => {
+      setElapsedSeconds((seconds) => seconds + 1);
+    }, 1000);
 
     return () => {
       clearInterval(intervalId);
@@ -210,7 +222,13 @@ function ReadingModal({ book, apiUrl, onClose }) {
         }
 
         if (data.session) {
-          setActiveSession(data.session);
+          setElapsedSeconds(
+            data.elapsedSeconds ?? 0,
+          );
+
+          setActiveSession(
+            data.session,
+          );
 
           setCurrentBook((current) => ({
             ...current,
@@ -218,7 +236,10 @@ function ReadingModal({ book, apiUrl, onClose }) {
           }));
         }
       } catch (error) {
-        console.error("Помилка отримання активної сесії:", error);
+        console.error(
+          "Помилка отримання активної сесії:",
+          error,
+        );
       }
     };
 
@@ -230,25 +251,43 @@ function ReadingModal({ book, apiUrl, onClose }) {
   }, [apiUrl, currentBook.id]);
 
   const formatTime = (totalSeconds) => {
-    const hours = Math.floor(totalSeconds / 3600);
+    const hours = Math.floor(
+      totalSeconds / 3600,
+    );
 
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const minutes = Math.floor(
+      (totalSeconds % 3600) / 60,
+    );
 
-    const seconds = totalSeconds % 60;
+    const seconds =
+      totalSeconds % 60;
 
-    return [hours, minutes, seconds]
-      .map((value) => String(value).padStart(2, "0"))
+    return [
+      hours,
+      minutes,
+      seconds,
+    ]
+      .map((value) =>
+        String(value).padStart(2, "0"),
+      )
       .join(":");
   };
 
   const formatDuration = (totalSeconds) => {
-    if (totalSeconds === null || totalSeconds === undefined) {
+    if (
+      totalSeconds === null ||
+      totalSeconds === undefined
+    ) {
       return "—";
     }
 
-    const hours = Math.floor(totalSeconds / 3600);
+    const hours = Math.floor(
+      totalSeconds / 3600,
+    );
 
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const minutes = Math.floor(
+      (totalSeconds % 3600) / 60,
+    );
 
     if (hours > 0) {
       return `${hours} год ${minutes} хв`;
@@ -258,10 +297,15 @@ function ReadingModal({ book, apiUrl, onClose }) {
   };
 
   return (
-    <div className="reading-modal-overlay" onMouseDown={handleOverlayClick}>
+    <div
+      className="reading-modal-overlay"
+      onMouseDown={handleOverlayClick}
+    >
       <div
         className="reading-modal"
-        onMouseDown={(event) => event.stopPropagation()}
+        onMouseDown={(event) =>
+          event.stopPropagation()
+        }
       >
         <button
           type="button"
@@ -272,25 +316,37 @@ function ReadingModal({ book, apiUrl, onClose }) {
           ×
         </button>
 
-        <h2>{currentBook.title}</h2>
+        <h2>
+          {currentBook.title}
+        </h2>
 
-        <p className="reading-modal__author">{currentBook.author}</p>
+        <p className="reading-modal__author">
+          {currentBook.author}
+        </p>
 
-        {message && <p className="reading-modal__message">{message}</p>}
+        {message && (
+          <p className="reading-modal__message">
+            {message}
+          </p>
+        )}
 
         <div className="reading-modal__layout">
           <div className="reading-modal__cover">
             {currentBook.coverUrl ? (
               <img
                 src={
-                  currentBook.coverUrl.startsWith("/uploads")
+                  currentBook.coverUrl.startsWith(
+                    "/uploads",
+                  )
                     ? `${apiUrl}${currentBook.coverUrl}`
                     : currentBook.coverUrl
                 }
                 alt={currentBook.title}
               />
             ) : (
-              <div className="reading-modal__no-cover">Немає обкладинки</div>
+              <div className="reading-modal__no-cover">
+                Немає обкладинки
+              </div>
             )}
           </div>
 
@@ -317,46 +373,71 @@ function ReadingModal({ book, apiUrl, onClose }) {
               </div>
 
               <div className="reading-modal__info-item">
-                <span className="reading-modal__info-label">Статус</span>
+                <span className="reading-modal__info-label">
+                  Статус
+                </span>
 
                 <span className="reading-modal__info-value">
-                  {activeSession ? "READING" : currentBook.status}
+                  {activeSession
+                    ? "READING"
+                    : currentBook.status}
                 </span>
               </div>
 
               <div className="reading-modal__info-item">
-                <span className="reading-modal__info-label">Оцінка</span>
+                <span className="reading-modal__info-label">
+                  Оцінка
+                </span>
 
                 <div className="reading-modal__rating">
-                  {[1, 2, 3, 4, 5].map((value) => (
-                    <button
-                      key={value}
-                      type="button"
-                      className="reading-modal__star"
-                      onClick={() => handleRatingChange(value)}
-                      disabled={ratingLoading}
-                      aria-label={`Оцінити на ${value} з 5`}
-                      title={`${value} з 5`}
-                    >
-                      {value <= (currentBook.rating ?? 0) ? "★" : "☆"}
-                    </button>
-                  ))}
+                  {[1, 2, 3, 4, 5].map(
+                    (value) => (
+                      <button
+                        key={value}
+                        type="button"
+                        className="reading-modal__star"
+                        onClick={() =>
+                          handleRatingChange(
+                            value,
+                          )
+                        }
+                        disabled={
+                          ratingLoading
+                        }
+                        aria-label={`Оцінити на ${value} з 5`}
+                        title={`${value} з 5`}
+                      >
+                        {value <=
+                        (currentBook.rating ??
+                          0)
+                          ? "★"
+                          : "☆"}
+                      </button>
+                    ),
+                  )}
                 </div>
               </div>
             </div>
 
             <div className="reading-modal__progress">
               <div className="reading-modal__progress-header">
-                <span>Прогрес читання</span>
+                <span>
+                  Прогрес читання
+                </span>
 
-                <span>{progress}%</span>
+                <span>
+                  {progress}%
+                </span>
               </div>
 
               <div className="reading-modal__progress-track">
                 <div
                   className="reading-modal__progress-bar"
                   style={{
-                    width: `${Math.min(progress, 100)}%`,
+                    width: `${Math.min(
+                      progress,
+                      100,
+                    )}%`,
                   }}
                 />
               </div>
@@ -370,12 +451,16 @@ function ReadingModal({ book, apiUrl, onClose }) {
                   </span>
 
                   <span className="reading-modal__stats-value">
-                    {formatDuration(stats.totalReadingSeconds)}
+                    {formatDuration(
+                      stats.totalReadingSeconds,
+                    )}
                   </span>
                 </div>
 
                 <div className="reading-modal__stats-item">
-                  <span className="reading-modal__stats-label">Прочитано</span>
+                  <span className="reading-modal__stats-label">
+                    Прочитано
+                  </span>
 
                   <span className="reading-modal__stats-value">
                     {stats.pagesRead} стор.
@@ -383,7 +468,9 @@ function ReadingModal({ book, apiUrl, onClose }) {
                 </div>
 
                 <div className="reading-modal__stats-item">
-                  <span className="reading-modal__stats-label">Швидкість</span>
+                  <span className="reading-modal__stats-label">
+                    Швидкість
+                  </span>
 
                   <span className="reading-modal__stats-value">
                     {stats.pagesPerHour} стор./год
@@ -391,7 +478,9 @@ function ReadingModal({ book, apiUrl, onClose }) {
                 </div>
 
                 <div className="reading-modal__stats-item">
-                  <span className="reading-modal__stats-label">Залишилось</span>
+                  <span className="reading-modal__stats-label">
+                    Залишилось
+                  </span>
 
                   <span className="reading-modal__stats-value">
                     {stats.remainingPages ?? "—"} стор.
@@ -404,12 +493,16 @@ function ReadingModal({ book, apiUrl, onClose }) {
                   </span>
 
                   <span className="reading-modal__stats-value">
-                    {formatDuration(stats.estimatedRemainingSeconds)}
+                    {formatDuration(
+                      stats.estimatedRemainingSeconds,
+                    )}
                   </span>
                 </div>
 
                 <div className="reading-modal__stats-item">
-                  <span className="reading-modal__stats-label">Сесій</span>
+                  <span className="reading-modal__stats-label">
+                    Сесій
+                  </span>
 
                   <span className="reading-modal__stats-value">
                     {stats.sessionsCount}
@@ -425,27 +518,43 @@ function ReadingModal({ book, apiUrl, onClose }) {
                 </span>
 
                 <div className="reading-modal__timer">
-                  {formatTime(elapsedSeconds)}
+                  {formatTime(
+                    elapsedSeconds,
+                  )}
                 </div>
 
                 <div className="reading-modal__finish-form">
                   <label htmlFor="reading-end-page">
-                    На якій сторінці зупинився?
+                    На якій сторінці
+                    зупинився?
                   </label>
 
                   <input
                     id="reading-end-page"
                     type="number"
-                    min={activeSession.startPage}
-                    max={currentBook.pages ?? undefined}
+                    min={
+                      activeSession.startPage
+                    }
+                    max={
+                      currentBook.pages ??
+                      undefined
+                    }
                     value={endPage}
-                    onChange={(event) => setEndPage(event.target.value)}
-                    placeholder={`Наприклад, ${activeSession.startPage + 10}`}
+                    onChange={(event) =>
+                      setEndPage(
+                        event.target.value,
+                      )
+                    }
+                    placeholder={`Наприклад, ${
+                      activeSession.startPage +
+                      10
+                    }`}
                   />
                 </div>
 
                 <span className="reading-modal__session-page">
-                  Початкова сторінка: {activeSession.startPage}
+                  Початкова сторінка:{" "}
+                  {activeSession.startPage}
                 </span>
               </div>
             )}
@@ -465,10 +574,14 @@ function ReadingModal({ book, apiUrl, onClose }) {
             <button
               type="button"
               className="reading-modal__start"
-              onClick={handleStartReading}
+              onClick={
+                handleStartReading
+              }
               disabled={loading}
             >
-              {loading ? "Запускаємо..." : "▶ Почати читання"}
+              {loading
+                ? "Запускаємо..."
+                : "▶ Почати читання"}
             </button>
           )}
 
@@ -476,10 +589,17 @@ function ReadingModal({ book, apiUrl, onClose }) {
             <button
               type="button"
               className="reading-modal__finish"
-              onClick={handleFinishReading}
-              disabled={finishing || endPage === ""}
+              onClick={
+                handleFinishReading
+              }
+              disabled={
+                finishing ||
+                endPage === ""
+              }
             >
-              {finishing ? "Завершуємо..." : "■ Завершити читання"}
+              {finishing
+                ? "Завершуємо..."
+                : "■ Завершити читання"}
             </button>
           )}
         </div>
