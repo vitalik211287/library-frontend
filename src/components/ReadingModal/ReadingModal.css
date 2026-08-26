@@ -481,9 +481,9 @@
   display: flex;
   flex-direction: column;
 
-  gap: 10px;
+  gap: 8px;
 
-  padding: 12px;
+  padding: 10px;
 
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -499,14 +499,18 @@
   color: var(--text-h);
 }
 
-.reading-modal__timer {
-  padding: 4px 0 8px;
+/* =========================
+   TIMER
+========================= */
 
-  font-size: 32px;
+.reading-modal__timer {
+  padding: 0;
+
+  font-size: 26px;
   font-weight: 700;
   line-height: 1;
 
-  letter-spacing: 1.5px;
+  letter-spacing: 1px;
 
   color: var(--text-h);
 
@@ -577,8 +581,8 @@
 
   gap: 8px;
 
-  margin-top: 16px;
-  padding-top: 14px;
+  margin-top: 12px;
+  padding-top: 12px;
 
   border-top: 1px solid var(--border);
 }
@@ -732,12 +736,12 @@
   }
 
   .reading-modal__timer {
-    font-size: 28px;
+    font-size: 24px;
   }
 }
 
 /* =========================
-   TABLET
+   TABLET — 600+
 ========================= */
 
 @media (min-width: 600px) {
@@ -817,6 +821,10 @@
     padding: 12px;
   }
 
+  .reading-modal__timer {
+    font-size: 32px;
+  }
+
   .reading-modal__actions {
     flex-direction: row;
     justify-content: flex-end;
@@ -830,7 +838,7 @@
 }
 
 /* =========================
-   DESKTOP
+   DESKTOP — 900+
 ========================= */
 
 @media (min-width: 900px) {
