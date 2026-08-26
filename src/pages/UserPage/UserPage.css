@@ -1,0 +1,125 @@
+.user-page {
+  width: 100%;
+
+  min-height: calc(100dvh - 80px);
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+
+  padding: 24px 16px;
+
+  box-sizing: border-box;
+
+  color: var(--text);
+}
+
+.user-page__card {
+  width: 100%;
+  max-width: 500px;
+
+  padding: 32px 24px;
+
+  box-sizing: border-box;
+
+  border: 1px solid var(--border);
+  border-radius: 18px;
+
+  background: var(--surface);
+
+  box-shadow: var(--shadow);
+
+  text-align: center;
+}
+
+.user-page__icon {
+  width: 72px;
+  height: 72px;
+
+  margin: 0 auto 20px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 20px;
+
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.user-page__icon-svg {
+  width: 42px;
+  height: 42px;
+
+  fill: none;
+
+  stroke: currentColor;
+  stroke-width: 1.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.user-page__card h1 {
+  margin: 0 0 10px;
+
+  color: var(--text-h);
+
+  font-size: 26px;
+  line-height: 1.2;
+}
+
+.user-page__card p {
+  margin: 0 0 26px;
+
+  color: var(--text);
+
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+.user-page__logout {
+  width: 100%;
+
+  min-height: 46px;
+
+  padding: 10px 16px;
+
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+
+  background: var(--accent);
+  color: white;
+
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    opacity 0.2s ease,
+    transform 0.15s ease;
+}
+
+.user-page__logout:hover {
+  opacity: 0.88;
+}
+
+.user-page__logout:active {
+  transform: scale(0.98);
+}
+
+@media (min-width: 600px) {
+  .user-page {
+    padding: 40px 24px;
+  }
+
+  .user-page__card {
+    padding: 40px 32px;
+  }
+
+  .user-page__card h1 {
+    font-size: 28px;
+  }
+}
