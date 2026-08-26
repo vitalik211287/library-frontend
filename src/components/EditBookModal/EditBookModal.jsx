@@ -1,9 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import "./EditBookModal.css";
 
-const API_URL =
-  "https://library-backend-production-5d60.up.railway.app";
+const API_URL = "https://library-backend-production-5d60.up.railway.app";
 
 function EditBookModal({ book, onClose, onUpdated }) {
   const [formData, setFormData] = useState({
@@ -21,6 +20,14 @@ function EditBookModal({ book, onClose, onUpdated }) {
   const [coverPreview, setCoverPreview] = useState(null);
   const [isSaving, setIsSaving] = useState(false);
 
+  useEffect(() => {
+    return () => {
+      if (coverPreview) {
+        URL.revokeObjectURL(coverPreview);
+      }
+    };
+  }, [coverPreview]);
+
   const handleChange = (event) => {
     const { name, value } = event.target;
 
@@ -35,6 +42,10 @@ function EditBookModal({ book, onClose, onUpdated }) {
 
     if (!file) {
       return;
+    }
+
+    if (coverPreview) {
+      URL.revokeObjectURL(coverPreview);
     }
 
     setCover(file);
@@ -60,51 +71,46 @@ function EditBookModal({ book, onClose, onUpdated }) {
     setIsSaving(true);
 
     try {
-      const response = await fetch(
-        `${API_URL}/api/books/${book.id}`,
-        {
-          method: "PATCH",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            title: formData.title.trim(),
-            author: formData.author.trim(),
-
-            ...(formData.publisher.trim() && {
-              publisher: formData.publisher.trim(),
-            }),
-
-            ...(formData.year && {
-              year: Number(formData.year),
-            }),
-
-            ...(formData.pages && {
-              pages: Number(formData.pages),
-            }),
-
-            ...(formData.language.trim() && {
-              language: formData.language.trim(),
-            }),
-
-            ...(formData.genre.trim() && {
-              genre: formData.genre.trim(),
-            }),
-
-            ...(formData.description.trim() && {
-              description: formData.description.trim(),
-            }),
-          }),
+      const response = await fetch(`${API_URL}/api/books/${book.id}`, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
         },
-      );
+        body: JSON.stringify({
+          title: formData.title.trim(),
+          author: formData.author.trim(),
+
+          ...(formData.publisher.trim() && {
+            publisher: formData.publisher.trim(),
+          }),
+
+          ...(formData.year && {
+            year: Number(formData.year),
+          }),
+
+          ...(formData.pages && {
+            pages: Number(formData.pages),
+          }),
+
+          ...(formData.language.trim() && {
+            language: formData.language.trim(),
+          }),
+
+          ...(formData.genre.trim() && {
+            genre: formData.genre.trim(),
+          }),
+
+          ...(formData.description.trim() && {
+            description: formData.description.trim(),
+          }),
+        }),
+      });
 
       const updatedBook = await response.json();
 
       if (!response.ok) {
-        toast.error(
-          updatedBook.message ||
-            "Не вдалося оновити книгу",
-        );
+        toast.error(updatedBook.message || "Не вдалося оновити книгу");
+
         return;
       }
 
@@ -123,8 +129,7 @@ function EditBookModal({ book, onClose, onUpdated }) {
           },
         );
 
-        const coverResult =
-          await coverResponse.json();
+        const coverResult = await coverResponse.json();
 
         if (!coverResponse.ok) {
           toast.error(
@@ -143,14 +148,9 @@ function EditBookModal({ book, onClose, onUpdated }) {
 
       onUpdated(finalBook);
     } catch (error) {
-      console.error(
-        "Помилка редагування книги:",
-        error,
-      );
+      console.error("Помилка редагування книги:", error);
 
-      toast.error(
-        "Не вдалося з'єднатися із сервером",
-      );
+      toast.error("Не вдалося з'єднатися із сервером");
     } finally {
       setIsSaving(false);
     }
@@ -171,15 +171,10 @@ function EditBookModal({ book, onClose, onUpdated }) {
       : null);
 
   return (
-    <div
-      className="edit-modal-overlay"
-      onMouseDown={handleOverlayClick}
-    >
+    <div className="edit-modal-overlay" onMouseDown={handleOverlayClick}>
       <div
         className="edit-modal"
-        onMouseDown={(event) =>
-          event.stopPropagation()
-        }
+        onMouseDown={(event) => event.stopPropagation()}
       >
         <button
           type="button"
@@ -193,28 +188,18 @@ function EditBookModal({ book, onClose, onUpdated }) {
         <div className="edit-modal__header">
           <h2>Редагувати книгу</h2>
 
-          <p className="edit-modal__subtitle">
-            {book.title}
-          </p>
+          <p className="edit-modal__subtitle">{book.title}</p>
         </div>
 
-        <form
-          className="edit-modal__form"
-          onSubmit={handleSubmit}
-        >
+        <form className="edit-modal__form" onSubmit={handleSubmit}>
           <div className="edit-modal__layout">
             <div className="edit-modal__top">
               <div className="edit-modal__cover">
                 <div className="edit-modal__cover-wrapper">
                   {coverSrc ? (
-                    <img
-                      src={coverSrc}
-                      alt={book.title}
-                    />
+                    <img src={coverSrc} alt={book.title} />
                   ) : (
-                    <div className="edit-modal__no-cover">
-                      Немає обкладинки
-                    </div>
+                    <div className="edit-modal__no-cover">Немає обкладинки</div>
                   )}
 
                   <label
@@ -236,7 +221,6 @@ function EditBookModal({ book, onClose, onUpdated }) {
               <div className="edit-modal__main-fields">
                 <label>
                   Назва
-
                   <input
                     type="text"
                     name="title"
@@ -247,7 +231,6 @@ function EditBookModal({ book, onClose, onUpdated }) {
 
                 <label>
                   Автор
-
                   <input
                     type="text"
                     name="author"
@@ -262,7 +245,6 @@ function EditBookModal({ book, onClose, onUpdated }) {
               <div className="edit-modal__row">
                 <label>
                   Видавництво
-
                   <input
                     type="text"
                     name="publisher"
@@ -273,7 +255,6 @@ function EditBookModal({ book, onClose, onUpdated }) {
 
                 <label>
                   Рік
-
                   <input
                     type="number"
                     name="year"
@@ -286,7 +267,6 @@ function EditBookModal({ book, onClose, onUpdated }) {
               <div className="edit-modal__row">
                 <label>
                   Сторінок
-
                   <input
                     type="number"
                     name="pages"
@@ -297,7 +277,6 @@ function EditBookModal({ book, onClose, onUpdated }) {
 
                 <label>
                   Мова
-
                   <input
                     type="text"
                     name="language"
@@ -309,7 +288,6 @@ function EditBookModal({ book, onClose, onUpdated }) {
 
               <label>
                 Жанр
-
                 <input
                   type="text"
                   name="genre"
@@ -320,7 +298,6 @@ function EditBookModal({ book, onClose, onUpdated }) {
 
               <label>
                 Опис
-
                 <textarea
                   name="description"
                   value={formData.description}
@@ -336,9 +313,7 @@ function EditBookModal({ book, onClose, onUpdated }) {
               className="edit-modal__save"
               disabled={isSaving}
             >
-              {isSaving
-                ? "Збереження..."
-                : "Зберегти"}
+              {isSaving ? "Збереження..." : "Зберегти"}
             </button>
 
             <button
