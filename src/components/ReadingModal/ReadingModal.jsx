@@ -12,12 +12,20 @@ function ReadingModal({ book, apiUrl, onClose }) {
   const [stats, setStats] = useState(null);
   const [ratingLoading, setRatingLoading] = useState(false);
 
+  const token = localStorage.getItem("token");
+
   const progress =
     currentBook.pages && currentBook.pages > 0
       ? Math.round(
-          (currentBook.currentPage / currentBook.pages) * 1000,
+          ((currentBook.currentPage ?? 0) /
+            currentBook.pages) *
+            1000,
         ) / 10
       : 0;
+
+  const getAuthHeaders = () => ({
+    Authorization: `Bearer ${token}`,
+  });
 
   const handleOverlayClick = (event) => {
     if (event.target === event.currentTarget) {
@@ -25,10 +33,72 @@ function ReadingModal({ book, apiUrl, onClose }) {
     }
   };
 
+  // =====================================================
+  // Отримання персональних даних книги
+  // =====================================================
+
+  const fetchUserBook = async () => {
+    try {
+      const response = await fetch(
+        `${apiUrl}/api/user-books/${book.id}`,
+        {
+          headers: getAuthHeaders(),
+        },
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setMessage(
+          data.message ||
+            "Не вдалося отримати дані читання",
+        );
+
+        return;
+      }
+
+      /*
+        Backend повертає UserBook:
+
+        {
+          id,
+          userId,
+          bookId,
+          currentPage,
+          status,
+          rating,
+          book: {...}
+        }
+
+        Для існуючої верстки об'єднуємо
+        Book + UserBook.
+      */
+
+      setCurrentBook({
+        ...data.book,
+        currentPage: data.currentPage ?? 0,
+        status: data.status ?? "NOT_STARTED",
+        rating: data.rating ?? null,
+      });
+    } catch (error) {
+      console.error(
+        "Помилка отримання даних книги:",
+        error,
+      );
+    }
+  };
+
+  // =====================================================
+  // Статистика
+  // =====================================================
+
   const fetchReadingStats = async () => {
     try {
       const response = await fetch(
-        `${apiUrl}/api/books/${currentBook.id}/reading/stats`,
+        `${apiUrl}/api/user-books/${book.id}/reading/stats`,
+        {
+          headers: getAuthHeaders(),
+        },
       );
 
       const data = await response.json();
@@ -39,9 +109,16 @@ function ReadingModal({ book, apiUrl, onClose }) {
 
       setStats(data.stats);
     } catch (error) {
-      console.error("Помилка отримання статистики:", error);
+      console.error(
+        "Помилка отримання статистики:",
+        error,
+      );
     }
   };
+
+  // =====================================================
+  // Початок читання
+  // =====================================================
 
   const handleStartReading = async () => {
     try {
@@ -49,9 +126,10 @@ function ReadingModal({ book, apiUrl, onClose }) {
       setMessage("");
 
       const response = await fetch(
-        `${apiUrl}/api/books/${currentBook.id}/reading/start`,
+        `${apiUrl}/api/user-books/${book.id}/reading/start`,
         {
           method: "POST",
+          headers: getAuthHeaders(),
         },
       );
 
@@ -59,8 +137,10 @@ function ReadingModal({ book, apiUrl, onClose }) {
 
       if (!response.ok) {
         setMessage(
-          data.message || "Не вдалося почати читання",
+          data.message ||
+            "Не вдалося почати читання",
         );
+
         return;
       }
 
@@ -85,18 +165,25 @@ function ReadingModal({ book, apiUrl, onClose }) {
     }
   };
 
+  // =====================================================
+  // Рейтинг
+  // =====================================================
+
   const handleRatingChange = async (rating) => {
     try {
       setRatingLoading(true);
       setMessage("");
 
       const response = await fetch(
-        `${apiUrl}/api/books/${currentBook.id}/rating`,
+        `${apiUrl}/api/user-books/${book.id}`,
         {
           method: "PATCH",
+
           headers: {
+            ...getAuthHeaders(),
             "Content-Type": "application/json",
           },
+
           body: JSON.stringify({
             rating,
           }),
@@ -107,14 +194,16 @@ function ReadingModal({ book, apiUrl, onClose }) {
 
       if (!response.ok) {
         setMessage(
-          data.message || "Не вдалося зберегти оцінку",
+          data.message ||
+            "Не вдалося зберегти оцінку",
         );
+
         return;
       }
 
       setCurrentBook((current) => ({
         ...current,
-        rating: data.book.rating,
+        rating: data.rating,
       }));
 
       setMessage("Оцінку збережено");
@@ -130,11 +219,40 @@ function ReadingModal({ book, apiUrl, onClose }) {
     }
   };
 
+  // =====================================================
+  // Завершення сесії
+  // =====================================================
+
   const handleFinishReading = async () => {
     const page = Number(endPage);
 
     if (!Number.isInteger(page)) {
-      setMessage("Вкажи коректний номер сторінки");
+      setMessage(
+        "Вкажи коректний номер сторінки",
+      );
+
+      return;
+    }
+
+    if (
+      activeSession &&
+      page < activeSession.startPage
+    ) {
+      setMessage(
+        `Сторінка не може бути меншою за ${activeSession.startPage}`,
+      );
+
+      return;
+    }
+
+    if (
+      currentBook.pages &&
+      page > currentBook.pages
+    ) {
+      setMessage(
+        `У книзі всього ${currentBook.pages} сторінок`,
+      );
+
       return;
     }
 
@@ -143,12 +261,15 @@ function ReadingModal({ book, apiUrl, onClose }) {
       setMessage("");
 
       const response = await fetch(
-        `${apiUrl}/api/books/${currentBook.id}/reading/finish`,
+        `${apiUrl}/api/user-books/${book.id}/reading/finish`,
         {
           method: "POST",
+
           headers: {
+            ...getAuthHeaders(),
             "Content-Type": "application/json",
           },
+
           body: JSON.stringify({
             endPage: page,
           }),
@@ -159,16 +280,21 @@ function ReadingModal({ book, apiUrl, onClose }) {
 
       if (!response.ok) {
         setMessage(
-          data.message || "Не вдалося завершити читання",
+          data.message ||
+            "Не вдалося завершити читання",
         );
+
         return;
       }
 
       setCurrentBook((current) => ({
         ...current,
+
         currentPage: page,
+
         status:
-          current.pages && page >= current.pages
+          current.pages &&
+          page >= current.pages
             ? "FINISHED"
             : "READING",
       }));
@@ -179,7 +305,9 @@ function ReadingModal({ book, apiUrl, onClose }) {
 
       await fetchReadingStats();
 
-      setMessage("Сесію читання завершено");
+      setMessage(
+        "Сесію читання завершено",
+      );
     } catch (error) {
       console.error(
         "Помилка завершення читання:",
@@ -194,13 +322,19 @@ function ReadingModal({ book, apiUrl, onClose }) {
     }
   };
 
+  // =====================================================
+  // Таймер
+  // =====================================================
+
   useEffect(() => {
     if (!activeSession) {
       return;
     }
 
     const intervalId = setInterval(() => {
-      setElapsedSeconds((seconds) => seconds + 1);
+      setElapsedSeconds(
+        (seconds) => seconds + 1,
+      );
     }, 1000);
 
     return () => {
@@ -208,11 +342,18 @@ function ReadingModal({ book, apiUrl, onClose }) {
     };
   }, [activeSession]);
 
+  // =====================================================
+  // Активна сесія
+  // =====================================================
+
   useEffect(() => {
     const fetchActiveSession = async () => {
       try {
         const response = await fetch(
-          `${apiUrl}/api/books/${currentBook.id}/reading/active`,
+          `${apiUrl}/api/user-books/${book.id}/reading/active`,
+          {
+            headers: getAuthHeaders(),
+          },
         );
 
         const data = await response.json();
@@ -226,9 +367,7 @@ function ReadingModal({ book, apiUrl, onClose }) {
             data.elapsedSeconds ?? 0,
           );
 
-          setActiveSession(
-            data.session,
-          );
+          setActiveSession(data.session);
 
           setCurrentBook((current) => ({
             ...current,
@@ -244,11 +383,27 @@ function ReadingModal({ book, apiUrl, onClose }) {
     };
 
     fetchActiveSession();
-  }, [apiUrl, currentBook.id]);
+  }, [apiUrl, book.id]);
+
+  // =====================================================
+  // Початкове завантаження UserBook
+  // =====================================================
+
+  useEffect(() => {
+    fetchUserBook();
+  }, [apiUrl, book.id]);
+
+  // =====================================================
+  // Початкове завантаження статистики
+  // =====================================================
 
   useEffect(() => {
     fetchReadingStats();
-  }, [apiUrl, currentBook.id]);
+  }, [apiUrl, book.id]);
+
+  // =====================================================
+  // Форматування часу
+  // =====================================================
 
   const formatTime = (totalSeconds) => {
     const hours = Math.floor(
@@ -295,6 +450,10 @@ function ReadingModal({ book, apiUrl, onClose }) {
 
     return `${minutes} хв`;
   };
+
+  // =====================================================
+  // JSX
+  // =====================================================
 
   return (
     <div
@@ -358,7 +517,7 @@ function ReadingModal({ book, apiUrl, onClose }) {
                 </span>
 
                 <span className="reading-modal__info-value">
-                  {currentBook.currentPage}
+                  {currentBook.currentPage ?? 0}
                 </span>
               </div>
 
@@ -401,12 +560,15 @@ function ReadingModal({ book, apiUrl, onClose }) {
                             value,
                           )
                         }
-                        disabled={ratingLoading}
+                        disabled={
+                          ratingLoading
+                        }
                         aria-label={`Оцінити на ${value} з 5`}
                         title={`${value} з 5`}
                       >
                         {value <=
-                        (currentBook.rating ?? 0)
+                        (currentBook.rating ??
+                          0)
                           ? "★"
                           : "☆"}
                       </button>
@@ -423,9 +585,7 @@ function ReadingModal({ book, apiUrl, onClose }) {
                 Прогрес читання
               </span>
 
-              <span>
-                {progress}%
-              </span>
+              <span>{progress}%</span>
             </div>
 
             <div className="reading-modal__progress-track">
@@ -481,7 +641,8 @@ function ReadingModal({ book, apiUrl, onClose }) {
                 </span>
 
                 <span className="reading-modal__stats-value">
-                  {stats.remainingPages ?? "—"} стор.
+                  {stats.remainingPages ?? "—"}{" "}
+                  стор.
                 </span>
               </div>
 
@@ -527,7 +688,9 @@ function ReadingModal({ book, apiUrl, onClose }) {
                 <input
                   id="reading-end-page"
                   type="number"
-                  min={activeSession.startPage}
+                  min={
+                    activeSession.startPage
+                  }
                   max={
                     currentBook.pages ??
                     undefined
@@ -539,7 +702,8 @@ function ReadingModal({ book, apiUrl, onClose }) {
                     )
                   }
                   placeholder={`Наприклад, ${
-                    activeSession.startPage + 10
+                    activeSession.startPage +
+                    10
                   }`}
                 />
               </div>
@@ -557,7 +721,9 @@ function ReadingModal({ book, apiUrl, onClose }) {
             <button
               type="button"
               className="reading-modal__start"
-              onClick={handleStartReading}
+              onClick={
+                handleStartReading
+              }
               disabled={loading}
             >
               {loading
@@ -570,7 +736,9 @@ function ReadingModal({ book, apiUrl, onClose }) {
             <button
               type="button"
               className="reading-modal__finish"
-              onClick={handleFinishReading}
+              onClick={
+                handleFinishReading
+              }
               disabled={
                 finishing ||
                 endPage === ""

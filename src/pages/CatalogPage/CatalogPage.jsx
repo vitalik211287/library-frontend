@@ -1,13 +1,18 @@
 import { useEffect, useState } from "react";
-import { useSearchParams } from "react-router-dom";
+import {
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 
 import "./CatalogPage.css";
 
 import EditBookModal from "../../components/EditBookModal/EditBookModal";
 import ReadingModal from "../../components/ReadingModal/ReadingModal";
 import BarcodeScanner from "../../components/BarcodeScanner/BarcodeScanner";
+import { useAuth } from "../../context/AuthContext.jsx";
 
-const API_URL = "https://library-backend-production-5d60.up.railway.app";
+const API_URL =
+  "https://library-backend-production-5d60.up.railway.app";
 
 function CatalogPage() {
   const [books, setBooks] = useState([]);
@@ -16,10 +21,16 @@ function CatalogPage() {
   const [searchBy, setSearchBy] = useState("title");
 
   const [editingBook, setEditingBook] = useState(null);
-
   const [scannerOpen, setScannerOpen] = useState(false);
 
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const navigate = useNavigate();
+
+  const {
+    isAuthenticated,
+    isAuthLoading,
+  } = useAuth();
 
   const readingBookId = searchParams.get("reading");
 
@@ -40,7 +51,10 @@ function CatalogPage() {
 
         setBooks(data);
       } catch (error) {
-        console.error("Помилка завантаження книг:", error);
+        console.error(
+          "Помилка завантаження книг:",
+          error,
+        );
 
         setMessage("Помилка завантаження бібліотеки");
       }
@@ -48,6 +62,41 @@ function CatalogPage() {
 
     fetchBooks();
   }, []);
+
+  /*
+   * Захист від ручного відкриття URL:
+   *
+   * /?reading=BOOK_ID
+   *
+   * Якщо користувач не авторизований,
+   * ReadingModal відкриватися не повинен.
+   */
+  useEffect(() => {
+    if (
+      isAuthLoading ||
+      !readingBookId ||
+      isAuthenticated
+    ) {
+      return;
+    }
+
+    const params = new URLSearchParams(searchParams);
+
+    params.delete("reading");
+
+    setSearchParams(params, {
+      replace: true,
+    });
+
+    navigate("/login");
+  }, [
+    isAuthenticated,
+    isAuthLoading,
+    readingBookId,
+    searchParams,
+    setSearchParams,
+    navigate,
+  ]);
 
   const filteredBooks = books.filter((book) => {
     const query = search.trim().toLowerCase();
@@ -58,11 +107,16 @@ function CatalogPage() {
 
     const value = book[searchBy];
 
-    if (value === null || value === undefined) {
+    if (
+      value === null ||
+      value === undefined
+    ) {
       return false;
     }
 
-    return String(value).toLowerCase().includes(query);
+    return String(value)
+      .toLowerCase()
+      .includes(query);
   });
 
   const handleScan = (isbn) => {
@@ -74,7 +128,9 @@ function CatalogPage() {
   const handleBookUpdated = (updatedBook) => {
     setBooks((currentBooks) =>
       currentBooks.map((book) =>
-        book.id === updatedBook.id ? updatedBook : book,
+        book.id === updatedBook.id
+          ? updatedBook
+          : book,
       ),
     );
 
@@ -82,6 +138,32 @@ function CatalogPage() {
   };
 
   const handleOpenReading = (book) => {
+    /*
+     * Не даємо відкрити читання,
+     * поки AuthContext ще перевіряє JWT.
+     */
+    if (isAuthLoading) {
+      return;
+    }
+
+    /*
+     * Немає авторизованого користувача —
+     * відправляємо на сторінку входу.
+     */
+    if (!isAuthenticated) {
+      navigate("/login", {
+        state: {
+          from: `/?reading=${book.id}`,
+        },
+      });
+
+      return;
+    }
+
+    /*
+     * Користувач авторизований —
+     * відкриваємо ReadingModal.
+     */
     const params = new URLSearchParams(searchParams);
 
     params.set("reading", book.id);
@@ -118,7 +200,9 @@ function CatalogPage() {
               type="text"
               placeholder="Пошук..."
               value={search}
-              onChange={(event) => setSearch(event.target.value)}
+              onChange={(event) =>
+                setSearch(event.target.value)
+              }
             />
 
             <svg
@@ -178,7 +262,9 @@ function CatalogPage() {
 
         <select
           value={searchBy}
-          onChange={(event) => setSearchBy(event.target.value)}
+          onChange={(event) =>
+            setSearchBy(event.target.value)
+          }
         >
           <option value="title">
             За назвою
@@ -248,7 +334,9 @@ function CatalogPage() {
               <button
                 type="button"
                 className="book-card__button book-card__button--edit"
-                onClick={() => setEditingBook(book)}
+                onClick={() =>
+                  setEditingBook(book)
+                }
               >
                 Редагувати
               </button>
@@ -256,7 +344,10 @@ function CatalogPage() {
               <button
                 type="button"
                 className="book-card__button book-card__button--read"
-                onClick={() => handleOpenReading(book)}
+                onClick={() =>
+                  handleOpenReading(book)
+                }
+                disabled={isAuthLoading}
               >
                 Читати
               </button>
@@ -268,23 +359,29 @@ function CatalogPage() {
       {editingBook && (
         <EditBookModal
           book={editingBook}
-          onClose={() => setEditingBook(null)}
+          onClose={() =>
+            setEditingBook(null)
+          }
           onUpdated={handleBookUpdated}
         />
       )}
 
-      {readingBook && (
-        <ReadingModal
-          book={readingBook}
-          apiUrl={API_URL}
-          onClose={handleCloseReading}
-        />
-      )}
+      {readingBook &&
+        isAuthenticated &&
+        !isAuthLoading && (
+          <ReadingModal
+            book={readingBook}
+            apiUrl={API_URL}
+            onClose={handleCloseReading}
+          />
+        )}
 
       {scannerOpen && (
         <BarcodeScanner
           onScan={handleScan}
-          onClose={() => setScannerOpen(false)}
+          onClose={() =>
+            setScannerOpen(false)
+          }
         />
       )}
     </div>
