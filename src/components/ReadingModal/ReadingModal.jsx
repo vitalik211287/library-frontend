@@ -13,6 +13,7 @@ function ReadingModal({ book, apiUrl, onClose }) {
   const [currentBook, setCurrentBook] = useState(book);
   const [stats, setStats] = useState(null);
   const [ratingLoading, setRatingLoading] = useState(false);
+  const [pauseLoading, setPauseLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -24,6 +25,8 @@ function ReadingModal({ book, apiUrl, onClose }) {
           ((currentBook.currentPage ?? 0) / currentBook.pages) * 1000,
         ) / 10
       : 0;
+
+  const isPaused = Boolean(activeSession?.pausedAt);
 
   const getAuthHeaders = () => ({
     Authorization: `Bearer ${token}`,
@@ -122,6 +125,72 @@ function ReadingModal({ book, apiUrl, onClose }) {
     }
   };
 
+  const handlePauseReading = async () => {
+    try {
+      setPauseLoading(true);
+      setMessage("");
+
+      const response = await fetch(
+        `${apiUrl}/api/user-books/${book.id}/reading/pause`,
+        {
+          method: "POST",
+          headers: getAuthHeaders(),
+        },
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setMessage(data.message || "Не вдалося поставити читання на паузу");
+
+        return;
+      }
+
+      setActiveSession(data.session);
+
+      setMessage("Читання поставлено на паузу");
+    } catch (error) {
+      console.error("Помилка паузи читання:", error);
+
+      setMessage("Не вдалося поставити читання на паузу");
+    } finally {
+      setPauseLoading(false);
+    }
+  };
+
+  const handleResumeReading = async () => {
+    try {
+      setPauseLoading(true);
+      setMessage("");
+
+      const response = await fetch(
+        `${apiUrl}/api/user-books/${book.id}/reading/resume`,
+        {
+          method: "POST",
+          headers: getAuthHeaders(),
+        },
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        setMessage(data.message || "Не вдалося продовжити читання");
+
+        return;
+      }
+
+      setActiveSession(data.session);
+
+      setMessage("Читання продовжено");
+    } catch (error) {
+      console.error("Помилка продовження читання:", error);
+
+      setMessage("Не вдалося продовжити читання");
+    } finally {
+      setPauseLoading(false);
+    }
+  };
+
   const handleRatingChange = async (rating) => {
     try {
       setRatingLoading(true);
@@ -217,7 +286,8 @@ function ReadingModal({ book, apiUrl, onClose }) {
 
         currentPage: page,
 
-        status: current.pages && page >= current.pages ? "FINISHED" : "READING",
+        status:
+          current.pages && page >= current.pages ? "FINISHED" : "READING",
       }));
 
       setActiveSession(null);
@@ -243,7 +313,7 @@ function ReadingModal({ book, apiUrl, onClose }) {
   };
 
   useEffect(() => {
-    if (!activeSession) {
+    if (!activeSession || activeSession.pausedAt) {
       return;
     }
 
@@ -391,7 +461,11 @@ function ReadingModal({ book, apiUrl, onClose }) {
                 <span className="reading-modal__info-label">Статус</span>
 
                 <span className="reading-modal__info-value">
-                  {activeSession ? "READING" : currentBook.status}
+                  {activeSession
+                    ? isPaused
+                      ? "PAUSED"
+                      : "READING"
+                    : currentBook.status}
                 </span>
               </div>
 
@@ -502,7 +576,7 @@ function ReadingModal({ book, apiUrl, onClose }) {
           {activeSession && (
             <div className="reading-modal__session">
               <span className="reading-modal__session-label">
-                Читання активне
+                {isPaused ? "Читання на паузі" : "Читання активне"}
               </span>
 
               <div className="reading-modal__timer">
@@ -541,6 +615,28 @@ function ReadingModal({ book, apiUrl, onClose }) {
               disabled={loading}
             >
               {loading ? "Запускаємо..." : "▶ Почати читання"}
+            </button>
+          )}
+
+          {activeSession && !isPaused && (
+            <button
+              type="button"
+              className="reading-modal__pause"
+              onClick={handlePauseReading}
+              disabled={pauseLoading}
+            >
+              {pauseLoading ? "Ставимо на паузу..." : "⏸ Пауза"}
+            </button>
+          )}
+
+          {activeSession && isPaused && (
+            <button
+              type="button"
+              className="reading-modal__resume"
+              onClick={handleResumeReading}
+              disabled={pauseLoading}
+            >
+              {pauseLoading ? "Продовжуємо..." : "▶ Продовжити"}
             </button>
           )}
 
