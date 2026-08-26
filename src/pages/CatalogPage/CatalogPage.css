@@ -33,6 +33,23 @@
 }
 
 /* =========================
+   ПОВІДОМЛЕННЯ
+========================= */
+
+.catalog-message {
+  margin-bottom: 20px;
+
+  padding: 12px 14px;
+
+  border-radius: 8px;
+
+  background: var(--error-bg, #fff1f1);
+  color: var(--error-text, #b42318);
+
+  font-size: 14px;
+}
+
+/* =========================
    ПОШУК
 ========================= */
 
@@ -60,6 +77,7 @@
   position: relative;
 
   flex: 1;
+
   min-width: 0;
 }
 
@@ -130,7 +148,6 @@
 
 /* =========================
    КНОПКА СКАНЕРА
-   Mobile-first: показана за замовчуванням
 ========================= */
 
 .catalog-scan__button {
@@ -162,6 +179,7 @@
 
 .catalog-scan__button:hover {
   border-color: var(--border-hover);
+
   background: var(--surface-secondary);
 }
 
@@ -243,7 +261,7 @@
 
 /* =========================
    СІТКА КНИГ
-   Mobile — 2 картки в ряд
+   Mobile-first: 2 картки
 ========================= */
 
 .books-grid {
@@ -260,6 +278,9 @@
 .book-card {
   min-width: 0;
 
+  display: flex;
+  flex-direction: column;
+
   padding: 10px;
 
   background: var(--surface);
@@ -268,7 +289,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
 
-  cursor: pointer;
+  box-sizing: border-box;
 
   transition:
     transform 0.2s ease,
@@ -278,8 +299,6 @@
 }
 
 .book-card:hover {
-  transform: translateY(-3px);
-
   border-color: var(--border-hover);
 
   box-shadow: var(--shadow);
@@ -302,6 +321,17 @@
   border-radius: 6px;
 
   background: var(--surface-secondary);
+}
+
+/* =========================
+   КОНТЕНТ КАРТКИ
+========================= */
+
+.book-card__content {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
 }
 
 /* =========================
@@ -335,20 +365,85 @@
 }
 
 /* =========================
-   ПОВІДОМЛЕННЯ
+   КНОПКИ КАРТКИ
+   Mobile-first
 ========================= */
 
-.catalog-message {
-  margin-bottom: 20px;
+.book-card__actions {
+  display: flex;
+  flex-direction: column;
 
-  padding: 12px 14px;
+  gap: 8px;
 
+  margin-top: auto;
+  padding-top: 14px;
+}
+
+.book-card__button {
+  width: 100%;
+  min-width: 0;
+
+  padding: 10px 8px;
+
+  border: 1px solid var(--border);
   border-radius: 8px;
 
-  background: var(--error-bg, #fff1f1);
-  color: var(--error-text, #b42318);
+  box-sizing: border-box;
 
-  font-size: 14px;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.1s ease,
+    opacity 0.2s ease;
+}
+
+/* Читати — головна кнопка */
+
+.book-card__button--read {
+  order: 1;
+
+  background: var(--text-h);
+  color: var(--bg);
+
+  border-color: var(--text-h);
+}
+
+.book-card__button--read:hover {
+  opacity: 0.85;
+}
+
+/* Редагувати — другорядна */
+
+.book-card__button--edit {
+  order: 2;
+
+  background: var(--surface);
+  color: var(--text-h);
+}
+
+.book-card__button--edit:hover {
+  background: var(--surface-secondary);
+
+  border-color: var(--border-hover);
+}
+
+.book-card__button:active {
+  transform: translateY(1px);
+}
+
+.book-card__button:focus-visible {
+  outline: 2px solid var(--text-h);
+  outline-offset: 2px;
 }
 
 /* =========================
@@ -374,6 +469,7 @@
 
   .book-cover {
     height: 260px;
+
     margin-bottom: 14px;
   }
 
@@ -387,6 +483,24 @@
     margin: 5px 0;
 
     font-size: 14px;
+  }
+
+  .book-card__actions {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+
+    gap: 8px;
+  }
+
+  .book-card__button {
+    padding: 10px 8px;
+
+    font-size: 14px;
+  }
+
+  .book-card__button--edit,
+  .book-card__button--read {
+    order: initial;
   }
 }
 
@@ -428,6 +542,10 @@
   .catalog-scan__button {
     display: none;
   }
+
+  .book-card:hover {
+    transform: translateY(-3px);
+  }
 }
 
 /* =========================
@@ -466,69 +584,4 @@
   .books-grid {
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
-}
-
-
-.book-card__actions {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
-
-  margin-top: auto;
-  padding-top: 14px;
-}
-
-.book-card__button {
-  width: 100%;
-  min-width: 0;
-
-  padding: 10px 12px;
-
-  border: 1px solid var(--border);
-  border-radius: 8px;
-
-  font-family: inherit;
-  font-size: 14px;
-  font-weight: 500;
-
-  cursor: pointer;
-
-  transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease,
-    color 0.2s ease,
-    transform 0.1s ease;
-}
-
-/* Редагувати */
-
-.book-card__button--edit {
-  background: var(--surface);
-  color: var(--text-h);
-}
-
-.book-card__button--edit:hover {
-  background: var(--surface-secondary);
-  border-color: var(--border-hover);
-}
-
-/* Читати */
-
-.book-card__button--read {
-  background: var(--text-h);
-  color: var(--bg);
-  border-color: var(--text-h);
-}
-
-.book-card__button--read:hover {
-  opacity: 0.85;
-}
-
-.book-card__button:active {
-  transform: translateY(1px);
-}
-
-.book-card__button:focus-visible {
-  outline: 2px solid var(--text-h);
-  outline-offset: 2px;
 }
