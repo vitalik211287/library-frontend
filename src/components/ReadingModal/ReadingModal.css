@@ -27,7 +27,7 @@
 
   margin: auto 0;
 
-  padding: 18px 14px;
+  padding: 16px 12px;
 
   overflow-y: auto;
 
@@ -35,7 +35,7 @@
   color: var(--text);
 
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 16px;
 
   box-shadow: var(--shadow);
 
@@ -47,39 +47,39 @@
 ========================= */
 
 .reading-modal__header {
-  padding-right: 42px;
+  padding-right: 40px;
 }
 
 .reading-modal h2 {
   margin: 0;
 
-  font-size: 22px;
-  line-height: 1.2;
-
   color: var(--text-h);
+
+  font-size: 21px;
+  line-height: 1.2;
 }
 
 .reading-modal__author {
-  margin: 6px 0 0;
-
-  font-size: 14px;
-  line-height: 1.3;
+  margin: 5px 0 0;
 
   color: var(--text);
+
+  font-size: 13px;
+  line-height: 1.25;
 }
 
 /* =========================
-   CLOSE BUTTON
+   CLOSE
 ========================= */
 
 .reading-modal__close {
   position: absolute;
 
-  top: 10px;
-  right: 10px;
+  top: 8px;
+  right: 8px;
 
-  width: 36px;
-  height: 36px;
+  width: 34px;
+  height: 34px;
 
   display: flex;
   align-items: center;
@@ -93,7 +93,8 @@
   background: transparent;
   color: var(--text);
 
-  font-size: 26px;
+  font-family: inherit;
+  font-size: 25px;
   line-height: 1;
 
   cursor: pointer;
@@ -113,9 +114,9 @@
 ========================= */
 
 .reading-modal__message {
-  margin: 14px 0 0;
+  margin: 10px 0 0;
 
-  padding: 10px 12px;
+  padding: 7px 9px;
 
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -123,8 +124,8 @@
   background: var(--surface-secondary);
   color: var(--text);
 
-  font-size: 13px;
-  line-height: 1.4;
+  font-size: 12px;
+  line-height: 1.25;
 
   box-sizing: border-box;
 }
@@ -137,9 +138,9 @@
   display: flex;
   flex-direction: column;
 
-  gap: 14px;
+  gap: 10px;
 
-  margin-top: 18px;
+  margin-top: 12px;
 }
 
 /* =========================
@@ -149,9 +150,9 @@
 .reading-modal__top {
   display: grid;
 
-  grid-template-columns: 92px minmax(0, 1fr);
+  grid-template-columns: 88px minmax(0, 1fr);
 
-  gap: 12px;
+  gap: 9px;
 
   align-items: start;
 }
@@ -161,7 +162,7 @@
 ========================= */
 
 .reading-modal__cover {
-  width: 92px;
+  width: 88px;
 
   flex-shrink: 0;
 }
@@ -171,7 +172,7 @@
   display: block;
 
   width: 100%;
-  height: 138px;
+  height: 132px;
 
   box-sizing: border-box;
 
@@ -187,14 +188,14 @@
   align-items: center;
   justify-content: center;
 
-  padding: 8px;
+  padding: 7px;
 
   border: 1px solid var(--border);
 
   background: var(--surface-secondary);
   color: var(--text);
 
-  font-size: 11px;
+  font-size: 10px;
   line-height: 1.2;
   text-align: center;
 }
@@ -210,13 +211,13 @@
 
   grid-template-columns: repeat(2, minmax(0, 1fr));
 
-  gap: 7px;
+  gap: 5px;
 }
 
 .reading-modal__info-item {
   min-width: 0;
 
-  padding: 9px;
+  padding: 7px;
 
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -229,12 +230,12 @@
 .reading-modal__info-label {
   display: block;
 
-  margin-bottom: 4px;
-
-  font-size: 10px;
-  line-height: 1.2;
+  margin-bottom: 2px;
 
   color: var(--text);
+
+  font-size: 9px;
+  line-height: 1.15;
 }
 
 .reading-modal__info-value {
@@ -244,11 +245,11 @@
 
   overflow-wrap: anywhere;
 
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 1.25;
-
   color: var(--text-h);
+
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.15;
 }
 
 /* =========================
@@ -259,7 +260,7 @@
   display: flex;
   align-items: center;
 
-  gap: 1px;
+  gap: 0;
 
   min-width: 0;
 
@@ -280,7 +281,7 @@
   color: var(--text-h);
 
   font-family: inherit;
-  font-size: 18px;
+  font-size: 17px;
   line-height: 1;
 
   cursor: pointer;
@@ -291,12 +292,11 @@
 }
 
 .reading-modal__star:hover {
-  transform: scale(1.12);
+  transform: scale(1.1);
 }
 
 .reading-modal__star:disabled {
   opacity: 0.6;
-
   cursor: wait;
 }
 
@@ -313,19 +313,19 @@
   align-items: center;
   justify-content: space-between;
 
-  gap: 12px;
+  gap: 8px;
 
-  margin-bottom: 7px;
-
-  font-size: 13px;
-  line-height: 1.2;
+  margin-bottom: 4px;
 
   color: var(--text);
+
+  font-size: 11px;
+  line-height: 1.2;
 }
 
 .reading-modal__progress-track {
   width: 100%;
-  height: 9px;
+  height: 7px;
 
   overflow: hidden;
 
@@ -353,7 +353,7 @@
 
   grid-template-columns: repeat(2, minmax(0, 1fr));
 
-  gap: 7px;
+  gap: 5px;
 }
 
 .reading-modal__stats-item {
@@ -362,9 +362,9 @@
   display: flex;
   flex-direction: column;
 
-  gap: 4px;
+  gap: 2px;
 
-  padding: 9px;
+  padding: 7px;
 
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -375,10 +375,10 @@
 }
 
 .reading-modal__stats-label {
-  font-size: 10px;
-  line-height: 1.2;
-
   color: var(--text);
+
+  font-size: 9px;
+  line-height: 1.15;
 }
 
 .reading-modal__stats-value {
@@ -386,11 +386,11 @@
 
   overflow-wrap: anywhere;
 
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 1.25;
-
   color: var(--text-h);
+
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1.15;
 }
 
 /* =========================
@@ -405,9 +405,9 @@
   flex-direction: column;
   justify-content: center;
 
-  gap: 4px;
+  gap: 2px;
 
-  padding: 9px;
+  padding: 7px;
 
   box-sizing: border-box;
 
@@ -449,7 +449,7 @@
   align-items: center;
   justify-content: space-between;
 
-  gap: 8px;
+  gap: 5px;
 }
 
 .reading-modal__stats-calendar-arrow {
@@ -457,7 +457,7 @@
 
   color: var(--accent);
 
-  font-size: 20px;
+  font-size: 18px;
   line-height: 1;
 
   opacity: 0.8;
@@ -468,7 +468,7 @@
 }
 
 .reading-modal__stats-item--calendar:hover
-.reading-modal__stats-calendar-arrow {
+  .reading-modal__stats-calendar-arrow {
   transform: translateX(3px);
   opacity: 1;
 }
@@ -481,22 +481,42 @@
   display: flex;
   flex-direction: column;
 
-  gap: 8px;
+  gap: 6px;
 
-  padding: 10px;
+  padding: 9px;
 
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 9px;
 
   background: var(--surface-secondary);
+
+  box-sizing: border-box;
 }
 
 .reading-modal__session-label {
-  font-size: 14px;
-  font-weight: 600;
-  line-height: 1.2;
-
   color: var(--text-h);
+
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.15;
+  margin-bottom: 10px;
+}
+
+/* =========================
+   SESSION CONTENT
+   MOBILE — 50 / 50
+========================= */
+
+.reading-modal__session-content {
+  display: grid;
+
+  grid-template-columns: 1fr 1fr;
+
+  gap: 10px;
+
+  align-items: center;
+
+  min-width: 0;
 }
 
 /* =========================
@@ -504,24 +524,26 @@
 ========================= */
 
 .reading-modal__timer {
+  min-width: 0;
+
+  margin: 0;
   padding: 0;
-
-  font-size: 26px;
-  font-weight: 700;
-  line-height: 1;
-
-  letter-spacing: 1px;
 
   color: var(--text-h);
 
+  font-size: 23px;
+  font-weight: 700;
+  line-height: 1;
+
+  letter-spacing: 0;
+
   font-variant-numeric: tabular-nums;
-}
 
-.reading-modal__session-page {
-  font-size: 12px;
-  line-height: 1.3;
+  white-space: nowrap;
 
-  color: var(--text);
+  text-align: center;
+  display: flex;
+  flex-direction: column;
 }
 
 /* =========================
@@ -529,36 +551,38 @@
 ========================= */
 
 .reading-modal__finish-form {
+  min-width: 0;
+
   display: flex;
   flex-direction: column;
 
-  gap: 7px;
+  gap: 4px;
 }
 
 .reading-modal__finish-form label {
-  font-size: 13px;
-  font-weight: 500;
-  line-height: 1.3;
-
   color: var(--text-h);
+
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 1.2;
 }
 
 .reading-modal__finish-form input {
   width: 100%;
-  min-height: 44px;
+  min-height: 36px;
 
-  padding: 11px 12px;
+  padding: 6px 8px;
 
   box-sizing: border-box;
 
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 7px;
 
   background: var(--surface);
   color: var(--text-h);
 
   font-family: inherit;
-  font-size: 16px;
+  font-size: 15px;
 
   outline: none;
 
@@ -571,6 +595,15 @@
   border-color: var(--border-hover);
 }
 
+.reading-modal__session-page {
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 10px;
+  line-height: 1.2;
+}
+
 /* =========================
    ACTIONS
 ========================= */
@@ -579,28 +612,28 @@
   display: flex;
   flex-direction: column;
 
-  gap: 8px;
+  gap: 6px;
 
-  margin-top: 12px;
-  padding-top: 12px;
+  margin-top: 8px;
+  padding-top: 8px;
 
   border-top: 1px solid var(--border);
 }
 
 .reading-modal__actions button {
   width: 100%;
-  min-height: 44px;
+  min-height: 40px;
 
-  padding: 12px 14px;
+  padding: 9px 10px;
 
   box-sizing: border-box;
 
   border-radius: 8px;
 
   font-family: inherit;
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 600;
-  line-height: 1.2;
+  line-height: 1.15;
 
   cursor: pointer;
 }
@@ -634,7 +667,6 @@
 .reading-modal__start:disabled,
 .reading-modal__finish:disabled {
   opacity: 0.6;
-
   cursor: not-allowed;
 }
 
@@ -670,7 +702,6 @@
 .reading-modal__pause:disabled,
 .reading-modal__resume:disabled {
   opacity: 0.6;
-
   cursor: not-allowed;
 }
 
@@ -703,40 +734,85 @@
 
 @media (max-width: 370px) {
   .reading-modal {
-    padding: 14px 10px;
+    padding: 12px 9px;
   }
 
   .reading-modal__top {
-    grid-template-columns: 78px minmax(0, 1fr);
-
-    gap: 9px;
+    grid-template-columns: 74px minmax(0, 1fr);
+    gap: 7px;
   }
 
   .reading-modal__cover {
-    width: 78px;
+    width: 74px;
   }
 
   .reading-modal__cover img,
   .reading-modal__no-cover {
-    height: 118px;
+    height: 111px;
   }
 
   .reading-modal__info {
-    gap: 5px;
+    gap: 4px;
   }
 
-  .reading-modal__info-item,
-  .reading-modal__stats-item,
-  .reading-modal__stats-item--calendar {
-    padding: 7px;
+  .reading-modal__info-item {
+    padding: 6px;
+  }
+
+  .reading-modal__info-label,
+  .reading-modal__stats-label {
+    font-size: 8px;
+  }
+
+  .reading-modal__info-value,
+  .reading-modal__stats-value {
+    font-size: 11px;
   }
 
   .reading-modal__star {
-    font-size: 16px;
+    font-size: 15px;
+  }
+
+  .reading-modal__session {
+    padding: 8px;
+  }
+
+  .reading-modal__session-content {
+    grid-template-columns: 1fr 1fr;
+    gap: 7px;
   }
 
   .reading-modal__timer {
-    font-size: 24px;
+    font-size: 19px;
+  }
+
+  .reading-modal__finish-form {
+    gap: 3px;
+  }
+
+  .reading-modal__finish-form label {
+    font-size: 10px;
+  }
+
+  .reading-modal__finish-form input {
+    min-height: 34px;
+    padding: 6px 7px;
+    font-size: 14px;
+  }
+
+  .reading-modal__session-page {
+    font-size: 9px;
+  }
+
+  .reading-modal__actions {
+    gap: 5px;
+    margin-top: 7px;
+    padding-top: 7px;
+  }
+
+  .reading-modal__actions button {
+    min-height: 38px;
+    padding: 8px 9px;
   }
 }
 
@@ -821,18 +897,47 @@
     padding: 12px;
   }
 
+  /* На планшеті повертаємо вертикальний блок */
+
+  .reading-modal__session-content {
+    display: flex;
+    flex-direction: column;
+
+    align-items: stretch;
+
+    gap: 8px;
+  }
+
   .reading-modal__timer {
     font-size: 32px;
+    text-align: left;
+  }
+
+  .reading-modal__finish-form {
+    gap: 5px;
+  }
+
+  .reading-modal__finish-form input {
+    min-height: 40px;
+
+    padding: 8px 10px;
+  }
+
+  .reading-modal__session-page {
+    font-size: 11px;
   }
 
   .reading-modal__actions {
     flex-direction: row;
+
     justify-content: flex-end;
+
     flex-wrap: wrap;
   }
 
   .reading-modal__actions button {
     width: auto;
+
     min-width: 130px;
   }
 }
