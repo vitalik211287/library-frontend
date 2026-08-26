@@ -1,4 +1,6 @@
 import { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+
 import "./CatalogPage.css";
 
 import EditBookModal from "../../components/EditBookModal/EditBookModal";
@@ -14,9 +16,15 @@ function CatalogPage() {
   const [searchBy, setSearchBy] = useState("title");
 
   const [editingBook, setEditingBook] = useState(null);
-  const [readingBook, setReadingBook] = useState(null);
 
   const [scannerOpen, setScannerOpen] = useState(false);
+
+  const [searchParams, setSearchParams] = useSearchParams();
+
+  const readingBookId = searchParams.get("reading");
+
+  const readingBook =
+    books.find((book) => book.id === readingBookId) ?? null;
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -73,6 +81,22 @@ function CatalogPage() {
     setEditingBook(null);
   };
 
+  const handleOpenReading = (book) => {
+    const params = new URLSearchParams(searchParams);
+
+    params.set("reading", book.id);
+
+    setSearchParams(params);
+  };
+
+  const handleCloseReading = () => {
+    const params = new URLSearchParams(searchParams);
+
+    params.delete("reading");
+
+    setSearchParams(params);
+  };
+
   return (
     <div className="catalog-page">
       <h1>Каталог бібліотеки</h1>
@@ -97,8 +121,16 @@ function CatalogPage() {
               onChange={(event) => setSearch(event.target.value)}
             />
 
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <circle cx="11" cy="11" r="7" />
+            <svg
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <circle
+                cx="11"
+                cy="11"
+                r="7"
+              />
+
               <path d="M20 20L16.5 16.5" />
             </svg>
           </div>
@@ -148,11 +180,25 @@ function CatalogPage() {
           value={searchBy}
           onChange={(event) => setSearchBy(event.target.value)}
         >
-          <option value="title">За назвою</option>
-          <option value="author">За автором</option>
-          <option value="year">За роком</option>
-          <option value="genre">За жанром</option>
-          <option value="isbn">За ISBN</option>
+          <option value="title">
+            За назвою
+          </option>
+
+          <option value="author">
+            За автором
+          </option>
+
+          <option value="year">
+            За роком
+          </option>
+
+          <option value="genre">
+            За жанром
+          </option>
+
+          <option value="isbn">
+            За ISBN
+          </option>
         </select>
       </div>
 
@@ -171,20 +217,30 @@ function CatalogPage() {
             )}
 
             <div className="book-card__content">
-              <h2>{book.title}</h2>
+              <h2>
+                {book.title}
+              </h2>
 
-              <p>{book.author}</p>
+              <p>
+                {book.author}
+              </p>
 
               {book.publisher && (
-                <p>Видавництво: {book.publisher}</p>
+                <p>
+                  Видавництво: {book.publisher}
+                </p>
               )}
 
               {book.year && (
-                <p>Рік: {book.year}</p>
+                <p>
+                  Рік: {book.year}
+                </p>
               )}
 
               {book.genre && (
-                <p>Жанр: {book.genre}</p>
+                <p>
+                  Жанр: {book.genre}
+                </p>
               )}
             </div>
 
@@ -200,7 +256,7 @@ function CatalogPage() {
               <button
                 type="button"
                 className="book-card__button book-card__button--read"
-                onClick={() => setReadingBook(book)}
+                onClick={() => handleOpenReading(book)}
               >
                 Читати
               </button>
@@ -221,7 +277,7 @@ function CatalogPage() {
         <ReadingModal
           book={readingBook}
           apiUrl={API_URL}
-          onClose={() => setReadingBook(null)}
+          onClose={handleCloseReading}
         />
       )}
 
