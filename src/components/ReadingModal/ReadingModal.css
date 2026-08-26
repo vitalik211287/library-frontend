@@ -42,7 +42,9 @@
   box-sizing: border-box;
 }
 
-/* HEADER */
+/* =========================
+   HEADER
+========================= */
 
 .reading-modal__header {
   padding-right: 42px;
@@ -61,11 +63,14 @@
   margin: 6px 0 0;
 
   font-size: 14px;
+  line-height: 1.3;
 
   color: var(--text);
 }
 
-/* CLOSE */
+/* =========================
+   CLOSE BUTTON
+========================= */
 
 .reading-modal__close {
   position: absolute;
@@ -92,6 +97,10 @@
   line-height: 1;
 
   cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
 }
 
 .reading-modal__close:hover {
@@ -99,7 +108,9 @@
   color: var(--text-h);
 }
 
-/* MESSAGE */
+/* =========================
+   MESSAGE
+========================= */
 
 .reading-modal__message {
   margin: 14px 0 0;
@@ -113,9 +124,14 @@
   color: var(--text);
 
   font-size: 13px;
+  line-height: 1.4;
+
+  box-sizing: border-box;
 }
 
-/* MAIN */
+/* =========================
+   MAIN LAYOUT
+========================= */
 
 .reading-modal__layout {
   display: flex;
@@ -126,10 +142,13 @@
   margin-top: 18px;
 }
 
-/* TOP */
+/* =========================
+   BOOK TOP
+========================= */
 
 .reading-modal__top {
   display: grid;
+
   grid-template-columns: 92px minmax(0, 1fr);
 
   gap: 12px;
@@ -137,14 +156,20 @@
   align-items: start;
 }
 
-/* COVER */
+/* =========================
+   COVER
+========================= */
 
 .reading-modal__cover {
   width: 92px;
+
+  flex-shrink: 0;
 }
 
 .reading-modal__cover img,
 .reading-modal__no-cover {
+  display: block;
+
   width: 100%;
   height: 138px;
 
@@ -154,8 +179,6 @@
 }
 
 .reading-modal__cover img {
-  display: block;
-
   object-fit: cover;
 }
 
@@ -172,13 +195,19 @@
   color: var(--text);
 
   font-size: 11px;
+  line-height: 1.2;
   text-align: center;
 }
 
-/* INFO */
+/* =========================
+   BOOK INFO
+========================= */
 
 .reading-modal__info {
+  min-width: 0;
+
   display: grid;
+
   grid-template-columns: repeat(2, minmax(0, 1fr));
 
   gap: 7px;
@@ -211,6 +240,8 @@
 .reading-modal__info-value {
   display: block;
 
+  min-width: 0;
+
   overflow-wrap: anywhere;
 
   font-size: 13px;
@@ -220,7 +251,9 @@
   color: var(--text-h);
 }
 
-/* RATING */
+/* =========================
+   RATING
+========================= */
 
 .reading-modal__rating {
   display: flex;
@@ -228,12 +261,17 @@
 
   gap: 1px;
 
+  min-width: 0;
+
   white-space: nowrap;
 }
 
 .reading-modal__star {
   flex: 0 0 auto;
 
+  width: auto;
+
+  margin: 0;
   padding: 0;
 
   border: none;
@@ -262,7 +300,9 @@
   cursor: wait;
 }
 
-/* PROGRESS */
+/* =========================
+   PROGRESS
+========================= */
 
 .reading-modal__progress {
   width: 100%;
@@ -278,6 +318,7 @@
   margin-bottom: 7px;
 
   font-size: 13px;
+  line-height: 1.2;
 
   color: var(--text);
 }
@@ -303,10 +344,13 @@
   transition: width 0.3s ease;
 }
 
-/* STATS */
+/* =========================
+   STATS
+========================= */
 
 .reading-modal__stats {
   display: grid;
+
   grid-template-columns: repeat(2, minmax(0, 1fr));
 
   gap: 7px;
@@ -326,6 +370,8 @@
   border-radius: 8px;
 
   background: var(--surface-secondary);
+
+  box-sizing: border-box;
 }
 
 .reading-modal__stats-label {
@@ -336,6 +382,8 @@
 }
 
 .reading-modal__stats-value {
+  min-width: 0;
+
   overflow-wrap: anywhere;
 
   font-size: 13px;
@@ -345,7 +393,9 @@
   color: var(--text-h);
 }
 
-/* CALENDAR BUTTON */
+/* =========================
+   CALENDAR BUTTON
+========================= */
 
 .reading-modal__stats-item--calendar {
   width: 100%;
@@ -361,11 +411,11 @@
 
   box-sizing: border-box;
 
-  color: var(--text);
-  background: var(--surface-secondary);
-
   border: 1px solid var(--border);
   border-radius: 8px;
+
+  background: var(--surface-secondary);
+  color: var(--text);
 
   font: inherit;
   text-align: left;
@@ -418,12 +468,14 @@
 }
 
 .reading-modal__stats-item--calendar:hover
-  .reading-modal__stats-calendar-arrow {
+.reading-modal__stats-calendar-arrow {
   transform: translateX(3px);
   opacity: 1;
 }
 
-/* ACTIVE SESSION */
+/* =========================
+   ACTIVE SESSION
+========================= */
 
 .reading-modal__session {
   display: flex;
@@ -442,6 +494,7 @@
 .reading-modal__session-label {
   font-size: 14px;
   font-weight: 600;
+  line-height: 1.2;
 
   color: var(--text-h);
 }
@@ -462,11 +515,14 @@
 
 .reading-modal__session-page {
   font-size: 12px;
+  line-height: 1.3;
 
   color: var(--text);
 }
 
-/* FINISH FORM */
+/* =========================
+   FINISH FORM
+========================= */
 
 .reading-modal__finish-form {
   display: flex;
@@ -478,12 +534,14 @@
 .reading-modal__finish-form label {
   font-size: 13px;
   font-weight: 500;
+  line-height: 1.3;
 
   color: var(--text-h);
 }
 
 .reading-modal__finish-form input {
   width: 100%;
+  min-height: 44px;
 
   padding: 11px 12px;
 
@@ -497,15 +555,21 @@
 
   font-family: inherit;
   font-size: 16px;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
 }
 
 .reading-modal__finish-form input:focus {
-  outline: none;
-
   border-color: var(--border-hover);
 }
 
-/* ACTIONS */
+/* =========================
+   ACTIONS
+========================= */
 
 .reading-modal__actions {
   display: flex;
@@ -521,6 +585,7 @@
 
 .reading-modal__actions button {
   width: 100%;
+  min-height: 44px;
 
   padding: 12px 14px;
 
@@ -531,11 +596,14 @@
   font-family: inherit;
   font-size: 14px;
   font-weight: 600;
+  line-height: 1.2;
 
   cursor: pointer;
 }
 
-/* START / FINISH */
+/* =========================
+   START / FINISH
+========================= */
 
 .reading-modal__start,
 .reading-modal__finish {
@@ -566,7 +634,9 @@
   cursor: not-allowed;
 }
 
-/* PAUSE / RESUME */
+/* =========================
+   PAUSE / RESUME
+========================= */
 
 .reading-modal__pause,
 .reading-modal__resume {
@@ -600,7 +670,9 @@
   cursor: not-allowed;
 }
 
-/* CANCEL */
+/* =========================
+   CANCEL
+========================= */
 
 .reading-modal__cancel {
   border: 1px solid var(--border);
@@ -621,7 +693,9 @@
   transform: scale(0.98);
 }
 
-/* VERY SMALL */
+/* =========================
+   VERY SMALL PHONES
+========================= */
 
 @media (max-width: 370px) {
   .reading-modal {
@@ -662,7 +736,9 @@
   }
 }
 
-/* TABLET */
+/* =========================
+   TABLET
+========================= */
 
 @media (min-width: 600px) {
   .reading-modal-overlay {
@@ -749,12 +825,13 @@
 
   .reading-modal__actions button {
     width: auto;
-
     min-width: 130px;
   }
 }
 
-/* DESKTOP */
+/* =========================
+   DESKTOP
+========================= */
 
 @media (min-width: 900px) {
   .reading-modal-overlay {
