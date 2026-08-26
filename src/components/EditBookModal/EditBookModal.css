@@ -4,10 +4,12 @@
   z-index: 1000;
 
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   justify-content: center;
 
-  padding: 24px;
+  padding: 8px;
+
+  overflow-y: auto;
 
   background: rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(3px);
@@ -19,48 +21,65 @@
   position: relative;
 
   width: 100%;
-  max-width: 900px;
-  max-height: calc(100vh - 48px);
+  max-width: 100%;
 
-  padding: 28px;
+  max-height: calc(100dvh - 16px);
+
+  margin: auto 0;
+
+  padding: 18px 14px;
+
   overflow-y: auto;
 
   background: var(--surface);
   color: var(--text);
 
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 14px;
 
   box-shadow: var(--shadow);
 
   box-sizing: border-box;
 }
 
-.edit-modal h2 {
-  margin: 0 0 24px;
+/* HEADER */
 
-  font-size: 26px;
+.edit-modal__header {
+  padding-right: 42px;
+}
+
+.edit-modal h2 {
+  margin: 0;
+
+  font-size: 22px;
   line-height: 1.2;
 
   color: var(--text-h);
 }
 
-/* Закрити */
+.edit-modal__subtitle {
+  margin: 6px 0 0;
+
+  font-size: 14px;
+  color: var(--text);
+}
+
+/* CLOSE */
 
 .edit-modal__close {
   position: absolute;
 
-  top: 16px;
-  right: 18px;
+  top: 10px;
+  right: 10px;
 
   width: 36px;
   height: 36px;
 
-  padding: 0;
-
   display: flex;
   align-items: center;
   justify-content: center;
+
+  padding: 0;
 
   border: none;
   border-radius: 8px;
@@ -68,7 +87,7 @@
   background: transparent;
   color: var(--text);
 
-  font-size: 28px;
+  font-size: 26px;
   line-height: 1;
 
   cursor: pointer;
@@ -79,47 +98,71 @@
   color: var(--text-h);
 }
 
-/* Основна частина */
+/* FORM */
+
+.edit-modal__form {
+  margin-top: 18px;
+}
 
 .edit-modal__layout {
-  display: grid;
-  grid-template-columns: 220px minmax(0, 1fr);
+  display: flex;
+  flex-direction: column;
 
-  gap: 28px;
+  gap: 14px;
+}
+
+/* TOP */
+
+.edit-modal__top {
+  display: grid;
+  grid-template-columns: 92px minmax(0, 1fr);
+
+  gap: 12px;
 
   align-items: start;
 }
 
-/* Обкладинка */
+/* COVER */
 
-.edit-modal__cover img {
-  display: block;
+.edit-modal__cover {
+  width: 92px;
 
+  display: flex;
+  flex-direction: column;
+
+  gap: 8px;
+}
+
+.edit-modal__cover img,
+.edit-modal__no-cover {
   width: 100%;
-  height: 310px;
+  height: 138px;
 
-  object-fit: cover;
+  box-sizing: border-box;
 
   border-radius: 8px;
 }
 
-.edit-modal__no-cover {
-  width: 100%;
-  height: 310px;
+.edit-modal__cover img {
+  display: block;
 
+  object-fit: cover;
+}
+
+.edit-modal__no-cover {
   display: flex;
   align-items: center;
   justify-content: center;
 
-  box-sizing: border-box;
+  padding: 8px;
 
   border: 1px solid var(--border);
-  border-radius: 8px;
 
   background: var(--surface-secondary);
   color: var(--text);
 
-  font-size: 14px;
+  font-size: 11px;
+  text-align: center;
 }
 
 .edit-modal__cover-button {
@@ -129,8 +172,7 @@
 
   width: 100%;
 
-  margin-top: 12px;
-  padding: 11px 12px;
+  padding: 8px 6px;
 
   box-sizing: border-box;
 
@@ -140,19 +182,16 @@
   background: var(--surface);
   color: var(--text-h);
 
-  font-size: 14px;
-  font-weight: 500;
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
 
   cursor: pointer;
-
-  transition:
-    background 0.2s ease,
-    border-color 0.2s ease;
 }
 
 .edit-modal__cover-button:hover {
   background: var(--surface-secondary);
-  border-color: var(--border-hover);
 }
 
 .edit-modal__cover-button input {
@@ -160,129 +199,116 @@
 }
 
 .edit-modal__file-name {
-  margin: 8px 0 0;
+  margin: 0;
 
-  font-size: 12px;
+  font-size: 10px;
+  line-height: 1.2;
 
   color: var(--text);
 
   overflow-wrap: anywhere;
 }
 
-/* Поля */
+/* FIELDS */
 
+.edit-modal__main-fields,
 .edit-modal__fields {
+  min-width: 0;
+
   display: flex;
   flex-direction: column;
 
-  gap: 14px;
+  gap: 10px;
 }
 
-.edit-modal__fields label {
+.edit-modal label {
   display: flex;
   flex-direction: column;
 
-  gap: 6px;
+  gap: 5px;
 
-  font-size: 14px;
+  min-width: 0;
+
+  font-size: 11px;
   font-weight: 500;
 
   color: var(--text);
 }
 
-.edit-modal__row {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-
-  gap: 14px;
-}
-
-.edit-modal__fields input,
-.edit-modal__fields textarea {
+.edit-modal input,
+.edit-modal textarea {
   width: 100%;
 
   box-sizing: border-box;
 
-  padding: 11px 12px;
-
   border: 1px solid var(--border);
   border-radius: 8px;
 
-  background: var(--surface);
+  background: var(--surface-secondary);
   color: var(--text-h);
 
   font-family: inherit;
-  font-size: 15px;
-
-  transition:
-    border-color 0.2s ease,
-    box-shadow 0.2s ease,
-    background-color 0.2s ease;
+  font-size: 14px;
 }
 
-.edit-modal__fields input {
-  height: 44px;
+.edit-modal input {
+  height: 42px;
+
+  padding: 0 10px;
 }
 
-.edit-modal__fields textarea {
-  min-height: 130px;
+.edit-modal textarea {
+  min-height: 110px;
+
+  padding: 10px;
 
   resize: vertical;
-
-  line-height: 1.5;
 }
 
-.edit-modal__fields input:hover,
-.edit-modal__fields textarea:hover {
+.edit-modal input:focus,
+.edit-modal textarea:focus {
+  outline: none;
+
   border-color: var(--border-hover);
 }
 
-.edit-modal__fields input:focus,
-.edit-modal__fields textarea:focus {
-  outline: none;
+/* ROW */
 
-  border-color: var(--accent);
+.edit-modal__row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 
-  box-shadow: 0 0 0 3px var(--accent-bg);
+  gap: 8px;
 }
 
-/* Кнопки */
+/* ACTIONS */
 
 .edit-modal__actions {
   display: flex;
-  justify-content: flex-end;
+  flex-direction: column;
 
-  gap: 10px;
+  gap: 8px;
 
-  margin-top: 24px;
-  padding-top: 20px;
+  margin-top: 16px;
+  padding-top: 14px;
 
   border-top: 1px solid var(--border);
 }
 
 .edit-modal__actions button {
-  min-width: 110px;
+  width: 100%;
 
-  padding: 11px 18px;
+  padding: 12px 14px;
+
+  box-sizing: border-box;
 
   border-radius: 8px;
 
   font-family: inherit;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
 
   cursor: pointer;
-}
-
-.edit-modal__cancel {
-  border: 1px solid var(--border);
-
-  background: var(--surface);
-  color: var(--text-h);
-}
-
-.edit-modal__cancel:hover {
-  background: var(--surface-secondary);
 }
 
 .edit-modal__save {
@@ -298,26 +324,103 @@
 
 .edit-modal__save:disabled {
   opacity: 0.6;
+
   cursor: not-allowed;
 }
 
-/* Мобільна версія */
+.edit-modal__cancel {
+  border: 1px solid var(--border);
 
-@media (max-width: 700px) {
-  .edit-modal-overlay {
-    padding: 12px;
-  }
+  background: var(--surface);
+  color: var(--text-h);
+}
 
+.edit-modal__cancel:hover {
+  background: var(--surface-secondary);
+}
+
+/* VERY SMALL */
+
+@media (max-width: 370px) {
   .edit-modal {
-    padding: 22px;
+    padding: 14px 10px;
   }
 
-  .edit-modal__layout {
-    grid-template-columns: 1fr;
+  .edit-modal__top {
+    grid-template-columns: 78px minmax(0, 1fr);
+
+    gap: 9px;
   }
 
   .edit-modal__cover {
-    width: 180px;
+    width: 78px;
+  }
+
+  .edit-modal__cover img,
+  .edit-modal__no-cover {
+    height: 118px;
+  }
+
+  .edit-modal input {
+    height: 40px;
+
+    padding: 0 8px;
+
+    font-size: 13px;
+  }
+
+  .edit-modal label {
+    font-size: 10px;
+  }
+
+  .edit-modal__row {
+    gap: 6px;
+  }
+}
+
+/* TABLET */
+
+@media (min-width: 600px) {
+  .edit-modal-overlay {
+    align-items: center;
+
+    padding: 18px;
+  }
+
+  .edit-modal {
+    max-width: 760px;
+
+    max-height: calc(100dvh - 36px);
+
+    padding: 24px;
+
+    border-radius: 16px;
+  }
+
+  .edit-modal h2 {
+    font-size: 24px;
+  }
+
+  .edit-modal__subtitle {
+    font-size: 15px;
+  }
+
+  .edit-modal__form {
+    margin-top: 22px;
+  }
+
+  .edit-modal__layout {
+    gap: 18px;
+  }
+
+  .edit-modal__top {
+    grid-template-columns: 170px minmax(0, 1fr);
+
+    gap: 22px;
+  }
+
+  .edit-modal__cover {
+    width: 170px;
   }
 
   .edit-modal__cover img,
@@ -325,21 +428,106 @@
     height: 250px;
   }
 
-  .edit-modal__row {
-    grid-template-columns: 1fr;
-  }
-}
+  .edit-modal__cover-button {
+    padding: 10px;
 
-@media (max-width: 450px) {
-  .edit-modal__cover {
-    width: 100%;
+    font-size: 13px;
+  }
+
+  .edit-modal__main-fields,
+  .edit-modal__fields {
+    gap: 12px;
+  }
+
+  .edit-modal label {
+    font-size: 12px;
+  }
+
+  .edit-modal input {
+    height: 44px;
+
+    font-size: 15px;
+  }
+
+  .edit-modal textarea {
+    min-height: 130px;
+
+    font-size: 15px;
+  }
+
+  .edit-modal__row {
+    gap: 12px;
   }
 
   .edit-modal__actions {
-    flex-direction: column-reverse;
+    flex-direction: row;
+    justify-content: flex-end;
   }
 
   .edit-modal__actions button {
-    width: 100%;
+    width: auto;
+    min-width: 130px;
+  }
+}
+
+/* DESKTOP */
+
+@media (min-width: 900px) {
+  .edit-modal-overlay {
+    padding: 24px;
+  }
+
+  .edit-modal {
+    max-width: 900px;
+
+    max-height: calc(100dvh - 48px);
+
+    padding: 28px;
+  }
+
+  .edit-modal h2 {
+    font-size: 26px;
+  }
+
+  .edit-modal__subtitle {
+    font-size: 16px;
+  }
+
+  .edit-modal__top {
+    grid-template-columns: 220px minmax(0, 1fr);
+
+    gap: 28px;
+  }
+
+  .edit-modal__cover {
+    width: 220px;
+  }
+
+  .edit-modal__cover img,
+  .edit-modal__no-cover {
+    height: 310px;
+  }
+
+  .edit-modal__cover-button {
+    font-size: 14px;
+  }
+
+  .edit-modal__main-fields,
+  .edit-modal__fields {
+    gap: 14px;
+  }
+
+  .edit-modal label {
+    font-size: 13px;
+  }
+
+  .edit-modal input {
+    height: 46px;
+
+    font-size: 15px;
+  }
+
+  .edit-modal textarea {
+    min-height: 150px;
   }
 }
