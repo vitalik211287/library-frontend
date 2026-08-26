@@ -467,3 +467,68 @@
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
 }
+
+
+.book-card__actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+
+  margin-top: auto;
+  padding-top: 14px;
+}
+
+.book-card__button {
+  width: 100%;
+  min-width: 0;
+
+  padding: 10px 12px;
+
+  border: 1px solid var(--border);
+  border-radius: 8px;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 500;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    border-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.1s ease;
+}
+
+/* Редагувати */
+
+.book-card__button--edit {
+  background: var(--surface);
+  color: var(--text-h);
+}
+
+.book-card__button--edit:hover {
+  background: var(--surface-secondary);
+  border-color: var(--border-hover);
+}
+
+/* Читати */
+
+.book-card__button--read {
+  background: var(--text-h);
+  color: var(--bg);
+  border-color: var(--text-h);
+}
+
+.book-card__button--read:hover {
+  opacity: 0.85;
+}
+
+.book-card__button:active {
+  transform: translateY(1px);
+}
+
+.book-card__button:focus-visible {
+  outline: 2px solid var(--text-h);
+  outline-offset: 2px;
+}

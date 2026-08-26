@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import "./CatalogPage.css";
+
 import EditBookModal from "../../components/EditBookModal/EditBookModal";
+import ReadingModal from "../../components/ReadingModal/ReadingModal";
 import BarcodeScanner from "../../components/BarcodeScanner/BarcodeScanner";
 
 const API_URL = "https://library-backend-production-5d60.up.railway.app";
@@ -10,7 +12,10 @@ function CatalogPage() {
   const [message, setMessage] = useState("");
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState("title");
-  const [selectedBook, setSelectedBook] = useState(null);
+
+  const [editingBook, setEditingBook] = useState(null);
+  const [readingBook, setReadingBook] = useState(null);
+
   const [scannerOpen, setScannerOpen] = useState(false);
 
   useEffect(() => {
@@ -58,13 +63,29 @@ function CatalogPage() {
     setScannerOpen(false);
   };
 
+  const handleBookUpdated = (updatedBook) => {
+    setBooks((currentBooks) =>
+      currentBooks.map((book) =>
+        book.id === updatedBook.id ? updatedBook : book,
+      ),
+    );
+
+    setEditingBook(null);
+  };
+
   return (
     <div className="catalog-page">
       <h1>Каталог бібліотеки</h1>
 
-      <p className="books-count">Книг у бібліотеці: {books.length}</p>
+      <p className="books-count">
+        Книг у бібліотеці: {books.length}
+      </p>
 
-      {message && <p className="catalog-message">{message}</p>}
+      {message && (
+        <p className="catalog-message">
+          {message}
+        </p>
+      )}
 
       <div className="catalog-search">
         <div className="catalog-search__field">
@@ -89,7 +110,12 @@ function CatalogPage() {
             aria-label="Сканувати ISBN"
             title="Сканувати ISBN"
           >
-            <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
+            <svg
+              viewBox="0 0 24 24"
+              width="24"
+              height="24"
+              aria-hidden="true"
+            >
               <path
                 d="M4 7V5a1 1 0 0 1 1-1h2M17 4h2a1 1 0 0 1 1 1v2M20 17v2a1 1 0 0 1-1 1h-2M7 20H5a1 1 0 0 1-1-1v-2"
                 fill="none"
@@ -132,10 +158,9 @@ function CatalogPage() {
 
       <div className="books-grid">
         {filteredBooks.map((book) => (
-          <div
+          <article
             className="book-card"
             key={book.id}
-            onClick={() => setSelectedBook(book)}
           >
             {book.coverUrl && (
               <img
@@ -145,32 +170,58 @@ function CatalogPage() {
               />
             )}
 
-            <h2>{book.title}</h2>
-            <p>{book.author}</p>
+            <div className="book-card__content">
+              <h2>{book.title}</h2>
 
-            {book.publisher && <p>Видавництво: {book.publisher}</p>}
+              <p>{book.author}</p>
 
-            {book.year && <p>Рік: {book.year}</p>}
+              {book.publisher && (
+                <p>Видавництво: {book.publisher}</p>
+              )}
 
-            {book.genre && <p>Жанр: {book.genre}</p>}
-          </div>
+              {book.year && (
+                <p>Рік: {book.year}</p>
+              )}
+
+              {book.genre && (
+                <p>Жанр: {book.genre}</p>
+              )}
+            </div>
+
+            <div className="book-card__actions">
+              <button
+                type="button"
+                className="book-card__button book-card__button--edit"
+                onClick={() => setEditingBook(book)}
+              >
+                Редагувати
+              </button>
+
+              <button
+                type="button"
+                className="book-card__button book-card__button--read"
+                onClick={() => setReadingBook(book)}
+              >
+                Читати
+              </button>
+            </div>
+          </article>
         ))}
       </div>
 
-      {/* ОСЬ СЮДИ — після books-grid */}
-      {selectedBook && (
+      {editingBook && (
         <EditBookModal
-          book={selectedBook}
-          onClose={() => setSelectedBook(null)}
-          onUpdated={(updatedBook) => {
-            setBooks((currentBooks) =>
-              currentBooks.map((book) =>
-                book.id === updatedBook.id ? updatedBook : book,
-              ),
-            );
+          book={editingBook}
+          onClose={() => setEditingBook(null)}
+          onUpdated={handleBookUpdated}
+        />
+      )}
 
-            setSelectedBook(null);
-          }}
+      {readingBook && (
+        <ReadingModal
+          book={readingBook}
+          apiUrl={API_URL}
+          onClose={() => setReadingBook(null)}
         />
       )}
 
