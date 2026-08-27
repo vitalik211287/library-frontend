@@ -696,6 +696,13 @@
   text-overflow: ellipsis;
 }
 
+.reading-modal__action-icon svg {
+  width: 17px;
+  height: 17px;
+
+  fill: currentColor;
+}
+
 /* =========================
    START
 ========================= */
