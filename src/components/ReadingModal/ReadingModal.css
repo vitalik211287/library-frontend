@@ -230,7 +230,8 @@
 
   display: grid;
 
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
 
   gap: 8px;
 }
@@ -240,7 +241,6 @@
 
   display: flex;
   flex-direction: column;
-
   justify-content: center;
 
   padding: 9px;
@@ -383,7 +383,9 @@
 
   background: var(--accent);
 
-  box-shadow: 0 0 12px rgba(181, 107, 255, 0.45);
+  box-shadow:
+    0 0 12px
+    rgba(181, 107, 255, 0.45);
 
   transition: width 0.3s ease;
 }
@@ -407,7 +409,9 @@
 
   background: var(--surface-secondary);
 
-  box-shadow: inset 0 0 20px rgba(181, 107, 255, 0.025);
+  box-shadow:
+    inset 0 0 20px
+    rgba(181, 107, 255, 0.025);
 
   transition: border-color 0.2s ease;
 }
@@ -417,7 +421,7 @@
 }
 
 /* =========================
-   SESSION EMPTY
+   EMPTY SESSION
 ========================= */
 
 .reading-modal__session-empty {
@@ -445,7 +449,9 @@
 
   font-size: 18px;
 
-  box-shadow: 0 0 18px rgba(181, 107, 255, 0.12);
+  box-shadow:
+    0 0 18px
+    rgba(181, 107, 255, 0.12);
 }
 
 .reading-modal__session-empty h3 {
@@ -467,7 +473,7 @@
 }
 
 /* =========================
-   ACTIVE SESSION HEADER
+   SESSION HEADER
 ========================= */
 
 .reading-modal__session-header {
@@ -539,7 +545,9 @@
 
   text-align: center;
 
-  text-shadow: 0 0 20px rgba(181, 107, 255, 0.18);
+  text-shadow:
+    0 0 20px
+    rgba(181, 107, 255, 0.18);
 }
 
 .reading-modal__timer-caption {
@@ -548,6 +556,7 @@
   color: var(--text);
 
   font-size: 12px;
+
   text-align: center;
 }
 
@@ -600,7 +609,8 @@
 .reading-modal__finish-form input:focus {
   border-color: var(--accent);
 
-  box-shadow: 0 0 0 3px var(--accent-bg);
+  box-shadow:
+    0 0 0 3px var(--accent-bg);
 }
 
 .reading-modal__session-page {
@@ -611,22 +621,33 @@
 
 /* =========================
    SESSION ACTIONS
+   ALWAYS ONE ROW
 ========================= */
 
 .reading-modal__session-actions {
   display: grid;
 
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
 
   gap: 8px;
+
+  width: 100%;
 }
 
 .reading-modal__session-actions button,
 .reading-modal__start {
   width: 100%;
+  min-width: 0;
   min-height: 44px;
 
-  padding: 10px 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  padding: 10px 8px;
 
   box-sizing: border-box;
 
@@ -635,14 +656,44 @@
   font-family: inherit;
   font-size: 13px;
   font-weight: 700;
+  line-height: 1;
+
+  white-space: nowrap;
 
   cursor: pointer;
+
+  overflow: hidden;
 
   transition:
     transform 0.15s ease,
     opacity 0.2s ease,
     border-color 0.2s ease,
     background-color 0.2s ease;
+}
+
+/* =========================
+   ACTION ICON / TEXT
+========================= */
+
+.reading-modal__action-icon {
+  flex: 0 0 auto;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  color: currentColor;
+
+  font-size: 16px;
+  line-height: 1;
+}
+
+.reading-modal__action-text {
+  min-width: 0;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
 }
 
 /* =========================
@@ -655,7 +706,9 @@
   background: var(--accent);
   color: #ffffff;
 
-  box-shadow: 0 8px 22px rgba(181, 107, 255, 0.2);
+  box-shadow:
+    0 8px 22px
+    rgba(181, 107, 255, 0.2);
 }
 
 .reading-modal__start:hover {
@@ -760,7 +813,8 @@
 .reading-modal__stats {
   display: grid;
 
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
 
   gap: 8px;
 }
@@ -803,36 +857,6 @@
 }
 
 /* =========================
-   CALENDAR
-========================= */
-
-.reading-modal__stats-item--calendar {
-  width: 100%;
-  height: 54.8px;
-  color: inherit;
-
-  font: inherit;
-  text-align: left;
-
-  cursor: pointer;
-
-  transition:
-    border-color 0.2s ease,
-    background-color 0.2s ease,
-    transform 0.15s ease;
-}
-
-.reading-modal__stats-item--calendar:hover {
-  border-color: var(--accent);
-
-  background: var(--accent-bg);
-}
-
-.reading-modal__stats-item--calendar:active {
-  transform: scale(0.98);
-}
-
-/* =========================
    CALENDAR BUTTON
 ========================= */
 
@@ -858,7 +882,8 @@
   cursor: pointer;
 
   box-shadow:
-    inset 0 0 0 1px rgba(181, 107, 255, 0.05);
+    inset 0 0 0 1px
+    rgba(181, 107, 255, 0.05);
 
   transition:
     border-color 0.2s ease,
@@ -867,10 +892,6 @@
     transform 0.15s ease;
 }
 
-.reading-modal__stats-div {
-  display: flex;
-  flex-wrap: wrap;
-}
 .reading-modal__stats-item--calendar:hover {
   border-color: var(--accent);
 
@@ -878,7 +899,8 @@
 
   box-shadow:
     0 0 0 2px var(--accent-bg),
-    0 6px 18px rgba(181, 107, 255, 0.12);
+    0 6px 18px
+    rgba(181, 107, 255, 0.12);
 }
 
 .reading-modal__stats-item--calendar:active {
@@ -896,6 +918,7 @@
 
 .reading-modal__stats-calendar-row {
   width: 100%;
+
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -914,9 +937,12 @@
   height: 30px;
 
   display: flex;
-  align-items: flex-start;
-  transform: translateY(-10px);
+  align-items: center;
   justify-content: center;
+
+  align-self: flex-start;
+
+  transform: translateY(-10px);
 
   border: 1px solid var(--accent);
   border-radius: 8px;
@@ -941,8 +967,11 @@
   stroke-linejoin: round;
 }
 
-.reading-modal__stats-item--calendar:hover .reading-modal__stats-calendar-icon {
-  transform: scale(1.08);
+.reading-modal__stats-item--calendar:hover
+  .reading-modal__stats-calendar-icon {
+  transform:
+    translateY(-10px)
+    scale(1.08);
 
   background: var(--surface);
 }
@@ -969,7 +998,8 @@
   }
 
   .reading-modal__top {
-    grid-template-columns: 76px minmax(0, 1fr);
+    grid-template-columns:
+      76px minmax(0, 1fr);
 
     gap: 8px;
   }
@@ -1002,7 +1032,7 @@
   }
 
   .reading-modal__star {
-    font-size: 15px;
+    font-size: 22px;
   }
 
   .reading-modal__session-card,
@@ -1014,8 +1044,47 @@
     font-size: 32px;
   }
 
+  /* ВАЖЛИВО:
+     кнопки все одно лишаються
+     у дві колонки */
   .reading-modal__session-actions {
-    grid-template-columns: 1fr;
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .reading-modal__session-actions button {
+    padding-inline: 6px;
+
+    font-size: 12px;
+  }
+}
+
+/* =========================
+   ULTRA SMALL PHONES
+   ICONS ONLY
+========================= */
+
+@media (max-width: 340px) {
+  .reading-modal__session-actions {
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
+  }
+
+  .reading-modal__session-actions button {
+    min-width: 0;
+    min-height: 44px;
+
+    padding: 8px;
+  }
+
+  .reading-modal__session-actions
+    .reading-modal__action-text {
+    display: none;
+  }
+
+  .reading-modal__session-actions
+    .reading-modal__action-icon {
+    font-size: 20px;
   }
 }
 
@@ -1031,7 +1100,8 @@
   .reading-modal {
     max-width: 760px;
 
-    max-height: calc(100dvh - 48px);
+    max-height:
+      calc(100dvh - 48px);
 
     padding: 28px;
 
@@ -1053,7 +1123,8 @@
   }
 
   .reading-modal__top {
-    grid-template-columns: 170px minmax(0, 1fr);
+    grid-template-columns:
+      170px minmax(0, 1fr);
 
     gap: 22px;
   }
@@ -1086,7 +1157,7 @@
   }
 
   .reading-modal__star {
-    font-size: 22px;
+    font-size: 26px;
   }
 
   .reading-modal__session-card,
@@ -1120,7 +1191,8 @@
   }
 
   .reading-modal__session-actions {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns:
+      repeat(2, minmax(0, 1fr));
   }
 
   .reading-modal__session-actions button,
@@ -1143,7 +1215,8 @@
   .reading-modal {
     max-width: 900px;
 
-    max-height: calc(100dvh - 60px);
+    max-height:
+      calc(100dvh - 60px);
 
     padding: 32px;
   }
@@ -1153,7 +1226,8 @@
   }
 
   .reading-modal__top {
-    grid-template-columns: 210px minmax(0, 1fr);
+    grid-template-columns:
+      210px minmax(0, 1fr);
 
     gap: 28px;
   }
