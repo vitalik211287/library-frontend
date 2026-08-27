@@ -12,7 +12,7 @@
 }
 
 /* =========================
-   ЗАГОЛОВОК
+   HEADER
 ========================= */
 
 .catalog-page h1 {
@@ -33,7 +33,7 @@
 }
 
 /* =========================
-   ПОВІДОМЛЕННЯ
+   MESSAGE
 ========================= */
 
 .catalog-message {
@@ -50,7 +50,8 @@
 }
 
 /* =========================
-   ПОШУК
+   SEARCH
+   MOBILE-FIRST
 ========================= */
 
 .catalog-search {
@@ -123,7 +124,9 @@
   box-shadow: 0 0 0 3px var(--accent-bg);
 }
 
-/* Лупа */
+/* =========================
+   SEARCH ICON
+========================= */
 
 .catalog-search__input svg {
   position: absolute;
@@ -147,7 +150,7 @@
 }
 
 /* =========================
-   КНОПКА СКАНЕРА
+   SCANNER BUTTON
 ========================= */
 
 .catalog-scan__button {
@@ -247,8 +250,6 @@
   box-shadow: 0 0 0 3px var(--accent-bg);
 }
 
-/* Темна тема */
-
 :root.dark .catalog-search__input input,
 :root.dark .catalog-search select {
   border-color: #6b6e7d;
@@ -260,19 +261,20 @@
 }
 
 /* =========================
-   СІТКА КНИГ
-   Mobile-first: 2 картки
+   BOOK GRID
+   MOBILE-FIRST
 ========================= */
 
 .books-grid {
   display: grid;
+
   grid-template-columns: repeat(2, minmax(0, 1fr));
 
   gap: 16px 12px;
 }
 
 /* =========================
-   КАРТКА
+   BOOK CARD
 ========================= */
 
 .book-card {
@@ -283,13 +285,13 @@
 
   padding: 10px;
 
+  box-sizing: border-box;
+
   background: var(--surface);
   color: var(--text);
 
   border: 1px solid var(--border);
   border-radius: 10px;
-
-  box-sizing: border-box;
 
   transition:
     transform 0.2s ease,
@@ -305,7 +307,7 @@
 }
 
 /* =========================
-   ОБКЛАДИНКА
+   COVER
 ========================= */
 
 .book-cover {
@@ -324,7 +326,7 @@
 }
 
 /* =========================
-   КОНТЕНТ КАРТКИ
+   CARD CONTENT
 ========================= */
 
 .book-card__content {
@@ -335,38 +337,70 @@
 }
 
 /* =========================
-   НАЗВА
+   TITLE
 ========================= */
 
 .book-card h2 {
   margin: 0 0 8px;
 
+  color: var(--text-h);
+
   font-size: 16px;
   line-height: 1.25;
-
-  color: var(--text-h);
 
   overflow-wrap: anywhere;
 }
 
 /* =========================
-   ІНФОРМАЦІЯ
+   AUTHOR / TEXT
 ========================= */
 
 .book-card p {
   margin: 4px 0;
 
+  color: var(--text);
+
   font-size: 13px;
   line-height: 1.35;
-
-  color: var(--text);
 
   overflow-wrap: anywhere;
 }
 
+.book-card__author {
+  margin-bottom: 6px;
+}
+
 /* =========================
-   КНОПКИ КАРТКИ
-   Mobile-first
+   READING INFO
+   MOBILE DEFAULT
+========================= */
+
+.book-card__reading-info {
+  display: block;
+}
+
+.book-card__reading-info p {
+  margin: 3px 0;
+}
+
+.book-card__reading-info strong {
+  color: var(--text-h);
+
+  font-weight: 600;
+}
+
+/* =========================
+   EXTRA INFO
+   HIDDEN ON MOBILE
+========================= */
+
+.book-card__extra-info {
+  display: none;
+}
+
+/* =========================
+   CARD ACTIONS
+   MOBILE-FIRST
 ========================= */
 
 .book-card__actions {
@@ -385,10 +419,10 @@
 
   padding: 10px 8px;
 
+  box-sizing: border-box;
+
   border: 1px solid var(--border);
   border-radius: 8px;
-
-  box-sizing: border-box;
 
   font-family: inherit;
   font-size: 13px;
@@ -407,7 +441,9 @@
     opacity 0.2s ease;
 }
 
-/* Читати — головна кнопка */
+/* =========================
+   READ BUTTON
+========================= */
 
 .book-card__button--read {
   order: 1;
@@ -422,7 +458,9 @@
   opacity: 0.85;
 }
 
-/* Редагувати — другорядна */
+/* =========================
+   EDIT BUTTON
+========================= */
 
 .book-card__button--edit {
   order: 2;
@@ -485,6 +523,7 @@
 
   .book-card__actions {
     display: grid;
+
     grid-template-columns: repeat(2, minmax(0, 1fr));
 
     gap: 8px;
@@ -503,7 +542,7 @@
 }
 
 /* =========================
-   TABLET — 768+
+   TABLET / SMALL DESKTOP — 768+
 ========================= */
 
 @media (min-width: 768px) {
@@ -527,6 +566,20 @@
     object-fit: contain;
 
     background: var(--surface-secondary);
+  }
+
+  /* Персональна інформація читання
+     на більших екранах ховається */
+
+  .book-card__reading-info {
+    display: none;
+  }
+
+  /* Видавництво, рік, жанр
+     повертаємо на більших екранах */
+
+  .book-card__extra-info {
+    display: block;
   }
 }
 
@@ -580,4 +633,29 @@
   .books-grid {
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
+}
+
+.book-card__rating-row {
+  display: flex;
+  align-items: center;
+
+  gap: 6px;
+
+  margin-top: 3px;
+}
+
+.book-card__stars {
+  display: flex;
+  align-items: center;
+
+  gap: 1px;
+
+  white-space: nowrap;
+}
+
+.book-card__star {
+  color: var(--accent);
+
+  font-size: 17px;
+  line-height: 1;
 }

@@ -1,8 +1,5 @@
 import { useEffect, useState } from "react";
-import {
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import "./CatalogPage.css";
 
@@ -11,8 +8,7 @@ import ReadingModal from "../../components/ReadingModal/ReadingModal";
 import BarcodeScanner from "../../components/BarcodeScanner/BarcodeScanner";
 import { useAuth } from "../../context/AuthContext.jsx";
 
-const API_URL =
-  "https://library-backend-production-5d60.up.railway.app";
+const API_URL = "https://library-backend-production-5d60.up.railway.app";
 
 function CatalogPage() {
   const [books, setBooks] = useState([]);
@@ -27,15 +23,11 @@ function CatalogPage() {
 
   const navigate = useNavigate();
 
-  const {
-    isAuthenticated,
-    isAuthLoading,
-  } = useAuth();
+  const { isAuthenticated, isAuthLoading } = useAuth();
 
   const readingBookId = searchParams.get("reading");
 
-  const readingBook =
-    books.find((book) => book.id === readingBookId) ?? null;
+  const readingBook = books.find((book) => book.id === readingBookId) ?? null;
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -51,10 +43,7 @@ function CatalogPage() {
 
         setBooks(data);
       } catch (error) {
-        console.error(
-          "Помилка завантаження книг:",
-          error,
-        );
+        console.error("Помилка завантаження книг:", error);
 
         setMessage("Помилка завантаження бібліотеки");
       }
@@ -72,11 +61,7 @@ function CatalogPage() {
    * ReadingModal відкриватися не повинен.
    */
   useEffect(() => {
-    if (
-      isAuthLoading ||
-      !readingBookId ||
-      isAuthenticated
-    ) {
+    if (isAuthLoading || !readingBookId || isAuthenticated) {
       return;
     }
 
@@ -88,7 +73,11 @@ function CatalogPage() {
       replace: true,
     });
 
-    navigate("/login");
+    navigate("/login", {
+      state: {
+        from: `/?reading=${readingBookId}`,
+      },
+    });
   }, [
     isAuthenticated,
     isAuthLoading,
@@ -107,16 +96,11 @@ function CatalogPage() {
 
     const value = book[searchBy];
 
-    if (
-      value === null ||
-      value === undefined
-    ) {
+    if (value === null || value === undefined) {
       return false;
     }
 
-    return String(value)
-      .toLowerCase()
-      .includes(query);
+    return String(value).toLowerCase().includes(query);
   });
 
   const handleScan = (isbn) => {
@@ -128,9 +112,7 @@ function CatalogPage() {
   const handleBookUpdated = (updatedBook) => {
     setBooks((currentBooks) =>
       currentBooks.map((book) =>
-        book.id === updatedBook.id
-          ? updatedBook
-          : book,
+        book.id === updatedBook.id ? updatedBook : book,
       ),
     );
 
@@ -138,18 +120,10 @@ function CatalogPage() {
   };
 
   const handleOpenReading = (book) => {
-    /*
-     * Не даємо відкрити читання,
-     * поки AuthContext ще перевіряє JWT.
-     */
     if (isAuthLoading) {
       return;
     }
 
-    /*
-     * Немає авторизованого користувача —
-     * відправляємо на сторінку входу.
-     */
     if (!isAuthenticated) {
       navigate("/login", {
         state: {
@@ -160,10 +134,6 @@ function CatalogPage() {
       return;
     }
 
-    /*
-     * Користувач авторизований —
-     * відкриваємо ReadingModal.
-     */
     const params = new URLSearchParams(searchParams);
 
     params.set("reading", book.id);
@@ -179,19 +149,30 @@ function CatalogPage() {
     setSearchParams(params);
   };
 
+  const getStatusLabel = (status) => {
+    switch (status) {
+      case "READING":
+        return "Читаю";
+
+      case "FINISHED":
+        return "Прочитано";
+
+      case "PAUSED":
+        return "Пауза";
+
+      case "NOT_STARTED":
+      default:
+        return "Не розпочато";
+    }
+  };
+
   return (
     <div className="catalog-page">
       <h1>Каталог бібліотеки</h1>
 
-      <p className="books-count">
-        Книг у бібліотеці: {books.length}
-      </p>
+      <p className="books-count">Книг у бібліотеці: {books.length}</p>
 
-      {message && (
-        <p className="catalog-message">
-          {message}
-        </p>
-      )}
+      {message && <p className="catalog-message">{message}</p>}
 
       <div className="catalog-search">
         <div className="catalog-search__field">
@@ -200,20 +181,11 @@ function CatalogPage() {
               type="text"
               placeholder="Пошук..."
               value={search}
-              onChange={(event) =>
-                setSearch(event.target.value)
-              }
+              onChange={(event) => setSearch(event.target.value)}
             />
 
-            <svg
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
-              <circle
-                cx="11"
-                cy="11"
-                r="7"
-              />
+            <svg viewBox="0 0 24 24" aria-hidden="true">
+              <circle cx="11" cy="11" r="7" />
 
               <path d="M20 20L16.5 16.5" />
             </svg>
@@ -226,12 +198,7 @@ function CatalogPage() {
             aria-label="Сканувати ISBN"
             title="Сканувати ISBN"
           >
-            <svg
-              viewBox="0 0 24 24"
-              width="24"
-              height="24"
-              aria-hidden="true"
-            >
+            <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true">
               <path
                 d="M4 7V5a1 1 0 0 1 1-1h2M17 4h2a1 1 0 0 1 1 1v2M20 17v2a1 1 0 0 1-1 1h-2M7 20H5a1 1 0 0 1-1-1v-2"
                 fill="none"
@@ -262,38 +229,23 @@ function CatalogPage() {
 
         <select
           value={searchBy}
-          onChange={(event) =>
-            setSearchBy(event.target.value)
-          }
+          onChange={(event) => setSearchBy(event.target.value)}
         >
-          <option value="title">
-            За назвою
-          </option>
+          <option value="title">За назвою</option>
 
-          <option value="author">
-            За автором
-          </option>
+          <option value="author">За автором</option>
 
-          <option value="year">
-            За роком
-          </option>
+          <option value="year">За роком</option>
 
-          <option value="genre">
-            За жанром
-          </option>
+          <option value="genre">За жанром</option>
 
-          <option value="isbn">
-            За ISBN
-          </option>
+          <option value="isbn">За ISBN</option>
         </select>
       </div>
 
       <div className="books-grid">
         {filteredBooks.map((book) => (
-          <article
-            className="book-card"
-            key={book.id}
-          >
+          <article className="book-card" key={book.id}>
             {book.coverUrl && (
               <img
                 className="book-cover"
@@ -303,40 +255,45 @@ function CatalogPage() {
             )}
 
             <div className="book-card__content">
-              <h2>
-                {book.title}
-              </h2>
+              <h2>{book.title}</h2>
 
-              <p>
-                {book.author}
-              </p>
+              <p className="book-card__author">{book.author}</p>
 
-              {book.publisher && (
+              <div className="book-card__reading-info">
                 <p>
-                  Видавництво: {book.publisher}
+                  Статус: <strong>{getStatusLabel(book.status)}</strong>
                 </p>
-              )}
 
-              {book.year && (
-                <p>
-                  Рік: {book.year}
-                </p>
-              )}
+                <div className="book-card__rating-row">
+                  <span>Рейтинг:</span>
 
-              {book.genre && (
-                <p>
-                  Жанр: {book.genre}
-                </p>
-              )}
+                  <div
+                    className="book-card__stars"
+                    aria-label={`Рейтинг ${book.rating ?? 0} з 5`}
+                  >
+                    {[1, 2, 3, 4, 5].map((value) => (
+                      <span key={value} className="book-card__star">
+                        {value <= (book.rating ?? 0) ? "★" : "☆"}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="book-card__extra-info">
+                {book.publisher && <p>Видавництво: {book.publisher}</p>}
+
+                {book.year && <p>Рік: {book.year}</p>}
+
+                {book.genre && <p>Жанр: {book.genre}</p>}
+              </div>
             </div>
 
             <div className="book-card__actions">
               <button
                 type="button"
                 className="book-card__button book-card__button--edit"
-                onClick={() =>
-                  setEditingBook(book)
-                }
+                onClick={() => setEditingBook(book)}
               >
                 Редагувати
               </button>
@@ -344,9 +301,7 @@ function CatalogPage() {
               <button
                 type="button"
                 className="book-card__button book-card__button--read"
-                onClick={() =>
-                  handleOpenReading(book)
-                }
+                onClick={() => handleOpenReading(book)}
                 disabled={isAuthLoading}
               >
                 Читати
@@ -359,29 +314,23 @@ function CatalogPage() {
       {editingBook && (
         <EditBookModal
           book={editingBook}
-          onClose={() =>
-            setEditingBook(null)
-          }
+          onClose={() => setEditingBook(null)}
           onUpdated={handleBookUpdated}
         />
       )}
 
-      {readingBook &&
-        isAuthenticated &&
-        !isAuthLoading && (
-          <ReadingModal
-            book={readingBook}
-            apiUrl={API_URL}
-            onClose={handleCloseReading}
-          />
-        )}
+      {readingBook && isAuthenticated && !isAuthLoading && (
+        <ReadingModal
+          book={readingBook}
+          apiUrl={API_URL}
+          onClose={handleCloseReading}
+        />
+      )}
 
       {scannerOpen && (
         <BarcodeScanner
           onScan={handleScan}
-          onClose={() =>
-            setScannerOpen(false)
-          }
+          onClose={() => setScannerOpen(false)}
         />
       )}
     </div>

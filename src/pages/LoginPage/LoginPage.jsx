@@ -19,6 +19,10 @@ function LoginPage() {
   const [password, setPassword] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
+  const handleClose = () => {
+    navigate("/");
+  };
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -87,6 +91,14 @@ function LoginPage() {
   return (
     <main className="login-page">
       <form className="login-form" onSubmit={handleSubmit}>
+        <button
+          type="button"
+          className="login-form__close"
+          onClick={handleClose}
+          aria-label="Закрити"
+        >
+          ×
+        </button>
         <h1>Вхід</h1>
 
         <label>

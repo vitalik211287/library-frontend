@@ -4,12 +4,12 @@
   z-index: 1000;
 
   display: flex;
-  align-items: flex-start;
+  align-items: center;
   justify-content: center;
 
-  padding: 8px;
+  padding: 12px;
 
-  overflow-y: auto;
+  overflow: hidden;
 
   background: rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(3px);
@@ -23,13 +23,16 @@
   width: 100%;
   max-width: 100%;
 
-  max-height: calc(100dvh - 16px);
+  max-height: calc(100dvh - 24px);
 
-  margin: auto 0;
+  margin: 0;
 
   padding: 16px 12px;
 
   overflow-y: auto;
+  overflow-x: hidden;
+
+  overscroll-behavior: contain;
 
   background: var(--surface);
   color: var(--text);
@@ -499,6 +502,7 @@
   font-size: 13px;
   font-weight: 600;
   line-height: 1.15;
+
   margin-bottom: 10px;
 }
 
@@ -542,6 +546,7 @@
   white-space: nowrap;
 
   text-align: center;
+
   display: flex;
   flex-direction: column;
 }
@@ -706,39 +711,23 @@
 }
 
 /* =========================
-   CANCEL
-========================= */
-
-.reading-modal__cancel {
-  border: 1px solid var(--border);
-
-  background: var(--surface);
-  color: var(--text-h);
-
-  transition:
-    background-color 0.2s ease,
-    transform 0.15s ease;
-}
-
-.reading-modal__cancel:hover {
-  background: var(--surface-secondary);
-}
-
-.reading-modal__cancel:active {
-  transform: scale(0.98);
-}
-
-/* =========================
    VERY SMALL PHONES
 ========================= */
 
 @media (max-width: 370px) {
+  .reading-modal-overlay {
+    padding: 8px;
+  }
+
   .reading-modal {
+    max-height: calc(100dvh - 16px);
+
     padding: 12px 9px;
   }
 
   .reading-modal__top {
     grid-template-columns: 74px minmax(0, 1fr);
+
     gap: 7px;
   }
 
@@ -779,6 +768,7 @@
 
   .reading-modal__session-content {
     grid-template-columns: 1fr 1fr;
+
     gap: 7px;
   }
 
@@ -796,7 +786,9 @@
 
   .reading-modal__finish-form input {
     min-height: 34px;
+
     padding: 6px 7px;
+
     font-size: 14px;
   }
 
@@ -806,12 +798,14 @@
 
   .reading-modal__actions {
     gap: 5px;
+
     margin-top: 7px;
     padding-top: 7px;
   }
 
   .reading-modal__actions button {
     min-height: 38px;
+
     padding: 8px 9px;
   }
 }
@@ -897,8 +891,6 @@
     padding: 12px;
   }
 
-  /* На планшеті повертаємо вертикальний блок */
-
   .reading-modal__session-content {
     display: flex;
     flex-direction: column;
@@ -910,6 +902,7 @@
 
   .reading-modal__timer {
     font-size: 32px;
+
     text-align: left;
   }
 

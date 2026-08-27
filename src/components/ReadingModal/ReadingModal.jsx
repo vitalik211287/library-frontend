@@ -47,6 +47,10 @@ function ReadingModal({ book, apiUrl, onClose }) {
       const data = await response.json();
 
       if (!response.ok) {
+        if (response.status === 401) {
+          return;
+        }
+
         setMessage(data.message || "Не вдалося отримати дані читання");
 
         return;
@@ -650,14 +654,6 @@ function ReadingModal({ book, apiUrl, onClose }) {
               {finishing ? "Завершуємо..." : "■ Завершити читання"}
             </button>
           )}
-
-          <button
-            type="button"
-            className="reading-modal__cancel"
-            onClick={onClose}
-          >
-            Закрити
-          </button>
         </div>
       </div>
     </div>
