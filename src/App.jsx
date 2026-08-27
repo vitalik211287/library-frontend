@@ -17,16 +17,18 @@ import UserPage from "./pages/UserPage/UserPage.jsx";
 
 import ThemeToggle from "./components/ThemeToggle/ThemeToggle";
 
+import { useAuth } from "./context/AuthContext.jsx";
+
 function App() {
-  const isLoggedIn = Boolean(
-    localStorage.getItem("token"),
-  );
+  const {
+    isAuthenticated,
+    isAuthLoading,
+  } = useAuth();
 
   return (
     <>
       <header className="header">
         <nav className="nav">
-
           {/* CATALOG */}
           <NavLink
             to="/"
@@ -38,13 +40,9 @@ function App() {
               viewBox="0 0 24 24"
               aria-hidden="true"
             >
-              <path
-                d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11a2 2 0 0 1 2 2v16a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 21.5v-16Z"
-              />
+              <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11a2 2 0 0 1 2 2v16a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 21.5v-16Z" />
 
-              <path
-                d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v18a2 2 0 0 1 2-2h2.5a2.5 2.5 0 0 1 2.5 2.5v-16Z"
-              />
+              <path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v18a2 2 0 0 1 2-2h2.5a2.5 2.5 0 0 1 2.5 2.5v-16Z" />
             </svg>
 
             <span className="nav__text">
@@ -103,16 +101,25 @@ function App() {
 
           {/* USER / LOGIN */}
           <NavLink
-            to={isLoggedIn ? "/account" : "/login"}
+            to={
+              isAuthenticated
+                ? "/account"
+                : "/login"
+            }
             aria-label={
-              isLoggedIn
+              isAuthenticated
                 ? "Мій акаунт"
                 : "Увійти"
             }
             title={
-              isLoggedIn
+              isAuthenticated
                 ? "Мій акаунт"
                 : "Увійти"
+            }
+            className={
+              isAuthLoading
+                ? "nav__auth-link nav__auth-link--loading"
+                : "nav__auth-link"
             }
           >
             <svg
@@ -126,18 +133,15 @@ function App() {
                 r="4"
               />
 
-              <path
-                d="M4 21a8 8 0 0 1 16 0"
-              />
+              <path d="M4 21a8 8 0 0 1 16 0" />
             </svg>
 
             <span className="nav__text">
-              {isLoggedIn
+              {isAuthenticated
                 ? "Мій акаунт"
                 : "Увійти"}
             </span>
           </NavLink>
-
         </nav>
 
         <ThemeToggle />
@@ -146,7 +150,6 @@ function App() {
       <Toaster position="top-right" />
 
       <Routes>
-
         {/* CATALOG */}
         <Route
           path="/"
@@ -162,9 +165,7 @@ function App() {
         {/* CALENDAR */}
         <Route
           path="/calendar"
-          element={
-            <ReadingCalendarPage />
-          }
+          element={<ReadingCalendarPage />}
         />
 
         {/* REGISTER */}
@@ -184,7 +185,6 @@ function App() {
           path="/account"
           element={<UserPage />}
         />
-
       </Routes>
     </>
   );

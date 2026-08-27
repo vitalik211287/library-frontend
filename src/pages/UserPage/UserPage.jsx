@@ -1,17 +1,24 @@
 import { useNavigate } from "react-router-dom";
+
 import "./UserPage.css";
+
+import { useAuth } from "../../context/AuthContext.jsx";
 
 function UserPage() {
   const navigate = useNavigate();
+
+  const { logout } = useAuth();
 
   const handleClose = () => {
     navigate("/");
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("token");
+    logout();
 
-    navigate("/login", { replace: true });
+    navigate("/", {
+      replace: true,
+    });
   };
 
   return (
@@ -25,6 +32,7 @@ function UserPage() {
         >
           ×
         </button>
+
         <div className="user-page__icon">
           <svg
             viewBox="0 0 24 24"
