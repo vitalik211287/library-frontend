@@ -32,6 +32,14 @@ function ReadingModal({ book, apiUrl, onClose }) {
     Authorization: `Bearer ${token}`,
   });
 
+  const getStatusLabel = () => {
+    if (activeSession) {
+      return isPaused ? "PAUSED" : "READING";
+    }
+
+    return currentBook.status;
+  };
+
   const handleOverlayClick = (event) => {
     if (event.target === event.currentTarget) {
       onClose();
@@ -423,6 +431,8 @@ function ReadingModal({ book, apiUrl, onClose }) {
         {message && <p className="reading-modal__message">{message}</p>}
 
         <div className="reading-modal__layout">
+          {/* BOOK INFO */}
+
           <div className="reading-modal__top">
             <div className="reading-modal__cover">
               {currentBook.coverUrl ? (
@@ -463,12 +473,8 @@ function ReadingModal({ book, apiUrl, onClose }) {
               <div className="reading-modal__info-item">
                 <span className="reading-modal__info-label">Статус</span>
 
-                <span className="reading-modal__info-value">
-                  {activeSession
-                    ? isPaused
-                      ? "PAUSED"
-                      : "READING"
-                    : currentBook.status}
+                <span className="reading-modal__info-value reading-modal__info-value--accent">
+                  {getStatusLabel()}
                 </span>
               </div>
 
@@ -494,11 +500,13 @@ function ReadingModal({ book, apiUrl, onClose }) {
             </div>
           </div>
 
+          {/* PROGRESS */}
+
           <div className="reading-modal__progress">
             <div className="reading-modal__progress-header">
               <span>Прогрес читання</span>
 
-              <span>{progress}%</span>
+              <strong>{progress}%</strong>
             </div>
 
             <div className="reading-modal__progress-track">
@@ -511,80 +519,52 @@ function ReadingModal({ book, apiUrl, onClose }) {
             </div>
           </div>
 
-          {stats && (
-            <div className="reading-modal__stats">
-              <div className="reading-modal__stats-item">
-                <span className="reading-modal__stats-label">
-                  Загальний час
-                </span>
+          {/* SESSION */}
 
-                <span className="reading-modal__stats-value">
-                  {formatDuration(stats.totalReadingSeconds)}
-                </span>
-              </div>
+          <section className="reading-modal__session-card">
+            {!activeSession ? (
+              <>
+                <div className="reading-modal__session-empty">
+                  <div className="reading-modal__session-icon">▶</div>
 
-              <div className="reading-modal__stats-item">
-                <span className="reading-modal__stats-label">Прочитано</span>
+                  <div>
+                    <h3>Сесія читання не активна</h3>
 
-                <span className="reading-modal__stats-value">
-                  {stats.pagesRead} стор.
-                </span>
-              </div>
+                    <p>Почніть читати, щоб відстежувати час та прогрес.</p>
+                  </div>
+                </div>
 
-              <div className="reading-modal__stats-item">
-                <span className="reading-modal__stats-label">Швидкість</span>
+                <button
+                  type="button"
+                  className="reading-modal__start"
+                  onClick={handleStartReading}
+                  disabled={loading}
+                >
+                  {loading ? "Запускаємо..." : "▶ Почати читання"}
+                </button>
+              </>
+            ) : (
+              <>
+                <div className="reading-modal__session-header">
+                  <h3>◉ Сесія читання</h3>
 
-                <span className="reading-modal__stats-value">
-                  {stats.pagesPerHour} стор./год
-                </span>
-              </div>
-
-              <div className="reading-modal__stats-item">
-                <span className="reading-modal__stats-label">Залишилось</span>
-
-                <span className="reading-modal__stats-value">
-                  {stats.remainingPages ?? "—"} стор.
-                </span>
-              </div>
-
-              <div className="reading-modal__stats-item">
-                <span className="reading-modal__stats-label">
-                  Орієнтовний час
-                </span>
-
-                <span className="reading-modal__stats-value">
-                  {formatDuration(stats.estimatedRemainingSeconds)}
-                </span>
-              </div>
-
-              <button
-                type="button"
-                className="reading-modal__stats-item reading-modal__stats-item--calendar"
-                onClick={handleOpenCalendar}
-                aria-label="Відкрити календар читання"
-              >
-                <span className="reading-modal__stats-label">Сесій</span>
-
-                <span className="reading-modal__stats-calendar-row">
-                  <span className="reading-modal__stats-value">
-                    {stats.sessionsCount}
+                  <span
+                    className={`reading-modal__session-status ${
+                      isPaused ? "reading-modal__session-status--paused" : ""
+                    }`}
+                  >
+                    <span />
+                    {isPaused ? "ПАУЗА" : "АКТИВНА"}
                   </span>
+                </div>
 
-                  <span className="reading-modal__stats-calendar-arrow">→</span>
-                </span>
-              </button>
-            </div>
-          )}
-
-          {activeSession && (
-            <div className="reading-modal__session">
-              <div className="reading-modal__session-content">
                 <div className="reading-modal__timer">
-                  <span className="reading-modal__session-label">
-                    {isPaused ? "Читання на паузі" : "Читання активне"}
-                  </span>
                   {formatTime(elapsedSeconds)}
                 </div>
+
+                <p className="reading-modal__timer-caption">
+                  {isPaused ? "Читання на паузі" : "Тривалість сесії"}
+                </p>
 
                 <div className="reading-modal__finish-form">
                   <label htmlFor="reading-end-page">
@@ -605,54 +585,125 @@ function ReadingModal({ book, apiUrl, onClose }) {
                     Початкова сторінка: {activeSession.startPage}
                   </span>
                 </div>
+
+                <div className="reading-modal__session-actions">
+                  {!isPaused && (
+                    <button
+                      type="button"
+                      className="reading-modal__pause"
+                      onClick={handlePauseReading}
+                      disabled={pauseLoading}
+                    >
+                      {pauseLoading ? "Пауза..." : "⏸ Пауза"}
+                    </button>
+                  )}
+
+                  {isPaused && (
+                    <button
+                      type="button"
+                      className="reading-modal__resume"
+                      onClick={handleResumeReading}
+                      disabled={pauseLoading}
+                    >
+                      {pauseLoading ? "Продовжуємо..." : "▶ Продовжити"}
+                    </button>
+                  )}
+
+                  <button
+                    type="button"
+                    className="reading-modal__finish"
+                    onClick={handleFinishReading}
+                    disabled={finishing || endPage === ""}
+                  >
+                    {finishing ? "Завершуємо..." : "■ Завершити"}
+                  </button>
+                </div>
+              </>
+            )}
+          </section>
+
+          {/* STATS */}
+
+          {stats && (
+            <section className="reading-modal__stats-section">
+              <h3 className="reading-modal__stats-title">
+                <span>▥</span>
+                Статистика
+              </h3>
+
+              <div className="reading-modal__stats">
+                <div className="reading-modal__stats-item">
+                  <span className="reading-modal__stats-label">
+                    Загальний час
+                  </span>
+
+                  <span className="reading-modal__stats-value">
+                    {formatDuration(stats.totalReadingSeconds)}
+                  </span>
+                </div>
+
+                <div className="reading-modal__stats-item">
+                  <span className="reading-modal__stats-label">Прочитано</span>
+
+                  <span className="reading-modal__stats-value">
+                    {stats.pagesRead} стор.
+                  </span>
+                </div>
+
+                <div className="reading-modal__stats-item">
+                  <span className="reading-modal__stats-label">Швидкість</span>
+
+                  <span className="reading-modal__stats-value">
+                    {stats.pagesPerHour} стор./год
+                  </span>
+                </div>
+
+                <div className="reading-modal__stats-item">
+                  <span className="reading-modal__stats-label">Залишилось</span>
+
+                  <span className="reading-modal__stats-value">
+                    {stats.remainingPages ?? "—"} стор.
+                  </span>
+                </div>
+
+                <div className="reading-modal__stats-item">
+                  <span className="reading-modal__stats-label">
+                    Орієнтовний час
+                  </span>
+
+                  <span className="reading-modal__stats-value">
+                    {formatDuration(stats.estimatedRemainingSeconds)}
+                  </span>
+                </div>
+
+                <button
+                  type="button"
+                  className="reading-modal__stats-item reading-modal__stats-item--calendar"
+                  onClick={handleOpenCalendar}
+                  aria-label="Відкрити календар читання"
+                  title="Відкрити календар читання"
+                >
+                  <div className="reading-modal__stats-div" >
+                    <span className="reading-modal__stats-label">Сесій</span>
+                    <span className="reading-modal__stats-calendar-row">
+                      <span className="reading-modal__stats-value">
+                        {stats.sessionsCount}
+                      </span>
+
+                      <span className="reading-modal__stats-calendar-icon">
+                        <svg viewBox="0 0 24 24" aria-hidden="true">
+                          <rect x="3" y="5" width="18" height="16" rx="2" />
+
+                          <path d="M16 3v4" />
+                          <path d="M8 3v4" />
+                          <path d="M3 10h18" />
+                        </svg>
+                      </span>
+                    </span>
+                  </div>
+                </button>
               </div>
-            </div>
-          )}
-        </div>
-
-        <div className="reading-modal__actions">
-          {!activeSession && (
-            <button
-              type="button"
-              className="reading-modal__start"
-              onClick={handleStartReading}
-              disabled={loading}
-            >
-              {loading ? "Запускаємо..." : "▶ Почати читання"}
-            </button>
-          )}
-
-          {activeSession && !isPaused && (
-            <button
-              type="button"
-              className="reading-modal__pause"
-              onClick={handlePauseReading}
-              disabled={pauseLoading}
-            >
-              {pauseLoading ? "Ставимо на паузу..." : "⏸ Пауза"}
-            </button>
-          )}
-
-          {activeSession && isPaused && (
-            <button
-              type="button"
-              className="reading-modal__resume"
-              onClick={handleResumeReading}
-              disabled={pauseLoading}
-            >
-              {pauseLoading ? "Продовжуємо..." : "▶ Продовжити"}
-            </button>
-          )}
-
-          {activeSession && (
-            <button
-              type="button"
-              className="reading-modal__finish"
-              onClick={handleFinishReading}
-              disabled={finishing || endPage === ""}
-            >
-              {finishing ? "Завершуємо..." : "■ Завершити читання"}
-            </button>
+            </section>
           )}
         </div>
       </div>

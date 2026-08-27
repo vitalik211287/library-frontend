@@ -1,3 +1,7 @@
+/* =========================
+   OVERLAY
+========================= */
+
 .reading-modal-overlay {
   position: fixed;
   inset: 0;
@@ -7,15 +11,21 @@
   align-items: center;
   justify-content: center;
 
-  padding: 12px;
+  padding: 16px;
+
+  box-sizing: border-box;
 
   overflow: hidden;
 
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(3px);
+  background: rgba(0, 0, 0, 0.68);
 
-  box-sizing: border-box;
+  backdrop-filter: blur(8px);
 }
+
+/* =========================
+   MODAL
+   MOBILE-FIRST
+========================= */
 
 .reading-modal {
   position: relative;
@@ -23,26 +33,26 @@
   width: 100%;
   max-width: 100%;
 
-  max-height: calc(100dvh - 24px);
+  max-height: calc(100dvh - 32px);
 
-  margin: 0;
-
-  padding: 16px 12px;
+  padding: 20px;
 
   overflow-y: auto;
   overflow-x: hidden;
 
   overscroll-behavior: contain;
 
+  box-sizing: border-box;
+
   background: var(--surface);
   color: var(--text);
 
-  border: 1px solid var(--border);
-  border-radius: 16px;
+  border: 1px solid var(--accent);
+  border-radius: 22px;
 
-  box-shadow: var(--shadow);
-
-  box-sizing: border-box;
+  box-shadow:
+    0 24px 70px rgba(0, 0, 0, 0.45),
+    0 0 35px rgba(181, 107, 255, 0.08);
 }
 
 /* =========================
@@ -50,7 +60,7 @@
 ========================= */
 
 .reading-modal__header {
-  padding-right: 40px;
+  padding-right: 44px;
 }
 
 .reading-modal h2 {
@@ -58,17 +68,17 @@
 
   color: var(--text-h);
 
-  font-size: 21px;
-  line-height: 1.2;
+  font-size: 26px;
+  line-height: 1.15;
 }
 
 .reading-modal__author {
-  margin: 5px 0 0;
+  margin: 8px 0 0;
 
-  color: var(--text);
+  color: var(--accent);
 
-  font-size: 13px;
-  line-height: 1.25;
+  font-size: 15px;
+  line-height: 1.3;
 }
 
 /* =========================
@@ -78,11 +88,11 @@
 .reading-modal__close {
   position: absolute;
 
-  top: 8px;
-  right: 8px;
+  top: 14px;
+  right: 14px;
 
-  width: 34px;
-  height: 34px;
+  width: 38px;
+  height: 38px;
 
   display: flex;
   align-items: center;
@@ -91,25 +101,30 @@
   padding: 0;
 
   border: none;
-  border-radius: 8px;
+  border-radius: 10px;
 
   background: transparent;
   color: var(--text);
 
   font-family: inherit;
-  font-size: 25px;
+  font-size: 30px;
   line-height: 1;
 
   cursor: pointer;
 
   transition:
     background-color 0.2s ease,
-    color 0.2s ease;
+    color 0.2s ease,
+    transform 0.15s ease;
 }
 
 .reading-modal__close:hover {
-  background: var(--surface-secondary);
-  color: var(--text-h);
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.reading-modal__close:active {
+  transform: scale(0.92);
 }
 
 /* =========================
@@ -117,20 +132,20 @@
 ========================= */
 
 .reading-modal__message {
-  margin: 10px 0 0;
+  margin: 14px 0 0;
 
-  padding: 7px 9px;
-
-  border: 1px solid var(--border);
-  border-radius: 8px;
-
-  background: var(--surface-secondary);
-  color: var(--text);
-
-  font-size: 12px;
-  line-height: 1.25;
+  padding: 10px 12px;
 
   box-sizing: border-box;
+
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+
+  background: var(--accent-bg);
+  color: var(--text-h);
+
+  font-size: 13px;
+  line-height: 1.3;
 }
 
 /* =========================
@@ -141,23 +156,23 @@
   display: flex;
   flex-direction: column;
 
-  gap: 10px;
+  gap: 18px;
 
-  margin-top: 12px;
+  margin-top: 20px;
 }
 
 /* =========================
-   BOOK TOP
+   TOP
 ========================= */
 
 .reading-modal__top {
   display: grid;
 
-  grid-template-columns: 88px minmax(0, 1fr);
+  grid-template-columns: 92px minmax(0, 1fr);
 
-  gap: 9px;
+  align-items: stretch;
 
-  align-items: start;
+  gap: 14px;
 }
 
 /* =========================
@@ -165,7 +180,7 @@
 ========================= */
 
 .reading-modal__cover {
-  width: 88px;
+  width: 92px;
 
   flex-shrink: 0;
 }
@@ -175,15 +190,19 @@
   display: block;
 
   width: 100%;
-  height: 132px;
+  height: 138px;
 
   box-sizing: border-box;
 
-  border-radius: 8px;
+  border-radius: 12px;
 }
 
 .reading-modal__cover img {
   object-fit: cover;
+
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.3),
+    0 0 16px rgba(181, 107, 255, 0.08);
 }
 
 .reading-modal__no-cover {
@@ -191,7 +210,7 @@
   align-items: center;
   justify-content: center;
 
-  padding: 7px;
+  padding: 8px;
 
   border: 1px solid var(--border);
 
@@ -199,12 +218,11 @@
   color: var(--text);
 
   font-size: 10px;
-  line-height: 1.2;
   text-align: center;
 }
 
 /* =========================
-   BOOK INFO
+   INFO
 ========================= */
 
 .reading-modal__info {
@@ -214,45 +232,60 @@
 
   grid-template-columns: repeat(2, minmax(0, 1fr));
 
-  gap: 5px;
+  gap: 8px;
 }
 
 .reading-modal__info-item {
   min-width: 0;
 
-  padding: 7px;
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+
+  padding: 9px;
+
+  box-sizing: border-box;
 
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: 11px;
 
   background: var(--surface-secondary);
 
-  box-sizing: border-box;
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.reading-modal__info-item:hover {
+  border-color: var(--accent);
 }
 
 .reading-modal__info-label {
   display: block;
 
-  margin-bottom: 2px;
+  margin-bottom: 4px;
 
   color: var(--text);
 
-  font-size: 9px;
-  line-height: 1.15;
+  font-size: 10px;
+  line-height: 1.2;
 }
 
 .reading-modal__info-value {
-  display: block;
-
   min-width: 0;
 
   overflow-wrap: anywhere;
 
   color: var(--text-h);
 
-  font-size: 12px;
-  font-weight: 600;
+  font-size: 14px;
+  font-weight: 700;
   line-height: 1.15;
+}
+
+.reading-modal__info-value--accent {
+  color: var(--accent);
 }
 
 /* =========================
@@ -263,7 +296,7 @@
   display: flex;
   align-items: center;
 
-  gap: 0;
+  gap: 1px;
 
   min-width: 0;
 
@@ -281,10 +314,10 @@
   border: none;
 
   background: transparent;
-  color: var(--text-h);
+  color: var(--accent);
 
   font-family: inherit;
-  font-size: 17px;
+  font-size: 26px;
   line-height: 1;
 
   cursor: pointer;
@@ -295,11 +328,12 @@
 }
 
 .reading-modal__star:hover {
-  transform: scale(1.1);
+  transform: scale(1.15);
 }
 
 .reading-modal__star:disabled {
-  opacity: 0.6;
+  opacity: 0.55;
+
   cursor: wait;
 }
 
@@ -316,19 +350,24 @@
   align-items: center;
   justify-content: space-between;
 
-  gap: 8px;
+  gap: 10px;
 
-  margin-bottom: 4px;
+  margin-bottom: 8px;
 
   color: var(--text);
 
-  font-size: 11px;
-  line-height: 1.2;
+  font-size: 13px;
+}
+
+.reading-modal__progress-header strong {
+  color: var(--accent);
+
+  font-size: 14px;
 }
 
 .reading-modal__progress-track {
   width: 100%;
-  height: 7px;
+  height: 8px;
 
   overflow: hidden;
 
@@ -342,9 +381,376 @@
 
   border-radius: inherit;
 
-  background: var(--text-h);
+  background: var(--accent);
+
+  box-shadow: 0 0 12px rgba(181, 107, 255, 0.45);
 
   transition: width 0.3s ease;
+}
+
+/* =========================
+   SESSION CARD
+========================= */
+
+.reading-modal__session-card {
+  display: flex;
+  flex-direction: column;
+
+  gap: 16px;
+
+  padding: 16px;
+
+  box-sizing: border-box;
+
+  border: 1px solid var(--border);
+  border-radius: 16px;
+
+  background: var(--surface-secondary);
+
+  box-shadow: inset 0 0 20px rgba(181, 107, 255, 0.025);
+
+  transition: border-color 0.2s ease;
+}
+
+.reading-modal__session-card:hover {
+  border-color: var(--accent);
+}
+
+/* =========================
+   SESSION EMPTY
+========================= */
+
+.reading-modal__session-empty {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+}
+
+.reading-modal__session-icon {
+  flex: 0 0 50px;
+
+  width: 50px;
+  height: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+
+  background: var(--accent-bg);
+  color: var(--accent);
+
+  font-size: 18px;
+
+  box-shadow: 0 0 18px rgba(181, 107, 255, 0.12);
+}
+
+.reading-modal__session-empty h3 {
+  margin: 0 0 5px;
+
+  color: var(--text-h);
+
+  font-size: 15px;
+  line-height: 1.2;
+}
+
+.reading-modal__session-empty p {
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* =========================
+   ACTIVE SESSION HEADER
+========================= */
+
+.reading-modal__session-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+}
+
+.reading-modal__session-header h3 {
+  margin: 0;
+
+  color: var(--accent);
+
+  font-size: 15px;
+  line-height: 1.2;
+}
+
+.reading-modal__session-status {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 6px;
+
+  padding: 5px 8px;
+
+  border-radius: 999px;
+
+  background: var(--accent-bg);
+  color: var(--accent);
+
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.reading-modal__session-status > span {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #45d483;
+}
+
+.reading-modal__session-status--paused > span {
+  background: var(--accent);
+}
+
+/* =========================
+   TIMER
+========================= */
+
+.reading-modal__timer {
+  min-width: 0;
+
+  color: var(--accent);
+
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1;
+
+  letter-spacing: 1px;
+
+  font-variant-numeric: tabular-nums;
+
+  white-space: nowrap;
+
+  text-align: center;
+
+  text-shadow: 0 0 20px rgba(181, 107, 255, 0.18);
+}
+
+.reading-modal__timer-caption {
+  margin: -7px 0 0;
+
+  color: var(--text);
+
+  font-size: 12px;
+  text-align: center;
+}
+
+/* =========================
+   FINISH FORM
+========================= */
+
+.reading-modal__finish-form {
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+
+  padding-top: 12px;
+
+  border-top: 1px solid var(--border);
+}
+
+.reading-modal__finish-form label {
+  color: var(--text-h);
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.reading-modal__finish-form input {
+  width: 100%;
+  min-height: 42px;
+
+  padding: 8px 11px;
+
+  box-sizing: border-box;
+
+  border: 1px solid var(--border);
+  border-radius: 9px;
+
+  background: var(--surface);
+  color: var(--text-h);
+
+  font-family: inherit;
+  font-size: 15px;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.reading-modal__finish-form input:focus {
+  border-color: var(--accent);
+
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+.reading-modal__session-page {
+  color: var(--text);
+
+  font-size: 10px;
+}
+
+/* =========================
+   SESSION ACTIONS
+========================= */
+
+.reading-modal__session-actions {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 8px;
+}
+
+.reading-modal__session-actions button,
+.reading-modal__start {
+  width: 100%;
+  min-height: 44px;
+
+  padding: 10px 12px;
+
+  box-sizing: border-box;
+
+  border-radius: 10px;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    opacity 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+/* =========================
+   START
+========================= */
+
+.reading-modal__start {
+  border: 1px solid var(--accent);
+
+  background: var(--accent);
+  color: #ffffff;
+
+  box-shadow: 0 8px 22px rgba(181, 107, 255, 0.2);
+}
+
+.reading-modal__start:hover {
+  opacity: 0.9;
+}
+
+.reading-modal__start:active {
+  transform: scale(0.98);
+}
+
+/* =========================
+   PAUSE
+========================= */
+
+.reading-modal__pause {
+  border: 1px solid var(--accent);
+
+  background: var(--accent);
+  color: #ffffff;
+}
+
+/* =========================
+   RESUME
+========================= */
+
+.reading-modal__resume {
+  border: 1px solid var(--accent);
+
+  background: transparent;
+  color: var(--accent);
+}
+
+/* =========================
+   FINISH
+========================= */
+
+.reading-modal__finish {
+  border: 1px solid var(--accent);
+
+  background: transparent;
+  color: var(--text-h);
+}
+
+.reading-modal__pause:hover,
+.reading-modal__resume:hover,
+.reading-modal__finish:hover {
+  background: var(--accent-bg);
+}
+
+.reading-modal__pause:hover {
+  color: var(--accent);
+}
+
+.reading-modal__session-actions button:active {
+  transform: scale(0.97);
+}
+
+.reading-modal__session-actions button:disabled,
+.reading-modal__start:disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
+}
+
+/* =========================
+   STATS SECTION
+========================= */
+
+.reading-modal__stats-section {
+  padding: 16px;
+
+  box-sizing: border-box;
+
+  border: 1px solid var(--border);
+  border-radius: 16px;
+
+  background: var(--surface-secondary);
+}
+
+.reading-modal__stats-title {
+  display: flex;
+  align-items: center;
+
+  gap: 8px;
+
+  margin: 0 0 14px;
+
+  color: var(--accent);
+
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.reading-modal__stats-title span {
+  font-size: 17px;
 }
 
 /* =========================
@@ -356,7 +762,7 @@
 
   grid-template-columns: repeat(2, minmax(0, 1fr));
 
-  gap: 5px;
+  gap: 8px;
 }
 
 .reading-modal__stats-item {
@@ -365,23 +771,23 @@
   display: flex;
   flex-direction: column;
 
-  gap: 2px;
+  gap: 4px;
 
-  padding: 7px;
-
-  border: 1px solid var(--border);
-  border-radius: 8px;
-
-  background: var(--surface-secondary);
+  padding: 10px;
 
   box-sizing: border-box;
+
+  border: 1px solid var(--border);
+  border-radius: 11px;
+
+  background: var(--surface);
 }
 
 .reading-modal__stats-label {
   color: var(--text);
 
-  font-size: 9px;
-  line-height: 1.15;
+  font-size: 10px;
+  line-height: 1.2;
 }
 
 .reading-modal__stats-value {
@@ -389,36 +795,21 @@
 
   overflow-wrap: anywhere;
 
-  color: var(--text-h);
+  color: var(--accent);
 
-  font-size: 12px;
-  font-weight: 600;
-  line-height: 1.15;
+  font-size: 14px;
+  font-weight: 700;
+  line-height: 1.2;
 }
 
 /* =========================
-   CALENDAR BUTTON
+   CALENDAR
 ========================= */
 
 .reading-modal__stats-item--calendar {
   width: 100%;
-  min-width: 0;
-
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-
-  gap: 2px;
-
-  padding: 7px;
-
-  box-sizing: border-box;
-
-  border: 1px solid var(--border);
-  border-radius: 8px;
-
-  background: var(--surface-secondary);
-  color: var(--text);
+  height: 54.8px;
+  color: inherit;
 
   font: inherit;
   text-align: left;
@@ -433,6 +824,7 @@
 
 .reading-modal__stats-item--calendar:hover {
   border-color: var(--accent);
+
   background: var(--accent-bg);
 }
 
@@ -440,274 +832,119 @@
   transform: scale(0.98);
 }
 
+/* =========================
+   CALENDAR BUTTON
+========================= */
+
+.reading-modal__stats-item--calendar {
+  width: 100%;
+
+  position: relative;
+
+  color: inherit;
+
+  font: inherit;
+  text-align: left;
+
+  border-color: var(--accent);
+
+  background:
+    linear-gradient(
+      135deg,
+      var(--surface) 0%,
+      var(--accent-bg) 100%
+    );
+
+  cursor: pointer;
+
+  box-shadow:
+    inset 0 0 0 1px rgba(181, 107, 255, 0.05);
+
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    box-shadow 0.2s ease,
+    transform 0.15s ease;
+}
+
+.reading-modal__stats-div {
+  display: flex;
+  flex-wrap: wrap;
+}
+.reading-modal__stats-item--calendar:hover {
+  border-color: var(--accent);
+
+  background: var(--accent-bg);
+
+  box-shadow:
+    0 0 0 2px var(--accent-bg),
+    0 6px 18px rgba(181, 107, 255, 0.12);
+}
+
+.reading-modal__stats-item--calendar:active {
+  transform: scale(0.97);
+}
+
 .reading-modal__stats-item--calendar:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
 }
 
+/* =========================
+   CALENDAR ROW
+========================= */
+
 .reading-modal__stats-calendar-row {
   width: 100%;
-
   display: flex;
   align-items: center;
   justify-content: space-between;
 
-  gap: 5px;
+  gap: 8px;
 }
 
-.reading-modal__stats-calendar-arrow {
-  flex-shrink: 0;
+/* =========================
+   CALENDAR ICON
+========================= */
 
+.reading-modal__stats-calendar-icon {
+  flex: 0 0 auto;
+
+  width: 30px;
+  height: 30px;
+
+  display: flex;
+  align-items: flex-start;
+  transform: translateY(-10px);
+  justify-content: center;
+
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+
+  background: var(--accent-bg);
   color: var(--accent);
-
-  font-size: 18px;
-  line-height: 1;
-
-  opacity: 0.8;
 
   transition:
     transform 0.2s ease,
-    opacity 0.2s ease;
-}
-
-.reading-modal__stats-item--calendar:hover
-  .reading-modal__stats-calendar-arrow {
-  transform: translateX(3px);
-  opacity: 1;
-}
-
-/* =========================
-   ACTIVE SESSION
-========================= */
-
-.reading-modal__session {
-  display: flex;
-  flex-direction: column;
-
-  gap: 6px;
-
-  padding: 9px;
-
-  border: 1px solid var(--border);
-  border-radius: 9px;
-
-  background: var(--surface-secondary);
-
-  box-sizing: border-box;
-}
-
-.reading-modal__session-label {
-  color: var(--text-h);
-
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 1.15;
-
-  margin-bottom: 10px;
-}
-
-/* =========================
-   SESSION CONTENT
-   MOBILE — 50 / 50
-========================= */
-
-.reading-modal__session-content {
-  display: grid;
-
-  grid-template-columns: 1fr 1fr;
-
-  gap: 10px;
-
-  align-items: center;
-
-  min-width: 0;
-}
-
-/* =========================
-   TIMER
-========================= */
-
-.reading-modal__timer {
-  min-width: 0;
-
-  margin: 0;
-  padding: 0;
-
-  color: var(--text-h);
-
-  font-size: 23px;
-  font-weight: 700;
-  line-height: 1;
-
-  letter-spacing: 0;
-
-  font-variant-numeric: tabular-nums;
-
-  white-space: nowrap;
-
-  text-align: center;
-
-  display: flex;
-  flex-direction: column;
-}
-
-/* =========================
-   FINISH FORM
-========================= */
-
-.reading-modal__finish-form {
-  min-width: 0;
-
-  display: flex;
-  flex-direction: column;
-
-  gap: 4px;
-}
-
-.reading-modal__finish-form label {
-  color: var(--text-h);
-
-  font-size: 11px;
-  font-weight: 500;
-  line-height: 1.2;
-}
-
-.reading-modal__finish-form input {
-  width: 100%;
-  min-height: 36px;
-
-  padding: 6px 8px;
-
-  box-sizing: border-box;
-
-  border: 1px solid var(--border);
-  border-radius: 7px;
-
-  background: var(--surface);
-  color: var(--text-h);
-
-  font-family: inherit;
-  font-size: 15px;
-
-  outline: none;
-
-  transition:
-    border-color 0.2s ease,
     background-color 0.2s ease;
 }
 
-.reading-modal__finish-form input:focus {
-  border-color: var(--border-hover);
+.reading-modal__stats-calendar-icon svg {
+  width: 17px;
+  height: 17px;
+
+  fill: none;
+  stroke: currentColor;
+
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
-.reading-modal__session-page {
-  margin: 0;
+.reading-modal__stats-item--calendar:hover .reading-modal__stats-calendar-icon {
+  transform: scale(1.08);
 
-  color: var(--text);
-
-  font-size: 10px;
-  line-height: 1.2;
-}
-
-/* =========================
-   ACTIONS
-========================= */
-
-.reading-modal__actions {
-  display: flex;
-  flex-direction: column;
-
-  gap: 6px;
-
-  margin-top: 8px;
-  padding-top: 8px;
-
-  border-top: 1px solid var(--border);
-}
-
-.reading-modal__actions button {
-  width: 100%;
-  min-height: 40px;
-
-  padding: 9px 10px;
-
-  box-sizing: border-box;
-
-  border-radius: 8px;
-
-  font-family: inherit;
-  font-size: 13px;
-  font-weight: 600;
-  line-height: 1.15;
-
-  cursor: pointer;
-}
-
-/* =========================
-   START / FINISH
-========================= */
-
-.reading-modal__start,
-.reading-modal__finish {
-  border: 1px solid var(--text-h);
-
-  background: var(--text-h);
-  color: var(--bg);
-
-  transition:
-    opacity 0.2s ease,
-    transform 0.15s ease;
-}
-
-.reading-modal__start:hover,
-.reading-modal__finish:hover {
-  opacity: 0.85;
-}
-
-.reading-modal__start:active,
-.reading-modal__finish:active {
-  transform: scale(0.98);
-}
-
-.reading-modal__start:disabled,
-.reading-modal__finish:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-/* =========================
-   PAUSE / RESUME
-========================= */
-
-.reading-modal__pause,
-.reading-modal__resume {
-  border: 1px solid var(--border);
-
-  background: var(--surface-secondary);
-  color: var(--text-h);
-
-  transition:
-    background-color 0.2s ease,
-    border-color 0.2s ease,
-    opacity 0.2s ease,
-    transform 0.15s ease;
-}
-
-.reading-modal__pause:hover,
-.reading-modal__resume:hover {
-  border-color: var(--border-hover);
-  background: var(--accent-bg);
-}
-
-.reading-modal__pause:active,
-.reading-modal__resume:active {
-  transform: scale(0.98);
-}
-
-.reading-modal__pause:disabled,
-.reading-modal__resume:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
+  background: var(--surface);
 }
 
 /* =========================
@@ -716,32 +953,38 @@
 
 @media (max-width: 370px) {
   .reading-modal-overlay {
-    padding: 8px;
+    padding: 10px;
   }
 
   .reading-modal {
-    max-height: calc(100dvh - 16px);
+    max-height: calc(100dvh - 20px);
 
-    padding: 12px 9px;
+    padding: 16px 12px;
+
+    border-radius: 18px;
+  }
+
+  .reading-modal h2 {
+    font-size: 22px;
   }
 
   .reading-modal__top {
-    grid-template-columns: 74px minmax(0, 1fr);
+    grid-template-columns: 76px minmax(0, 1fr);
 
-    gap: 7px;
+    gap: 8px;
   }
 
   .reading-modal__cover {
-    width: 74px;
+    width: 76px;
   }
 
   .reading-modal__cover img,
   .reading-modal__no-cover {
-    height: 111px;
+    height: 114px;
   }
 
   .reading-modal__info {
-    gap: 4px;
+    gap: 5px;
   }
 
   .reading-modal__info-item {
@@ -762,51 +1005,17 @@
     font-size: 15px;
   }
 
-  .reading-modal__session {
-    padding: 8px;
-  }
-
-  .reading-modal__session-content {
-    grid-template-columns: 1fr 1fr;
-
-    gap: 7px;
+  .reading-modal__session-card,
+  .reading-modal__stats-section {
+    padding: 12px;
   }
 
   .reading-modal__timer {
-    font-size: 19px;
+    font-size: 32px;
   }
 
-  .reading-modal__finish-form {
-    gap: 3px;
-  }
-
-  .reading-modal__finish-form label {
-    font-size: 10px;
-  }
-
-  .reading-modal__finish-form input {
-    min-height: 34px;
-
-    padding: 6px 7px;
-
-    font-size: 14px;
-  }
-
-  .reading-modal__session-page {
-    font-size: 9px;
-  }
-
-  .reading-modal__actions {
-    gap: 5px;
-
-    margin-top: 7px;
-    padding-top: 7px;
-  }
-
-  .reading-modal__actions button {
-    min-height: 38px;
-
-    padding: 8px 9px;
+  .reading-modal__session-actions {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -816,33 +1025,31 @@
 
 @media (min-width: 600px) {
   .reading-modal-overlay {
-    align-items: center;
-
-    padding: 18px;
+    padding: 24px;
   }
 
   .reading-modal {
     max-width: 760px;
 
-    max-height: calc(100dvh - 36px);
+    max-height: calc(100dvh - 48px);
 
-    padding: 24px;
+    padding: 28px;
 
-    border-radius: 16px;
+    border-radius: 24px;
   }
 
   .reading-modal h2 {
-    font-size: 24px;
+    font-size: 30px;
   }
 
   .reading-modal__author {
-    font-size: 15px;
+    font-size: 17px;
   }
 
   .reading-modal__layout {
-    gap: 18px;
+    gap: 22px;
 
-    margin-top: 22px;
+    margin-top: 26px;
   }
 
   .reading-modal__top {
@@ -865,7 +1072,7 @@
   }
 
   .reading-modal__info-item {
-    padding: 12px;
+    padding: 13px;
   }
 
   .reading-modal__info-label,
@@ -875,63 +1082,52 @@
 
   .reading-modal__info-value,
   .reading-modal__stats-value {
-    font-size: 15px;
+    font-size: 16px;
   }
 
   .reading-modal__star {
     font-size: 22px;
   }
 
+  .reading-modal__session-card,
+  .reading-modal__stats-section {
+    padding: 20px;
+  }
+
+  .reading-modal__session-empty h3,
+  .reading-modal__session-header h3 {
+    font-size: 18px;
+  }
+
+  .reading-modal__session-empty p {
+    font-size: 14px;
+  }
+
+  .reading-modal__timer {
+    font-size: 50px;
+  }
+
+  .reading-modal__finish-form label {
+    font-size: 14px;
+  }
+
   .reading-modal__stats {
     gap: 10px;
   }
 
-  .reading-modal__stats-item,
-  .reading-modal__stats-item--calendar {
-    padding: 12px;
+  .reading-modal__stats-item {
+    padding: 13px;
   }
 
-  .reading-modal__session-content {
-    display: flex;
-    flex-direction: column;
-
-    align-items: stretch;
-
-    gap: 8px;
+  .reading-modal__session-actions {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .reading-modal__timer {
-    font-size: 32px;
+  .reading-modal__session-actions button,
+  .reading-modal__start {
+    min-height: 48px;
 
-    text-align: left;
-  }
-
-  .reading-modal__finish-form {
-    gap: 5px;
-  }
-
-  .reading-modal__finish-form input {
-    min-height: 40px;
-
-    padding: 8px 10px;
-  }
-
-  .reading-modal__session-page {
-    font-size: 11px;
-  }
-
-  .reading-modal__actions {
-    flex-direction: row;
-
-    justify-content: flex-end;
-
-    flex-wrap: wrap;
-  }
-
-  .reading-modal__actions button {
-    width: auto;
-
-    min-width: 130px;
+    font-size: 14px;
   }
 }
 
@@ -941,33 +1137,29 @@
 
 @media (min-width: 900px) {
   .reading-modal-overlay {
-    padding: 24px;
+    padding: 30px;
   }
 
   .reading-modal {
     max-width: 900px;
 
-    max-height: calc(100dvh - 48px);
+    max-height: calc(100dvh - 60px);
 
-    padding: 28px;
+    padding: 32px;
   }
 
   .reading-modal h2 {
-    font-size: 26px;
-  }
-
-  .reading-modal__author {
-    font-size: 16px;
+    font-size: 32px;
   }
 
   .reading-modal__top {
-    grid-template-columns: 220px minmax(0, 1fr);
+    grid-template-columns: 210px minmax(0, 1fr);
 
     gap: 28px;
   }
 
   .reading-modal__cover {
-    width: 220px;
+    width: 210px;
   }
 
   .reading-modal__cover img,
@@ -975,40 +1167,28 @@
     height: 310px;
   }
 
-  .reading-modal__info {
-    gap: 12px;
-  }
-
   .reading-modal__info-item {
-    padding: 14px;
-  }
-
-  .reading-modal__info-label {
-    font-size: 12px;
+    padding: 15px;
   }
 
   .reading-modal__info-value {
-    font-size: 16px;
+    font-size: 17px;
   }
 
-  .reading-modal__stats {
-    gap: 10px;
+  .reading-modal__session-card,
+  .reading-modal__stats-section {
+    padding: 22px;
   }
 
-  .reading-modal__stats-item,
-  .reading-modal__stats-item--calendar {
-    padding: 12px;
-  }
-
-  .reading-modal__stats-label {
-    font-size: 12px;
+  .reading-modal__stats-item {
+    padding: 15px;
   }
 
   .reading-modal__stats-value {
-    font-size: 15px;
+    font-size: 17px;
   }
 
   .reading-modal__timer {
-    font-size: 36px;
+    font-size: 56px;
   }
 }
