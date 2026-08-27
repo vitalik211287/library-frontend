@@ -4,7 +4,10 @@ import {
   useState,
 } from "react";
 
-import { useNavigate } from "react-router-dom";
+import {
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 
 import "./ReadingCalendarPage.css";
 
@@ -40,6 +43,7 @@ const WEEK_DAYS = [
 
 function ReadingCalendarPage() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const now = new Date();
 
@@ -179,6 +183,24 @@ function ReadingCalendarPage() {
   }, [calendar]);
 
   const handleClose = () => {
+    const bookId =
+      location.state?.bookId;
+
+    if (
+      location.state
+        ?.fromReadingModal &&
+      bookId
+    ) {
+      navigate(
+        `/?reading=${bookId}`,
+        {
+          replace: true,
+        },
+      );
+
+      return;
+    }
+
     navigate("/");
   };
 

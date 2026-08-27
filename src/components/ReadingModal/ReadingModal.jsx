@@ -318,9 +318,12 @@ function ReadingModal({ book, apiUrl, onClose }) {
   };
 
   const handleOpenCalendar = () => {
-    onClose();
-
-    navigate(`/calendar?book=${book.id}`);
+    navigate(`/calendar?book=${book.id}`, {
+      state: {
+        fromReadingModal: true,
+        bookId: book.id,
+      },
+    });
   };
 
   useEffect(() => {
@@ -683,7 +686,7 @@ function ReadingModal({ book, apiUrl, onClose }) {
                   aria-label="Відкрити календар читання"
                   title="Відкрити календар читання"
                 >
-                  <div className="reading-modal__stats-div" >
+                  <div className="reading-modal__stats-div">
                     <span className="reading-modal__stats-label">Сесій</span>
                     <span className="reading-modal__stats-calendar-row">
                       <span className="reading-modal__stats-value">
