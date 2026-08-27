@@ -431,7 +431,7 @@ function ReadingModal({ book, apiUrl, onClose }) {
           <p className="reading-modal__author">{currentBook.author}</p>
         </div>
 
-        {message && <p className="reading-modal__message">{message}</p>}
+        {/* {message && <p className="reading-modal__message">{message}</p>} */}
 
         <div className="reading-modal__layout">
           {/* BOOK INFO */}
