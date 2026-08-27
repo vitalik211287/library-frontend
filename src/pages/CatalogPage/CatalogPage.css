@@ -377,6 +377,8 @@
 
 .book-card__reading-info {
   display: block;
+
+  min-width: 0;
 }
 
 .book-card__reading-info p {
@@ -387,6 +389,57 @@
   color: var(--text-h);
 
   font-weight: 600;
+}
+
+/* =========================
+   RATING
+   MOBILE-FIRST
+========================= */
+
+.book-card__rating-row {
+  display: flex;
+  align-items: center;
+
+  gap: 3px;
+
+  min-width: 0;
+
+  margin-top: 3px;
+
+  color: var(--text);
+
+  font-size: 12px;
+  line-height: 1.2;
+
+  white-space: nowrap;
+}
+
+.book-card__rating-row > span {
+  flex: 0 0 auto;
+}
+
+.book-card__stars {
+  display: flex;
+  align-items: center;
+
+  flex: 0 0 auto;
+
+  gap: 0;
+
+  min-width: 0;
+
+  white-space: nowrap;
+}
+
+.book-card__star {
+  display: inline-block;
+
+  flex: 0 0 auto;
+
+  color: var(--accent);
+
+  font-size: 15px;
+  line-height: 1;
 }
 
 /* =========================
@@ -485,6 +538,48 @@
 }
 
 /* =========================
+   VERY SMALL PHONES
+========================= */
+
+@media (max-width: 370px) {
+  .catalog-page {
+    padding: 12px;
+  }
+
+  .books-grid {
+    gap: 12px 8px;
+  }
+
+  .book-card {
+    padding: 8px;
+  }
+
+  .book-card h2 {
+    font-size: 15px;
+  }
+
+  .book-card p {
+    font-size: 12px;
+  }
+
+  .book-card__rating-row {
+    gap: 2px;
+
+    font-size: 11px;
+  }
+
+  .book-card__star {
+    font-size: 14px;
+  }
+
+  .book-card__button {
+    padding: 9px 6px;
+
+    font-size: 12px;
+  }
+}
+
+/* =========================
    TABLET — 600+
 ========================= */
 
@@ -519,6 +614,20 @@
     margin: 5px 0;
 
     font-size: 14px;
+  }
+
+  .book-card__rating-row {
+    gap: 5px;
+
+    font-size: 14px;
+  }
+
+  .book-card__stars {
+    gap: 1px;
+  }
+
+  .book-card__star {
+    font-size: 18px;
   }
 
   .book-card__actions {
@@ -568,14 +677,14 @@
     background: var(--surface-secondary);
   }
 
-  /* Персональна інформація читання
-     на більших екранах ховається */
+  /* Персональні дані читання
+     на більших екранах ховаємо */
 
   .book-card__reading-info {
     display: none;
   }
 
-  /* Видавництво, рік, жанр
+  /* Видавництво, рік і жанр
      повертаємо на більших екранах */
 
   .book-card__extra-info {
@@ -633,29 +742,4 @@
   .books-grid {
     grid-template-columns: repeat(5, minmax(0, 1fr));
   }
-}
-
-.book-card__rating-row {
-  display: flex;
-  align-items: center;
-
-  gap: 6px;
-
-  margin-top: 3px;
-}
-
-.book-card__stars {
-  display: flex;
-  align-items: center;
-
-  gap: 1px;
-
-  white-space: nowrap;
-}
-
-.book-card__star {
-  color: var(--accent);
-
-  font-size: 17px;
-  line-height: 1;
 }
