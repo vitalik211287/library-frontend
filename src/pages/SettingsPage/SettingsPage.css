@@ -1,0 +1,286 @@
+.settings-page {
+  width: 100%;
+  min-height: calc(100dvh - 80px);
+
+  padding: 18px 14px 32px;
+
+  box-sizing: border-box;
+
+  background: var(--bg);
+  color: var(--text);
+}
+
+.settings-page__content {
+  width: 100%;
+  max-width: 760px;
+
+  margin: 0 auto;
+}
+
+/* HEADER */
+
+.settings-page__header {
+  position: relative;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  min-height: 48px;
+
+  margin-bottom: 26px;
+}
+
+.settings-page__header h1 {
+  margin: 0;
+
+  color: var(--text-h);
+
+  font-size: 21px;
+  line-height: 1.2;
+}
+
+.settings-page__back {
+  position: absolute;
+  left: 0;
+
+  width: 42px;
+  height: 42px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  margin: 0;
+  padding: 0;
+
+  border: none;
+  border-radius: 50%;
+
+  background: transparent;
+  color: var(--text-h);
+
+  cursor: pointer;
+}
+
+.settings-page__back:hover {
+  background: var(--surface-secondary);
+}
+
+.settings-page__back svg {
+  width: 26px;
+  height: 26px;
+
+  fill: none;
+  stroke: currentColor;
+
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* SECTION */
+
+.settings-page__section {
+  margin-bottom: 24px;
+}
+
+.settings-page__section h2 {
+  margin: 0 0 9px 4px;
+
+  color: var(--text);
+
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.settings-page__card {
+  overflow: hidden;
+
+  border: 1px solid var(--border);
+  border-radius: 16px;
+
+  background: var(--surface);
+
+  box-shadow: var(--shadow);
+}
+
+/* ROW */
+
+.settings-page__row {
+  width: 100%;
+  min-height: 66px;
+
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 10px;
+
+  padding: 10px 14px;
+
+  box-sizing: border-box;
+
+  border: none;
+  border-bottom: 1px solid var(--border);
+
+  background: transparent;
+  color: var(--text);
+
+  font-family: inherit;
+  text-align: left;
+}
+
+button.settings-page__row {
+  cursor: pointer;
+}
+
+button.settings-page__row:hover {
+  background: var(--surface-secondary);
+}
+
+.settings-page__row:last-child {
+  border-bottom: none;
+}
+
+.settings-page__row-icon {
+  width: 36px;
+  height: 36px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--text);
+}
+
+.settings-page__row-icon svg {
+  width: 23px;
+  height: 23px;
+
+  fill: none;
+  stroke: currentColor;
+
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.settings-page__row-content {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.settings-page__row-title {
+  color: var(--text-h);
+
+  font-size: 15px;
+  font-weight: 500;
+}
+
+.settings-page__row-value {
+  min-width: 0;
+
+  color: var(--text);
+
+  font-size: 13px;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.settings-page__chevron {
+  color: var(--text);
+
+  font-size: 28px;
+  font-weight: 300;
+  line-height: 1;
+}
+
+/* LOGOUT */
+
+.settings-page__logout {
+  width: 100%;
+  min-height: 56px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+
+  margin-top: 10px;
+  padding: 12px 18px;
+
+  border: 1px solid rgba(255, 70, 70, 0.35);
+  border-radius: 14px;
+
+  background: rgba(255, 70, 70, 0.09);
+  color: #ff5757;
+
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    background-color 0.2s ease,
+    transform 0.15s ease;
+}
+
+.settings-page__logout:hover {
+  background: rgba(255, 70, 70, 0.15);
+}
+
+.settings-page__logout:active {
+  transform: scale(0.99);
+}
+
+.settings-page__logout svg {
+  width: 23px;
+  height: 23px;
+
+  flex-shrink: 0;
+
+  fill: none;
+  stroke: currentColor;
+
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* TABLET */
+
+@media (min-width: 600px) {
+  .settings-page {
+    padding: 28px 24px 44px;
+  }
+
+  .settings-page__header {
+    margin-bottom: 32px;
+  }
+
+  .settings-page__header h1 {
+    font-size: 24px;
+  }
+
+  .settings-page__row {
+    min-height: 72px;
+
+    padding: 12px 18px;
+  }
+
+  .settings-page__row-title {
+    font-size: 16px;
+  }
+
+  .settings-page__row-value {
+    font-size: 14px;
+  }
+}
