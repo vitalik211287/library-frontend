@@ -672,3 +672,172 @@
 
   font-size: 12px;
 }
+
+.user-profile__book-rating {
+  margin-top: 4px;
+
+  color: var(--accent);
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.user-profile__book-rating {
+  margin-top: 4px;
+
+  color: var(--accent);
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+/* =========================
+   MULTIPLE CURRENT BOOKS
+========================= */
+
+.user-profile__current-books {
+  display: grid;
+  gap: 12px;
+}
+
+.user-profile__section-count {
+  min-width: 26px;
+  height: 26px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 7px;
+
+  box-sizing: border-box;
+
+  border-radius: 999px;
+
+  background: var(--accent-bg);
+  color: var(--accent);
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.user-profile__book-rating {
+  margin-top: 4px;
+
+  color: var(--accent);
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+@media (min-width: 900px) {
+  .user-profile__current-books {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+}
+
+/* =========================
+   MOBILE CURRENT BOOKS
+========================= */
+
+.user-profile__current-book--secondary {
+  display: none;
+}
+
+.user-profile__current-books {
+  display: grid;
+  gap: 12px;
+}
+
+.user-profile__more-current {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+
+  margin-top: 10px;
+  padding: 11px 14px;
+
+  border: 1px solid var(--border);
+  border-radius: 12px;
+
+  background: var(--surface);
+  color: var(--accent);
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.user-profile__more-current:hover {
+  border-color: var(--accent);
+  background: var(--accent-bg);
+}
+
+.user-profile__more-current svg {
+  width: 18px;
+  height: 18px;
+
+  fill: none;
+  stroke: currentColor;
+
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  transition:
+    transform 0.2s ease;
+}
+
+.user-profile__more-current--open svg {
+  transform: rotate(180deg);
+}
+
+.user-profile__more-current--open
+  + * {
+  display: block;
+}
+
+/* Коли список відкритий */
+.user-profile__current-books:has(
+  + .user-profile__more-current--open
+)
+  .user-profile__current-book--secondary {
+  display: grid;
+}
+
+/* =========================
+   TABLET / DESKTOP
+========================= */
+
+@media (min-width: 600px) {
+  .user-profile__current-book--secondary {
+    display: grid;
+  }
+
+  .user-profile__more-current {
+    display: none;
+  }
+}
+
+@media (min-width: 900px) {
+  .user-profile__current-books {
+    grid-template-columns:
+      repeat(
+        2,
+        minmax(0, 1fr)
+      );
+  }
+}
