@@ -640,6 +640,40 @@ function ReadingModal({ book, apiUrl, onClose }) {
               </h3>
 
               <div className="reading-modal__stats">
+                <div
+                  className={`reading-modal__stats-item reading-modal__stats-item--current-session ${
+                    activeSession
+                      ? "reading-modal__stats-item--current-session-active"
+                      : ""
+                  }`}
+                >
+                  <span className="reading-modal__stats-label">
+                    Поточна сесія
+                  </span>
+
+                  <span className="reading-modal__stats-session-row">
+                    <span className="reading-modal__stats-value reading-modal__stats-value--timer">
+                      {activeSession ? formatTime(elapsedSeconds) : "00:00:00"}
+                    </span>
+
+                    <span className="reading-modal__stats-session-icon">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="12" cy="13" r="8" />
+
+                        <path d="M12 9v4l2.5 1.5" />
+                        <path d="M9 2h6" />
+                        <path d="M12 2v3" />
+                      </svg>
+                    </span>
+                  </span>
+                </div>
+                <div className="reading-modal__stats-item">
+                  <span className="reading-modal__stats-label">Прочитано</span>
+
+                  <span className="reading-modal__stats-value">
+                    {stats.pagesRead} стор.
+                  </span>
+                </div>
                 <div className="reading-modal__stats-item">
                   <span className="reading-modal__stats-label">
                     Загальний час
@@ -647,14 +681,6 @@ function ReadingModal({ book, apiUrl, onClose }) {
 
                   <span className="reading-modal__stats-value">
                     {formatDuration(stats.totalReadingSeconds)}
-                  </span>
-                </div>
-
-                <div className="reading-modal__stats-item">
-                  <span className="reading-modal__stats-label">Прочитано</span>
-
-                  <span className="reading-modal__stats-value">
-                    {stats.pagesRead} стор.
                   </span>
                 </div>
 
@@ -712,34 +738,6 @@ function ReadingModal({ book, apiUrl, onClose }) {
                     </span>
                   </span>
                 </button>
-
-                <div
-                  className={`reading-modal__stats-item reading-modal__stats-item--current-session ${
-                    activeSession
-                      ? "reading-modal__stats-item--current-session-active"
-                      : ""
-                  }`}
-                >
-                  <span className="reading-modal__stats-label">
-                    Поточна сесія
-                  </span>
-
-                  <span className="reading-modal__stats-session-row">
-                    <span className="reading-modal__stats-value reading-modal__stats-value--timer">
-                      {activeSession ? formatTime(elapsedSeconds) : "00:00:00"}
-                    </span>
-
-                    <span className="reading-modal__stats-session-icon">
-                      <svg viewBox="0 0 24 24" aria-hidden="true">
-                        <circle cx="12" cy="13" r="8" />
-
-                        <path d="M12 9v4l2.5 1.5" />
-                        <path d="M9 2h6" />
-                        <path d="M12 2v3" />
-                      </svg>
-                    </span>
-                  </span>
-                </div>
 
                 <div className="reading-modal__stats-item reading-modal__stats-item--longest-session">
                   <span className="reading-modal__stats-label">
