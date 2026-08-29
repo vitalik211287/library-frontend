@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useNavigate, useSearchParams } from "react-router-dom";
 
@@ -37,15 +37,16 @@ const ReadingIcon = () => (
   </svg>
 );
 
-const StarIcon = () => (
+const StreakIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-2.9-5.6 2.9 1.1-6.2L3 9.6l6.2-.9L12 3Z" />
+    <path d="M13 2s1 4-2 7c-2 2-4 4-4 7a5 5 0 0 0 10 0c0-2-1-4-2-5 0 3-2 4-3 4 1-3-1-5-1-5" />
   </svg>
 );
 
 const EditIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <path d="m4 20 4.4-1 9.8-9.8-3.4-3.4L5 15.6 4 20Z" />
+
     <path d="m13.8 6.8 3.4 3.4" />
   </svg>
 );
@@ -86,6 +87,7 @@ const buildPreviousMonthWeeks = (days) => {
 
   days.forEach((day) => {
     const dayNumber = Number(day.day) || 0;
+
     const seconds = Number(day.seconds) || 0;
 
     let weekIndex = 0;
@@ -105,6 +107,7 @@ const buildPreviousMonthWeeks = (days) => {
 
   return weeks.map((week) => ({
     ...week,
+
     value: Math.round(week.value),
   }));
 };
@@ -114,6 +117,7 @@ const buildCurrentMonthWeeks = (days) => {
 
   days.forEach((day) => {
     const dayNumber = Number(day.day) || 0;
+
     const seconds = Number(day.seconds) || 0;
 
     let weekIndex = Math.floor((dayNumber - 1) / 7);
@@ -125,6 +129,7 @@ const buildCurrentMonthWeeks = (days) => {
 
   return weeks.map((week) => ({
     ...week,
+
     value: Math.round(week.value),
   }));
 };
@@ -173,6 +178,7 @@ const getChartScale = (chartData) => {
 
   return {
     maxValue,
+
     yTicks: [0, step, step * 2, step * 3],
   };
 };
@@ -253,10 +259,6 @@ const ReadingActivityChart = ({
     "Z",
   ].join(" ");
 
-  /*
-   * Знаходимо реальний
-   * максимум графіка.
-   */
   const peakValue = Math.max(
     ...chartData.map((item) => Number(item.value) || 0),
     0,
@@ -312,15 +314,11 @@ const ReadingActivityChart = ({
 
       <div className="reading-chart">
         <div className="reading-chart__body">
-          {/* Y SCALE */}
-
           <div className="reading-chart__scale">
             {[...yTicks].reverse().map((tick) => (
               <span key={tick}>{tick} хв</span>
             ))}
           </div>
-
-          {/* GRAPH */}
 
           <div className="reading-chart__plot">
             {peakValue > 0 && (
@@ -328,6 +326,7 @@ const ReadingActivityChart = ({
                 className="reading-chart__peak-value"
                 style={{
                   left: `${peakLeft}%`,
+
                   top: `${Math.max((getY(peakValue) / height) * 100 - 8, 0)}%`,
                 }}
               >
@@ -368,8 +367,6 @@ const ReadingActivityChart = ({
                 </linearGradient>
               </defs>
 
-              {/* HORIZONTAL GRID */}
-
               {yTicks.map((tick) => (
                 <line
                   key={`horizontal-${tick}`}
@@ -380,8 +377,6 @@ const ReadingActivityChart = ({
                   className="reading-chart__horizontal-line"
                 />
               ))}
-
-              {/* VERTICAL GRID */}
 
               {chartData.map((item, index) => (
                 <line
@@ -394,11 +389,7 @@ const ReadingActivityChart = ({
                 />
               ))}
 
-              {/* AREA */}
-
               <path d={areaPath} fill="url(#readingAreaGradient)" />
-
-              {/* LINE */}
 
               <polyline
                 points={linePoints}
@@ -406,13 +397,8 @@ const ReadingActivityChart = ({
                 stroke="url(#readingLineGradient)"
                 className="reading-chart__line"
               />
-
-              {/* DOTS */}
-
-              {chartData.map((item, index) => {
-                const isPeak = index === peakIndex && peakValue > 0;
-              })}
             </svg>
+
             {chartData.map((item, index) => {
               const isPeak = index === peakIndex && peakValue > 0;
 
@@ -441,8 +427,6 @@ const ReadingActivityChart = ({
           </div>
         </div>
 
-        {/* MONTHS */}
-
         <div className="reading-chart__periods">
           <span>{previousMonthName}</span>
 
@@ -452,6 +436,7 @@ const ReadingActivityChart = ({
     </div>
   );
 };
+
 /* =========================
    PAGE
 ========================= */
@@ -489,10 +474,6 @@ const UserPage = () => {
 
   const [isCurrentBooksOpen, setIsCurrentBooksOpen] = useState(false);
 
-  /* =========================
-     ACTIVITY STATE
-  ========================= */
-
   const [readingActivity, setReadingActivity] = useState({
     weeks: [],
     currentMonthSeconds: 0,
@@ -501,6 +482,30 @@ const UserPage = () => {
   const [isActivityLoading, setIsActivityLoading] = useState(true);
 
   const [activityError, setActivityError] = useState("");
+
+  const [currentStreak, setCurrentStreak] = useState(0);
+
+  const [isStreakLoading, setIsStreakLoading] = useState(true);
+
+  const currentYear = new Date().getFullYear();
+
+  const [readingGoal, setReadingGoal] = useState(null);
+
+  const [isGoalLoading, setIsGoalLoading] = useState(true);
+
+  const [goalError, setGoalError] = useState("");
+
+  const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
+
+  const [isGoalSaving, setIsGoalSaving] = useState(false);
+
+  const [goalSaveError, setGoalSaveError] = useState("");
+
+  const [goalForm, setGoalForm] = useState({
+    books: "",
+    pages: "",
+    hours: "",
+  });
 
   /* =========================
      CURRENT
@@ -721,6 +726,106 @@ const UserPage = () => {
   }, [readingBookId]);
 
   /* =========================
+     READING STREAK
+  ========================= */
+
+  useEffect(() => {
+    const loadStreak = async () => {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        setIsStreakLoading(false);
+
+        return;
+      }
+
+      try {
+        setIsStreakLoading(true);
+
+        const now = new Date();
+
+        const currentYear = now.getFullYear();
+
+        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+        const response = await fetch(
+          `${API_URL}/api/user-books/stats?year=${currentYear}&timeZone=${encodeURIComponent(
+            timeZone,
+          )}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        if (!response.ok) {
+          throw new Error("Failed to load reading streak");
+        }
+
+        const data = await response.json();
+
+        setCurrentStreak(Number(data?.stats?.streak?.current) || 0);
+      } catch (error) {
+        console.error("Load reading streak error:", error);
+
+        setCurrentStreak(0);
+      } finally {
+        setIsStreakLoading(false);
+      }
+    };
+
+    loadStreak();
+  }, [readingBookId]);
+
+  /* =========================
+     READING GOAL
+  ========================= */
+
+  useEffect(() => {
+    const loadReadingGoal = async () => {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        setIsGoalLoading(false);
+
+        return;
+      }
+
+      try {
+        setIsGoalLoading(true);
+
+        setGoalError("");
+
+        const response = await fetch(
+          `${API_URL}/api/user-books/goals?year=${currentYear}`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          },
+        );
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "Не вдалося завантажити мету");
+        }
+
+        setReadingGoal(data.goal);
+      } catch (error) {
+        console.error("Load reading goal error:", error);
+
+        setGoalError("Не вдалося завантажити мету");
+      } finally {
+        setIsGoalLoading(false);
+      }
+    };
+
+    loadReadingGoal();
+  }, [currentYear]);
+
+  /* =========================
      REMOVE WISHLIST
   ========================= */
 
@@ -774,6 +879,159 @@ const UserPage = () => {
   };
 
   /* =========================
+     GOAL MODAL
+  ========================= */
+
+  const handleOpenGoalModal = () => {
+    const goal = readingGoal?.goal;
+
+    setGoalForm({
+      books:
+        goal?.books !== null && goal?.books !== undefined
+          ? String(goal.books)
+          : "",
+
+      pages:
+        goal?.pages !== null && goal?.pages !== undefined
+          ? String(goal.pages)
+          : "",
+
+      hours:
+        goal?.minutes !== null && goal?.minutes !== undefined
+          ? String(Math.round((goal.minutes / 60) * 10) / 10)
+          : "",
+    });
+
+    setGoalSaveError("");
+
+    setIsGoalModalOpen(true);
+  };
+
+  const handleCloseGoalModal = () => {
+    if (isGoalSaving) {
+      return;
+    }
+
+    setGoalSaveError("");
+
+    setIsGoalModalOpen(false);
+  };
+
+  const handleGoalChange = (event) => {
+    const { name, value } = event.target;
+
+    setGoalForm((form) => ({
+      ...form,
+
+      [name]: value,
+    }));
+  };
+
+  const parseGoalValue = (value) => {
+    if (value === "") {
+      return null;
+    }
+
+    const number = Number(value);
+
+    if (!Number.isFinite(number) || number < 0) {
+      return null;
+    }
+
+    return number;
+  };
+
+  const handleSaveGoal = async (event) => {
+    event.preventDefault();
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      setGoalSaveError("Потрібно увійти в акаунт");
+
+      return;
+    }
+
+    const books = parseGoalValue(goalForm.books);
+
+    const pages = parseGoalValue(goalForm.pages);
+
+    const hours = parseGoalValue(goalForm.hours);
+
+    if (goalForm.books !== "" && books === null) {
+      setGoalSaveError("Вкажи коректну кількість книг");
+
+      return;
+    }
+
+    if (goalForm.pages !== "" && pages === null) {
+      setGoalSaveError("Вкажи коректну кількість сторінок");
+
+      return;
+    }
+
+    if (goalForm.hours !== "" && hours === null) {
+      setGoalSaveError("Вкажи коректну кількість годин");
+
+      return;
+    }
+
+    if (
+      (books !== null && !Number.isInteger(books)) ||
+      (pages !== null && !Number.isInteger(pages))
+    ) {
+      setGoalSaveError("Книги та сторінки мають бути цілими числами");
+
+      return;
+    }
+
+    const minutes = hours === null ? null : Math.round(hours * 60);
+
+    try {
+      setIsGoalSaving(true);
+
+      setGoalSaveError("");
+
+      const response = await fetch(
+        `${API_URL}/api/user-books/goals?year=${currentYear}`,
+        {
+          method: "PUT",
+
+          headers: {
+            "Content-Type": "application/json",
+
+            Authorization: `Bearer ${token}`,
+          },
+
+          body: JSON.stringify({
+            booksGoal: books,
+            pagesGoal: pages,
+            minutesGoal: minutes,
+          }),
+        },
+      );
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.message || "Не вдалося зберегти мету");
+      }
+
+      setReadingGoal(data.goal);
+
+      setIsGoalModalOpen(false);
+    } catch (error) {
+      console.error("Save reading goal error:", error);
+
+      setGoalSaveError(
+        error instanceof Error ? error.message : "Не вдалося зберегти мету",
+      );
+    } finally {
+      setIsGoalSaving(false);
+    }
+  };
+
+  /* =========================
      HELPERS
   ========================= */
 
@@ -785,32 +1043,23 @@ const UserPage = () => {
     return Math.min(Math.round((currentPage / totalPages) * 100), 100);
   };
 
-  const averageRating = useMemo(() => {
-    const values = finishedBooks
-      .map(({ userBook }) => Number(userBook?.rating))
-      .filter((rating) => Number.isFinite(rating) && rating > 0);
-
-    if (!values.length) {
-      return 0;
-    }
-
-    const sum = values.reduce((total, rating) => total + rating, 0);
-
-    return (sum / values.length).toFixed(1);
-  }, [finishedBooks]);
-
   const mainCurrentBook = currentBooks[0] ?? null;
 
   const otherCurrentBooks = currentBooks.slice(1);
 
   const profileName = user?.name || "Користувач";
 
+  const goal = readingGoal?.goal;
+
+  const goalHours =
+    goal?.minutes !== null && goal?.minutes !== undefined
+      ? Math.round((goal.minutes / 60) * 10) / 10
+      : null;
+
   return (
     <main className="user-page">
       <div className="user-profile">
-        {/* =========================
-            PROFILE HERO
-        ========================= */}
+        {/* PROFILE HERO */}
 
         <section className="profile-hero">
           <div className="profile-hero__avatar-wrap">
@@ -845,9 +1094,7 @@ const UserPage = () => {
           </div>
         </section>
 
-        {/* =========================
-            STATS
-        ========================= */}
+        {/* STATS */}
 
         <section className="profile-stats">
           <article className="profile-stat">
@@ -877,17 +1124,74 @@ const UserPage = () => {
           </article>
 
           <article className="profile-stat">
-            <StarIcon />
+            <StreakIcon />
 
-            <strong>{isFinishedLoading ? "..." : averageRating}</strong>
+            <strong>{isStreakLoading ? "..." : currentStreak}</strong>
 
-            <span>Середній рейтинг</span>
+            <span>Днів поспіль</span>
           </article>
         </section>
 
-        {/* =========================
-            CURRENT
-        ========================= */}
+        {/* READING GOAL */}
+
+        <section className="profile-section profile-section--goal">
+          <div className="profile-section__header">
+            <h2>Мета на {currentYear}</h2>
+
+            <button
+              type="button"
+              onClick={handleOpenGoalModal}
+              disabled={isGoalLoading}
+            >
+              <EditIcon />
+              Змінити
+            </button>
+          </div>
+
+          {isGoalLoading ? (
+            <div className="profile-empty">Завантаження мети...</div>
+          ) : goalError ? (
+            <div className="profile-empty">{goalError}</div>
+          ) : (
+            <div className="reading-goal-card">
+              <div className="reading-goal-card__item">
+                <BookIcon />
+
+                <div>
+                  <strong>{goal?.books ?? "—"}</strong>
+
+                  <span>книг</span>
+                </div>
+              </div>
+
+              <div className="reading-goal-card__item">
+                <BookmarkIcon />
+
+                <div>
+                  <strong>{goal?.pages ?? "—"}</strong>
+
+                  <span>сторінок</span>
+                </div>
+              </div>
+
+              <div className="reading-goal-card__item">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="12" r="9" />
+
+                  <path d="M12 7v5l3 2" />
+                </svg>
+
+                <div>
+                  <strong>{goalHours ?? "—"}</strong>
+
+                  <span>годин</span>
+                </div>
+              </div>
+            </div>
+          )}
+        </section>
+
+        {/* CURRENT */}
 
         <section className="profile-section">
           <div className="profile-section__header">
@@ -1050,9 +1354,7 @@ const UserPage = () => {
           )}
         </section>
 
-        {/* =========================
-            WISHLIST
-        ========================= */}
+        {/* WISHLIST */}
 
         <section className="profile-section">
           <div className="profile-section__header">
@@ -1107,9 +1409,7 @@ const UserPage = () => {
           )}
         </section>
 
-        {/* =========================
-            FINISHED
-        ========================= */}
+        {/* FINISHED */}
 
         <section className="profile-section">
           <div className="profile-section__header">
@@ -1160,9 +1460,7 @@ const UserPage = () => {
           )}
         </section>
 
-        {/* =========================
-            ACTIVITY
-        ========================= */}
+        {/* ACTIVITY */}
 
         <section className="profile-section profile-section--activity">
           <ReadingActivityChart
@@ -1174,6 +1472,108 @@ const UserPage = () => {
           />
         </section>
       </div>
+
+      {isGoalModalOpen && (
+        <div
+          className="goal-modal-overlay"
+          onMouseDown={(event) => {
+            if (event.target === event.currentTarget) {
+              handleCloseGoalModal();
+            }
+          }}
+        >
+          <div
+            className="goal-modal"
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="goal-modal-title"
+          >
+            <div className="goal-modal__header">
+              <div>
+                <h2 id="goal-modal-title">Мета на {currentYear}</h2>
+
+                <p>Встанови річну мету читання</p>
+              </div>
+
+              <button
+                type="button"
+                className="goal-modal__close"
+                onClick={handleCloseGoalModal}
+                aria-label="Закрити"
+              >
+                ×
+              </button>
+            </div>
+
+            <form className="goal-modal__form" onSubmit={handleSaveGoal}>
+              <label>
+                <span>Книги</span>
+
+                <input
+                  type="number"
+                  name="books"
+                  min="0"
+                  step="1"
+                  value={goalForm.books}
+                  onChange={handleGoalChange}
+                  placeholder="20"
+                />
+              </label>
+
+              <label>
+                <span>Сторінки</span>
+
+                <input
+                  type="number"
+                  name="pages"
+                  min="0"
+                  step="1"
+                  value={goalForm.pages}
+                  onChange={handleGoalChange}
+                  placeholder="5000"
+                />
+              </label>
+
+              <label>
+                <span>Час читання, годин</span>
+
+                <input
+                  type="number"
+                  name="hours"
+                  min="0"
+                  step="0.5"
+                  value={goalForm.hours}
+                  onChange={handleGoalChange}
+                  placeholder="100"
+                />
+              </label>
+
+              {goalSaveError && (
+                <div className="goal-modal__error">{goalSaveError}</div>
+              )}
+
+              <div className="goal-modal__actions">
+                <button
+                  type="button"
+                  className="goal-modal__cancel"
+                  onClick={handleCloseGoalModal}
+                  disabled={isGoalSaving}
+                >
+                  Скасувати
+                </button>
+
+                <button
+                  type="submit"
+                  className="goal-modal__save"
+                  disabled={isGoalSaving}
+                >
+                  {isGoalSaving ? "Збереження..." : "Зберегти"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </main>
   );
 };
