@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import "./UserPage.css";
 
@@ -8,53 +8,109 @@ import { useAuth } from "../../context/AuthContext.jsx";
 
 const API_URL = "https://library-backend-production-5d60.up.railway.app";
 
-function UserPage() {
+/* =========================
+   ICONS
+========================= */
+
+const BookIcon = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11a2 2 0 0 1 2 2v16a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 21.5v-16Z" />
+
+    <path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v18a2 2 0 0 1 2-2h2.5a2.5 2.5 0 0 1 2.5 2.5v-16Z" />
+  </svg>
+);
+
+const BookmarkIcon = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M6 4.5A1.5 1.5 0 0 1 7.5 3h9A1.5 1.5 0 0 1 18 4.5V21l-6-4-6 4V4.5Z" />
+  </svg>
+);
+
+const ReadingIcon = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M3.5 5.5A2.5 2.5 0 0 1 6 3h4a2 2 0 0 1 2 2v15a2 2 0 0 0-2-2H6a2.5 2.5 0 0 0-2.5 2.5v-15Z" />
+
+    <path d="M20.5 5.5A2.5 2.5 0 0 0 18 3h-4a2 2 0 0 0-2 2v15a2 2 0 0 1 2-2h4a2.5 2.5 0 0 1 2.5 2.5v-15Z" />
+
+    <path d="M7 7h2" />
+    <path d="M15 7h2" />
+  </svg>
+);
+
+const StarIcon = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2-5.6-2.9-5.6 2.9 1.1-6.2L3 9.6l6.2-.9L12 3Z" />
+  </svg>
+);
+
+const EditIcon = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="m4 20 4.4-1 9.8-9.8-3.4-3.4L5 15.6 4 20Z" />
+    <path d="m13.8 6.8 3.4 3.4" />
+  </svg>
+);
+
+const ArrowIcon = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="m9 6 6 6-6 6" />
+  </svg>
+);
+
+const ChevronIcon = ({ isOpen = false }) => (
+  <svg
+    className={
+      isOpen
+        ? "current-books-toggle__icon current-books-toggle__icon--open"
+        : "current-books-toggle__icon"
+    }
+    viewBox="0 0 24 24"
+    aria-hidden="true"
+  >
+    <path d="m7 9 5 5 5-5" />
+  </svg>
+);
+
+/* =========================
+   PAGE
+========================= */
+
+const UserPage = () => {
   const navigate = useNavigate();
+
+  const [searchParams, setSearchParams] = useSearchParams();
 
   const { user } = useAuth();
 
-  /* =========================
-     CURRENT READING
-  ========================= */
-
   const [currentBooks, setCurrentBooks] = useState([]);
+
+  const [wishlistBooks, setWishlistBooks] = useState([]);
+
+  const [finishedBooks, setFinishedBooks] = useState([]);
+
+  const [wishlistCount, setWishlistCount] = useState(0);
+
+  const [finishedCount, setFinishedCount] = useState(0);
 
   const [isCurrentReadingLoading, setIsCurrentReadingLoading] = useState(true);
 
+  const [isWishlistLoading, setIsWishlistLoading] = useState(true);
+
+  const [isFinishedLoading, setIsFinishedLoading] = useState(true);
+
   const [currentReadingError, setCurrentReadingError] = useState("");
+
+  const [wishlistError, setWishlistError] = useState("");
+
+  const [finishedError, setFinishedError] = useState("");
 
   const [isCurrentBooksOpen, setIsCurrentBooksOpen] = useState(false);
 
   /* =========================
-     WISHLIST
-  ========================= */
-
-  const [wishlistBooks, setWishlistBooks] = useState([]);
-
-  const [wishlistCount, setWishlistCount] = useState(0);
-
-  const [isWishlistLoading, setIsWishlistLoading] = useState(true);
-
-  const [wishlistError, setWishlistError] = useState("");
-
-  /* =========================
-     FINISHED BOOKS
-  ========================= */
-
-  const [finishedBooks, setFinishedBooks] = useState([]);
-
-  const [finishedCount, setFinishedCount] = useState(0);
-
-  const [isFinishedLoading, setIsFinishedLoading] = useState(true);
-
-  const [finishedError, setFinishedError] = useState("");
-
-  /* =========================
-     LOAD CURRENT READING
+     CURRENT
   ========================= */
 
   useEffect(() => {
-    const loadCurrentReading = async () => {
+    const loadCurrentBooks = async () => {
       const token = localStorage.getItem("token");
 
       if (!token) {
@@ -73,7 +129,7 @@ function UserPage() {
         });
 
         if (!response.ok) {
-          throw new Error("Не вдалося завантажити поточні книги");
+          throw new Error();
         }
 
         const data = await response.json();
@@ -88,11 +144,11 @@ function UserPage() {
       }
     };
 
-    loadCurrentReading();
+    loadCurrentBooks();
   }, []);
 
   /* =========================
-     LOAD WISHLIST
+     WISHLIST
   ========================= */
 
   useEffect(() => {
@@ -115,7 +171,7 @@ function UserPage() {
         });
 
         if (!response.ok) {
-          throw new Error("Не вдалося завантажити wishlist");
+          throw new Error();
         }
 
         const data = await response.json();
@@ -136,7 +192,7 @@ function UserPage() {
   }, []);
 
   /* =========================
-     LOAD FINISHED BOOKS
+     FINISHED
   ========================= */
 
   useEffect(() => {
@@ -159,7 +215,7 @@ function UserPage() {
         });
 
         if (!response.ok) {
-          throw new Error("Не вдалося завантажити прочитані книги");
+          throw new Error();
         }
 
         const data = await response.json();
@@ -168,7 +224,7 @@ function UserPage() {
 
         setFinishedCount(Number(data.count) || 0);
       } catch (error) {
-        console.error("Load finished books error:", error);
+        console.error("Load finished error:", error);
 
         setFinishedError("Не вдалося завантажити прочитані книги");
       } finally {
@@ -180,23 +236,60 @@ function UserPage() {
   }, []);
 
   /* =========================
-     NAVIGATION
+     REMOVE WISHLIST
   ========================= */
 
-  const handleSettings = () => {
-    navigate("/settings");
+  const handleRemoveFromWishlist = async (bookId) => {
+    const token = localStorage.getItem("token");
+
+    if (!token || !bookId) {
+      return;
+    }
+
+    try {
+      const response = await fetch(
+        `${API_URL}/api/user-books/${bookId}/wishlist`,
+        {
+          method: "DELETE",
+
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        },
+      );
+
+      if (!response.ok) {
+        throw new Error("Не вдалося прибрати книгу зі списку бажань");
+      }
+
+      setWishlistBooks((books) =>
+        books.filter(({ book }) => book.id !== bookId),
+      );
+
+      setWishlistCount((count) => Math.max(count - 1, 0));
+    } catch (error) {
+      console.error("Remove wishlist error:", error);
+    }
   };
 
-  const handleContinueReading = (bookId) => {
+  /* =========================
+     OPEN READING
+  ========================= */
+
+  const handleOpenReading = (bookId) => {
     if (!bookId) {
       return;
     }
 
-    navigate(`/?reading=${bookId}`);
+    const params = new URLSearchParams(searchParams);
+
+    params.set("reading", bookId);
+
+    setSearchParams(params);
   };
 
   /* =========================
-     PROGRESS
+     HELPERS
   ========================= */
 
   const getProgress = (currentPage, totalPages) => {
@@ -207,227 +300,317 @@ function UserPage() {
     return Math.min(Math.round((currentPage / totalPages) * 100), 100);
   };
 
+  const averageRating = useMemo(() => {
+    const values = finishedBooks
+      .map(({ userBook }) => Number(userBook?.rating))
+      .filter((rating) => Number.isFinite(rating) && rating > 0);
+
+    if (!values.length) {
+      return 0;
+    }
+
+    const sum = values.reduce((total, rating) => total + rating, 0);
+
+    return (sum / values.length).toFixed(1);
+  }, [finishedBooks]);
+
   const mainCurrentBook = currentBooks[0] ?? null;
 
   const otherCurrentBooks = currentBooks.slice(1);
 
+  const profileName = user?.name || "Користувач";
+
   return (
     <main className="user-page">
-      <section className="user-profile">
-        {/* =====================
-            PROFILE HEADER
-        ===================== */}
+      <div className="user-profile">
+        {/* =========================
+            PROFILE HERO
+        ========================= */}
 
-        <div className="user-profile__top">
-          <div className="user-profile__avatar">
-            {user?.avatarUrl ? (
-              <img src={user.avatarUrl} alt={user?.name || "Користувач"} />
-            ) : (
-              <span>
-                {(user?.name || user?.email || "U").charAt(0).toUpperCase()}
-              </span>
-            )}
+        <section className="profile-hero">
+          <div className="profile-hero__avatar-wrap">
+            <div className="profile-hero__avatar">
+              {user?.avatarUrl ? (
+                <img src={user.avatarUrl} alt={profileName} />
+              ) : (
+                <span>{profileName.charAt(0).toUpperCase()}</span>
+              )}
+            </div>
+
+            <button
+              type="button"
+              className="profile-hero__edit"
+              onClick={() => navigate("/settings")}
+              aria-label="Редагувати профіль"
+            >
+              <EditIcon />
+            </button>
           </div>
 
-          <div className="user-profile__identity">
-            <h1>{user?.name || "Мій профіль"}</h1>
+          <div className="profile-hero__content">
+            <h1>{profileName}</h1>
 
-            {user?.email && <p>{user.email}</p>}
-          </div>
+            {user?.email && <p className="profile-hero__email">{user.email}</p>}
 
-          <button
-            type="button"
-            className="user-profile__settings"
-            onClick={handleSettings}
-            aria-label="Налаштування"
-            title="Налаштування"
-          >
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 15.5A3.5 3.5 0 1 0 12 8a3.5 3.5 0 0 0 0 7.5Z" />
-
-              <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V21h-4v-.08a1.7 1.7 0 0 0-1.03-1.56 1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.03H3v-4h.08A1.7 1.7 0 0 0 4.64 8.9a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 9 4.53a1.7 1.7 0 0 0 1.03-1.56V3h4v.08A1.7 1.7 0 0 0 15.1 4.64a1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06a1.7 1.7 0 0 0-.34 1.88 1.7 1.7 0 0 0 1.56 1.03H21v4h-.08A1.7 1.7 0 0 0 19.4 15Z" />
-            </svg>
-          </button>
-        </div>
-
-        {/* =====================
-            STATS
-        ===================== */}
-
-        <section className="user-profile__stats">
-          <div className="user-profile__stat">
-            <strong>{isFinishedLoading ? "..." : finishedCount}</strong>
-
-            <span>Прочитано</span>
-          </div>
-
-          <div className="user-profile__stat">
-            <strong>{isWishlistLoading ? "..." : wishlistCount}</strong>
-
-            <span>Хочу прочитати</span>
-          </div>
-
-          <div className="user-profile__stat">
-            <strong>0</strong>
-
-            <span>Годин читання</span>
-          </div>
-
-          <div className="user-profile__stat">
-            <strong>0</strong>
-
-            <span>Днів поспіль</span>
+            <p className="profile-hero__quote">
+              «Читання — це подорож,
+              <br />
+              яка ніколи не закінчується.»
+            </p>
           </div>
         </section>
 
-        {/* =====================
-            CURRENT READING
-        ===================== */}
+        {/* =========================
+            STATS
+        ========================= */}
 
-        <section className="user-profile__section">
-          <div className="user-profile__section-header">
+        <section className="profile-stats">
+          <article className="profile-stat">
+            <BookIcon />
+
+            <strong>{isFinishedLoading ? "..." : finishedCount}</strong>
+
+            <span>Прочитано</span>
+          </article>
+
+          <article className="profile-stat">
+            <BookmarkIcon />
+
+            <strong>{isWishlistLoading ? "..." : wishlistCount}</strong>
+
+            <span>Хочу прочитати</span>
+          </article>
+
+          <article className="profile-stat">
+            <ReadingIcon />
+
+            <strong>
+              {isCurrentReadingLoading ? "..." : currentBooks.length}
+            </strong>
+
+            <span>Читаю зараз</span>
+          </article>
+
+          <article className="profile-stat">
+            <StarIcon />
+
+            <strong>{isFinishedLoading ? "..." : averageRating}</strong>
+
+            <span>Середній рейтинг</span>
+          </article>
+        </section>
+
+        {/* =========================
+            CURRENT
+        ========================= */}
+
+        <section className="profile-section">
+          <div className="profile-section__header">
             <h2>Зараз читаю</h2>
 
-            {currentBooks.length > 0 && (
-              <span className="user-profile__section-count">
-                {currentBooks.length}
-              </span>
+            {otherCurrentBooks.length > 0 && (
+              <button
+                type="button"
+                className="current-books-toggle"
+                onClick={() => setIsCurrentBooksOpen((isOpen) => !isOpen)}
+              >
+                {isCurrentBooksOpen
+                  ? "Згорнути"
+                  : `Ще ${otherCurrentBooks.length}`}
+
+                <ChevronIcon isOpen={isCurrentBooksOpen} />
+              </button>
             )}
           </div>
 
           {isCurrentReadingLoading ? (
-            <div className="user-profile__empty">Завантаження...</div>
+            <div className="profile-empty">Завантаження...</div>
           ) : currentReadingError ? (
-            <div className="user-profile__empty">{currentReadingError}</div>
+            <div className="profile-empty">{currentReadingError}</div>
           ) : !mainCurrentBook ? (
-            <div className="user-profile__empty">Немає активних книг</div>
+            <div className="profile-empty">Немає активних книг</div>
           ) : (
             <>
-              <div className="user-profile__current-books">
-                {[mainCurrentBook, ...otherCurrentBooks].map(
-                  ({ book, userBook }, index) => {
-                    const currentPage = userBook?.currentPage ?? 0;
+              <article className="current-book">
+                <div className="current-book__cover">
+                  {mainCurrentBook.book?.coverUrl ? (
+                    <img
+                      src={mainCurrentBook.book.coverUrl}
+                      alt={mainCurrentBook.book.title}
+                    />
+                  ) : (
+                    <div className="book-no-cover">
+                      Немає
+                      <br />
+                      обкладинки
+                    </div>
+                  )}
+                </div>
 
-                    const totalPages = book?.pages ?? 0;
+                <div className="current-book__content">
+                  <h3>{mainCurrentBook.book?.title}</h3>
+
+                  <p className="current-book__author">
+                    {mainCurrentBook.book?.author}
+                  </p>
+
+                  {(() => {
+                    const currentPage =
+                      mainCurrentBook.userBook?.currentPage ?? 0;
+
+                    const totalPages = mainCurrentBook.book?.pages ?? 0;
 
                     const progress = getProgress(currentPage, totalPages);
 
-                    const isSecondary = index > 0;
-
                     return (
-                      <article
-                        className={`user-profile__current-book ${
-                          isSecondary
-                            ? "user-profile__current-book--secondary"
-                            : ""
-                        }`}
-                        key={userBook.id}
-                      >
-                        <div className="user-profile__current-book-cover">
-                          {book?.coverUrl ? (
-                            <img src={book.coverUrl} alt={book.title} />
-                          ) : (
-                            <div className="user-profile__no-cover">
-                              Немає
-                              <br />
-                              обкладинки
-                            </div>
-                          )}
+                      <>
+                        <div className="current-book__progress">
+                          <span
+                            style={{
+                              width: `${progress}%`,
+                            }}
+                          />
                         </div>
 
-                        <div className="user-profile__current-book-content">
-                          <h3>{book?.title}</h3>
+                        <div className="current-book__progress-info">
+                          <span>
+                            Сторінка {currentPage}
+                            {totalPages ? ` з ${totalPages}` : ""}
+                          </span>
 
-                          <p>{book?.author}</p>
+                          <strong>{progress}%</strong>
+                        </div>
+                      </>
+                    );
+                  })()}
 
-                          <div className="user-profile__progress">
-                            <div
-                              className="user-profile__progress-bar"
-                              style={{
-                                width: `${progress}%`,
-                              }}
-                            />
+                  <button
+                    type="button"
+                    className="current-book__button"
+                    onClick={() => handleOpenReading(mainCurrentBook.book.id)}
+                  >
+                    Продовжити читання
+                  </button>
+                </div>
+              </article>
+
+              {otherCurrentBooks.length > 0 && (
+                <div
+                  className={`current-books-dropdown ${
+                    isCurrentBooksOpen ? "current-books-dropdown--open" : ""
+                  }`}
+                >
+                  <div className="current-books-dropdown__inner">
+                    {otherCurrentBooks.map(({ book, userBook }) => {
+                      const currentPage = userBook?.currentPage ?? 0;
+
+                      const totalPages = book?.pages ?? 0;
+
+                      const progress = getProgress(currentPage, totalPages);
+
+                      return (
+                        <article
+                          className="current-books-dropdown__book"
+                          key={userBook.id}
+                        >
+                          <div className="current-books-dropdown__cover">
+                            {book.coverUrl ? (
+                              <img src={book.coverUrl} alt={book.title} />
+                            ) : (
+                              <div className="book-no-cover">
+                                Немає
+                                <br />
+                                обкладинки
+                              </div>
+                            )}
                           </div>
 
-                          <div className="user-profile__progress-text">
-                            <span>
+                          <div className="current-books-dropdown__content">
+                            <h3>{book.title}</h3>
+
+                            <p>{book.author}</p>
+
+                            <div className="current-books-dropdown__progress-row">
+                              <div className="current-books-dropdown__progress">
+                                <span
+                                  style={{
+                                    width: `${progress}%`,
+                                  }}
+                                />
+                              </div>
+
+                              <strong>{progress}%</strong>
+                            </div>
+
+                            <span className="current-books-dropdown__page">
                               Сторінка {currentPage}
                               {totalPages ? ` з ${totalPages}` : ""}
                             </span>
 
-                            <strong>{progress}%</strong>
+                            <button
+                              type="button"
+                              className="current-books-dropdown__button"
+                              onClick={() => handleOpenReading(book.id)}
+                            >
+                              Продовжити
+                            </button>
                           </div>
-
-                          <button
-                            type="button"
-                            className="user-profile__continue"
-                            onClick={() => handleContinueReading(book.id)}
-                          >
-                            Продовжити читання
-                          </button>
-                        </div>
-                      </article>
-                    );
-                  },
-                )}
-              </div>
-
-              {otherCurrentBooks.length > 0 && (
-                <button
-                  type="button"
-                  className={`user-profile__more-current ${
-                    isCurrentBooksOpen ? "user-profile__more-current--open" : ""
-                  }`}
-                  onClick={() => setIsCurrentBooksOpen((current) => !current)}
-                >
-                  <span>
-                    {isCurrentBooksOpen
-                      ? "Згорнути"
-                      : `Ще ${otherCurrentBooks.length} ${
-                          otherCurrentBooks.length === 1 ? "книга" : "книги"
-                        }`}
-                  </span>
-
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <path d="m7 9 5 5 5-5" />
-                  </svg>
-                </button>
+                        </article>
+                      );
+                    })}
+                  </div>
+                </div>
               )}
             </>
           )}
         </section>
 
-        {/* =====================
+        {/* =========================
             WISHLIST
-        ===================== */}
+        ========================= */}
 
-        <section className="user-profile__section">
-          <div className="user-profile__section-header">
+        <section className="profile-section">
+          <div className="profile-section__header">
             <h2>Хочу прочитати</h2>
 
-            {wishlistBooks.length > 0 && <button type="button">Всі</button>}
+            {wishlistBooks.length > 0 && (
+              <button type="button">
+                Переглянути всі
+                <ArrowIcon />
+              </button>
+            )}
           </div>
 
           {isWishlistLoading ? (
-            <div className="user-profile__empty">Завантаження...</div>
+            <div className="profile-empty">Завантаження...</div>
           ) : wishlistError ? (
-            <div className="user-profile__empty">{wishlistError}</div>
+            <div className="profile-empty">{wishlistError}</div>
           ) : wishlistBooks.length === 0 ? (
-            <div className="user-profile__empty">Список поки порожній</div>
+            <div className="profile-empty">Список поки порожній</div>
           ) : (
-            <div className="user-profile__books">
+            <div className="profile-books">
               {wishlistBooks.map(({ book, userBook }) => (
-                <article className="user-profile__book" key={userBook.id}>
-                  <div className="user-profile__book-cover">
+                <article className="profile-book" key={userBook.id}>
+                  <div className="profile-book__cover">
                     {book.coverUrl ? (
                       <img src={book.coverUrl} alt={book.title} />
                     ) : (
-                      <div className="user-profile__no-cover">
+                      <div className="book-no-cover">
                         Немає
                         <br />
                         обкладинки
                       </div>
                     )}
+
+                    <button
+                      type="button"
+                      className="profile-book__bookmark"
+                      onClick={() => handleRemoveFromWishlist(book.id)}
+                      aria-label="Прибрати зі списку бажань"
+                      title="Прибрати зі списку бажань"
+                    >
+                      <BookmarkIcon />
+                    </button>
                   </div>
 
                   <h3>{book.title}</h3>
@@ -439,34 +622,37 @@ function UserPage() {
           )}
         </section>
 
-        {/* =====================
+        {/* =========================
             FINISHED
-        ===================== */}
+        ========================= */}
 
-        <section className="user-profile__section">
-          <div className="user-profile__section-header">
+        <section className="profile-section">
+          <div className="profile-section__header">
             <h2>Прочитано</h2>
 
-            {finishedBooks.length > 0 && <button type="button">Всі</button>}
+            {finishedBooks.length > 0 && (
+              <button type="button">
+                Переглянути всі
+                <ArrowIcon />
+              </button>
+            )}
           </div>
 
           {isFinishedLoading ? (
-            <div className="user-profile__empty">Завантаження...</div>
+            <div className="profile-empty">Завантаження...</div>
           ) : finishedError ? (
-            <div className="user-profile__empty">{finishedError}</div>
+            <div className="profile-empty">{finishedError}</div>
           ) : finishedBooks.length === 0 ? (
-            <div className="user-profile__empty">
-              Тут з’являться прочитані книги
-            </div>
+            <div className="profile-empty">Тут з’являться прочитані книги</div>
           ) : (
-            <div className="user-profile__books">
+            <div className="profile-books">
               {finishedBooks.map(({ book, userBook }) => (
-                <article className="user-profile__book" key={userBook.id}>
-                  <div className="user-profile__book-cover">
+                <article className="profile-book" key={userBook.id}>
+                  <div className="profile-book__cover">
                     {book.coverUrl ? (
                       <img src={book.coverUrl} alt={book.title} />
                     ) : (
-                      <div className="user-profile__no-cover">
+                      <div className="book-no-cover">
                         Немає
                         <br />
                         обкладинки
@@ -479,7 +665,7 @@ function UserPage() {
                   <p>{book.author}</p>
 
                   {userBook.rating && (
-                    <div className="user-profile__book-rating">
+                    <div className="profile-book__rating">
                       {"★".repeat(userBook.rating)}
                     </div>
                   )}
@@ -489,22 +675,42 @@ function UserPage() {
           )}
         </section>
 
-        {/* =====================
+        {/* =========================
             ACTIVITY
-        ===================== */}
+        ========================= */}
 
-        <section className="user-profile__section">
-          <div className="user-profile__section-header">
+        <section className="profile-section">
+          <div className="profile-section__header">
             <h2>Активність читання</h2>
           </div>
 
-          <div className="user-profile__chart-placeholder">
-            Графік додамо наступним етапом
+          <div className="reading-activity">
+            <div className="reading-activity__bars">
+              {[18, 34, 22, 58, 40, 66, 52, 70, 48, 51, 30, 15].map(
+                (height, index) => (
+                  <span
+                    key={index}
+                    style={{
+                      height: `${height}%`,
+                    }}
+                  />
+                ),
+              )}
+            </div>
+
+            <div className="reading-activity__months">
+              <span>Січ</span>
+              <span>Бер</span>
+              <span>Тра</span>
+              <span>Лип</span>
+              <span>Вер</span>
+              <span>Лис</span>
+            </div>
           </div>
         </section>
-      </section>
+      </div>
     </main>
   );
-}
+};
 
 export default UserPage;
