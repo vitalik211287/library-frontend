@@ -17,7 +17,9 @@
   margin: 0 auto;
 }
 
-/* HEADER */
+/* =========================
+   HEADER
+========================= */
 
 .settings-page__header {
   position: relative;
@@ -79,7 +81,9 @@
   stroke-linejoin: round;
 }
 
-/* SECTION */
+/* =========================
+   SECTION
+========================= */
 
 .settings-page__section {
   margin-bottom: 24px;
@@ -92,6 +96,7 @@
 
   font-size: 12px;
   font-weight: 600;
+
   letter-spacing: 0.06em;
   text-transform: uppercase;
 }
@@ -107,7 +112,9 @@
   box-shadow: var(--shadow);
 }
 
-/* ROW */
+/* =========================
+   ROW
+========================= */
 
 .settings-page__row {
   width: 100%;
@@ -116,6 +123,7 @@
   display: grid;
   grid-template-columns: 40px minmax(0, 1fr) auto;
   align-items: center;
+
   gap: 10px;
 
   padding: 10px 14px;
@@ -138,6 +146,11 @@ button.settings-page__row {
 
 button.settings-page__row:hover {
   background: var(--surface-secondary);
+}
+
+button.settings-page__row:disabled {
+  cursor: default;
+  opacity: 0.65;
 }
 
 .settings-page__row:last-child {
@@ -172,6 +185,7 @@ button.settings-page__row:hover {
 
   display: flex;
   flex-direction: column;
+
   gap: 3px;
 }
 
@@ -202,7 +216,140 @@ button.settings-page__row:hover {
   line-height: 1;
 }
 
-/* LOGOUT */
+/* =========================
+   AVATAR
+========================= */
+
+.settings-page__avatar {
+  width: 38px;
+  height: 38px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  border-radius: 50%;
+
+  background: var(--surface-secondary);
+  color: var(--text);
+}
+
+.settings-page__avatar img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+.settings-page__avatar svg {
+  width: 23px;
+  height: 23px;
+
+  fill: none;
+  stroke: currentColor;
+
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.settings-page__file-input {
+  display: none;
+}
+
+/* =========================
+   THEME
+========================= */
+
+.settings-page__theme-card {
+  padding: 14px;
+}
+
+.settings-page__theme-header {
+  display: grid;
+  grid-template-columns: 40px minmax(0, 1fr);
+  align-items: center;
+
+  gap: 10px;
+
+  margin-bottom: 14px;
+}
+
+.settings-page__theme-options {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
+  gap: 8px;
+}
+
+.settings-page__theme-option {
+  min-width: 0;
+  min-height: 72px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  gap: 7px;
+
+  padding: 10px 6px;
+
+  box-sizing: border-box;
+
+  border: 1px solid var(--border);
+  border-radius: 12px;
+
+  background: var(--surface-secondary);
+  color: var(--text);
+
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+
+  cursor: pointer;
+
+  transition:
+    border-color 0.2s ease,
+    background-color 0.2s ease,
+    color 0.2s ease,
+    transform 0.15s ease;
+}
+
+.settings-page__theme-option svg {
+  width: 23px;
+  height: 23px;
+
+  fill: none;
+  stroke: currentColor;
+
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.settings-page__theme-option:hover {
+  border-color: var(--accent);
+}
+
+.settings-page__theme-option:active {
+  transform: scale(0.97);
+}
+
+.settings-page__theme-option--active {
+  border-color: var(--accent);
+
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+/* =========================
+   LOGOUT
+========================= */
 
 .settings-page__logout {
   width: 100%;
@@ -211,6 +358,7 @@ button.settings-page__row:hover {
   display: flex;
   align-items: center;
   justify-content: flex-start;
+
   gap: 12px;
 
   margin-top: 10px;
@@ -255,7 +403,181 @@ button.settings-page__row:hover {
   stroke-linejoin: round;
 }
 
-/* TABLET */
+/* =========================
+   MODAL
+========================= */
+
+.settings-page__modal-overlay {
+  position: fixed;
+  inset: 0;
+
+  z-index: 2000;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 18px;
+
+  box-sizing: border-box;
+
+  background: rgba(0, 0, 0, 0.55);
+
+  backdrop-filter: blur(4px);
+}
+
+.settings-page__modal {
+  width: 100%;
+  max-width: 440px;
+
+  padding: 22px;
+
+  box-sizing: border-box;
+
+  border: 1px solid var(--border);
+  border-radius: 18px;
+
+  background: var(--surface);
+  color: var(--text);
+
+  box-shadow: var(--shadow);
+}
+
+.settings-page__modal h2 {
+  margin: 0 0 20px;
+
+  color: var(--text-h);
+
+  font-size: 20px;
+}
+
+.settings-page__field {
+  display: flex;
+  flex-direction: column;
+
+  gap: 7px;
+
+  margin-bottom: 16px;
+}
+
+.settings-page__field span {
+  color: var(--text);
+
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.settings-page__field input {
+  width: 100%;
+  height: 48px;
+
+  padding: 0 14px;
+
+  box-sizing: border-box;
+
+  border: 1px solid var(--border);
+  border-radius: 11px;
+
+  outline: none;
+
+  background: var(--surface-secondary);
+  color: var(--text-h);
+
+  font: inherit;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.settings-page__field input:focus {
+  border-color: var(--accent);
+
+  box-shadow:
+    0 0 0 3px var(--accent-bg);
+}
+
+.settings-page__modal-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+
+  gap: 10px;
+
+  margin-top: 22px;
+}
+
+.settings-page__modal-button {
+  min-height: 46px;
+
+  padding: 10px 14px;
+
+  border-radius: 11px;
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+.settings-page__modal-button:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
+
+.settings-page__modal-button--secondary {
+  border: 1px solid var(--border);
+
+  background: var(--surface-secondary);
+  color: var(--text-h);
+}
+
+.settings-page__modal-button--primary {
+  border: 1px solid var(--accent);
+
+  background: var(--accent);
+  color: #ffffff;
+}
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 370px) {
+  .settings-page {
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+
+  .settings-page__theme-card {
+    padding: 12px;
+  }
+
+  .settings-page__theme-options {
+    gap: 6px;
+  }
+
+  .settings-page__theme-option {
+    min-height: 64px;
+
+    padding: 8px 3px;
+
+    font-size: 9px;
+  }
+
+  .settings-page__theme-option svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .settings-page__modal {
+    padding: 18px;
+  }
+}
+
+/* =========================
+   TABLET+
+========================= */
 
 @media (min-width: 600px) {
   .settings-page {
@@ -282,5 +604,15 @@ button.settings-page__row:hover {
 
   .settings-page__row-value {
     font-size: 14px;
+  }
+
+  .settings-page__theme-card {
+    padding: 18px;
+  }
+
+  .settings-page__theme-option {
+    min-height: 78px;
+
+    font-size: 12px;
   }
 }

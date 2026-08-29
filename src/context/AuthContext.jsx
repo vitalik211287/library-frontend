@@ -10,13 +10,15 @@ const API_URL =
 
 const AuthContext = createContext(null);
 
-export function AuthProvider({ children }) {
+export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
-  const [isAuthLoading, setIsAuthLoading] = useState(true);
+  const [isAuthLoading, setIsAuthLoading] =
+    useState(true);
 
   useEffect(() => {
     const checkAuth = async () => {
-      const token = localStorage.getItem("token");
+      const token =
+        localStorage.getItem("token");
 
       if (!token) {
         setIsAuthLoading(false);
@@ -24,41 +26,75 @@ export function AuthProvider({ children }) {
       }
 
       try {
-        const response = await fetch(`${API_URL}/api/auth/me`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
+        const response = await fetch(
+          `${API_URL}/api/auth/me`,
+          {
+            headers: {
+              Authorization:
+                `Bearer ${token}`,
+            },
           },
-        });
+        );
 
         if (!response.ok) {
-          localStorage.removeItem("token");
+          localStorage.removeItem(
+            "token",
+          );
+
           setUser(null);
           return;
         }
 
-        const data = await response.json();
+        const data =
+          await response.json();
 
-        setUser(data.user ?? null);
+        setUser(
+          data.user ?? null,
+        );
       } catch (error) {
-        console.error("Auth check error:", error);
+        console.error(
+          "Auth check error:",
+          error,
+        );
 
         setUser(null);
       } finally {
-        setIsAuthLoading(false);
+        setIsAuthLoading(
+          false,
+        );
       }
     };
 
     checkAuth();
   }, []);
 
-  const login = (userData, token) => {
-    localStorage.setItem("token", token);
+  const login = (
+    userData,
+    token,
+  ) => {
+    localStorage.setItem(
+      "token",
+      token,
+    );
+
     setUser(userData);
   };
 
   const logout = () => {
-    localStorage.removeItem("token");
+    localStorage.removeItem(
+      "token",
+    );
+
     setUser(null);
+  };
+
+  const updateUser = (
+    userData,
+  ) => {
+    setUser((currentUser) => ({
+      ...currentUser,
+      ...userData,
+    }));
   };
 
   return (
@@ -67,15 +103,19 @@ export function AuthProvider({ children }) {
         user,
         login,
         logout,
+        updateUser,
         isAuthLoading,
-        isAuthenticated: Boolean(user),
+        isAuthenticated:
+          Boolean(user),
       }}
     >
       {children}
     </AuthContext.Provider>
   );
-}
+};
 
-export function useAuth() {
-  return useContext(AuthContext);
-}
+export const useAuth = () => {
+  return useContext(
+    AuthContext,
+  );
+};
