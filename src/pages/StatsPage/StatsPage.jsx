@@ -39,12 +39,73 @@ const formatReadingTime = (seconds = 0) => {
   return `${hours} год ${minutes} хв`;
 };
 
+const formatGoalMinutes = (minutes = 0) => {
+  if (!minutes) {
+    return "0 хв";
+  }
+
+  const hours = Math.floor(minutes / 60);
+  const remainingMinutes = minutes % 60;
+
+  if (hours === 0) {
+    return `${remainingMinutes} хв`;
+  }
+
+  if (remainingMinutes === 0) {
+    return `${hours} год`;
+  }
+
+  return `${hours} год ${remainingMinutes} хв`;
+};
+
+const GoalProgress = ({
+  label,
+  current,
+  target,
+  percent,
+  formatter = (value) => String(value ?? 0),
+}) => {
+  const safePercent = Math.min(Math.max(Number(percent) || 0, 0), 100);
+  const hasTarget = target !== null && target !== undefined;
+
+  return (
+    <div className="reading-goal">
+      <div className="reading-goal__top">
+        <span>{label}</span>
+
+        <strong>
+          {hasTarget
+            ? `${formatter(current)} / ${formatter(target)}`
+            : "Не задано"}
+        </strong>
+      </div>
+
+      <div className="reading-goal__track">
+        <div
+          className="reading-goal__bar"
+          style={{
+            width: `${hasTarget ? safePercent : 0}%`,
+          }}
+        />
+      </div>
+
+      <div className="reading-goal__bottom">
+        <span>
+          {hasTarget ? `${safePercent}% виконано` : "Ціль ще не встановлена"}
+        </span>
+      </div>
+    </div>
+  );
+};
+
 const StatsPage = () => {
   const currentYear = new Date().getFullYear();
 
   const [year, setYear] = useState(currentYear);
 
   const [stats, setStats] = useState(null);
+
+  const [goal, setGoal] = useState(null);
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -68,24 +129,44 @@ const StatsPage = () => {
 
         const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-        const response = await fetch(
-          `${API_URL}/api/user-books/stats?year=${year}&timeZone=${encodeURIComponent(
-            timeZone,
-          )}`,
-          {
+        const [statsResponse, goalResponse] = await Promise.all([
+          fetch(
+            `${API_URL}/api/user-books/stats?year=${year}&timeZone=${encodeURIComponent(
+              timeZone,
+            )}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            },
+          ),
+
+          fetch(`${API_URL}/api/user-books/goals?year=${year}`, {
             headers: {
               Authorization: `Bearer ${token}`,
             },
-          },
-        );
+          }),
+        ]);
 
-        const data = await response.json();
+        const [statsData, goalData] = await Promise.all([
+          statsResponse.json(),
+          goalResponse.json(),
+        ]);
 
-        if (!response.ok) {
-          throw new Error(data.message || "Не вдалося завантажити статистику");
+        if (!statsResponse.ok) {
+          throw new Error(
+            statsData.message || "Не вдалося завантажити статистику",
+          );
         }
 
-        setStats(data.stats);
+        if (!goalResponse.ok) {
+          throw new Error(
+            goalData.message || "Не вдалося завантажити прогрес мети",
+          );
+        }
+
+        setStats(statsData.stats);
+        setGoal(goalData.goal);
       } catch (error) {
         console.error("Get stats error:", error);
 
@@ -139,6 +220,13 @@ const StatsPage = () => {
   }
 
   const { summary, streak, genres = [], authors = [], months = [] } = stats;
+
+  const goals = goal?.goal || {};
+  const progress = goal?.progress || {};
+  const percent = goal?.percent || {};
+
+  const hasGoals =
+    goals.books != null || goals.pages != null || goals.minutes != null;
 
   return (
     <main className="stats-page">
@@ -240,6 +328,44 @@ const StatsPage = () => {
             <span>днів поспіль</span>
           </div>
         </article>
+      </section>
+
+      <section className="stats-goals">
+        <div className="stats-goals__header">
+          <div>
+            <h2>Цілі на {year}</h2>
+
+            <p>Прогрес виконання річної мети</p>
+          </div>
+        </div>
+
+        {hasGoals ? (
+          <div className="reading-goals">
+            <GoalProgress
+              label="Книги"
+              current={progress.books}
+              target={goals.books}
+              percent={percent.books}
+            />
+
+            <GoalProgress
+              label="Сторінки"
+              current={progress.pages}
+              target={goals.pages}
+              percent={percent.pages}
+            />
+
+            <GoalProgress
+              label="Час читання"
+              current={progress.minutes}
+              target={goals.minutes}
+              percent={percent.minutes}
+              formatter={formatGoalMinutes}
+            />
+          </div>
+        ) : (
+          <div className="stats-empty">Цілі на цей рік ще не встановлені</div>
+        )}
       </section>
 
       <section className="stats-grid">
