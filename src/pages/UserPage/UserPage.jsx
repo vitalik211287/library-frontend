@@ -71,6 +71,390 @@ const ChevronIcon = ({ isOpen = false }) => (
 );
 
 /* =========================
+   ACTIVITY HELPERS
+========================= */
+
+const createEmptyWeeks = (count, current) =>
+  Array.from({ length: count }, (_, index) => ({
+    label: `Тиждень ${index + 1}`,
+    value: 0,
+    current,
+  }));
+
+const buildPreviousMonthWeeks = (days) => {
+  const weeks = createEmptyWeeks(4, false);
+
+  days.forEach((day) => {
+    const dayNumber = Number(day.day) || 0;
+    const seconds = Number(day.seconds) || 0;
+
+    let weekIndex = 0;
+
+    if (dayNumber <= 7) {
+      weekIndex = 0;
+    } else if (dayNumber <= 14) {
+      weekIndex = 1;
+    } else if (dayNumber <= 21) {
+      weekIndex = 2;
+    } else {
+      weekIndex = 3;
+    }
+
+    weeks[weekIndex].value += seconds / 60;
+  });
+
+  return weeks.map((week) => ({
+    ...week,
+    value: Math.round(week.value),
+  }));
+};
+
+const buildCurrentMonthWeeks = (days) => {
+  const weeks = createEmptyWeeks(5, true);
+
+  days.forEach((day) => {
+    const dayNumber = Number(day.day) || 0;
+    const seconds = Number(day.seconds) || 0;
+
+    let weekIndex = Math.floor((dayNumber - 1) / 7);
+
+    weekIndex = Math.min(Math.max(weekIndex, 0), 4);
+
+    weeks[weekIndex].value += seconds / 60;
+  });
+
+  return weeks.map((week) => ({
+    ...week,
+    value: Math.round(week.value),
+  }));
+};
+
+const getCurrentMonthSeconds = (days) =>
+  days.reduce((total, day) => total + (Number(day.seconds) || 0), 0);
+
+const formatReadingTime = (totalSeconds) => {
+  const totalMinutes = Math.floor(totalSeconds / 60);
+
+  const hours = Math.floor(totalMinutes / 60);
+
+  const minutes = totalMinutes % 60;
+
+  if (hours === 0) {
+    return `${minutes} хв`;
+  }
+
+  if (minutes === 0) {
+    return `${hours} год`;
+  }
+
+  return `${hours} год ${minutes} хв`;
+};
+
+const getChartScale = (chartData) => {
+  const highestValue = Math.max(...chartData.map((item) => item.value), 0);
+
+  let step = 10;
+
+  if (highestValue <= 30) {
+    step = 10;
+  } else if (highestValue <= 60) {
+    step = 20;
+  } else if (highestValue <= 120) {
+    step = 40;
+  } else if (highestValue <= 180) {
+    step = 60;
+  } else if (highestValue <= 360) {
+    step = 120;
+  } else {
+    step = Math.ceil(highestValue / 3 / 60) * 60;
+  }
+
+  const maxValue = step * 3;
+
+  return {
+    maxValue,
+    yTicks: [0, step, step * 2, step * 3],
+  };
+};
+
+/* =========================
+   READING ACTIVITY CHART
+========================= */
+
+const ReadingActivityChart = ({
+  data,
+  currentMonthSeconds,
+  isLoading,
+  error,
+  onDetails,
+}) => {
+  const chartData =
+    data.length > 0
+      ? data
+      : [...createEmptyWeeks(4, false), ...createEmptyWeeks(5, true)];
+
+  const today = new Date();
+
+  const monthNames = [
+    "Січень",
+    "Лютий",
+    "Березень",
+    "Квітень",
+    "Травень",
+    "Червень",
+    "Липень",
+    "Серпень",
+    "Вересень",
+    "Жовтень",
+    "Листопад",
+    "Грудень",
+  ];
+
+  const currentMonthName = monthNames[today.getMonth()];
+
+  const previousMonthName = monthNames[(today.getMonth() + 11) % 12];
+
+  const currentWeekIndex = Math.min(Math.floor((today.getDate() - 1) / 7), 4);
+
+  /*
+    Перші 4 точки — попередній місяць.
+    Поточний місяць починається з index 4.
+  */
+
+  const activeChartIndex = 4 + currentWeekIndex;
+
+  const activeItem = chartData[activeChartIndex] ?? {
+    value: 0,
+  };
+
+  const width = 900;
+  const height = 270;
+
+  const paddingLeft = 58;
+  const paddingRight = 20;
+  const paddingTop = 32;
+  const paddingBottom = 20;
+
+  const chartWidth = width - paddingLeft - paddingRight;
+
+  const chartHeight = height - paddingTop - paddingBottom;
+
+  const { maxValue, yTicks } = getChartScale(chartData);
+
+  const getX = (index) =>
+    paddingLeft + (chartWidth / (chartData.length - 1)) * index;
+
+  const getY = (value) =>
+    paddingTop + chartHeight - (value / maxValue) * chartHeight;
+
+  const linePoints = chartData
+    .map((item, index) => `${getX(index)},${getY(item.value)}`)
+    .join(" ");
+
+  const areaPath = [
+    `M ${getX(0)} ${getY(chartData[0].value)}`,
+
+    ...chartData
+      .slice(1)
+      .map((item, index) => `L ${getX(index + 1)} ${getY(item.value)}`),
+
+    `L ${getX(chartData.length - 1)} ${paddingTop + chartHeight}`,
+
+    `L ${getX(0)} ${paddingTop + chartHeight}`,
+
+    "Z",
+  ].join(" ");
+
+  if (isLoading) {
+    return (
+      <div className="reading-chart-card">
+        <div className="profile-empty">Завантаження активності...</div>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="reading-chart-card">
+        <div className="profile-empty">{error}</div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="reading-chart-card">
+      <div className="reading-chart-card__header">
+        <div>
+          <h2>Активність читання</h2>
+
+          <p>
+            {currentMonthName}
+            <span> · {formatReadingTime(currentMonthSeconds)}</span>
+          </p>
+        </div>
+
+        <button
+          type="button"
+          className="reading-chart-card__details"
+          onClick={onDetails}
+        >
+          Детальніше
+          <ArrowIcon />
+        </button>
+      </div>
+
+      <div className="reading-chart">
+        <svg
+          className="reading-chart__svg"
+          viewBox={`0 0 ${width} ${height}`}
+          role="img"
+          aria-label="Графік активності читання у хвилинах"
+        >
+          <defs>
+            <linearGradient
+              id="readingAreaGradient"
+              x1="0"
+              y1="0"
+              x2="0"
+              y2="1"
+            >
+              <stop offset="0%" stopColor="#9b5cff" stopOpacity="0.32" />
+
+              <stop offset="100%" stopColor="#9b5cff" stopOpacity="0.03" />
+            </linearGradient>
+
+            <linearGradient
+              id="readingLineGradient"
+              x1="0"
+              y1="0"
+              x2="1"
+              y2="0"
+            >
+              <stop offset="0%" stopColor="#a56cff" />
+
+              <stop offset="100%" stopColor="#9b5cff" />
+            </linearGradient>
+          </defs>
+
+          {/* Y AXIS */}
+
+          {yTicks.map((tick) => {
+            const y = getY(tick);
+
+            return (
+              <g key={tick}>
+                <text
+                  x={paddingLeft - 12}
+                  y={y + 4}
+                  textAnchor="end"
+                  className="reading-chart__y-label"
+                >
+                  {tick} хв
+                </text>
+              </g>
+            );
+          })}
+
+          {/* VERTICAL GRID */}
+
+          {chartData.map((item, index) => {
+            const x = getX(index);
+
+            const isActiveWeek = index === activeChartIndex;
+
+            return (
+              <line
+                key={`${item.label}-${index}`}
+                x1={x}
+                x2={x}
+                y1={paddingTop}
+                y2={paddingTop + chartHeight}
+                className={
+                  isActiveWeek
+                    ? "reading-chart__grid-line reading-chart__grid-line--active"
+                    : "reading-chart__grid-line"
+                }
+              />
+            );
+          })}
+
+          {/* BOTTOM AXIS */}
+
+          <line
+            x1={paddingLeft}
+            x2={width - paddingRight}
+            y1={paddingTop + chartHeight}
+            y2={paddingTop + chartHeight}
+            className="reading-chart__axis"
+          />
+
+          {/* AREA */}
+
+          <path d={areaPath} fill="url(#readingAreaGradient)" />
+
+          {/* LINE */}
+
+          <polyline
+            points={linePoints}
+            fill="none"
+            stroke="url(#readingLineGradient)"
+            className="reading-chart__line"
+          />
+
+          {/* DOTS */}
+
+          {chartData.map((item, index) => (
+            <circle
+              key={`dot-${index}`}
+              cx={getX(index)}
+              cy={getY(item.value)}
+              r="6"
+              className="reading-chart__dot"
+            />
+          ))}
+
+          {/* CURRENT WEEK VALUE */}
+
+          <text
+            x={getX(activeChartIndex)}
+            y={Math.max(getY(activeItem.value) - 18, 18)}
+            textAnchor="middle"
+            className="reading-chart__last-value"
+          >
+            {activeItem.value} хв
+          </text>
+        </svg>
+
+        {/* WEEK LABELS */}
+
+        <div className="reading-chart__weeks">
+          {chartData.map((item, index) => (
+            <span
+              key={`${item.label}-${index}`}
+              className={
+                item.current
+                  ? "reading-chart__week reading-chart__week--current"
+                  : "reading-chart__week"
+              }
+            >
+              {item.label}
+            </span>
+          ))}
+        </div>
+
+        {/* PERIODS */}
+
+        <div className="reading-chart__periods">
+          <span>{previousMonthName}</span>
+
+          <span>{currentMonthName}</span>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+/* =========================
    PAGE
 ========================= */
 
@@ -80,6 +464,8 @@ const UserPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const { user } = useAuth();
+
+  const readingBookId = searchParams.get("reading");
 
   const [currentBooks, setCurrentBooks] = useState([]);
 
@@ -104,6 +490,19 @@ const UserPage = () => {
   const [finishedError, setFinishedError] = useState("");
 
   const [isCurrentBooksOpen, setIsCurrentBooksOpen] = useState(false);
+
+  /* =========================
+     ACTIVITY STATE
+  ========================= */
+
+  const [readingActivity, setReadingActivity] = useState({
+    weeks: [],
+    currentMonthSeconds: 0,
+  });
+
+  const [isActivityLoading, setIsActivityLoading] = useState(true);
+
+  const [activityError, setActivityError] = useState("");
 
   /* =========================
      CURRENT
@@ -145,7 +544,7 @@ const UserPage = () => {
     };
 
     loadCurrentBooks();
-  }, []);
+  }, [readingBookId]);
 
   /* =========================
      WISHLIST
@@ -233,7 +632,95 @@ const UserPage = () => {
     };
 
     loadFinishedBooks();
-  }, []);
+  }, [readingBookId]);
+
+  /* =========================
+     REAL READING ACTIVITY
+  ========================= */
+
+  useEffect(() => {
+    const loadReadingActivity = async () => {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        setIsActivityLoading(false);
+
+        return;
+      }
+
+      try {
+        setActivityError("");
+
+        const now = new Date();
+
+        const currentYear = now.getFullYear();
+
+        const currentMonth = now.getMonth() + 1;
+
+        const previousDate = new Date(currentYear, currentMonth - 2, 1);
+
+        const previousYear = previousDate.getFullYear();
+
+        const previousMonth = previousDate.getMonth() + 1;
+
+        const [previousResponse, currentResponse] = await Promise.all([
+          fetch(
+            `${API_URL}/api/user-books/activity?year=${previousYear}&month=${previousMonth}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            },
+          ),
+
+          fetch(
+            `${API_URL}/api/user-books/activity?year=${currentYear}&month=${currentMonth}`,
+            {
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            },
+          ),
+        ]);
+
+        if (!previousResponse.ok || !currentResponse.ok) {
+          throw new Error("Failed to load reading activity");
+        }
+
+        const previousData = await previousResponse.json();
+
+        const currentData = await currentResponse.json();
+
+        const previousDays = Array.isArray(previousData?.activity?.days)
+          ? previousData.activity.days
+          : [];
+
+        const currentDays = Array.isArray(currentData?.activity?.days)
+          ? currentData.activity.days
+          : [];
+
+        const previousWeeks = buildPreviousMonthWeeks(previousDays);
+
+        const currentWeeks = buildCurrentMonthWeeks(currentDays);
+
+        const currentMonthSeconds = getCurrentMonthSeconds(currentDays);
+
+        setReadingActivity({
+          weeks: [...previousWeeks, ...currentWeeks],
+
+          currentMonthSeconds,
+        });
+      } catch (error) {
+        console.error("Load reading activity error:", error);
+
+        setActivityError("Не вдалося завантажити активність читання");
+      } finally {
+        setIsActivityLoading(false);
+      }
+    };
+
+    loadReadingActivity();
+  }, [readingBookId]);
 
   /* =========================
      REMOVE WISHLIST
@@ -679,34 +1166,14 @@ const UserPage = () => {
             ACTIVITY
         ========================= */}
 
-        <section className="profile-section">
-          <div className="profile-section__header">
-            <h2>Активність читання</h2>
-          </div>
-
-          <div className="reading-activity">
-            <div className="reading-activity__bars">
-              {[18, 34, 22, 58, 40, 66, 52, 70, 48, 51, 30, 15].map(
-                (height, index) => (
-                  <span
-                    key={index}
-                    style={{
-                      height: `${height}%`,
-                    }}
-                  />
-                ),
-              )}
-            </div>
-
-            <div className="reading-activity__months">
-              <span>Січ</span>
-              <span>Бер</span>
-              <span>Тра</span>
-              <span>Лип</span>
-              <span>Вер</span>
-              <span>Лис</span>
-            </div>
-          </div>
+        <section className="profile-section profile-section--activity">
+          <ReadingActivityChart
+            data={readingActivity.weeks}
+            currentMonthSeconds={readingActivity.currentMonthSeconds}
+            isLoading={isActivityLoading}
+            error={activityError}
+            onDetails={() => navigate("/stats")}
+          />
         </section>
       </div>
     </main>
