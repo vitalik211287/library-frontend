@@ -7,12 +7,9 @@ import {
   useSearchParams,
 } from "react-router-dom";
 
-import {
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 
-import { Toaster } from "react-hot-toast";
+import { Toaster, toast } from "react-hot-toast";
 
 import "./App.css";
 
@@ -29,20 +26,17 @@ import RightSidebar from "./components/RightSidebar/RightSidebar.jsx";
 import ReadingModal from "./components/ReadingModal/ReadingModal.jsx";
 
 import { useAuth } from "./context/AuthContext.jsx";
+
 import { useTheme } from "./context/ThemeContext.jsx";
 
-const API_URL =
-  "https://library-backend-production-5d60.up.railway.app";
+const API_URL = "https://library-backend-production-5d60.up.railway.app";
 
 /* =========================
    ICONS
 ========================= */
 
 const CatalogIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
+  <svg viewBox="0 0 24 24" aria-hidden="true">
     <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11a2 2 0 0 1 2 2v16a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 21.5v-16Z" />
 
     <path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v18a2 2 0 0 1 2-2h2.5a2.5 2.5 0 0 1 2.5 2.5v-16Z" />
@@ -50,27 +44,15 @@ const CatalogIcon = () => (
 );
 
 const AddIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
+  <svg viewBox="0 0 24 24" aria-hidden="true">
     <path d="M12 5v14" />
     <path d="M5 12h14" />
   </svg>
 );
 
 const CalendarIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
-    <rect
-      x="3"
-      y="5"
-      width="18"
-      height="16"
-      rx="2"
-    />
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <rect x="3" y="5" width="18" height="16" rx="2" />
 
     <path d="M16 3v4" />
     <path d="M8 3v4" />
@@ -78,11 +60,19 @@ const CalendarIcon = () => (
   </svg>
 );
 
+const ReaderIcon = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M3.5 5.5A2.5 2.5 0 0 1 6 3h4a2 2 0 0 1 2 2v15a2 2 0 0 0-2-2H6a2.5 2.5 0 0 0-2.5 2.5v-15Z" />
+
+    <path d="M20.5 5.5A2.5 2.5 0 0 0 18 3h-4a2 2 0 0 0-2 2v15a2 2 0 0 1 2-2h4a2.5 2.5 0 0 1 2.5 2.5v-15Z" />
+
+    <path d="M7 7h2" />
+    <path d="M15 7h2" />
+  </svg>
+);
+
 const StatsIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
+  <svg viewBox="0 0 24 24" aria-hidden="true">
     <path d="M4 19V9" />
     <path d="M10 19V5" />
     <path d="M16 19v-7" />
@@ -91,47 +81,24 @@ const StatsIcon = () => (
 );
 
 const ProfileIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
-    <circle
-      cx="12"
-      cy="8"
-      r="4"
-    />
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="12" cy="8" r="4" />
 
     <path d="M4 21a8 8 0 0 1 16 0" />
   </svg>
 );
 
 const SettingsIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
-    <circle
-      cx="12"
-      cy="12"
-      r="3"
-    />
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="12" cy="12" r="3" />
 
     <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V21h-4v-.08a1.7 1.7 0 0 0-1.03-1.56 1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.03H3v-4h.08A1.7 1.7 0 0 0 4.64 8.9a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 9 4.53a1.7 1.7 0 0 0 1.03-1.56V3h4v.08a1.7 1.7 0 0 0 1.07 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06a1.7 1.7 0 0 0-.34 1.88 1.7 1.7 0 0 0 1.56 1.03H21v4h-.08A1.7 1.7 0 0 0 19.4 15Z" />
   </svg>
 );
 
 const SystemIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
-    <rect
-      x="3"
-      y="4"
-      width="18"
-      height="14"
-      rx="2"
-    />
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <rect x="3" y="4" width="18" height="14" rx="2" />
 
     <path d="M8 21h8" />
     <path d="M12 18v3" />
@@ -139,15 +106,8 @@ const SystemIcon = () => (
 );
 
 const SunIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
-    <circle
-      cx="12"
-      cy="12"
-      r="4"
-    />
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="12" cy="12" r="4" />
 
     <path d="M12 2v2" />
     <path d="M12 20v2" />
@@ -161,10 +121,7 @@ const SunIcon = () => (
 );
 
 const MoonIcon = () => (
-  <svg
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
+  <svg viewBox="0 0 24 24" aria-hidden="true">
     <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z" />
   </svg>
 );
@@ -174,56 +131,27 @@ const MoonIcon = () => (
 ========================= */
 
 const App = () => {
-  const {
-    isAuthenticated,
-    isAuthLoading,
-  } = useAuth();
+  const { user, isAuthenticated, isAuthLoading } = useAuth();
 
-  const {
-    themeMode,
-    setThemeMode,
-  } = useTheme();
+  const { themeMode, setThemeMode } = useTheme();
 
-  const location =
-    useLocation();
+  const location = useLocation();
 
-  const navigate =
-    useNavigate();
+  const navigate = useNavigate();
 
-  const [
-    searchParams,
-    setSearchParams,
-  ] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const [
-    readingBook,
-    setReadingBook,
-  ] = useState(null);
+  const [readingBook, setReadingBook] = useState(null);
 
-  const [
-    isReadingBookLoading,
-    setIsReadingBookLoading,
-  ] = useState(false);
+  const [isReadingBookLoading, setIsReadingBookLoading] = useState(false);
 
-  const [
-    isMobileMenuOpen,
-    setIsMobileMenuOpen,
-  ] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const readingBookId =
-    searchParams.get(
-      "reading",
-    );
+  const readingBookId = searchParams.get("reading");
 
-  const accountPath =
-    isAuthenticated
-      ? "/account"
-      : "/login";
+  const accountPath = isAuthenticated ? "/account" : "/login";
 
-  const showRightSidebar =
-    isAuthenticated &&
-    location.pathname ===
-      "/account";
+  const showRightSidebar = isAuthenticated && location.pathname === "/account";
 
   /* =========================
      CLOSE MOBILE MENU
@@ -231,9 +159,7 @@ const App = () => {
   ========================= */
 
   useEffect(() => {
-    setIsMobileMenuOpen(
-      false,
-    );
+    setIsMobileMenuOpen(false);
   }, [location.pathname]);
 
   /* =========================
@@ -241,23 +167,16 @@ const App = () => {
   ========================= */
 
   useEffect(() => {
-    if (
-      !isMobileMenuOpen
-    ) {
+    if (!isMobileMenuOpen) {
       return undefined;
     }
 
-    const previousOverflow =
-      document.body.style
-        .overflow;
+    const previousOverflow = document.body.style.overflow;
 
-    document.body.style
-      .overflow = "hidden";
+    document.body.style.overflow = "hidden";
 
     return () => {
-      document.body.style
-        .overflow =
-        previousOverflow;
+      document.body.style.overflow = previousOverflow;
     };
   }, [isMobileMenuOpen]);
 
@@ -266,35 +185,20 @@ const App = () => {
   ========================= */
 
   useEffect(() => {
-    if (
-      !isMobileMenuOpen
-    ) {
+    if (!isMobileMenuOpen) {
       return undefined;
     }
 
-    const handleKeyDown = (
-      event,
-    ) => {
-      if (
-        event.key ===
-        "Escape"
-      ) {
-        setIsMobileMenuOpen(
-          false,
-        );
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        setIsMobileMenuOpen(false);
       }
     };
 
-    window.addEventListener(
-      "keydown",
-      handleKeyDown,
-    );
+    window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      window.removeEventListener(
-        "keydown",
-        handleKeyDown,
-      );
+      window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isMobileMenuOpen]);
 
@@ -303,167 +207,170 @@ const App = () => {
   ========================= */
 
   useEffect(() => {
-    const loadReadingBook =
-      async () => {
-        if (!readingBookId) {
-          setReadingBook(
-            null,
-          );
+    const loadReadingBook = async () => {
+      if (!readingBookId) {
+        setReadingBook(null);
+
+        return;
+      }
+
+      if (isAuthLoading) {
+        return;
+      }
+
+      if (!isAuthenticated) {
+        const params = new URLSearchParams(searchParams);
+
+        params.delete("reading");
+
+        setSearchParams(params, {
+          replace: true,
+        });
+
+        navigate("/login", {
+          replace: true,
+        });
+
+        return;
+      }
+
+      try {
+        setIsReadingBookLoading(true);
+
+        const response = await fetch(`${API_URL}/api/books`);
+
+        if (!response.ok) {
+          throw new Error("Не вдалося завантажити книгу");
+        }
+
+        const data = await response.json();
+
+        const books = Array.isArray(data)
+          ? data
+          : Array.isArray(data.books)
+            ? data.books
+            : [];
+
+        const book =
+          books.find((item) => String(item.id) === String(readingBookId)) ??
+          null;
+
+        if (!book) {
+          const params = new URLSearchParams(searchParams);
+
+          params.delete("reading");
+
+          setSearchParams(params, {
+            replace: true,
+          });
+
+          setReadingBook(null);
 
           return;
         }
 
-        if (isAuthLoading) {
-          return;
-        }
+        setReadingBook(book);
+      } catch (error) {
+        console.error("Load reading book error:", error);
 
-        if (
-          !isAuthenticated
-        ) {
-          const params =
-            new URLSearchParams(
-              searchParams,
-            );
-
-          params.delete(
-            "reading",
-          );
-
-          setSearchParams(
-            params,
-            {
-              replace: true,
-            },
-          );
-
-          navigate(
-            "/login",
-            {
-              replace: true,
-            },
-          );
-
-          return;
-        }
-
-        try {
-          setIsReadingBookLoading(
-            true,
-          );
-
-          const response =
-            await fetch(
-              `${API_URL}/api/books`,
-            );
-
-          if (
-            !response.ok
-          ) {
-            throw new Error(
-              "Не вдалося завантажити книгу",
-            );
-          }
-
-          const data =
-            await response.json();
-
-          const books =
-            Array.isArray(data)
-              ? data
-              : Array.isArray(
-                    data.books,
-                  )
-                ? data.books
-                : [];
-
-          const book =
-            books.find(
-              (item) =>
-                String(
-                  item.id,
-                ) ===
-                String(
-                  readingBookId,
-                ),
-            ) ?? null;
-
-          if (!book) {
-            const params =
-              new URLSearchParams(
-                searchParams,
-              );
-
-            params.delete(
-              "reading",
-            );
-
-            setSearchParams(
-              params,
-              {
-                replace: true,
-              },
-            );
-
-            setReadingBook(
-              null,
-            );
-
-            return;
-          }
-
-          setReadingBook(
-            book,
-          );
-        } catch (error) {
-          console.error(
-            "Load reading book error:",
-            error,
-          );
-
-          setReadingBook(
-            null,
-          );
-        } finally {
-          setIsReadingBookLoading(
-            false,
-          );
-        }
-      };
+        setReadingBook(null);
+      } finally {
+        setIsReadingBookLoading(false);
+      }
+    };
 
     loadReadingBook();
-  }, [
-    readingBookId,
-    isAuthenticated,
-    isAuthLoading,
-  ]);
+  }, [readingBookId, isAuthenticated, isAuthLoading]);
 
-  const handleCloseReading =
-    () => {
-      const params =
-        new URLSearchParams(
-          searchParams,
-        );
+  /* =========================
+     CLOSE READING
+  ========================= */
 
-      params.delete(
-        "reading",
-      );
+  const handleCloseReading = () => {
+    const params = new URLSearchParams(searchParams);
 
-      setSearchParams(
-        params,
-        {
-          replace: true,
+    params.delete("reading");
+
+    setSearchParams(params, {
+      replace: true,
+    });
+
+    setReadingBook(null);
+  };
+
+  /* =========================
+     OPEN READER
+  ========================= */
+
+  const handleOpenReader = async () => {
+    setIsMobileMenuOpen(false);
+
+    if (isAuthLoading) {
+      return;
+    }
+
+    if (!isAuthenticated) {
+      toast.error("Спочатку увійдіть в акаунт");
+
+      navigate("/login");
+
+      return;
+    }
+
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      navigate("/login");
+
+      return;
+    }
+
+    try {
+      const response = await fetch(`${API_URL}/api/user-books/current`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
         },
-      );
+      });
 
-      setReadingBook(
-        null,
-      );
-    };
+      if (!response.ok) {
+        throw new Error("Не вдалося завантажити поточне читання");
+      }
 
-  const handleThemeChange =
-    (mode) => {
-      setThemeMode(mode);
-    };
+      const data = await response.json();
+
+      const books = Array.isArray(data.books) ? data.books : [];
+
+      const currentBook = books[0];
+
+      const bookId = currentBook?.book?.id;
+
+      if (!bookId) {
+        toast("Немає активного читання");
+
+        return;
+      }
+
+      const params = new URLSearchParams(searchParams);
+
+      params.set("reading", bookId);
+
+      setSearchParams(params, {
+        replace: true,
+      });
+    } catch (error) {
+      console.error("Open reader error:", error);
+
+      toast.error("Не вдалося відкрити читалку");
+    }
+  };
+
+  /* =========================
+     THEME
+  ========================= */
+
+  const handleThemeChange = (mode) => {
+    setThemeMode(mode);
+  };
 
   return (
     <div className="app-shell">
@@ -472,44 +379,41 @@ const App = () => {
       ========================= */}
 
       <header className="mobile-header">
-        <NavLink
-          to="/"
-          end
-          className="mobile-header__brand"
-        >
+        <NavLink to="/" end className="mobile-header__brand">
           <CatalogIcon />
 
-          <span>
-            Бібліотека
-          </span>
+          <span>Бібліотека</span>
         </NavLink>
 
-        <button
-          type="button"
-          className={`mobile-menu-button ${
-            isMobileMenuOpen
-              ? "mobile-menu-button--open"
-              : ""
-          }`}
-          onClick={() =>
-            setIsMobileMenuOpen(
-              (current) =>
-                !current,
-            )
-          }
-          aria-label={
-            isMobileMenuOpen
-              ? "Закрити меню"
-              : "Відкрити меню"
-          }
-          aria-expanded={
-            isMobileMenuOpen
-          }
-        >
-          <span />
-          <span />
-          <span />
-        </button>
+        <div className="mobile-header__actions">
+          {isAuthenticated && (
+            <NavLink
+              to="/account"
+              className="mobile-header__avatar"
+              aria-label="Відкрити профіль"
+            >
+              {user?.avatarUrl ? (
+                <img src={user.avatarUrl} alt={user?.name || "Профіль"} />
+              ) : (
+                <span>{(user?.name || "К").charAt(0).toUpperCase()}</span>
+              )}
+            </NavLink>
+          )}
+
+          <button
+            type="button"
+            className={`mobile-menu-button ${
+              isMobileMenuOpen ? "mobile-menu-button--open" : ""
+            }`}
+            onClick={() => setIsMobileMenuOpen((current) => !current)}
+            aria-label={isMobileMenuOpen ? "Закрити меню" : "Відкрити меню"}
+            aria-expanded={isMobileMenuOpen}
+          >
+            <span />
+            <span />
+            <span />
+          </button>
+        </div>
       </header>
 
       {/* =========================
@@ -518,18 +422,10 @@ const App = () => {
 
       <div
         className={`mobile-menu-overlay ${
-          isMobileMenuOpen
-            ? "mobile-menu-overlay--open"
-            : ""
+          isMobileMenuOpen ? "mobile-menu-overlay--open" : ""
         }`}
-        onClick={() =>
-          setIsMobileMenuOpen(
-            false,
-          )
-        }
-        aria-hidden={
-          !isMobileMenuOpen
-        }
+        onClick={() => setIsMobileMenuOpen(false)}
+        aria-hidden={!isMobileMenuOpen}
       />
 
       {/* =========================
@@ -538,31 +434,21 @@ const App = () => {
 
       <aside
         className={`mobile-drawer ${
-          isMobileMenuOpen
-            ? "mobile-drawer--open"
-            : ""
+          isMobileMenuOpen ? "mobile-drawer--open" : ""
         }`}
-        aria-hidden={
-          !isMobileMenuOpen
-        }
+        aria-hidden={!isMobileMenuOpen}
       >
         <div className="mobile-drawer__header">
           <div className="mobile-drawer__brand">
             <CatalogIcon />
 
-            <span>
-              Бібліотека
-            </span>
+            <span>Бібліотека</span>
           </div>
 
           <button
             type="button"
             className="mobile-drawer__close"
-            onClick={() =>
-              setIsMobileMenuOpen(
-                false,
-              )
-            }
+            onClick={() => setIsMobileMenuOpen(false)}
             aria-label="Закрити меню"
           >
             ×
@@ -570,151 +456,101 @@ const App = () => {
         </div>
 
         <nav className="mobile-drawer__nav">
-          <NavLink
-            to="/"
-            end
-            className="mobile-drawer__link"
-          >
+          <NavLink to="/" end className="mobile-drawer__link">
             <CatalogIcon />
 
-            <span>
-              Каталог
-            </span>
+            <span>Каталог</span>
           </NavLink>
 
-          <NavLink
-            to="/add"
-            className="mobile-drawer__link"
-          >
+          <NavLink to="/add" className="mobile-drawer__link">
             <AddIcon />
 
-            <span>
-              Додати книгу
-            </span>
+            <span>Додати книгу</span>
           </NavLink>
 
-          <NavLink
-            to="/calendar"
-            className="mobile-drawer__link"
-          >
+          <NavLink to="/calendar" className="mobile-drawer__link">
             <CalendarIcon />
 
-            <span>
-              Календар
-            </span>
+            <span>Календар</span>
           </NavLink>
 
-          <NavLink
-            to="/stats"
+          <button
+            type="button"
             className="mobile-drawer__link"
+            onClick={handleOpenReader}
           >
+            <ReaderIcon />
+
+            <span>Читалка</span>
+          </button>
+
+          <NavLink to="/stats" className="mobile-drawer__link">
             <StatsIcon />
 
-            <span>
-              Статистика
-            </span>
+            <span>Статистика</span>
           </NavLink>
 
           <NavLink
             to={accountPath}
             className={`mobile-drawer__link ${
-              isAuthLoading
-                ? "mobile-drawer__link--loading"
-                : ""
+              isAuthLoading ? "mobile-drawer__link--loading" : ""
             }`}
           >
             <ProfileIcon />
 
-            <span>
-              {isAuthenticated
-                ? "Профіль"
-                : "Увійти"}
-            </span>
+            <span>{isAuthenticated ? "Профіль" : "Увійти"}</span>
           </NavLink>
         </nav>
 
-        {isAuthenticated && (
-          <div className="mobile-drawer__settings">
-            <NavLink
-              to="/settings"
-              className="mobile-drawer__link mobile-drawer__settings-link"
-            >
-              <SettingsIcon />
+        <div className="mobile-drawer__settings">
+          <NavLink
+            to="/settings"
+            className="mobile-drawer__link mobile-drawer__settings-link"
+          >
+            <SettingsIcon />
 
-              <span>
-                Налаштування
-              </span>
-            </NavLink>
-          </div>
-        )}
+            <span>Налаштування</span>
+          </NavLink>
+        </div>
 
         <div className="mobile-theme">
-          <span className="mobile-theme__title">
-            Тема
-          </span>
+          <span className="mobile-theme__title">Тема</span>
 
           <div className="mobile-theme__options">
             <button
               type="button"
               className={`mobile-theme__option ${
-                themeMode ===
-                "system"
-                  ? "mobile-theme__option--active"
-                  : ""
+                themeMode === "system" ? "mobile-theme__option--active" : ""
               }`}
-              onClick={() =>
-                handleThemeChange(
-                  "system",
-                )
-              }
+              onClick={() => handleThemeChange("system")}
             >
               <SystemIcon />
 
-              <span>
-                Системна
-              </span>
+              <span>Системна</span>
             </button>
 
             <button
               type="button"
               className={`mobile-theme__option ${
-                themeMode ===
-                "light"
-                  ? "mobile-theme__option--active"
-                  : ""
+                themeMode === "light" ? "mobile-theme__option--active" : ""
               }`}
-              onClick={() =>
-                handleThemeChange(
-                  "light",
-                )
-              }
+              onClick={() => handleThemeChange("light")}
             >
               <SunIcon />
 
-              <span>
-                Світла
-              </span>
+              <span>Світла</span>
             </button>
 
             <button
               type="button"
               className={`mobile-theme__option ${
-                themeMode ===
-                "dark"
-                  ? "mobile-theme__option--active"
-                  : ""
+                themeMode === "dark" ? "mobile-theme__option--active" : ""
               }`}
-              onClick={() =>
-                handleThemeChange(
-                  "dark",
-                )
-              }
+              onClick={() => handleThemeChange("dark")}
             >
               <MoonIcon />
 
-              <span>
-                Темна
-              </span>
+              <span>Темна</span>
             </button>
           </div>
         </div>
@@ -725,114 +561,73 @@ const App = () => {
       ========================= */}
 
       <aside className="app-sidebar">
-        <NavLink
-          to="/"
-          end
-          className="app-brand"
-        >
+        <NavLink to="/" end className="app-brand">
           <CatalogIcon />
 
-          <span>
-            Бібліотека
-          </span>
+          <span>Бібліотека</span>
         </NavLink>
 
         <nav className="desktop-nav">
-          <NavLink
-            to="/"
-            end
-            className="desktop-nav__link"
-          >
+          <NavLink to="/" end className="desktop-nav__link">
             <CatalogIcon />
 
-            <span>
-              Каталог
-            </span>
+            <span>Каталог</span>
           </NavLink>
 
-          <NavLink
-            to="/add"
-            className="desktop-nav__link"
-          >
+          <NavLink to="/add" className="desktop-nav__link">
             <AddIcon />
 
-            <span>
-              Додати книгу
-            </span>
+            <span>Додати книгу</span>
           </NavLink>
 
-          <NavLink
-            to="/calendar"
-            className="desktop-nav__link"
-          >
+          <NavLink to="/calendar" className="desktop-nav__link">
             <CalendarIcon />
 
-            <span>
-              Календар
-            </span>
+            <span>Календар</span>
           </NavLink>
 
-          <NavLink
-            to="/stats"
+          <button
+            type="button"
             className="desktop-nav__link"
+            onClick={handleOpenReader}
           >
+            <ReaderIcon />
+
+            <span>Читалка</span>
+          </button>
+
+          <NavLink to="/stats" className="desktop-nav__link">
             <StatsIcon />
 
-            <span>
-              Статистика
-            </span>
+            <span>Статистика</span>
           </NavLink>
 
           <NavLink
             to={accountPath}
             className={`desktop-nav__link ${
-              isAuthLoading
-                ? "desktop-nav__link--loading"
-                : ""
+              isAuthLoading ? "desktop-nav__link--loading" : ""
             }`}
           >
             <ProfileIcon />
 
-            <span>
-              {isAuthenticated
-                ? "Мій профіль"
-                : "Увійти"}
-            </span>
+            <span>{isAuthenticated ? "Мій профіль" : "Увійти"}</span>
           </NavLink>
 
-          {isAuthenticated && (
-            <NavLink
-              to="/settings"
-              className="desktop-nav__link"
-            >
-              <SettingsIcon />
+          <NavLink to="/settings" className="desktop-nav__link">
+            <SettingsIcon />
 
-              <span>
-                Налаштування
-              </span>
-            </NavLink>
-          )}
+            <span>Налаштування</span>
+          </NavLink>
         </nav>
 
         <div className="desktop-theme">
-          <span className="desktop-theme__title">
-            Тема
-          </span>
+          <span className="desktop-theme__title">Тема</span>
 
           <div className="desktop-theme__options">
             <button
               type="button"
-              className={
-                themeMode ===
-                "system"
-                  ? "active"
-                  : ""
-              }
-              onClick={() =>
-                handleThemeChange(
-                  "system",
-                )
-              }
+              className={themeMode === "system" ? "active" : ""}
+              onClick={() => handleThemeChange("system")}
               title="Системна тема"
             >
               <SystemIcon />
@@ -840,17 +635,8 @@ const App = () => {
 
             <button
               type="button"
-              className={
-                themeMode ===
-                "light"
-                  ? "active"
-                  : ""
-              }
-              onClick={() =>
-                handleThemeChange(
-                  "light",
-                )
-              }
+              className={themeMode === "light" ? "active" : ""}
+              onClick={() => handleThemeChange("light")}
               title="Світла тема"
             >
               <SunIcon />
@@ -858,17 +644,8 @@ const App = () => {
 
             <button
               type="button"
-              className={
-                themeMode ===
-                "dark"
-                  ? "active"
-                  : ""
-              }
-              onClick={() =>
-                handleThemeChange(
-                  "dark",
-                )
-              }
+              className={themeMode === "dark" ? "active" : ""}
+              onClick={() => handleThemeChange("dark")}
               title="Темна тема"
             >
               <MoonIcon />
@@ -884,74 +661,30 @@ const App = () => {
       <div className="app-content">
         <div
           className={`app-main-layout ${
-            showRightSidebar
-              ? "app-main-layout--with-sidebar"
-              : ""
+            showRightSidebar ? "app-main-layout--with-sidebar" : ""
           }`}
         >
           <div className="app-main-column">
             <Routes>
-              <Route
-                path="/"
-                element={
-                  <CatalogPage />
-                }
-              />
+              <Route path="/" element={<CatalogPage />} />
 
-              <Route
-                path="/add"
-                element={
-                  <AddBookPage />
-                }
-              />
+              <Route path="/add" element={<AddBookPage />} />
 
-              <Route
-                path="/calendar"
-                element={
-                  <ReadingCalendarPage />
-                }
-              />
+              <Route path="/calendar" element={<ReadingCalendarPage />} />
 
-              <Route
-                path="/stats"
-                element={
-                  <StatsPage />
-                }
-              />
+              <Route path="/stats" element={<StatsPage />} />
 
-              <Route
-                path="/register"
-                element={
-                  <RegisterPage />
-                }
-              />
+              <Route path="/register" element={<RegisterPage />} />
 
-              <Route
-                path="/login"
-                element={
-                  <LoginPage />
-                }
-              />
+              <Route path="/login" element={<LoginPage />} />
 
-              <Route
-                path="/account"
-                element={
-                  <UserPage />
-                }
-              />
+              <Route path="/account" element={<UserPage />} />
 
-              <Route
-                path="/settings"
-                element={
-                  <SettingsPage />
-                }
-              />
+              <Route path="/settings" element={<SettingsPage />} />
             </Routes>
           </div>
 
-          {showRightSidebar && (
-            <RightSidebar />
-          )}
+          {showRightSidebar && <RightSidebar />}
         </div>
       </div>
 
@@ -964,15 +697,9 @@ const App = () => {
         !isAuthLoading &&
         !isReadingBookLoading && (
           <ReadingModal
-            book={
-              readingBook
-            }
-            apiUrl={
-              API_URL
-            }
-            onClose={
-              handleCloseReading
-            }
+            book={readingBook}
+            apiUrl={API_URL}
+            onClose={handleCloseReading}
           />
         )}
 

@@ -976,3 +976,56 @@
     width: 390px;
   }
 }
+
+button.mobile-drawer__link,
+button.desktop-nav__link {
+  width: 100%;
+  border: none;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.mobile-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.mobile-header__avatar {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  border-radius: 50%;
+
+  background: var(--surface);
+
+  color: var(--text);
+
+  text-decoration: none;
+
+  border: 1px solid var(--border);
+}
+
+.mobile-header__avatar img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+.mobile-header__avatar span {
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+}
