@@ -214,35 +214,23 @@ const ReadingActivityChart = ({
 
   const previousMonthName = monthNames[(today.getMonth() + 11) % 12];
 
-  const currentWeekIndex = Math.min(Math.floor((today.getDate() - 1) / 7), 4);
+  const width = 760;
+  const height = 240;
 
-  /*
-    Перші 4 точки — попередній місяць.
-    Поточний місяць починається з index 4.
-  */
-
-  const activeChartIndex = 4 + currentWeekIndex;
-
-  const activeItem = chartData[activeChartIndex] ?? {
-    value: 0,
-  };
-
-  const width = 900;
-  const height = 270;
-
-  const paddingLeft = 58;
-  const paddingRight = 20;
-  const paddingTop = 32;
-  const paddingBottom = 20;
-
-  const chartWidth = width - paddingLeft - paddingRight;
+  const paddingTop = 28;
+  const paddingBottom = 8;
 
   const chartHeight = height - paddingTop - paddingBottom;
 
   const { maxValue, yTicks } = getChartScale(chartData);
 
-  const getX = (index) =>
-    paddingLeft + (chartWidth / (chartData.length - 1)) * index;
+  const getX = (index) => {
+    if (chartData.length <= 1) {
+      return width / 2;
+    }
+
+    return (width / (chartData.length - 1)) * index;
+  };
 
   const getY = (value) =>
     paddingTop + chartHeight - (value / maxValue) * chartHeight;
@@ -258,12 +246,30 @@ const ReadingActivityChart = ({
       .slice(1)
       .map((item, index) => `L ${getX(index + 1)} ${getY(item.value)}`),
 
-    `L ${getX(chartData.length - 1)} ${paddingTop + chartHeight}`,
+    `L ${getX(chartData.length - 1)} ${height}`,
 
-    `L ${getX(0)} ${paddingTop + chartHeight}`,
+    `L ${getX(0)} ${height}`,
 
     "Z",
   ].join(" ");
+
+  /*
+   * Знаходимо реальний
+   * максимум графіка.
+   */
+  const peakValue = Math.max(
+    ...chartData.map((item) => Number(item.value) || 0),
+    0,
+  );
+
+  const peakIndex = chartData.findIndex(
+    (item) => Number(item.value) === peakValue,
+  );
+
+  const peakLeft =
+    chartData.length > 1 && peakIndex >= 0
+      ? (peakIndex / (chartData.length - 1)) * 100
+      : 0;
 
   if (isLoading) {
     return (
@@ -289,6 +295,7 @@ const ReadingActivityChart = ({
 
           <p>
             {currentMonthName}
+
             <span> · {formatReadingTime(currentMonthSeconds)}</span>
           </p>
         </div>
@@ -304,145 +311,137 @@ const ReadingActivityChart = ({
       </div>
 
       <div className="reading-chart">
-        <svg
-          className="reading-chart__svg"
-          viewBox={`0 0 ${width} ${height}`}
-          role="img"
-          aria-label="Графік активності читання у хвилинах"
-        >
-          <defs>
-            <linearGradient
-              id="readingAreaGradient"
-              x1="0"
-              y1="0"
-              x2="0"
-              y2="1"
+        <div className="reading-chart__body">
+          {/* Y SCALE */}
+
+          <div className="reading-chart__scale">
+            {[...yTicks].reverse().map((tick) => (
+              <span key={tick}>{tick} хв</span>
+            ))}
+          </div>
+
+          {/* GRAPH */}
+
+          <div className="reading-chart__plot">
+            {peakValue > 0 && (
+              <div
+                className="reading-chart__peak-value"
+                style={{
+                  left: `${peakLeft}%`,
+                  top: `${Math.max((getY(peakValue) / height) * 100 - 8, 0)}%`,
+                }}
+              >
+                {peakValue} хв
+              </div>
+            )}
+
+            <svg
+              className="reading-chart__svg"
+              viewBox={`0 0 ${width} ${height}`}
+              preserveAspectRatio="none"
+              role="img"
+              aria-label="Графік активності читання у хвилинах"
             >
-              <stop offset="0%" stopColor="#9b5cff" stopOpacity="0.32" />
-
-              <stop offset="100%" stopColor="#9b5cff" stopOpacity="0.03" />
-            </linearGradient>
-
-            <linearGradient
-              id="readingLineGradient"
-              x1="0"
-              y1="0"
-              x2="1"
-              y2="0"
-            >
-              <stop offset="0%" stopColor="#a56cff" />
-
-              <stop offset="100%" stopColor="#9b5cff" />
-            </linearGradient>
-          </defs>
-
-          {/* Y AXIS */}
-
-          {yTicks.map((tick) => {
-            const y = getY(tick);
-
-            return (
-              <g key={tick}>
-                <text
-                  x={paddingLeft - 12}
-                  y={y + 4}
-                  textAnchor="end"
-                  className="reading-chart__y-label"
+              <defs>
+                <linearGradient
+                  id="readingAreaGradient"
+                  x1="0"
+                  y1="0"
+                  x2="0"
+                  y2="1"
                 >
-                  {tick} хв
-                </text>
-              </g>
-            );
-          })}
+                  <stop offset="0%" stopColor="#9b5cff" stopOpacity="0.38" />
 
-          {/* VERTICAL GRID */}
+                  <stop offset="100%" stopColor="#9b5cff" stopOpacity="0.04" />
+                </linearGradient>
 
-          {chartData.map((item, index) => {
-            const x = getX(index);
+                <linearGradient
+                  id="readingLineGradient"
+                  x1="0"
+                  y1="0"
+                  x2="1"
+                  y2="0"
+                >
+                  <stop offset="0%" stopColor="#a56cff" />
 
-            const isActiveWeek = index === activeChartIndex;
+                  <stop offset="100%" stopColor="#9b5cff" />
+                </linearGradient>
+              </defs>
 
-            return (
-              <line
-                key={`${item.label}-${index}`}
-                x1={x}
-                x2={x}
-                y1={paddingTop}
-                y2={paddingTop + chartHeight}
-                className={
-                  isActiveWeek
-                    ? "reading-chart__grid-line reading-chart__grid-line--active"
-                    : "reading-chart__grid-line"
-                }
+              {/* HORIZONTAL GRID */}
+
+              {yTicks.map((tick) => (
+                <line
+                  key={`horizontal-${tick}`}
+                  x1="0"
+                  x2={width}
+                  y1={getY(tick)}
+                  y2={getY(tick)}
+                  className="reading-chart__horizontal-line"
+                />
+              ))}
+
+              {/* VERTICAL GRID */}
+
+              {chartData.map((item, index) => (
+                <line
+                  key={`vertical-${item.label}-${index}`}
+                  x1={getX(index)}
+                  x2={getX(index)}
+                  y1={paddingTop}
+                  y2={height}
+                  className="reading-chart__grid-line"
+                />
+              ))}
+
+              {/* AREA */}
+
+              <path d={areaPath} fill="url(#readingAreaGradient)" />
+
+              {/* LINE */}
+
+              <polyline
+                points={linePoints}
+                fill="none"
+                stroke="url(#readingLineGradient)"
+                className="reading-chart__line"
               />
-            );
-          })}
 
-          {/* BOTTOM AXIS */}
+              {/* DOTS */}
 
-          <line
-            x1={paddingLeft}
-            x2={width - paddingRight}
-            y1={paddingTop + chartHeight}
-            y2={paddingTop + chartHeight}
-            className="reading-chart__axis"
-          />
+              {chartData.map((item, index) => {
+                const isPeak = index === peakIndex && peakValue > 0;
+              })}
+            </svg>
+            {chartData.map((item, index) => {
+              const isPeak = index === peakIndex && peakValue > 0;
 
-          {/* AREA */}
+              const left =
+                chartData.length > 1
+                  ? (index / (chartData.length - 1)) * 100
+                  : 50;
 
-          <path d={areaPath} fill="url(#readingAreaGradient)" />
+              const top = (getY(item.value) / height) * 100;
 
-          {/* LINE */}
-
-          <polyline
-            points={linePoints}
-            fill="none"
-            stroke="url(#readingLineGradient)"
-            className="reading-chart__line"
-          />
-
-          {/* DOTS */}
-
-          {chartData.map((item, index) => (
-            <circle
-              key={`dot-${index}`}
-              cx={getX(index)}
-              cy={getY(item.value)}
-              r="6"
-              className="reading-chart__dot"
-            />
-          ))}
-
-          {/* CURRENT WEEK VALUE */}
-
-          <text
-            x={getX(activeChartIndex)}
-            y={Math.max(getY(activeItem.value) - 18, 18)}
-            textAnchor="middle"
-            className="reading-chart__last-value"
-          >
-            {activeItem.value} хв
-          </text>
-        </svg>
-
-        {/* WEEK LABELS */}
-
-        <div className="reading-chart__weeks">
-          {chartData.map((item, index) => (
-            <span
-              key={`${item.label}-${index}`}
-              className={
-                item.current
-                  ? "reading-chart__week reading-chart__week--current"
-                  : "reading-chart__week"
-              }
-            >
-              {item.label}
-            </span>
-          ))}
+              return (
+                <span
+                  key={`dot-${index}`}
+                  className={
+                    isPeak
+                      ? "reading-chart__html-dot reading-chart__html-dot--peak"
+                      : "reading-chart__html-dot"
+                  }
+                  style={{
+                    left: `${left}%`,
+                    top: `${top}%`,
+                  }}
+                />
+              );
+            })}
+          </div>
         </div>
 
-        {/* PERIODS */}
+        {/* MONTHS */}
 
         <div className="reading-chart__periods">
           <span>{previousMonthName}</span>
@@ -453,7 +452,6 @@ const ReadingActivityChart = ({
     </div>
   );
 };
-
 /* =========================
    PAGE
 ========================= */

@@ -489,10 +489,6 @@
   gap: 8px;
 }
 
-/* =========================
-   DROPDOWN BOOK
-========================= */
-
 .current-books-dropdown__book {
   width: 100%;
   min-width: 0;
@@ -513,10 +509,6 @@
 
   background: var(--surface);
 }
-
-/* =========================
-   DROPDOWN COVER
-========================= */
 
 .current-books-dropdown__cover {
   width: 58px;
@@ -543,10 +535,6 @@
 
   object-fit: cover;
 }
-
-/* =========================
-   DROPDOWN CONTENT
-========================= */
 
 .current-books-dropdown__content {
   min-width: 0;
@@ -586,10 +574,6 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-
-/* =========================
-   DROPDOWN PROGRESS
-========================= */
 
 .current-books-dropdown__progress-row {
   width: 100%;
@@ -642,10 +626,6 @@
   font-size: 8px;
 }
 
-/* =========================
-   DROPDOWN BUTTON
-========================= */
-
 .current-books-dropdown__button {
   width: max-content;
 
@@ -666,7 +646,7 @@
 }
 
 /* =========================
-   WISHLIST / FINISHED ROW
+   WISHLIST / FINISHED
 ========================= */
 
 .profile-books {
@@ -839,14 +819,14 @@
 .reading-chart-card {
   width: 100%;
 
-  padding: 16px 12px 14px;
+  padding: 18px 14px 16px;
 
   box-sizing: border-box;
 
   overflow: hidden;
 
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: 18px;
 
   background: var(--surface);
 }
@@ -863,7 +843,7 @@
   justify-content: space-between;
   gap: 12px;
 
-  margin-bottom: 12px;
+  margin-bottom: 18px;
 }
 
 .reading-chart-card__header > div {
@@ -875,7 +855,7 @@
 
   color: var(--text-h);
 
-  font-size: 18px;
+  font-size: 20px;
   line-height: 1.2;
 }
 
@@ -884,18 +864,15 @@
 
   color: var(--text);
 
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.3;
 }
 
 .reading-chart-card__header p span {
   color: var(--accent);
 
-  font-weight: 600;
+  font-weight: 700;
 }
-
-/* важливо:
-   перебиваємо загальні стилі button */
 
 .reading-chart-card__details {
   width: auto !important;
@@ -909,7 +886,7 @@
   flex: 0 0 auto;
 
   margin: 0 !important;
-  padding: 2px 0 !important;
+  padding: 3px 0 !important;
 
   border: 0 !important;
   border-radius: 0 !important;
@@ -920,8 +897,8 @@
   box-shadow: none !important;
 
   font-family: inherit;
-  font-size: 10px;
-  font-weight: 600;
+  font-size: 11px;
+  font-weight: 700;
   line-height: 1.2;
 
   cursor: pointer;
@@ -929,16 +906,15 @@
 
 .reading-chart-card__details:hover {
   background: transparent !important;
-  color: var(--accent) !important;
 }
 
 .reading-chart-card__details svg {
-  width: 14px !important;
-  height: 14px !important;
+  width: 15px !important;
+  height: 15px !important;
 
   display: block;
 
-  flex: 0 0 14px;
+  flex: 0 0 15px;
 
   margin: 0 !important;
 
@@ -951,34 +927,85 @@
 }
 
 /* =========================
-   CHART
+   GRAPH
 ========================= */
 
 .reading-chart {
   width: 100%;
   min-width: 0;
+}
 
-  overflow: hidden;
+.reading-chart__body {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  gap: 8px;
+
+  align-items: stretch;
+}
+
+/* =========================
+   Y SCALE
+========================= */
+
+.reading-chart__scale {
+  height: 240px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  padding: 28px 0 0;
+
+  box-sizing: border-box;
+
+  color: var(--text);
+
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+
+  text-align: right;
+}
+
+.reading-chart__scale span {
+  display: block;
+
+  white-space: nowrap;
+}
+
+/* =========================
+   PLOT
+========================= */
+
+.reading-chart__plot {
+  position: relative;
+
+  width: 100%;
+  height: 240px;
+
+  min-width: 0;
 }
 
 .reading-chart__svg {
   width: 100% !important;
-  height: auto !important;
+  height: 240px !important;
 
   display: block;
 
   overflow: visible;
 }
 
-/* важливо:
-   щоб глобальні svg-стилі не ламали графік */
-
 .reading-chart__svg line,
 .reading-chart__svg path,
-.reading-chart__svg polyline,
-.reading-chart__svg circle {
+.reading-chart__svg polyline {
   vector-effect: non-scaling-stroke;
 }
+
+/* =========================
+   GRID
+========================= */
 
 .reading-chart__grid-line {
   stroke: var(--border);
@@ -986,98 +1013,110 @@
   stroke-width: 1;
   stroke-dasharray: 5 7;
 
-  opacity: 0.8;
+  opacity: 0.65;
 }
 
-.reading-chart__axis {
+.reading-chart__horizontal-line {
   stroke: var(--border);
 
   stroke-width: 1;
+
+  opacity: 0.35;
 }
 
+/* =========================
+   LINE
+========================= */
+
 .reading-chart__line {
-  stroke-width: 2.5 !important;
+  stroke-width: 3 !important;
 
   stroke-linecap: round;
   stroke-linejoin: round;
 }
 
-.reading-chart__dot {
-  fill: var(--accent) !important;
-  stroke: var(--surface) !important;
-
-  stroke-width: 2 !important;
-}
-
-.reading-chart__y-label {
-  fill: var(--text);
-
-  font-family: inherit;
-  font-size: 11px;
-}
-
-.reading-chart__last-value {
-  fill: var(--text-h);
-
-  font-family: inherit;
-  font-size: 12px;
-  font-weight: 700;
-}
-
 /* =========================
-   WEEKS
+   ROUND DOTS
 ========================= */
 
-.reading-chart__weeks {
-  width: calc(100% - 42px);
+.reading-chart__html-dot {
+  position: absolute;
+  z-index: 4;
 
-  display: grid;
-  grid-template-columns: repeat(9, minmax(0, 1fr));
-
-  margin-top: 2px;
-  margin-left: 42px;
+  width: 10px;
+  height: 10px;
 
   box-sizing: border-box;
+
+  transform: translate(-50%, -50%);
+
+  border: 3px solid var(--accent);
+  border-radius: 50%;
+
+  background: var(--surface);
+
+  pointer-events: none;
 }
 
-.reading-chart__week {
-  min-width: 0;
+.reading-chart__html-dot--peak {
+  width: 14px;
+  height: 14px;
 
-  color: var(--text);
+  border-color: var(--surface);
 
-  font-size: 7px;
-  line-height: 1.15;
-  text-align: center;
+  background: var(--accent);
 
-  white-space: normal;
-  overflow-wrap: anywhere;
-}
-
-.reading-chart__week--current {
-  color: var(--accent);
-
-  font-weight: 600;
+  box-shadow: 0 0 0 2px var(--accent);
 }
 
 /* =========================
-   PERIODS
+   PEAK VALUE
+========================= */
+
+.reading-chart__peak-value {
+  position: absolute;
+  z-index: 5;
+
+  transform: translate(-50%, -100%);
+
+  padding: 3px 7px;
+
+  border-radius: 7px;
+
+  background: var(--surface);
+
+  color: var(--text-h);
+
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1;
+
+  white-space: nowrap;
+
+  pointer-events: none;
+}
+
+/* =========================
+   MONTHS
 ========================= */
 
 .reading-chart__periods {
-  width: calc(100% - 42px);
+  width: calc(100% - 60px);
 
   display: grid;
   grid-template-columns: 4fr 5fr;
 
-  margin-top: 9px;
-  margin-left: 42px;
+  margin-top: 10px;
+  margin-left: 60px;
 
   box-sizing: border-box;
 
   color: var(--text);
 
-  font-size: 8px;
+  font-size: 11px;
+  font-weight: 600;
   line-height: 1.2;
+
   text-align: center;
 }
 
@@ -1091,8 +1130,6 @@
 
 .reading-chart__periods span:last-child {
   color: var(--accent);
-
-  font-weight: 600;
 
   border-left: 1px solid var(--border);
 }
@@ -1197,6 +1234,10 @@
     max-height: 78px !important;
   }
 
+  /* =========================
+     MOBILE CHART
+  ========================= */
+
   .reading-chart-card {
     padding: 14px 8px 12px;
   }
@@ -1226,30 +1267,50 @@
     flex-basis: 12px;
   }
 
-  .reading-chart__weeks {
-    width: calc(100% - 38px);
-
-    margin-left: 38px;
+  .reading-chart__body {
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 6px;
   }
 
-  .reading-chart__week {
-    font-size: 6px;
+  .reading-chart__scale {
+    height: 220px;
+
+    padding-top: 28px;
+
+    font-size: 11px;
+  }
+
+  .reading-chart__plot {
+    height: 220px;
+  }
+
+  .reading-chart__svg {
+    height: 220px !important;
+  }
+
+  .reading-chart__peak-value {
+    font-size: 14px;
+  }
+
+  .reading-chart__html-dot {
+    width: 9px;
+    height: 9px;
+
+    border-width: 2px;
+  }
+
+  .reading-chart__html-dot--peak {
+    width: 13px;
+    height: 13px;
   }
 
   .reading-chart__periods {
-    width: calc(100% - 38px);
+    width: calc(100% - 54px);
 
-    margin-left: 38px;
+    margin-top: 10px;
+    margin-left: 54px;
 
-    font-size: 7px;
-  }
-
-  .reading-chart__y-label {
-    font-size: 10px;
-  }
-
-  .reading-chart__last-value {
-    font-size: 10px;
+    font-size: 11px;
   }
 }
 
@@ -1398,30 +1459,12 @@
     flex-basis: 16px;
   }
 
-  .reading-chart__weeks {
-    width: calc(100% - 52px);
-
-    margin-left: 52px;
-  }
-
-  .reading-chart__week {
-    font-size: 9px;
-  }
-
   .reading-chart__periods {
-    width: calc(100% - 52px);
+    width: calc(100% - 60px);
 
-    margin-left: 52px;
+    margin-left: 60px;
 
-    font-size: 10px;
-  }
-
-  .reading-chart__y-label {
-    font-size: 12px;
-  }
-
-  .reading-chart__last-value {
-    font-size: 13px;
+    font-size: 11px;
   }
 }
 
@@ -1623,41 +1666,16 @@
     flex-basis: 18px;
   }
 
-  .reading-chart__weeks {
-    width: calc(100% - 58px);
-
-    margin-left: 58px;
-  }
-
-  .reading-chart__week {
-    font-size: 11px;
-
-    white-space: nowrap;
-    overflow-wrap: normal;
-  }
-
   .reading-chart__periods {
-    width: calc(100% - 58px);
+    width: calc(100% - 60px);
 
     margin-top: 12px;
-    margin-left: 58px;
+    margin-left: 60px;
 
     font-size: 12px;
   }
 
-  .reading-chart__y-label {
-    font-size: 13px;
-  }
-
-  .reading-chart__last-value {
-    font-size: 14px;
-  }
-
   .reading-chart__line {
     stroke-width: 3 !important;
-  }
-
-  .reading-chart__dot {
-    stroke-width: 2.2 !important;
   }
 }
