@@ -1,172 +1,727 @@
-import { useEffect, useMemo, useState } from "react";
-import { useZxing } from "react-zxing";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+
+import {
+  useZxing,
+} from "react-zxing";
+
 import "./BarcodeScanner.css";
 
-function BarcodeScanner({ onScan, onClose }) {
-  const [backCameras, setBackCameras] = useState([]);
-  const [selectedCamera, setSelectedCamera] = useState("");
+const BarcodeScanner = ({
+  onScan,
+  onClose,
+}) => {
+  const [
+    cameras,
+    setCameras,
+  ] = useState([]);
+
+  const [
+    selectedCamera,
+    setSelectedCamera,
+  ] = useState("");
+
+  const [
+    isScanned,
+    setIsScanned,
+  ] = useState(false);
+
+  const [
+    cameraError,
+    setCameraError,
+  ] = useState("");
+
+  const scanLockRef =
+    useRef(false);
+
+  /* =========================
+     LOAD CAMERAS
+  ========================= */
 
   useEffect(() => {
-    const getCameras = async () => {
-      try {
-        const stream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: "environment",
-          },
-          audio: false,
-        });
+    let cancelled =
+      false;
 
-        stream.getTracks().forEach((track) => track.stop());
-
-        const devices = await navigator.mediaDevices.enumerateDevices();
-
-        const videoDevices = devices.filter(
-          (device) => device.kind === "videoinput",
-        );
-
-        const rearCameras = videoDevices.filter((camera) => {
-          const label = camera.label.toLowerCase();
-
-          return (
-            label.includes("back") ||
-            label.includes("rear") ||
-            label.includes("environment")
+    const loadCameras =
+      async () => {
+        try {
+          setCameraError(
+            "",
           );
-        });
 
-        const availableBackCameras =
-          rearCameras.length > 0 ? rearCameras : videoDevices;
+          if (
+            !navigator
+              .mediaDevices
+              ?.getUserMedia
+          ) {
+            setCameraError(
+              "Камера недоступна в цьому браузері",
+            );
 
-        setBackCameras(availableBackCameras);
+            return;
+          }
 
-        const savedCameraId = localStorage.getItem(
-          "library-scanner-camera",
-        );
+          /*
+           * Спочатку запитуємо
+           * доступ до камери,
+           * щоб браузер відкрив
+           * назви пристроїв.
+           */
+          const stream =
+            await navigator.mediaDevices.getUserMedia(
+              {
+                video: {
+                  facingMode: {
+                    ideal:
+                      "environment",
+                  },
+                },
+                audio: false,
+              },
+            );
 
-        const savedCamera = availableBackCameras.find(
-          (camera) => camera.deviceId === savedCameraId,
-        );
+          stream
+            .getTracks()
+            .forEach(
+              (
+                track,
+              ) => {
+                track.stop();
+              },
+            );
 
-        if (savedCamera) {
-          setSelectedCamera(savedCamera.deviceId);
-          return;
+          const devices =
+            await navigator.mediaDevices.enumerateDevices();
+
+          if (cancelled) {
+            return;
+          }
+
+          const videoDevices =
+            devices.filter(
+              (
+                device,
+              ) =>
+                device.kind ===
+                "videoinput",
+            );
+
+          if (
+            videoDevices.length ===
+            0
+          ) {
+            setCameraError(
+              "Камеру не знайдено",
+            );
+
+            return;
+          }
+
+          /*
+           * Задні камери.
+           */
+          const rearCameras =
+            videoDevices.filter(
+              (
+                camera,
+              ) => {
+                const label =
+                  camera.label
+                    .toLowerCase();
+
+                return (
+                  label.includes(
+                    "back",
+                  ) ||
+                  label.includes(
+                    "rear",
+                  ) ||
+                  label.includes(
+                    "environment",
+                  ) ||
+                  label.includes(
+                    "зад",
+                  )
+                );
+              },
+            );
+
+          const availableCameras =
+            rearCameras.length >
+            0
+              ? rearCameras
+              : videoDevices;
+
+          setCameras(
+            availableCameras,
+          );
+
+          /*
+           * Якщо користувач уже
+           * вибирав камеру —
+           * використовуємо її.
+           */
+          const savedCameraId =
+            localStorage.getItem(
+              "library-scanner-camera",
+            );
+
+          const savedCamera =
+            availableCameras.find(
+              (
+                camera,
+              ) =>
+                camera.deviceId ===
+                savedCameraId,
+            );
+
+          if (savedCamera) {
+            setSelectedCamera(
+              savedCamera.deviceId,
+            );
+
+            return;
+          }
+
+          /*
+           * Пробуємо вибрати
+           * нормальну основну
+           * задню камеру,
+           * а не macro / ultra wide.
+           */
+          const preferredCamera =
+            availableCameras.find(
+              (
+                camera,
+              ) => {
+                const label =
+                  camera.label
+                    .toLowerCase();
+
+                return (
+                  label.includes(
+                    "camera 0",
+                  ) ||
+                  label.includes(
+                    "back camera",
+                  ) ||
+                  label.includes(
+                    "rear camera",
+                  )
+                );
+              },
+            ) ||
+            availableCameras[0];
+
+          if (
+            preferredCamera
+          ) {
+            setSelectedCamera(
+              preferredCamera.deviceId,
+            );
+          }
+        } catch (error) {
+          console.error(
+            "Помилка отримання камер:",
+            error,
+          );
+
+          if (
+            error?.name ===
+            "NotAllowedError"
+          ) {
+            setCameraError(
+              "Немає дозволу на використання камери",
+            );
+
+            return;
+          }
+
+          if (
+            error?.name ===
+            "NotFoundError"
+          ) {
+            setCameraError(
+              "Камеру не знайдено",
+            );
+
+            return;
+          }
+
+          setCameraError(
+            "Не вдалося відкрити камеру",
+          );
         }
+      };
 
-        const preferredCamera =
-          availableBackCameras.find((camera) =>
-            camera.label.toLowerCase().includes("camera 0"),
-          ) || availableBackCameras[0];
+    loadCameras();
 
-        if (preferredCamera) {
-          setSelectedCamera(preferredCamera.deviceId);
-        }
-      } catch (error) {
-        console.error("Помилка отримання камер:", error);
-      }
+    return () => {
+      cancelled = true;
+
+      scanLockRef.current =
+        true;
     };
-
-    getCameras();
   }, []);
 
-  const currentCameraIndex = useMemo(() => {
-    return backCameras.findIndex(
-      (camera) => camera.deviceId === selectedCamera,
-    );
-  }, [backCameras, selectedCamera]);
+  /* =========================
+     CURRENT CAMERA INDEX
+  ========================= */
 
-  const handleSwitchCamera = () => {
-    if (backCameras.length < 2) {
-      return;
+  const currentCameraIndex =
+    useMemo(() => {
+      return cameras.findIndex(
+        (
+          camera,
+        ) =>
+          camera.deviceId ===
+          selectedCamera,
+      );
+    }, [
+      cameras,
+      selectedCamera,
+    ]);
+
+  /* =========================
+     SWITCH CAMERA
+  ========================= */
+
+  const handleSwitchCamera =
+    () => {
+      if (
+        cameras.length <
+        2
+      ) {
+        return;
+      }
+
+      const nextIndex =
+        currentCameraIndex <
+        0
+          ? 0
+          : (
+              currentCameraIndex +
+              1
+            ) %
+            cameras.length;
+
+      const nextCamera =
+        cameras[
+          nextIndex
+        ];
+
+      if (!nextCamera) {
+        return;
+      }
+
+      scanLockRef.current =
+        false;
+
+      setIsScanned(
+        false,
+      );
+
+      setSelectedCamera(
+        nextCamera.deviceId,
+      );
+
+      localStorage.setItem(
+        "library-scanner-camera",
+        nextCamera.deviceId,
+      );
+    };
+
+  /* =========================
+     VALIDATE ISBN-13
+  ========================= */
+
+  const isValidIsbn13 = (
+    value,
+  ) => {
+    if (
+      !/^\d{13}$/.test(
+        value,
+      )
+    ) {
+      return false;
     }
 
-    const nextIndex =
-      currentCameraIndex === -1
-        ? 0
-        : (currentCameraIndex + 1) % backCameras.length;
+    /*
+     * ISBN-13 книги:
+     * 978 або 979.
+     */
+    if (
+      !value.startsWith(
+        "978",
+      ) &&
+      !value.startsWith(
+        "979",
+      )
+    ) {
+      return false;
+    }
 
-    const nextCamera = backCameras[nextIndex];
+    /*
+     * Перевірка контрольної
+     * цифри ISBN-13.
+     */
+    let sum = 0;
 
-    setSelectedCamera(nextCamera.deviceId);
+    for (
+      let index = 0;
+      index < 12;
+      index += 1
+    ) {
+      const digit =
+        Number(
+          value[index],
+        );
 
-    localStorage.setItem(
-      "library-scanner-camera",
-      nextCamera.deviceId,
+      sum +=
+        index % 2 === 0
+          ? digit
+          : digit * 3;
+    }
+
+    const checkDigit =
+      (
+        10 -
+        (
+          sum % 10
+        )
+      ) %
+      10;
+
+    return (
+      checkDigit ===
+      Number(
+        value[12],
+      )
     );
   };
 
-  const { ref } = useZxing({
-    paused: !selectedCamera,
+  /* =========================
+     SCAN RESULT
+  ========================= */
 
-    deviceId: selectedCamera,
+  const handleScanResult =
+    (
+      value,
+    ) => {
+      if (
+        scanLockRef.current
+      ) {
+        return;
+      }
 
-    formats: ["ean_13"],
+      const cleanIsbn =
+        String(
+          value ?? "",
+        ).replace(
+          /\D/g,
+          "",
+        );
 
-    trySkew: true,
+      if (
+        !isValidIsbn13(
+          cleanIsbn,
+        )
+      ) {
+        return;
+      }
 
-    timeBetweenDecodingAttempts: 150,
+      /*
+       * ZXing може розпізнати
+       * один штрихкод багато
+       * разів поспіль.
+       *
+       * Тому блокуємо все
+       * після першого результату.
+       */
+      scanLockRef.current =
+        true;
 
-    onDecodeResult(result) {
-      const isbn = result.rawValue;
+      setIsScanned(
+        true,
+      );
 
-      if (isbn?.length === 13) {
+      if (
+        selectedCamera
+      ) {
         localStorage.setItem(
           "library-scanner-camera",
           selectedCamera,
         );
-
-        onScan(isbn);
       }
+
+      /*
+       * Це одразу передає ISBN
+       * у AddBookPage.
+       *
+       * Там handleScan:
+       * setIsbn()
+       * setScannerOpen(false)
+       * lookupBook()
+       */
+      onScan(
+        cleanIsbn,
+      );
+    };
+
+  /* =========================
+     ZXING
+  ========================= */
+
+  const {
+    ref,
+    torch,
+  } = useZxing({
+    paused:
+      !selectedCamera ||
+      isScanned,
+
+    deviceId:
+      selectedCamera ||
+      undefined,
+
+    formats: [
+      "ean_13",
+    ],
+
+    trySkew: true,
+
+    timeBetweenDecodingAttempts:
+      120,
+
+    constraints: {
+      audio: false,
+
+      video:
+        selectedCamera
+          ? {
+              deviceId: {
+                exact:
+                  selectedCamera,
+              },
+
+              width: {
+                ideal:
+                  1920,
+              },
+
+              height: {
+                ideal:
+                  1080,
+              },
+            }
+          : {
+              facingMode: {
+                ideal:
+                  "environment",
+              },
+
+              width: {
+                ideal:
+                  1920,
+              },
+
+              height: {
+                ideal:
+                  1080,
+              },
+            },
     },
 
-    onError(error) {
-      console.error("Помилка сканера:", error);
+    onDecodeResult: (
+      result,
+    ) => {
+      handleScanResult(
+        result.rawValue,
+      );
+    },
+
+    onError: (
+      error,
+    ) => {
+      console.error(
+        "Помилка камери сканера:",
+        error,
+      );
+
+      if (
+        error?.name ===
+        "NotAllowedError"
+      ) {
+        setCameraError(
+          "Немає дозволу на використання камери",
+        );
+
+        return;
+      }
+
+      setCameraError(
+        "Не вдалося запустити сканер",
+      );
     },
   });
 
+  /* =========================
+     CLOSE
+  ========================= */
+
+  const handleClose =
+    () => {
+      scanLockRef.current =
+        true;
+
+      onClose();
+    };
+
+  /* =========================
+     TORCH
+  ========================= */
+
+  const handleTorch =
+    async () => {
+      try {
+        if (
+          !torch
+            ?.isAvailable
+        ) {
+          return;
+        }
+
+        if (
+          torch.isOn
+        ) {
+          await torch.off();
+
+          return;
+        }
+
+        await torch.on();
+      } catch (error) {
+        console.error(
+          "Помилка ліхтарика:",
+          error,
+        );
+      }
+    };
+
+  /* =========================
+     JSX
+  ========================= */
+
   return (
-    <div className="scanner-overlay" onClick={onClose}>
+    <div
+      className="scanner-overlay"
+      onClick={
+        handleClose
+      }
+    >
       <div
         className="scanner-modal"
-        onClick={(event) => event.stopPropagation()}
+        onClick={(
+          event,
+        ) => {
+          event.stopPropagation();
+        }}
       >
         <button
           type="button"
           className="scanner-close"
-          onClick={onClose}
+          onClick={
+            handleClose
+          }
           aria-label="Закрити сканер"
         >
           ×
         </button>
 
-        <h2>Сканувати ISBN</h2>
+        <h2>
+          Сканувати ISBN
+        </h2>
 
-        <p>Наведіть камеру на штрихкод книги</p>
+        <p>
+          {isScanned
+            ? "ISBN розпізнано. Шукаємо книгу..."
+            : "Наведіть камеру на штрихкод книги"}
+        </p>
 
-        <div className="scanner-camera">
-          <video
-            ref={ref}
-            className="scanner-video"
-            muted
-            playsInline
-          />
+        {cameraError ? (
+          <div className="scanner-error">
+            {
+              cameraError
+            }
+          </div>
+        ) : (
+          <div className="scanner-camera">
+            <video
+              ref={ref}
+              className="scanner-video"
+              muted
+              playsInline
+              autoPlay
+            />
 
-          <div className="scanner-frame" />
+            <div
+              className={
+                isScanned
+                  ? "scanner-frame scanner-frame--success"
+                  : "scanner-frame"
+              }
+            />
 
-          {backCameras.length > 1 && (
-            <button
-              type="button"
-              className="scanner-switch-camera"
-              onClick={handleSwitchCamera}
-              aria-label="Змінити камеру"
-              title="Змінити камеру"
-            >
-              ↻
-            </button>
-          )}
-        </div>
+            {!isScanned &&
+              cameras.length >
+                1 && (
+                <button
+                  type="button"
+                  className="scanner-switch-camera"
+                  onClick={
+                    handleSwitchCamera
+                  }
+                  aria-label="Змінити камеру"
+                  title="Змінити камеру"
+                >
+                  ↻
+                </button>
+              )}
+
+            {!isScanned &&
+              torch
+                ?.isAvailable && (
+                <button
+                  type="button"
+                  className="scanner-torch"
+                  onClick={
+                    handleTorch
+                  }
+                  aria-label={
+                    torch.isOn
+                      ? "Вимкнути ліхтарик"
+                      : "Увімкнути ліхтарик"
+                  }
+                  title={
+                    torch.isOn
+                      ? "Вимкнути ліхтарик"
+                      : "Увімкнути ліхтарик"
+                  }
+                >
+                  {torch.isOn
+                    ? "☀"
+                    : "⚡"}
+                </button>
+              )}
+          </div>
+        )}
       </div>
     </div>
   );
-}
+};
 
 export default BarcodeScanner;
