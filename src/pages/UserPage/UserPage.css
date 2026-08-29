@@ -3706,3 +3706,170 @@
     font-size: 11px;
   }
 }
+
+/* =========================
+   ACHIEVEMENTS
+========================= */
+
+.profile-section--achievements
+  .profile-section__header
+  > div {
+  min-width: 0;
+}
+
+.profile-achievements__summary {
+  display: block;
+
+  margin-top: 3px;
+
+  color: var(--text);
+
+  font-size: 9px;
+}
+
+.profile-achievements {
+  display: grid;
+  grid-template-columns:
+    repeat(2, minmax(0, 1fr));
+
+  gap: 8px;
+}
+
+.profile-achievement {
+  position: relative;
+
+  min-width: 0;
+  min-height: 76px;
+
+  display: flex;
+  align-items: center;
+
+  gap: 9px;
+
+  padding: 10px;
+
+  box-sizing: border-box;
+
+  border: 1px solid var(--border);
+  border-radius: 12px;
+
+  background: var(--surface);
+  color: var(--text-h);
+
+  font-family: inherit;
+  text-align: left;
+
+  cursor: pointer;
+}
+
+.profile-achievement--unlocked {
+  border-color:
+    color-mix(
+      in srgb,
+      var(--accent) 45%,
+      var(--border)
+    );
+
+  background:
+    linear-gradient(
+      135deg,
+      color-mix(
+        in srgb,
+        var(--accent) 10%,
+        transparent
+      ),
+      transparent
+    ),
+    var(--surface);
+}
+
+.profile-achievement--locked {
+  opacity: 0.72;
+}
+
+.profile-achievement__medal {
+  width: 42px;
+  height: 42px;
+
+  flex-shrink: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 50%;
+
+  background: var(--accent-bg);
+
+  font-size: 21px;
+}
+
+.profile-achievement--locked
+  .profile-achievement__medal {
+  filter: grayscale(1);
+}
+
+.profile-achievement__content {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 4px;
+}
+
+.profile-achievement__content strong {
+  overflow: hidden;
+
+  color: var(--text-h);
+
+  font-size: 11px;
+  line-height: 1.15;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.profile-achievement__content small {
+  color: var(--accent);
+
+  font-size: 8px;
+  font-weight: 700;
+}
+
+.profile-achievement--locked
+  .profile-achievement__content
+  small {
+  color: var(--text);
+}
+
+.profile-achievement__lock {
+  position: absolute;
+
+  top: 7px;
+  right: 7px;
+
+  font-size: 8px;
+}
+
+@media (min-width: 600px) {
+  .profile-achievements {
+    grid-template-columns:
+      repeat(4, minmax(0, 1fr));
+
+    gap: 10px;
+  }
+
+  .profile-achievement {
+    min-height: 86px;
+
+    padding: 12px;
+  }
+
+  .profile-achievement__medal {
+    width: 46px;
+    height: 46px;
+
+    font-size: 23px;
+  }
+}

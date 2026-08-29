@@ -21,6 +21,7 @@ import ReadingCalendarPage from "./pages/ReadingCalendarPage/ReadingCalendarPage
 import UserPage from "./pages/UserPage/UserPage.jsx";
 import SettingsPage from "./pages/SettingsPage/SettingsPage.jsx";
 import StatsPage from "./pages/StatsPage/StatsPage.jsx";
+import AchievementsPage from "./pages/AchievementsPage/AchievementsPage.jsx";
 
 import RightSidebar from "./components/RightSidebar/RightSidebar.jsx";
 import ReadingModal from "./components/ReadingModal/ReadingModal.jsx";
@@ -77,6 +78,14 @@ const StatsIcon = () => (
     <path d="M10 19V5" />
     <path d="M16 19v-7" />
     <path d="M22 19V3" />
+  </svg>
+);
+
+const AchievementsIcon = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="12" cy="9" r="5" />
+    <path d="M8.5 13 7 22l5-3 5 3-1.5-9" />
+    <path d="m10 9 1.3 1.3L14 7.5" />
   </svg>
 );
 
@@ -490,6 +499,12 @@ const App = () => {
             <span>Статистика</span>
           </NavLink>
 
+          <NavLink to="/achievements" className="mobile-drawer__link">
+            <AchievementsIcon />
+
+            <span>Досягнення</span>
+          </NavLink>
+
           <NavLink
             to={accountPath}
             className={`mobile-drawer__link ${
@@ -602,6 +617,12 @@ const App = () => {
             <span>Статистика</span>
           </NavLink>
 
+          <NavLink to="/achievements" className="desktop-nav__link">
+            <AchievementsIcon />
+
+            <span>Досягнення</span>
+          </NavLink>
+
           <NavLink
             to={accountPath}
             className={`desktop-nav__link ${
@@ -673,6 +694,8 @@ const App = () => {
               <Route path="/calendar" element={<ReadingCalendarPage />} />
 
               <Route path="/stats" element={<StatsPage />} />
+
+              <Route path="/achievements" element={<AchievementsPage />} />
 
               <Route path="/register" element={<RegisterPage />} />
 

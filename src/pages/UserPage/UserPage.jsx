@@ -507,6 +507,18 @@ const UserPage = () => {
     hours: "",
   });
 
+  const [achievements, setAchievements] = useState([]);
+
+  const [achievementsSummary, setAchievementsSummary] = useState({
+    total: 0,
+    unlocked: 0,
+    locked: 0,
+  });
+
+  const [isAchievementsLoading, setIsAchievementsLoading] = useState(true);
+
+  const [achievementsError, setAchievementsError] = useState("");
+
   /* =========================
      CURRENT
   ========================= */
@@ -826,6 +838,58 @@ const UserPage = () => {
   }, [currentYear]);
 
   /* =========================
+     ACHIEVEMENTS
+  ========================= */
+
+  useEffect(() => {
+    const loadAchievements = async () => {
+      const token = localStorage.getItem("token");
+
+      if (!token) {
+        setIsAchievementsLoading(false);
+
+        return;
+      }
+
+      try {
+        setIsAchievementsLoading(true);
+
+        setAchievementsError("");
+
+        const response = await fetch(`${API_URL}/api/user-books/achievements`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          throw new Error(data.message || "Не вдалося завантажити досягнення");
+        }
+
+        const items = Array.isArray(data.achievements) ? data.achievements : [];
+
+        setAchievements(items);
+
+        setAchievementsSummary({
+          total: Number(data.summary?.total) || 0,
+          unlocked: Number(data.summary?.unlocked) || 0,
+          locked: Number(data.summary?.locked) || 0,
+        });
+      } catch (error) {
+        console.error("Load achievements error:", error);
+
+        setAchievementsError("Не вдалося завантажити досягнення");
+      } finally {
+        setIsAchievementsLoading(false);
+      }
+    };
+
+    loadAchievements();
+  }, [readingBookId]);
+
+  /* =========================
      REMOVE WISHLIST
   ========================= */
 
@@ -1056,6 +1120,16 @@ const UserPage = () => {
       ? Math.round((goal.minutes / 60) * 10) / 10
       : null;
 
+  const profileAchievements = [...achievements]
+    .sort((a, b) => {
+      if (a.unlocked !== b.unlocked) {
+        return a.unlocked ? -1 : 1;
+      }
+
+      return (Number(b.percent) || 0) - (Number(a.percent) || 0);
+    })
+    .slice(0, 4);
+
   return (
     <main className="user-page">
       <div className="user-profile">
@@ -1187,6 +1261,74 @@ const UserPage = () => {
                   <span>годин</span>
                 </div>
               </div>
+            </div>
+          )}
+        </section>
+
+        {/* ACHIEVEMENTS */}
+
+        <section className="profile-section profile-section--achievements">
+          <div className="profile-section__header">
+            <div>
+              <h2>Досягнення</h2>
+
+              {!isAchievementsLoading &&
+                !achievementsError &&
+                achievementsSummary.total > 0 && (
+                  <span className="profile-achievements__summary">
+                    {achievementsSummary.unlocked} із{" "}
+                    {achievementsSummary.total}
+                  </span>
+                )}
+            </div>
+
+            <button type="button" onClick={() => navigate("/achievements")}>
+              Усі
+              <ArrowIcon />
+            </button>
+          </div>
+
+          {isAchievementsLoading ? (
+            <div className="profile-empty">Завантаження досягнень...</div>
+          ) : achievementsError ? (
+            <div className="profile-empty">{achievementsError}</div>
+          ) : profileAchievements.length === 0 ? (
+            <div className="profile-empty">Досягнень поки немає</div>
+          ) : (
+            <div className="profile-achievements">
+              {profileAchievements.map((achievement) => (
+                <button
+                  key={achievement.id}
+                  type="button"
+                  className={
+                    achievement.unlocked
+                      ? "profile-achievement profile-achievement--unlocked"
+                      : "profile-achievement profile-achievement--locked"
+                  }
+                  onClick={() => navigate("/achievements")}
+                >
+                  <span className="profile-achievement__medal">
+                    {achievement.category === "books" && "📚"}
+                    {achievement.category === "pages" && "📜"}
+                    {achievement.category === "time" && "⏱️"}
+                    {achievement.category === "streak" && "🔥"}
+                  </span>
+
+                  <span className="profile-achievement__content">
+                    <strong>{achievement.title}</strong>
+
+                    <small>
+                      {achievement.unlocked
+                        ? "Отримано"
+                        : `${achievement.percent}%`}
+                    </small>
+                  </span>
+
+                  {!achievement.unlocked && (
+                    <span className="profile-achievement__lock">🔒</span>
+                  )}
+                </button>
+              ))}
             </div>
           )}
         </section>
