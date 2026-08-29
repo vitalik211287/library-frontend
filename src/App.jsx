@@ -315,6 +315,17 @@ const App = () => {
           <span>Календар</span>
         </NavLink>
 
+        <NavLink to="/stats" className="mobile-nav__link">
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M4 19V9" />
+            <path d="M10 19V5" />
+            <path d="M16 19v-7" />
+            <path d="M22 19V3" />
+          </svg>
+
+          <span>Статистика</span>
+        </NavLink>
+
         <NavLink
           to={accountPath}
           className={`mobile-nav__link ${

@@ -18,10 +18,10 @@
   width: 100%;
   min-width: 0;
 
-  padding-bottom:
+  padding-top:
     calc(
-      68px +
-      env(safe-area-inset-bottom)
+      64px +
+      env(safe-area-inset-top)
     );
 
   box-sizing: border-box;
@@ -47,41 +47,46 @@
 }
 
 /* =========================
-   MOBILE BOTTOM NAV
+   MOBILE TOP NAV
 ========================= */
 
 .mobile-nav {
   position: fixed;
 
+  top: 0;
   right: 0;
-  bottom: 0;
   left: 0;
 
   z-index: 2000;
 
   width: 100%;
-  min-height: 64px;
+  min-height:
+    calc(
+      64px +
+      env(safe-area-inset-top)
+    );
 
   display: grid;
+
   grid-template-columns:
     repeat(
-      4,
+      5,
       minmax(0, 1fr)
     );
 
-  padding-bottom:
-    env(safe-area-inset-bottom);
+  padding-top:
+    env(safe-area-inset-top);
 
   box-sizing: border-box;
 
-  border-top:
+  border-bottom:
     1px solid
     var(--border);
 
   background: var(--surface);
 
   box-shadow:
-    0 -8px 24px
+    0 8px 24px
     rgba(0, 0, 0, 0.08);
 }
 
@@ -102,7 +107,7 @@
 
   gap: 5px;
 
-  padding: 7px 4px;
+  padding: 7px 2px;
 
   box-sizing: border-box;
 
@@ -116,8 +121,8 @@
 }
 
 .mobile-nav__link svg {
-  width: 22px;
-  height: 22px;
+  width: 21px;
+  height: 21px;
 
   flex-shrink: 0;
 
@@ -130,12 +135,14 @@
 }
 
 .mobile-nav__link span {
-  max-width: 100%;
+  width: 100%;
 
   overflow: hidden;
 
-  font-size: 9px;
+  font-size: 8px;
   line-height: 1;
+
+  text-align: center;
 
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -147,26 +154,26 @@
 
 .mobile-nav__link.active {
   color: var(--accent);
+
+  background:
+    var(--accent-bg);
 }
 
-.mobile-nav__link.active::before {
+.mobile-nav__link.active::after {
   content: "";
 
   position: absolute;
 
-  top: 0;
-  left: 50%;
+  right: 14px;
+  bottom: 0;
+  left: 14px;
 
-  width: 30px;
   height: 3px;
 
   border-radius:
-    0 0 999px 999px;
+    999px 999px 0 0;
 
   background: var(--accent);
-
-  transform:
-    translateX(-50%);
 }
 
 /* =========================
@@ -192,12 +199,38 @@
 }
 
 /* =========================
+   VERY SMALL MOBILE
+========================= */
+
+@media (max-width: 370px) {
+  .mobile-nav__link {
+    gap: 4px;
+
+    padding-right: 1px;
+    padding-left: 1px;
+  }
+
+  .mobile-nav__link svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .mobile-nav__link span {
+    font-size: 7px;
+  }
+}
+
+/* =========================
    TABLET
 ========================= */
 
 @media (min-width: 600px) {
   .mobile-nav {
-    min-height: 70px;
+    min-height:
+      calc(
+        70px +
+        env(safe-area-inset-top)
+      );
   }
 
   .mobile-nav__link {
@@ -216,12 +249,10 @@
   }
 
   .app-content {
-    padding-bottom:
+    padding-top:
       calc(
-        74px +
-        env(
-          safe-area-inset-bottom
-        )
+        70px +
+        env(safe-area-inset-top)
       );
   }
 }
@@ -430,7 +461,8 @@
     min-height: 100dvh;
 
     margin-left: 220px;
-    padding-bottom: 0;
+
+    padding-top: 0;
 
     box-sizing: border-box;
   }
@@ -479,6 +511,7 @@
     top: 20px;
 
     width: 360px;
+
     max-height:
       calc(
         100dvh - 40px

@@ -1,8 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import "./StatsPage.css";
 
-const API_URL =
-  "https://library-backend-production-5d60.up.railway.app";
+const API_URL = "https://library-backend-production-5d60.up.railway.app";
 
 const MONTH_NAMES = [
   "Січ",
@@ -72,19 +71,14 @@ const StatsPage = () => {
         const data = await response.json();
 
         if (!response.ok) {
-          throw new Error(
-            data.message || "Не вдалося завантажити статистику",
-          );
+          throw new Error(data.message || "Не вдалося завантажити статистику");
         }
 
         setStats(data.stats);
       } catch (error) {
         console.error("Get stats error:", error);
 
-        setError(
-          error.message ||
-            "Не вдалося завантажити статистику",
-        );
+        setError(error.message || "Не вдалося завантажити статистику");
       } finally {
         setIsLoading(false);
       }
@@ -98,10 +92,7 @@ const StatsPage = () => {
       return 1;
     }
 
-    return Math.max(
-      ...stats.months.map((month) => month.pages || 0),
-      1,
-    );
+    return Math.max(...stats.months.map((month) => month.pages || 0), 1);
   }, [stats]);
 
   const maxGenreBooks = useMemo(() => {
@@ -109,18 +100,13 @@ const StatsPage = () => {
       return 1;
     }
 
-    return Math.max(
-      ...stats.genres.map((genre) => genre.books || 0),
-      1,
-    );
+    return Math.max(...stats.genres.map((genre) => genre.books || 0), 1);
   }, [stats]);
 
   if (isLoading) {
     return (
       <main className="stats-page">
-        <div className="stats-state">
-          Завантажуємо статистику...
-        </div>
+        <div className="stats-state">Завантажуємо статистику...</div>
       </main>
     );
   }
@@ -128,9 +114,7 @@ const StatsPage = () => {
   if (error) {
     return (
       <main className="stats-page">
-        <div className="stats-state stats-state--error">
-          {error}
-        </div>
+        <div className="stats-state stats-state--error">{error}</div>
       </main>
     );
   }
@@ -139,62 +123,47 @@ const StatsPage = () => {
     return null;
   }
 
-  const {
-    summary,
-    streak,
-    genres = [],
-    authors = [],
-    months = [],
-  } = stats;
+  const { summary, streak, genres = [], authors = [], months = [] } = stats;
 
   return (
     <main className="stats-page">
       <section className="stats-header">
-        <div>
-          <p className="stats-eyebrow">
-            Аналітика читання
-          </p>
+        <div className="stats-header__top">
+          <div>
+            <p className="stats-eyebrow">Аналітика читання</p>
 
-          <h1>Статистика</h1>
+            <h1>Статистика</h1>
+          </div>
 
-          <p className="stats-header__description">
-            Твоя активність, прочитані книги та прогрес за
-            обраний рік.
-          </p>
+          <label className="stats-year">
+            <span>Рік</span>
+
+            <select
+              value={year}
+              onChange={(event) => setYear(Number(event.target.value))}
+            >
+              {Array.from({ length: 6 }, (_, index) => {
+                const optionYear = currentYear - index;
+
+                return (
+                  <option key={optionYear} value={optionYear}>
+                    {optionYear}
+                  </option>
+                );
+              })}
+            </select>
+          </label>
         </div>
 
-        <label className="stats-year">
-          <span>Рік</span>
-
-          <select
-            value={year}
-            onChange={(event) =>
-              setYear(Number(event.target.value))
-            }
-          >
-            {Array.from({ length: 6 }, (_, index) => {
-              const optionYear = currentYear - index;
-
-              return (
-                <option
-                  key={optionYear}
-                  value={optionYear}
-                >
-                  {optionYear}
-                </option>
-              );
-            })}
-          </select>
-        </label>
+        <p className="stats-header__description">
+          Твоя активність, прочитані книги та прогрес за обраний рік.
+        </p>
       </section>
 
       <section className="stats-summary">
         <article className="stats-summary-card">
           <div className="stats-summary-card__icon">
-            <svg
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11a2 2 0 0 1 2 2v16a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 21.5v-16Z" />
               <path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v18a2 2 0 0 1 2-2h2.5a2.5 2.5 0 0 1 2.5 2.5v-16Z" />
             </svg>
@@ -208,10 +177,7 @@ const StatsPage = () => {
 
         <article className="stats-summary-card">
           <div className="stats-summary-card__icon">
-            <svg
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M6 3h12a2 2 0 0 1 2 2v16l-8-4-8 4V5a2 2 0 0 1 2-2Z" />
             </svg>
           </div>
@@ -224,39 +190,27 @@ const StatsPage = () => {
 
         <article className="stats-summary-card">
           <div className="stats-summary-card__icon">
-            <svg
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
               <circle cx="12" cy="12" r="9" />
               <path d="M12 7v5l3 2" />
             </svg>
           </div>
 
           <div>
-            <strong>
-              {formatReadingTime(
-                summary.readingSeconds,
-              )}
-            </strong>
+            <strong>{formatReadingTime(summary.readingSeconds)}</strong>
             <span>час читання</span>
           </div>
         </article>
 
         <article className="stats-summary-card">
           <div className="stats-summary-card__icon">
-            <svg
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="m12 3 2.8 5.67 6.2.9-4.5 4.39 1.06 6.18L12 17.22l-5.56 2.92 1.06-6.18L3 9.57l6.2-.9L12 3Z" />
             </svg>
           </div>
 
           <div>
-            <strong>
-              {summary.averageRating || "—"}
-            </strong>
+            <strong>{summary.averageRating || "—"}</strong>
             <span>середній рейтинг</span>
           </div>
         </article>
@@ -276,20 +230,11 @@ const StatsPage = () => {
               const height =
                 month.pages === 0
                   ? 3
-                  : Math.max(
-                      (month.pages / maxMonthPages) *
-                        100,
-                      8,
-                    );
+                  : Math.max((month.pages / maxMonthPages) * 100, 8);
 
               return (
-                <div
-                  className="stats-month"
-                  key={month.month}
-                >
-                  <div className="stats-month__value">
-                    {month.pages || ""}
-                  </div>
+                <div className="stats-month" key={month.month}>
+                  <div className="stats-month__value">{month.pages || ""}</div>
 
                   <div className="stats-month__bar-track">
                     <div
@@ -301,11 +246,7 @@ const StatsPage = () => {
                     />
                   </div>
 
-                  <span>
-                    {MONTH_NAMES[
-                      month.month - 1
-                    ]}
-                  </span>
+                  <span>{MONTH_NAMES[month.month - 1]}</span>
                 </div>
               );
             })}
@@ -322,10 +263,7 @@ const StatsPage = () => {
 
           <div className="streak-main">
             <div className="streak-main__icon">
-              <svg
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
+              <svg viewBox="0 0 24 24" aria-hidden="true">
                 <path d="M13 2s1 4-2 7c-2 2-4 4-4 7a5 5 0 0 0 10 0c0-2-1-4-2-5 0 3-2 4-3 4 1-3-1-5-1-5" />
               </svg>
             </div>
@@ -339,18 +277,12 @@ const StatsPage = () => {
           <div className="streak-details">
             <div>
               <span>Найдовша серія</span>
-              <strong>
-                {streak.longest} дн.
-              </strong>
+              <strong>{streak.longest} дн.</strong>
             </div>
 
             <div>
               <span>Сьогодні</span>
-              <strong>
-                {streak.readToday
-                  ? "Прочитано"
-                  : "Ще ні"}
-              </strong>
+              <strong>{streak.readToday ? "Прочитано" : "Ще ні"}</strong>
             </div>
           </div>
         </article>
@@ -364,30 +296,19 @@ const StatsPage = () => {
           </div>
 
           {genres.length === 0 ? (
-            <div className="stats-empty">
-              Поки немає даних
-            </div>
+            <div className="stats-empty">Поки немає даних</div>
           ) : (
             <div className="genre-list">
               {genres.map((genre) => {
-                const width =
-                  (genre.books /
-                    maxGenreBooks) *
-                  100;
+                const width = (genre.books / maxGenreBooks) * 100;
 
                 return (
-                  <div
-                    className="genre-item"
-                    key={genre.name}
-                  >
+                  <div className="genre-item" key={genre.name}>
                     <div className="genre-item__top">
-                      <strong>
-                        {genre.name}
-                      </strong>
+                      <strong>{genre.name}</strong>
 
                       <span>
-                        {genre.books} ·{" "}
-                        {genre.percent}%
+                        {genre.books} · {genre.percent}%
                       </span>
                     </div>
 
@@ -415,27 +336,17 @@ const StatsPage = () => {
           </div>
 
           {authors.length === 0 ? (
-            <div className="stats-empty">
-              Поки немає даних
-            </div>
+            <div className="stats-empty">Поки немає даних</div>
           ) : (
             <div className="authors-list">
               {authors.map((author, index) => (
-                <div
-                  className="author-item"
-                  key={author.name}
-                >
-                  <span className="author-item__position">
-                    {index + 1}
-                  </span>
+                <div className="author-item" key={author.name}>
+                  <span className="author-item__position">{index + 1}</span>
 
                   <div className="author-item__content">
                     <strong>{author.name}</strong>
                     <span>
-                      {author.books}{" "}
-                      {author.books === 1
-                        ? "книга"
-                        : "книги"}
+                      {author.books} {author.books === 1 ? "книга" : "книги"}
                     </span>
                   </div>
                 </div>
@@ -453,11 +364,7 @@ const StatsPage = () => {
 
         <article>
           <span>Середня сесія</span>
-          <strong>
-            {formatReadingTime(
-              summary.averageSessionSeconds,
-            )}
-          </strong>
+          <strong>{formatReadingTime(summary.averageSessionSeconds)}</strong>
         </article>
 
         <article>
