@@ -55,13 +55,11 @@
   align-items: center;
   gap: 7px;
 
-  padding: 6px 8px;
+  padding: 0;
 
-  background: var(--card-bg, rgba(255, 255, 255, 0.05));
-
-  border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
-
-  border-radius: 12px;
+  background: transparent;
+  border: none;
+  border-radius: 0;
 }
 
 .stats-year span {
