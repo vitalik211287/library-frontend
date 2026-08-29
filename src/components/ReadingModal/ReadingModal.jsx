@@ -679,12 +679,12 @@ function ReadingModal({ book, apiUrl, onClose }) {
                     Орієнтовний час
                   </span>
 
-                  {stats.estimatedRemainingSeconds !== null &&
-                    stats.estimatedRemainingSeconds !== undefined && (
-                      <span className="reading-modal__stats-value">
-                        {formatDuration(stats.estimatedRemainingSeconds)}
-                      </span>
-                    )}
+                  <span className="reading-modal__stats-value">
+                    {stats.estimatedRemainingSeconds !== null &&
+                    stats.estimatedRemainingSeconds !== undefined
+                      ? formatDuration(stats.estimatedRemainingSeconds)
+                      : "—"}
+                  </span>
                 </div>
 
                 <button
@@ -712,6 +712,61 @@ function ReadingModal({ book, apiUrl, onClose }) {
                     </span>
                   </span>
                 </button>
+
+                <div
+                  className={`reading-modal__stats-item reading-modal__stats-item--current-session ${
+                    activeSession
+                      ? "reading-modal__stats-item--current-session-active"
+                      : ""
+                  }`}
+                >
+                  <span className="reading-modal__stats-label">
+                    Поточна сесія
+                  </span>
+
+                  <span className="reading-modal__stats-session-row">
+                    <span className="reading-modal__stats-value reading-modal__stats-value--timer">
+                      {activeSession ? formatTime(elapsedSeconds) : "00:00:00"}
+                    </span>
+
+                    <span className="reading-modal__stats-session-icon">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="12" cy="13" r="8" />
+
+                        <path d="M12 9v4l2.5 1.5" />
+                        <path d="M9 2h6" />
+                        <path d="M12 2v3" />
+                      </svg>
+                    </span>
+                  </span>
+                </div>
+
+                <div className="reading-modal__stats-item reading-modal__stats-item--longest-session">
+                  <span className="reading-modal__stats-label">
+                    Найдовша сесія
+                  </span>
+
+                  <span className="reading-modal__stats-session-row">
+                    <span className="reading-modal__stats-value reading-modal__stats-value--timer">
+                      {formatTime(
+                        Math.max(
+                          stats.longestSessionSeconds ?? 0,
+                          activeSession ? elapsedSeconds : 0,
+                        ),
+                      )}
+                    </span>
+
+                    <span className="reading-modal__stats-session-icon">
+                      <svg viewBox="0 0 24 24" aria-hidden="true">
+                        <circle cx="12" cy="9" r="5" />
+
+                        <path d="m9 14-1 7 4-2 4 2-1-7" />
+
+                        <path d="m12 6 .9 1.8 2 .3-1.45 1.4.35 2-1.8-.95-1.8.95.35-2L9.1 8.1l2-.3L12 6Z" />
+                      </svg>
+                    </span>
+                  </span>
+                </div>
               </div>
             </section>
           )}
