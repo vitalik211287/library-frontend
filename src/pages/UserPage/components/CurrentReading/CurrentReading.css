@@ -1,0 +1,532 @@
+/* =========================
+   MAIN CURRENT BOOK
+========================= */
+
+.current-book {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: 96px minmax(0, 1fr);
+  gap: 12px;
+
+  padding: 11px;
+
+  box-sizing: border-box;
+
+  border: 1px solid var(--border);
+  border-radius: 14px;
+
+  background: var(--surface);
+}
+
+.current-book__cover {
+  width: 96px;
+  height: 144px;
+
+  overflow: hidden;
+
+  border-radius: 8px;
+
+  background: var(--surface-secondary);
+}
+
+.current-book__cover img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+.current-book__content {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.current-book__content h3 {
+  margin: 1px 0 4px;
+
+  overflow: hidden;
+
+  color: var(--text-h);
+
+  font-size: 15px;
+  line-height: 1.2;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.current-book__author {
+  margin: 0 0 10px;
+
+  overflow: hidden;
+
+  color: var(--text);
+
+  font-size: 10px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.current-book__progress {
+  width: 100%;
+  height: 5px;
+
+  margin-top: auto;
+  margin-bottom: 6px;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background: var(--surface-secondary);
+}
+
+.current-book__progress > span {
+  display: block;
+
+  height: 100%;
+
+  border-radius: inherit;
+
+  background: var(--accent);
+}
+
+.current-book__progress-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+
+  margin-bottom: 9px;
+
+  color: var(--text);
+
+  font-size: 8px;
+}
+
+.current-book__progress-info strong {
+  flex-shrink: 0;
+
+  color: var(--text-h);
+
+  font-size: 8px;
+}
+
+.current-book__button {
+  width: 100%;
+
+  padding: 9px 8px;
+
+  border: none;
+  border-radius: 8px;
+
+  background: var(--accent);
+  color: #ffffff;
+
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+/* =========================
+   CURRENT BOOKS TOGGLE
+========================= */
+
+.current-books-toggle {
+  display: flex;
+  align-items: center;
+  gap: 3px;
+
+  color: var(--accent);
+}
+
+.current-books-toggle__icon {
+  width: 15px;
+  height: 15px;
+
+  flex-shrink: 0;
+
+  fill: none;
+  stroke: currentColor;
+
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  transition: transform 0.2s ease;
+}
+
+.current-books-toggle__icon--open {
+  transform: rotate(180deg);
+}
+
+/* =========================
+   CURRENT BOOKS DROPDOWN
+========================= */
+
+.current-books-dropdown {
+  width: 100%;
+
+  display: grid;
+  grid-template-rows: 0fr;
+
+  margin-top: 0;
+
+  overflow: hidden;
+
+  opacity: 0;
+
+  transition:
+    grid-template-rows 0.25s ease,
+    opacity 0.2s ease,
+    margin-top 0.25s ease;
+}
+
+.current-books-dropdown--open {
+  grid-template-rows: 1fr;
+
+  margin-top: 9px;
+
+  opacity: 1;
+}
+
+.current-books-dropdown__inner {
+  min-height: 0;
+  min-width: 0;
+
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.current-books-dropdown__book {
+  width: 100%;
+  min-width: 0;
+
+  display: grid;
+  grid-template-columns: 58px minmax(0, 1fr);
+  align-items: stretch;
+  gap: 10px;
+
+  padding: 8px;
+
+  box-sizing: border-box;
+  overflow: hidden;
+
+  border: 1px solid var(--border);
+  border-radius: 11px;
+
+  background: var(--surface);
+}
+
+.current-books-dropdown__cover {
+  width: 58px;
+  height: 87px;
+
+  min-width: 58px;
+  max-width: 58px;
+
+  overflow: hidden;
+
+  border-radius: 6px;
+
+  background: var(--surface-secondary);
+}
+
+.current-books-dropdown__cover img {
+  width: 58px !important;
+  height: 87px !important;
+
+  max-width: 58px !important;
+  max-height: 87px !important;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+.current-books-dropdown__content {
+  min-width: 0;
+  width: 100%;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.current-books-dropdown__content h3 {
+  width: 100%;
+
+  margin: 1px 0 3px;
+
+  overflow: hidden;
+
+  color: var(--text-h);
+
+  font-size: 12px;
+  line-height: 1.2;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.current-books-dropdown__content > p {
+  width: 100%;
+
+  margin: 0;
+
+  overflow: hidden;
+
+  color: var(--text);
+
+  font-size: 9px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.current-books-dropdown__progress-row {
+  width: 100%;
+
+  display: flex;
+  align-items: center;
+  gap: 6px;
+
+  margin-top: auto;
+}
+
+.current-books-dropdown__progress {
+  min-width: 0;
+  height: 4px;
+
+  flex: 1;
+
+  overflow: hidden;
+
+  border-radius: 999px;
+
+  background: var(--surface-secondary);
+}
+
+.current-books-dropdown__progress > span {
+  display: block;
+
+  height: 100%;
+
+  border-radius: inherit;
+
+  background: var(--accent);
+}
+
+.current-books-dropdown__progress-row strong {
+  flex-shrink: 0;
+
+  color: var(--text-h);
+
+  font-size: 8px;
+}
+
+.current-books-dropdown__page {
+  display: block;
+
+  margin-top: 4px;
+
+  color: var(--text);
+
+  font-size: 8px;
+}
+
+.current-books-dropdown__button {
+  width: max-content;
+
+  margin-top: 5px;
+  padding: 5px 8px;
+
+  border: 1px solid var(--accent);
+  border-radius: 6px;
+
+  background: transparent;
+  color: var(--accent);
+
+  font-family: inherit;
+  font-size: 8px;
+  font-weight: 600;
+
+  cursor: pointer;
+}
+
+
+/* =========================
+   SHARED CURRENT HELPERS
+========================= */
+
+.current-book .book-no-cover,
+.current-books-dropdown .book-no-cover {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 5px;
+
+  box-sizing: border-box;
+
+  color: var(--text);
+
+  font-size: 7px;
+  text-align: center;
+}
+
+@media (max-width: 390px) {
+  .current-book {
+    grid-template-columns: 86px minmax(0, 1fr);
+    gap: 9px;
+
+    padding: 9px;
+  }
+
+  .current-book__cover {
+    width: 86px;
+    height: 129px;
+  }
+
+  .current-book__content h3 {
+    font-size: 13px;
+  }
+
+  .current-book__author {
+    font-size: 8px;
+  }
+
+  .current-book__button {
+    padding: 8px 5px;
+
+    font-size: 8px;
+  }
+
+  .current-books-dropdown__book {
+    grid-template-columns: 52px minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .current-books-dropdown__cover,
+  .current-books-dropdown__cover img {
+    width: 52px !important;
+    min-width: 52px;
+    max-width: 52px !important;
+
+    height: 78px !important;
+    max-height: 78px !important;
+  }
+}
+
+@media (min-width: 600px) {
+  .current-book {
+    grid-template-columns: 125px minmax(0, 1fr);
+    gap: 18px;
+
+    padding: 16px;
+  }
+
+  .current-book__cover {
+    width: 125px;
+    height: 187px;
+  }
+
+  .current-book__content h3 {
+    font-size: 17px;
+  }
+
+  .current-book__author {
+    font-size: 12px;
+  }
+
+  .current-book__button {
+    font-size: 11px;
+  }
+
+  .current-books-dropdown__book {
+    grid-template-columns: 72px minmax(0, 1fr);
+    gap: 13px;
+
+    padding: 10px;
+  }
+
+  .current-books-dropdown__cover,
+  .current-books-dropdown__cover img {
+    width: 72px !important;
+    min-width: 72px;
+    max-width: 72px !important;
+
+    height: 108px !important;
+    max-height: 108px !important;
+  }
+
+  .current-books-dropdown__content h3 {
+    font-size: 14px;
+  }
+
+  .current-books-dropdown__content > p {
+    font-size: 11px;
+  }
+
+  .current-books-dropdown__page,
+  .current-books-dropdown__progress-row strong {
+    font-size: 9px;
+  }
+
+  .current-books-dropdown__button {
+    font-size: 9px;
+  }
+}
+
+@media (min-width: 1100px) {
+  .current-book {
+    grid-template-columns: 145px minmax(0, 1fr);
+    gap: 22px;
+
+    padding: 18px;
+  }
+
+  .current-book__cover {
+    width: 145px;
+    height: 217px;
+  }
+
+  .current-book__content h3 {
+    font-size: 20px;
+  }
+
+  .current-book__author {
+    font-size: 13px;
+  }
+
+  .current-book__progress-info {
+    font-size: 12px;
+  }
+
+  .current-book__button {
+    width: max-content;
+    min-width: 180px;
+
+    padding: 10px 18px;
+
+    font-size: 13px;
+  }
+
+  .current-books-toggle,
+  .current-books-dropdown {
+    display: none;
+  }
+}

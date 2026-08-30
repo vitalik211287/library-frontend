@@ -1,0 +1,631 @@
+/* =========================
+   READING ACTIVITY
+========================= */
+
+.profile-section--activity {
+  width: 100%;
+  margin-bottom: 28px;
+}
+
+.reading-chart-card {
+  width: 100%;
+
+  padding: 18px 14px 16px;
+
+  box-sizing: border-box;
+  overflow: hidden;
+
+  border: 1px solid var(--border);
+  border-radius: 18px;
+
+  background: var(--surface);
+}
+
+/* =========================
+   CHART HEADER
+========================= */
+
+.reading-chart-card__header {
+  width: 100%;
+
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+
+  margin-bottom: 18px;
+}
+
+.reading-chart-card__header > div {
+  min-width: 0;
+}
+
+.reading-chart-card__header h2 {
+  margin: 0;
+
+  color: var(--text-h);
+
+  font-size: 20px;
+  line-height: 1.2;
+}
+
+.reading-chart-card__header p {
+  margin: 6px 0 0;
+
+  color: var(--text);
+
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.reading-chart-card__header p span {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.reading-chart-card__details {
+  width: auto !important;
+  height: auto !important;
+
+  display: inline-flex !important;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+
+  flex: 0 0 auto;
+
+  margin: 0 !important;
+  padding: 3px 0 !important;
+
+  border: 0 !important;
+  border-radius: 0 !important;
+
+  background: transparent !important;
+  color: var(--accent) !important;
+
+  box-shadow: none !important;
+
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1.2;
+
+  cursor: pointer;
+}
+
+.reading-chart-card__details:hover {
+  background: transparent !important;
+}
+
+.reading-chart-card__details svg {
+  width: 15px !important;
+  height: 15px !important;
+
+  display: block;
+
+  flex: 0 0 15px;
+
+  margin: 0 !important;
+
+  fill: none !important;
+  stroke: currentColor !important;
+
+  stroke-width: 2 !important;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* =========================
+   CURRENT WEEK
+========================= */
+
+.reading-week {
+  margin-bottom: 22px;
+}
+
+.reading-week__title {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+
+  margin-bottom: 14px;
+
+  color: var(--text-h);
+
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.reading-week__title svg {
+  width: 17px;
+  height: 17px;
+
+  fill: none;
+  stroke: var(--accent);
+
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.reading-week__stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+.reading-week__stat {
+  min-width: 0;
+
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.reading-week__stat:not(:last-child) {
+  padding-right: 8px;
+  border-right: 1px solid var(--border);
+}
+
+.reading-week__icon {
+  width: 34px;
+  height: 34px;
+
+  flex: 0 0 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 10px;
+
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.reading-week__icon svg {
+  width: 20px;
+  height: 20px;
+
+  fill: none;
+  stroke: currentColor;
+
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.reading-week__content {
+  min-width: 0;
+}
+
+.reading-week__content strong {
+  display: block;
+  overflow: hidden;
+
+  color: var(--text-h);
+
+  font-size: 14px;
+  line-height: 1.1;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reading-week__content span {
+  display: block;
+
+  margin-top: 4px;
+
+  overflow: hidden;
+
+  color: var(--text);
+
+  font-size: 8px;
+  line-height: 1.15;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* =========================
+   GRAPH
+========================= */
+
+.reading-chart {
+  width: 100%;
+  min-width: 0;
+}
+
+.reading-chart__body {
+  width: 100%;
+
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  gap: 8px;
+
+  align-items: stretch;
+}
+
+/* =========================
+   Y SCALE
+========================= */
+
+.reading-chart__scale {
+  height: 240px;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  padding: 28px 0 0;
+
+  box-sizing: border-box;
+
+  color: var(--text);
+
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 1;
+
+  text-align: right;
+}
+
+.reading-chart__scale span {
+  display: block;
+  white-space: nowrap;
+}
+
+/* =========================
+   PLOT
+========================= */
+
+.reading-chart__plot {
+  position: relative;
+
+  width: 100%;
+  height: 240px;
+
+  min-width: 0;
+}
+
+.reading-chart__svg {
+  width: 100% !important;
+  height: 240px !important;
+
+  display: block;
+  overflow: visible;
+}
+
+.reading-chart__svg line,
+.reading-chart__svg path,
+.reading-chart__svg polyline {
+  vector-effect: non-scaling-stroke;
+}
+
+/* =========================
+   GRID
+========================= */
+
+.reading-chart__grid-line {
+  stroke: var(--border);
+
+  stroke-width: 1;
+  stroke-dasharray: 5 7;
+
+  opacity: 0.65;
+}
+
+.reading-chart__horizontal-line {
+  stroke: var(--border);
+
+  stroke-width: 1;
+
+  opacity: 0.35;
+}
+
+/* =========================
+   LINE
+========================= */
+
+.reading-chart__line {
+  stroke-width: 3 !important;
+
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* =========================
+   ROUND DOTS
+========================= */
+
+.reading-chart__html-dot {
+  position: absolute;
+  z-index: 4;
+
+  width: 10px;
+  height: 10px;
+
+  box-sizing: border-box;
+
+  transform: translate(-50%, -50%);
+
+  border: 3px solid var(--accent);
+  border-radius: 50%;
+
+  background: var(--surface);
+
+  pointer-events: none;
+}
+
+.reading-chart__html-dot--peak {
+  width: 14px;
+  height: 14px;
+
+  border-color: var(--surface);
+
+  background: var(--accent);
+
+  box-shadow: 0 0 0 2px var(--accent);
+}
+
+/* =========================
+   PEAK VALUE
+========================= */
+
+.reading-chart__peak-value {
+  position: absolute;
+  z-index: 5;
+
+  transform: translate(-50%, -100%);
+
+  padding: 3px 7px;
+
+  border-radius: 7px;
+
+  background: var(--surface);
+  color: var(--text-h);
+
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1;
+
+  white-space: nowrap;
+  pointer-events: none;
+}
+
+/* =========================
+   MONTHS
+========================= */
+
+.reading-chart__periods {
+  width: calc(100% - 60px);
+
+  display: grid;
+  grid-template-columns: 4fr 5fr;
+
+  margin-top: 10px;
+  margin-left: 60px;
+
+  box-sizing: border-box;
+
+  color: var(--text);
+
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.2;
+
+  text-align: center;
+}
+
+.reading-chart__periods span {
+  min-width: 0;
+
+  padding: 0 4px;
+
+  box-sizing: border-box;
+}
+
+.reading-chart__periods span:last-child {
+  color: var(--accent);
+  border-left: 1px solid var(--border);
+}
+
+/* =========================
+   SMALL MOBILE
+========================= */
+
+@media (max-width: 390px) {
+  .reading-chart-card {
+    padding: 14px 8px 12px;
+  }
+
+  .reading-chart-card__header {
+    margin-bottom: 8px;
+  }
+
+  .reading-chart-card__header h2 {
+    font-size: 16px;
+  }
+
+  .reading-chart-card__header p {
+    margin-top: 4px;
+    font-size: 9px;
+  }
+
+  .reading-chart-card__details {
+    font-size: 9px;
+  }
+
+  .reading-chart-card__details svg {
+    width: 12px !important;
+    height: 12px !important;
+
+    flex-basis: 12px;
+  }
+
+  .reading-week {
+    margin-bottom: 18px;
+  }
+
+  .reading-week__title {
+    margin-bottom: 11px;
+    font-size: 11px;
+  }
+
+  .reading-week__title svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .reading-week__stats {
+    gap: 5px;
+  }
+
+  .reading-week__stat {
+    gap: 5px;
+  }
+
+  .reading-week__stat:not(:last-child) {
+    padding-right: 5px;
+  }
+
+  .reading-week__icon {
+    width: 28px;
+    height: 28px;
+
+    flex-basis: 28px;
+
+    border-radius: 8px;
+  }
+
+  .reading-week__icon svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .reading-week__content strong {
+    font-size: 11px;
+  }
+
+  .reading-week__content span {
+    font-size: 7px;
+  }
+
+  .reading-chart__body {
+    grid-template-columns: 48px minmax(0, 1fr);
+    gap: 6px;
+  }
+
+  .reading-chart__scale {
+    height: 220px;
+
+    padding-top: 28px;
+
+    font-size: 11px;
+  }
+
+  .reading-chart__plot {
+    height: 220px;
+  }
+
+  .reading-chart__svg {
+    height: 220px !important;
+  }
+
+  .reading-chart__peak-value {
+    font-size: 14px;
+  }
+
+  .reading-chart__html-dot {
+    width: 9px;
+    height: 9px;
+
+    border-width: 2px;
+  }
+
+  .reading-chart__html-dot--peak {
+    width: 13px;
+    height: 13px;
+  }
+
+  .reading-chart__periods {
+    width: calc(100% - 54px);
+
+    margin-top: 10px;
+    margin-left: 54px;
+
+    font-size: 11px;
+  }
+}
+
+/* =========================
+   TABLET
+========================= */
+
+@media (min-width: 600px) {
+  .reading-chart-card {
+    padding: 20px 18px 18px;
+
+    border-radius: 16px;
+  }
+
+  .reading-chart-card__header {
+    margin-bottom: 16px;
+  }
+
+  .reading-chart-card__header h2 {
+    font-size: 20px;
+  }
+
+  .reading-chart-card__header p {
+    font-size: 12px;
+  }
+
+  .reading-chart-card__details {
+    font-size: 12px;
+  }
+
+  .reading-chart-card__details svg {
+    width: 16px !important;
+    height: 16px !important;
+
+    flex-basis: 16px;
+  }
+
+  .reading-week__stats {
+    max-width: 620px;
+    gap: 18px;
+  }
+
+  .reading-week__stat {
+    gap: 10px;
+  }
+
+  .reading-week__stat:not(:last-child) {
+    padding-right: 18px;
+  }
+
+  .reading-week__icon {
+    width: 40px;
+    height: 40px;
+
+    flex-basis: 40px;
+  }
+
+  .reading-week__content strong {
+    font-size: 16px;
+  }
+
+  .reading-week__content span {
+    font-size: 10px;
+  }
+
+  .reading-chart__periods {
+    width: calc(100% - 60px);
+
+    margin-left: 60px;
+
+    font-size: 11px;
+  }
+}
