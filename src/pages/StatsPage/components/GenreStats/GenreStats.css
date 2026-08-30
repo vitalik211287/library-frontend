@@ -1,0 +1,56 @@
+.genre-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.genre-item__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  margin-bottom: 7px;
+}
+
+.genre-item__top strong {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  font-size: 13px;
+}
+
+.genre-item__top span {
+  flex: 0 0 auto;
+
+  color: var(
+    --text-secondary,
+    #8b8b96
+  );
+
+  font-size: 11px;
+}
+
+.genre-item__track {
+  height: 7px;
+
+  overflow: hidden;
+
+  background: rgba(
+    139,
+    92,
+    246,
+    0.1
+  );
+
+  border-radius: 999px;
+}
+
+.genre-item__bar {
+  height: 100%;
+
+  background: #8b5cf6;
+
+  border-radius: inherit;
+}

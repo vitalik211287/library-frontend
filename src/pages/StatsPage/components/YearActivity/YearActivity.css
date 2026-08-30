@@ -1,0 +1,76 @@
+.stats-month-chart {
+  height: 220px;
+
+  display: grid;
+
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+
+  align-items: end;
+
+  gap: 5px;
+}
+
+.stats-month {
+  height: 100%;
+
+  display: grid;
+
+  grid-template-rows:
+    22px
+    minmax(0, 1fr)
+    22px;
+
+  align-items: end;
+
+  text-align: center;
+}
+
+.stats-month__value {
+  min-height: 22px;
+
+  overflow: hidden;
+
+  color: var(--text-secondary, #8b8b96);
+
+  font-size: 9px;
+}
+
+.stats-month__bar-track {
+  width: 100%;
+  height: 100%;
+
+  display: flex;
+
+  align-items: flex-end;
+  justify-content: center;
+}
+
+.stats-month__bar {
+  width: min(70%, 24px);
+
+  min-height: 3px;
+
+  background: linear-gradient(180deg, #a78bfa 0%, #7c3aed 100%);
+
+  border-radius: 7px 7px 3px 3px;
+
+  transition: height 0.25s ease;
+}
+
+.stats-month span {
+  align-self: end;
+
+  color: var(--text-secondary, #8b8b96);
+
+  font-size: 9px;
+}
+
+@media (min-width: 600px) {
+  .stats-month-chart {
+    gap: 9px;
+  }
+
+  .stats-month span {
+    font-size: 10px;
+  }
+}
