@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 
-const API_URL = "https://library-backend-production-5d60.up.railway.app";
+import { apiFetch } from "../../../utils/apiClient.js";
 
 const useWishlist = ({ onCountChange }) => {
   const [books, setBooks] = useState([]);
+
   const [isLoading, setIsLoading] = useState(true);
+
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -15,6 +17,7 @@ const useWishlist = ({ onCountChange }) => {
         setBooks([]);
         setIsLoading(false);
         setError("");
+
         onCountChange?.(0);
 
         return;
@@ -24,27 +27,18 @@ const useWishlist = ({ onCountChange }) => {
         setIsLoading(true);
         setError("");
 
-        const response = await fetch(`${API_URL}/api/user-books/wishlist`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const data = await apiFetch("/api/user-books/wishlist");
 
-        if (!response.ok) {
-          throw new Error("Failed to load wishlist");
-        }
-
-        const data = await response.json();
-
-        const items = Array.isArray(data.books) ? data.books : [];
+        const items = Array.isArray(data?.books) ? data.books : [];
 
         setBooks(items);
 
-        onCountChange?.(Number(data.count) || items.length);
+        onCountChange?.(Number(data?.count) || items.length);
       } catch (loadError) {
         console.error("Load wishlist error:", loadError);
 
         setBooks([]);
+
         setError("Не вдалося завантажити список");
 
         onCountChange?.(0);
@@ -57,26 +51,14 @@ const useWishlist = ({ onCountChange }) => {
   }, [onCountChange]);
 
   const removeFromWishlist = async (bookId) => {
-    const token = localStorage.getItem("token");
-
-    if (!token || !bookId) {
+    if (!bookId) {
       return;
     }
 
     try {
-      const response = await fetch(
-        `${API_URL}/api/user-books/${bookId}/wishlist`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
-      if (!response.ok) {
-        throw new Error("Failed to remove book from wishlist");
-      }
+      await apiFetch(`/api/user-books/${bookId}/wishlist`, {
+        method: "DELETE",
+      });
 
       setBooks((currentBooks) => {
         const nextBooks = currentBooks.filter(({ book }) => book.id !== bookId);

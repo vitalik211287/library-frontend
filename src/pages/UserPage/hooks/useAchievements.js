@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-const API_URL = "https://library-backend-production-5d60.up.railway.app";
+import { apiFetch } from "../../../utils/apiClient.js";
 
 const useAchievements = ({ readingBookId }) => {
   const [achievements, setAchievements] = useState([]);
@@ -38,28 +38,18 @@ const useAchievements = ({ readingBookId }) => {
         setIsLoading(true);
         setError("");
 
-        const response = await fetch(`${API_URL}/api/user-books/achievements`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.message || "Не вдалося завантажити досягнення");
-        }
+        const data = await apiFetch("/api/user-books/achievements");
 
         setAchievements(
-          Array.isArray(data.achievements) ? data.achievements : [],
+          Array.isArray(data?.achievements) ? data.achievements : [],
         );
 
         setSummary({
-          total: Number(data.summary?.total) || 0,
+          total: Number(data?.summary?.total) || 0,
 
-          unlocked: Number(data.summary?.unlocked) || 0,
+          unlocked: Number(data?.summary?.unlocked) || 0,
 
-          locked: Number(data.summary?.locked) || 0,
+          locked: Number(data?.summary?.locked) || 0,
         });
       } catch (loadError) {
         console.error("Load achievements error:", loadError);

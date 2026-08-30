@@ -1,13 +1,13 @@
 import { useEffect, useState } from "react";
 
+import { apiFetch } from "../../../utils/apiClient.js";
+
 import {
   buildCurrentMonthWeeks,
   buildPreviousMonthWeeks,
   getCurrentMonthSeconds,
   getCurrentWeekStats,
 } from "../utils/activityHelpers.js";
-
-const API_URL = "https://library-backend-production-5d60.up.railway.app";
 
 const INITIAL_ACTIVITY = {
   weeks: [],
@@ -56,33 +56,15 @@ const useReadingActivity = ({ readingBookId }) => {
 
         const previousMonth = previousDate.getMonth() + 1;
 
-        const [previousResponse, currentResponse] = await Promise.all([
-          fetch(
-            `${API_URL}/api/user-books/activity?year=${previousYear}&month=${previousMonth}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            },
+        const [previousData, currentData] = await Promise.all([
+          apiFetch(
+            `/api/user-books/activity?year=${previousYear}&month=${previousMonth}`,
           ),
 
-          fetch(
-            `${API_URL}/api/user-books/activity?year=${currentYear}&month=${currentMonth}`,
-            {
-              headers: {
-                Authorization: `Bearer ${token}`,
-              },
-            },
+          apiFetch(
+            `/api/user-books/activity?year=${currentYear}&month=${currentMonth}`,
           ),
         ]);
-
-        if (!previousResponse.ok || !currentResponse.ok) {
-          throw new Error("Failed to load reading activity");
-        }
-
-        const previousData = await previousResponse.json();
-
-        const currentData = await currentResponse.json();
 
         const previousDays = Array.isArray(previousData?.activity?.days)
           ? previousData.activity.days

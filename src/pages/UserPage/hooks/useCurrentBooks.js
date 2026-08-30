@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 
-const API_URL = "https://library-backend-production-5d60.up.railway.app";
+import { apiFetch } from "../../../utils/apiClient.js";
 
 const useCurrentBooks = ({ readingBookId, onBooksChange }) => {
   const [currentBooks, setCurrentBooks] = useState([]);
+
   const [isLoading, setIsLoading] = useState(true);
+
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -15,6 +17,7 @@ const useCurrentBooks = ({ readingBookId, onBooksChange }) => {
         setCurrentBooks([]);
         setIsLoading(false);
         setError("");
+
         onBooksChange?.(0);
 
         return;
@@ -24,26 +27,18 @@ const useCurrentBooks = ({ readingBookId, onBooksChange }) => {
         setIsLoading(true);
         setError("");
 
-        const response = await fetch(`${API_URL}/api/user-books/current`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const data = await apiFetch("/api/user-books/current");
 
-        if (!response.ok) {
-          throw new Error("Failed to load current reading");
-        }
-
-        const data = await response.json();
-
-        const books = Array.isArray(data.books) ? data.books : [];
+        const books = Array.isArray(data?.books) ? data.books : [];
 
         setCurrentBooks(books);
+
         onBooksChange?.(books.length);
       } catch (loadError) {
         console.error("Load current reading error:", loadError);
 
         setCurrentBooks([]);
+
         setError("Не вдалося завантажити поточне читання");
 
         onBooksChange?.(0);

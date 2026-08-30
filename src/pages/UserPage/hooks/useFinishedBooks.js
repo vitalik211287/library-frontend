@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
 
-const API_URL = "https://library-backend-production-5d60.up.railway.app";
+import { apiFetch } from "../../../utils/apiClient.js";
 
 const useFinishedBooks = ({ readingBookId, onCountChange }) => {
   const [books, setBooks] = useState([]);
+
   const [isLoading, setIsLoading] = useState(true);
+
   const [error, setError] = useState("");
 
   useEffect(() => {
@@ -15,6 +17,7 @@ const useFinishedBooks = ({ readingBookId, onCountChange }) => {
         setBooks([]);
         setIsLoading(false);
         setError("");
+
         onCountChange?.(0);
 
         return;
@@ -24,27 +27,18 @@ const useFinishedBooks = ({ readingBookId, onCountChange }) => {
         setIsLoading(true);
         setError("");
 
-        const response = await fetch(`${API_URL}/api/user-books/finished`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        const data = await apiFetch("/api/user-books/finished");
 
-        if (!response.ok) {
-          throw new Error("Failed to load finished books");
-        }
-
-        const data = await response.json();
-
-        const items = Array.isArray(data.books) ? data.books : [];
+        const items = Array.isArray(data?.books) ? data.books : [];
 
         setBooks(items);
 
-        onCountChange?.(Number(data.count) || items.length);
+        onCountChange?.(Number(data?.count) || items.length);
       } catch (loadError) {
         console.error("Load finished books error:", loadError);
 
         setBooks([]);
+
         setError("Не вдалося завантажити прочитані книги");
 
         onCountChange?.(0);

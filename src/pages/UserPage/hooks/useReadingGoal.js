@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const API_URL = "https://library-backend-production-5d60.up.railway.app";
+import { apiFetch } from "../../../utils/apiClient.js";
 
 const useReadingGoal = () => {
   const currentYear = new Date().getFullYear();
@@ -29,24 +29,14 @@ const useReadingGoal = () => {
 
       try {
         setIsGoalLoading(true);
+
         setGoalError("");
 
-        const response = await fetch(
-          `${API_URL}/api/user-books/goals?year=${currentYear}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
+        const data = await apiFetch(
+          `/api/user-books/goals?year=${currentYear}`,
         );
 
-        const data = await response.json();
-
-        if (!response.ok) {
-          throw new Error(data.message || "Не вдалося завантажити мету");
-        }
-
-        setReadingGoal(data.goal);
+        setReadingGoal(data?.goal ?? null);
       } catch (error) {
         console.error("Load reading goal error:", error);
 
@@ -74,29 +64,17 @@ const useReadingGoal = () => {
       setIsGoalSaving(true);
       setGoalSaveError("");
 
-      const response = await fetch(
-        `${API_URL}/api/user-books/goals?year=${currentYear}`,
-        {
-          method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify({
-            booksGoal: books,
-            pagesGoal: pages,
-            minutesGoal: minutes,
-          }),
+      const data = await apiFetch(`/api/user-books/goals?year=${currentYear}`, {
+        method: "PUT",
+
+        body: {
+          booksGoal: books,
+          pagesGoal: pages,
+          minutesGoal: minutes,
         },
-      );
+      });
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.message || "Не вдалося зберегти мету");
-      }
-
-      setReadingGoal(data.goal);
+      setReadingGoal(data?.goal ?? null);
 
       return true;
     } catch (error) {

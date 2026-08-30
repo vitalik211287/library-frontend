@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-const API_URL = "https://library-backend-production-5d60.up.railway.app";
+import { apiFetch } from "../../../utils/apiClient.js";
 
 const useReadingStreak = ({ readingBookId }) => {
   const [currentStreak, setCurrentStreak] = useState(0);
@@ -25,22 +25,11 @@ const useReadingStreak = ({ readingBookId }) => {
 
         const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-        const response = await fetch(
-          `${API_URL}/api/user-books/stats?year=${currentYear}&timeZone=${encodeURIComponent(
+        const data = await apiFetch(
+          `/api/user-books/stats?year=${currentYear}&timeZone=${encodeURIComponent(
             timeZone,
           )}`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
         );
-
-        if (!response.ok) {
-          throw new Error("Failed to load reading streak");
-        }
-
-        const data = await response.json();
 
         setCurrentStreak(Number(data?.stats?.streak?.current) || 0);
       } catch (error) {
