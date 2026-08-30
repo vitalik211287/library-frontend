@@ -1,40 +1,22 @@
-import {
-  useRef,
-  useState,
-} from "react";
+import { useRef, useState } from "react";
 
-import {
-  useNavigate,
-} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import toast from "react-hot-toast";
 
+import { useAuth } from "../../context/AuthContext.jsx";
+
+import { useTheme } from "../../context/ThemeContext.jsx";
+
+import { apiFetch } from "../../utils/apiClient.js";
+
 import "./SettingsPage.css";
-
-import {
-  useAuth,
-} from "../../context/AuthContext.jsx";
-
-import {
-  useTheme,
-} from "../../context/ThemeContext.jsx";
-
-const API_URL =
-  "https://library-backend-production-5d60.up.railway.app";
 
 const SystemIcon = () => {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-    >
-      <rect
-        x="3"
-        y="4"
-        width="18"
-        height="14"
-        rx="2"
-      />
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <rect x="3" y="4" width="18" height="14" rx="2" />
+
       <path d="M8 21h8" />
       <path d="M12 18v3" />
     </svg>
@@ -43,15 +25,8 @@ const SystemIcon = () => {
 
 const SunIcon = () => {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-    >
-      <circle
-        cx="12"
-        cy="12"
-        r="4"
-      />
+    <svg viewBox="0 0 24 24" aria-hidden="true">
+      <circle cx="12" cy="12" r="4" />
 
       <path d="M12 2v2" />
       <path d="M12 20v2" />
@@ -67,105 +42,61 @@ const SunIcon = () => {
 
 const MoonIcon = () => {
   return (
-    <svg
-      viewBox="0 0 24 24"
-      aria-hidden="true"
-    >
+    <svg viewBox="0 0 24 24" aria-hidden="true">
       <path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z" />
     </svg>
   );
 };
 
 const SettingsPage = () => {
-  const navigate =
-    useNavigate();
+  const navigate = useNavigate();
 
-  const {
-    user,
-    logout,
-    updateUser,
-  } = useAuth();
+  const { user, logout, updateUser } = useAuth();
 
-  const {
-    themeMode,
-    setThemeMode,
-  } = useTheme();
+  const { themeMode, setThemeMode } = useTheme();
 
-  const fileInputRef =
-    useRef(null);
+  const fileInputRef = useRef(null);
 
-  const [isNameOpen, setIsNameOpen] =
-    useState(false);
+  const [isNameOpen, setIsNameOpen] = useState(false);
 
-  const [
-    isPasswordOpen,
-    setIsPasswordOpen,
-  ] = useState(false);
+  const [isPasswordOpen, setIsPasswordOpen] = useState(false);
 
-  const [
-    name,
-    setName,
-  ] = useState(
-    user?.name ?? "",
-  );
+  const [name, setName] = useState(user?.name ?? "");
 
-  const [
-    currentPassword,
-    setCurrentPassword,
-  ] = useState("");
+  const [currentPassword, setCurrentPassword] = useState("");
 
-  const [
-    newPassword,
-    setNewPassword,
-  ] = useState("");
+  const [newPassword, setNewPassword] = useState("");
 
-  const [
-    confirmPassword,
-    setConfirmPassword,
-  ] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
-  const [
-    isSavingName,
-    setIsSavingName,
-  ] = useState(false);
+  const [isSavingName, setIsSavingName] = useState(false);
 
-  const [
-    isSavingPassword,
-    setIsSavingPassword,
-  ] = useState(false);
+  const [isSavingPassword, setIsSavingPassword] = useState(false);
 
-  const [
-    isUploadingAvatar,
-    setIsUploadingAvatar,
-  ] = useState(false);
+  const [isUploadingAvatar, setIsUploadingAvatar] = useState(false);
 
-  const getToken = () => {
-    return localStorage.getItem(
-      "token",
-    );
-  };
+  /* =========================
+     НАВІГАЦІЯ
+  ========================= */
 
   const handleBack = () => {
-    navigate(
-      "/account",
-    );
+    navigate("/account");
   };
 
   const handleLogout = () => {
     logout();
 
-    navigate(
-      "/",
-      {
-        replace: true,
-      },
-    );
+    navigate("/", {
+      replace: true,
+    });
   };
 
+  /* =========================
+     ІМ'Я
+  ========================= */
+
   const handleOpenName = () => {
-    setName(
-      user?.name ?? "",
-    );
+    setName(user?.name ?? "");
 
     setIsNameOpen(true);
   };
@@ -178,300 +109,163 @@ const SettingsPage = () => {
     setIsNameOpen(false);
   };
 
-  const handleSaveName =
-    async (event) => {
-      event.preventDefault();
+  const handleSaveName = async (event) => {
+    event.preventDefault();
 
-      const normalizedName =
-        name.trim();
+    const normalizedName = name.trim();
 
-      if (
-        normalizedName.length <
-        2
-      ) {
-        toast.error(
-          "Ім’я має містити щонайменше 2 символи",
-        );
+    if (normalizedName.length < 2) {
+      toast.error("Ім’я має містити щонайменше 2 символи");
 
-        return;
-      }
+      return;
+    }
 
-      try {
-        setIsSavingName(true);
+    try {
+      setIsSavingName(true);
 
-        const response =
-          await fetch(
-            `${API_URL}/api/auth/me/name`,
-            {
-              method:
-                "PATCH",
+      const data = await apiFetch("/api/auth/me/name", {
+        method: "PATCH",
+        body: {
+          name: normalizedName,
+        },
+      });
 
-              headers: {
-                "Content-Type":
-                  "application/json",
+      updateUser(data.user);
 
-                Authorization:
-                  `Bearer ${getToken()}`,
-              },
+      setIsNameOpen(false);
 
-              body:
-                JSON.stringify({
-                  name:
-                    normalizedName,
-                }),
-            },
-          );
+      toast.success("Ім’я змінено");
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Не вдалося змінити ім’я",
+      );
+    } finally {
+      setIsSavingName(false);
+    }
+  };
 
-        const data =
-          await response.json();
-
-        if (!response.ok) {
-          throw new Error(
-            data.message ||
-              "Не вдалося змінити ім’я",
-          );
-        }
-
-        updateUser(
-          data.user,
-        );
-
-        setIsNameOpen(false);
-
-        toast.success(
-          "Ім’я змінено",
-        );
-      } catch (error) {
-        toast.error(
-          error instanceof Error
-            ? error.message
-            : "Не вдалося змінити ім’я",
-        );
-      } finally {
-        setIsSavingName(
-          false,
-        );
-      }
-    };
+  /* =========================
+     ПАРОЛЬ
+  ========================= */
 
   const handleOpenPassword = () => {
     setCurrentPassword("");
     setNewPassword("");
     setConfirmPassword("");
 
-    setIsPasswordOpen(
-      true,
-    );
+    setIsPasswordOpen(true);
   };
 
   const handleClosePassword = () => {
-    if (
-      isSavingPassword
-    ) {
+    if (isSavingPassword) {
       return;
     }
 
-    setIsPasswordOpen(
-      false,
-    );
+    setIsPasswordOpen(false);
   };
 
-  const handleSavePassword =
-    async (event) => {
-      event.preventDefault();
+  const handleSavePassword = async (event) => {
+    event.preventDefault();
 
-      if (
-        !currentPassword
-      ) {
-        toast.error(
-          "Введи поточний пароль",
-        );
+    if (!currentPassword) {
+      toast.error("Введи поточний пароль");
 
-        return;
-      }
+      return;
+    }
 
-      if (
-        newPassword.length <
-        6
-      ) {
-        toast.error(
-          "Новий пароль має містити мінімум 6 символів",
-        );
+    if (newPassword.length < 6) {
+      toast.error("Новий пароль має містити мінімум 6 символів");
 
-        return;
-      }
+      return;
+    }
 
-      if (
-        newPassword !==
-        confirmPassword
-      ) {
-        toast.error(
-          "Нові паролі не збігаються",
-        );
+    if (newPassword !== confirmPassword) {
+      toast.error("Нові паролі не збігаються");
 
-        return;
-      }
+      return;
+    }
 
-      try {
-        setIsSavingPassword(
-          true,
-        );
+    try {
+      setIsSavingPassword(true);
 
-        const response =
-          await fetch(
-            `${API_URL}/api/auth/me/password`,
-            {
-              method:
-                "PATCH",
+      await apiFetch("/api/auth/me/password", {
+        method: "PATCH",
+        body: {
+          currentPassword,
+          newPassword,
+        },
+      });
 
-              headers: {
-                "Content-Type":
-                  "application/json",
+      setCurrentPassword("");
+      setNewPassword("");
+      setConfirmPassword("");
 
-                Authorization:
-                  `Bearer ${getToken()}`,
-              },
+      setIsPasswordOpen(false);
 
-              body:
-                JSON.stringify({
-                  currentPassword,
-                  newPassword,
-                }),
-            },
-          );
+      toast.success("Пароль змінено");
+    } catch (error) {
+      toast.error(
+        error instanceof Error ? error.message : "Не вдалося змінити пароль",
+      );
+    } finally {
+      setIsSavingPassword(false);
+    }
+  };
 
-        const data =
-          await response.json();
-
-        if (!response.ok) {
-          throw new Error(
-            data.message ||
-              "Не вдалося змінити пароль",
-          );
-        }
-
-        setCurrentPassword("");
-        setNewPassword("");
-        setConfirmPassword("");
-
-        setIsPasswordOpen(
-          false,
-        );
-
-        toast.success(
-          "Пароль змінено",
-        );
-      } catch (error) {
-        toast.error(
-          error instanceof Error
-            ? error.message
-            : "Не вдалося змінити пароль",
-        );
-      } finally {
-        setIsSavingPassword(
-          false,
-        );
-      }
-    };
+  /* =========================
+     АВАТАР
+  ========================= */
 
   const handleAvatarClick = () => {
     fileInputRef.current?.click();
   };
 
-  const handleAvatarChange =
-    async (event) => {
-      const file =
-        event.target.files?.[0];
+  const handleAvatarChange = async (event) => {
+    const file = event.target.files?.[0];
 
-      event.target.value =
-        "";
+    event.target.value = "";
 
-      if (!file) {
-        return;
-      }
+    if (!file) {
+      return;
+    }
 
-      if (
-        !file.type.startsWith(
-          "image/",
-        )
-      ) {
-        toast.error(
-          "Оберіть зображення",
-        );
+    if (!file.type.startsWith("image/")) {
+      toast.error("Оберіть зображення");
 
-        return;
-      }
+      return;
+    }
 
-      if (
-        file.size >
-        15 * 1024 * 1024
-      ) {
-        toast.error(
-          "Максимальний розмір фото — 5 МБ",
-        );
+    if (file.size > 15 * 1024 * 1024) {
+      toast.error("Максимальний розмір фото — 5 МБ");
 
-        return;
-      }
+      return;
+    }
 
-      try {
-        setIsUploadingAvatar(
-          true,
-        );
+    try {
+      setIsUploadingAvatar(true);
 
-        const formData =
-          new FormData();
+      const formData = new FormData();
 
-        formData.append(
-          "avatar",
-          file,
-        );
+      formData.append("avatar", file);
 
-        const response =
-          await fetch(
-            `${API_URL}/api/auth/me/avatar`,
-            {
-              method:
-                "PATCH",
+      const data = await apiFetch("/api/auth/me/avatar", {
+        method: "PATCH",
+        body: formData,
+      });
 
-              headers: {
-                Authorization:
-                  `Bearer ${getToken()}`,
-              },
+      updateUser(data.user);
 
-              body:
-                formData,
-            },
-          );
-
-        const data =
-          await response.json();
-
-        if (!response.ok) {
-          throw new Error(
-            data.message ||
-              "Не вдалося завантажити аватар",
-          );
-        }
-
-        updateUser(
-          data.user,
-        );
-
-        toast.success(
-          "Аватар оновлено",
-        );
-      } catch (error) {
-        toast.error(
-          error instanceof Error
-            ? error.message
-            : "Не вдалося завантажити аватар",
-        );
-      } finally {
-        setIsUploadingAvatar(
-          false,
-        );
-      }
-    };
+      toast.success("Аватар оновлено");
+    } catch (error) {
+      toast.error(
+        error instanceof Error
+          ? error.message
+          : "Не вдалося завантажити аватар",
+      );
+    } finally {
+      setIsUploadingAvatar(false);
+    }
+  };
 
   return (
     <main className="settings-page">
@@ -483,89 +277,56 @@ const SettingsPage = () => {
             onClick={handleBack}
             aria-label="Назад"
           >
-            <svg
-              viewBox="0 0 24 24"
-              aria-hidden="true"
-            >
+            <svg viewBox="0 0 24 24" aria-hidden="true">
               <path d="M15 18l-6-6 6-6" />
             </svg>
           </button>
 
-          <h1>
-            Налаштування
-          </h1>
+          <h1>Налаштування</h1>
         </header>
 
         <section className="settings-page__section">
-          <h2>
-            Профіль
-          </h2>
+          <h2>Профіль</h2>
 
           <div className="settings-page__card">
             <button
               type="button"
               className="settings-page__row"
-              onClick={
-                handleOpenName
-              }
+              onClick={handleOpenName}
             >
               <span className="settings-page__row-icon">
-                <svg
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <circle
-                    cx="12"
-                    cy="8"
-                    r="4"
-                  />
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <circle cx="12" cy="8" r="4" />
 
                   <path d="M4 21a8 8 0 0 1 16 0" />
                 </svg>
               </span>
 
               <span className="settings-page__row-content">
-                <span className="settings-page__row-title">
-                  Ім&apos;я
-                </span>
+                <span className="settings-page__row-title">Ім&apos;я</span>
 
                 <span className="settings-page__row-value">
-                  {user?.name ||
-                    "Не вказано"}
+                  {user?.name || "Не вказано"}
                 </span>
               </span>
 
-              <span className="settings-page__chevron">
-                ›
-              </span>
+              <span className="settings-page__chevron">›</span>
             </button>
 
             <div className="settings-page__row">
               <span className="settings-page__row-icon">
-                <svg
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <rect
-                    x="3"
-                    y="5"
-                    width="18"
-                    height="14"
-                    rx="2"
-                  />
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="3" y="5" width="18" height="14" rx="2" />
 
                   <path d="m3 7 9 6 9-6" />
                 </svg>
               </span>
 
               <span className="settings-page__row-content">
-                <span className="settings-page__row-title">
-                  Email
-                </span>
+                <span className="settings-page__row-title">Email</span>
 
                 <span className="settings-page__row-value">
-                  {user?.email ||
-                    "Не вказано"}
+                  {user?.email || "Не вказано"}
                 </span>
               </span>
             </div>
@@ -573,31 +334,15 @@ const SettingsPage = () => {
             <button
               type="button"
               className="settings-page__row"
-              onClick={
-                handleAvatarClick
-              }
-              disabled={
-                isUploadingAvatar
-              }
+              onClick={handleAvatarClick}
+              disabled={isUploadingAvatar}
             >
               <span className="settings-page__avatar">
                 {user?.avatarUrl ? (
-                  <img
-                    src={
-                      user.avatarUrl
-                    }
-                    alt="Аватар користувача"
-                  />
+                  <img src={user.avatarUrl} alt="Аватар користувача" />
                 ) : (
-                  <svg
-                    viewBox="0 0 24 24"
-                    aria-hidden="true"
-                  >
-                    <circle
-                      cx="12"
-                      cy="8"
-                      r="4"
-                    />
+                  <svg viewBox="0 0 24 24" aria-hidden="true">
+                    <circle cx="12" cy="8" r="4" />
 
                     <path d="M4 21a8 8 0 0 1 16 0" />
                   </svg>
@@ -605,9 +350,7 @@ const SettingsPage = () => {
               </span>
 
               <span className="settings-page__row-content">
-                <span className="settings-page__row-title">
-                  Аватар
-                </span>
+                <span className="settings-page__row-title">Аватар</span>
 
                 <span className="settings-page__row-value">
                   {isUploadingAvatar
@@ -618,95 +361,63 @@ const SettingsPage = () => {
                 </span>
               </span>
 
-              <span className="settings-page__chevron">
-                ›
-              </span>
+              <span className="settings-page__chevron">›</span>
             </button>
 
             <input
-              ref={
-                fileInputRef
-              }
+              ref={fileInputRef}
               className="settings-page__file-input"
               type="file"
               accept="image/*"
-              onChange={
-                handleAvatarChange
-              }
+              onChange={handleAvatarChange}
             />
           </div>
         </section>
 
         <section className="settings-page__section">
-          <h2>
-            Акаунт
-          </h2>
+          <h2>Акаунт</h2>
 
           <div className="settings-page__card">
             <button
               type="button"
               className="settings-page__row"
-              onClick={
-                handleOpenPassword
-              }
+              onClick={handleOpenPassword}
             >
               <span className="settings-page__row-icon">
-                <svg
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
-                  <rect
-                    x="5"
-                    y="10"
-                    width="14"
-                    height="11"
-                    rx="2"
-                  />
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="5" y="10" width="14" height="11" rx="2" />
 
                   <path d="M8 10V7a4 4 0 0 1 8 0v3" />
                 </svg>
               </span>
 
               <span className="settings-page__row-content">
-                <span className="settings-page__row-title">
-                  Змінити пароль
-                </span>
+                <span className="settings-page__row-title">Змінити пароль</span>
               </span>
 
-              <span className="settings-page__chevron">
-                ›
-              </span>
+              <span className="settings-page__chevron">›</span>
             </button>
           </div>
         </section>
 
         <section className="settings-page__section">
-          <h2>
-            Застосунок
-          </h2>
+          <h2>Застосунок</h2>
 
           <div className="settings-page__card settings-page__theme-card">
             <div className="settings-page__theme-header">
               <span className="settings-page__row-icon">
-                <svg
-                  viewBox="0 0 24 24"
-                  aria-hidden="true"
-                >
+                <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9Z" />
                 </svg>
               </span>
 
               <div className="settings-page__row-content">
-                <span className="settings-page__row-title">
-                  Тема
-                </span>
+                <span className="settings-page__row-title">Тема</span>
 
                 <span className="settings-page__row-value">
-                  {themeMode ===
-                  "system"
+                  {themeMode === "system"
                     ? "Системна"
-                    : themeMode ===
-                        "light"
+                    : themeMode === "light"
                       ? "Світла"
                       : "Темна"}
                 </span>
@@ -717,64 +428,43 @@ const SettingsPage = () => {
               <button
                 type="button"
                 className={`settings-page__theme-option ${
-                  themeMode ===
-                  "system"
+                  themeMode === "system"
                     ? "settings-page__theme-option--active"
                     : ""
                 }`}
-                onClick={() =>
-                  setThemeMode(
-                    "system",
-                  )
-                }
+                onClick={() => setThemeMode("system")}
               >
                 <SystemIcon />
 
-                <span>
-                  Системна
-                </span>
+                <span>Системна</span>
               </button>
 
               <button
                 type="button"
                 className={`settings-page__theme-option ${
-                  themeMode ===
-                  "light"
+                  themeMode === "light"
                     ? "settings-page__theme-option--active"
                     : ""
                 }`}
-                onClick={() =>
-                  setThemeMode(
-                    "light",
-                  )
-                }
+                onClick={() => setThemeMode("light")}
               >
                 <SunIcon />
 
-                <span>
-                  Світла
-                </span>
+                <span>Світла</span>
               </button>
 
               <button
                 type="button"
                 className={`settings-page__theme-option ${
-                  themeMode ===
-                  "dark"
+                  themeMode === "dark"
                     ? "settings-page__theme-option--active"
                     : ""
                 }`}
-                onClick={() =>
-                  setThemeMode(
-                    "dark",
-                  )
-                }
+                onClick={() => setThemeMode("dark")}
               >
                 <MoonIcon />
 
-                <span>
-                  Темна
-                </span>
+                <span>Темна</span>
               </button>
             </div>
           </div>
@@ -783,19 +473,13 @@ const SettingsPage = () => {
         <button
           type="button"
           className="settings-page__logout"
-          onClick={
-            handleLogout
-          }
+          onClick={handleLogout}
         >
-          <svg
-            viewBox="0 0 24 24"
-            aria-hidden="true"
-          >
+          <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M10 17l5-5-5-5" />
             <path d="M15 12H3" />
             <path d="M13 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6" />
           </svg>
-
           Вийти з акаунта
         </button>
       </section>
@@ -803,43 +487,24 @@ const SettingsPage = () => {
       {isNameOpen && (
         <div
           className="settings-page__modal-overlay"
-          onMouseDown={
-            handleCloseName
-          }
+          onMouseDown={handleCloseName}
         >
           <form
             className="settings-page__modal"
-            onSubmit={
-              handleSaveName
-            }
-            onMouseDown={(
-              event,
-            ) =>
-              event.stopPropagation()
-            }
+            onSubmit={handleSaveName}
+            onMouseDown={(event) => event.stopPropagation()}
           >
-            <h2>
-              Змінити ім&apos;я
-            </h2>
+            <h2>Змінити ім&apos;я</h2>
 
             <label className="settings-page__field">
-              <span>
-                Ім&apos;я
-              </span>
+              <span>Ім&apos;я</span>
 
               <input
                 type="text"
                 value={name}
                 maxLength={50}
                 autoFocus
-                onChange={(
-                  event,
-                ) =>
-                  setName(
-                    event.target
-                      .value,
-                  )
-                }
+                onChange={(event) => setName(event.target.value)}
               />
             </label>
 
@@ -847,12 +512,8 @@ const SettingsPage = () => {
               <button
                 type="button"
                 className="settings-page__modal-button settings-page__modal-button--secondary"
-                onClick={
-                  handleCloseName
-                }
-                disabled={
-                  isSavingName
-                }
+                onClick={handleCloseName}
+                disabled={isSavingName}
               >
                 Скасувати
               </button>
@@ -860,13 +521,9 @@ const SettingsPage = () => {
               <button
                 type="submit"
                 className="settings-page__modal-button settings-page__modal-button--primary"
-                disabled={
-                  isSavingName
-                }
+                disabled={isSavingName}
               >
-                {isSavingName
-                  ? "Збереження..."
-                  : "Зберегти"}
+                {isSavingName ? "Збереження..." : "Зберегти"}
               </button>
             </div>
           </form>
@@ -876,88 +533,45 @@ const SettingsPage = () => {
       {isPasswordOpen && (
         <div
           className="settings-page__modal-overlay"
-          onMouseDown={
-            handleClosePassword
-          }
+          onMouseDown={handleClosePassword}
         >
           <form
             className="settings-page__modal"
-            onSubmit={
-              handleSavePassword
-            }
-            onMouseDown={(
-              event,
-            ) =>
-              event.stopPropagation()
-            }
+            onSubmit={handleSavePassword}
+            onMouseDown={(event) => event.stopPropagation()}
           >
-            <h2>
-              Змінити пароль
-            </h2>
+            <h2>Змінити пароль</h2>
 
             <label className="settings-page__field">
-              <span>
-                Поточний пароль
-              </span>
+              <span>Поточний пароль</span>
 
               <input
                 type="password"
-                value={
-                  currentPassword
-                }
+                value={currentPassword}
                 autoComplete="current-password"
-                onChange={(
-                  event,
-                ) =>
-                  setCurrentPassword(
-                    event.target
-                      .value,
-                  )
-                }
+                onChange={(event) => setCurrentPassword(event.target.value)}
               />
             </label>
 
             <label className="settings-page__field">
-              <span>
-                Новий пароль
-              </span>
+              <span>Новий пароль</span>
 
               <input
                 type="password"
-                value={
-                  newPassword
-                }
+                value={newPassword}
                 autoComplete="new-password"
-                onChange={(
-                  event,
-                ) =>
-                  setNewPassword(
-                    event.target
-                      .value,
-                  )
-                }
+                onChange={(event) => setNewPassword(event.target.value)}
               />
             </label>
 
             <label className="settings-page__field">
-              <span>
-                Повтори новий пароль
-              </span>
+              <span>Повтори новий пароль</span>
 
               <input
                 type="password"
-                value={
-                  confirmPassword
-                }
+                value={confirmPassword}
                 autoComplete="new-password"
-                onChange={(
-                  event,
-                ) =>
-                  setConfirmPassword(
-                    event.target
-                      .value,
-                  )
-                }
+                onChange={(event) => setConfirmPassword(event.target.value)}
               />
             </label>
 
@@ -965,12 +579,8 @@ const SettingsPage = () => {
               <button
                 type="button"
                 className="settings-page__modal-button settings-page__modal-button--secondary"
-                onClick={
-                  handleClosePassword
-                }
-                disabled={
-                  isSavingPassword
-                }
+                onClick={handleClosePassword}
+                disabled={isSavingPassword}
               >
                 Скасувати
               </button>
@@ -978,13 +588,9 @@ const SettingsPage = () => {
               <button
                 type="submit"
                 className="settings-page__modal-button settings-page__modal-button--primary"
-                disabled={
-                  isSavingPassword
-                }
+                disabled={isSavingPassword}
               >
-                {isSavingPassword
-                  ? "Збереження..."
-                  : "Змінити пароль"}
+                {isSavingPassword ? "Збереження..." : "Змінити пароль"}
               </button>
             </div>
           </form>

@@ -1,10 +1,10 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 
 import { useSearchParams } from "react-router-dom";
 
-import "./RightSidebar.css";
+import useRightSidebarData from "./hooks/useRightSidebarData.js";
 
-const API_URL = "https://library-backend-production-5d60.up.railway.app";
+import "./RightSidebar.css";
 
 /* =========================
    ICONS
@@ -55,94 +55,26 @@ const ArrowIcon = () => (
 );
 
 /* =========================
+   HELPERS
+========================= */
+
+const getProgress = (currentPage, totalPages) => {
+  if (!totalPages || totalPages <= 0) {
+    return 0;
+  }
+
+  return Math.min(Math.round((currentPage / totalPages) * 100), 100);
+};
+
+/* =========================
    COMPONENT
 ========================= */
 
 const RightSidebar = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const [currentBooks, setCurrentBooks] = useState([]);
-
-  const [wishlistCount, setWishlistCount] = useState(0);
-
-  const [finishedCount, setFinishedCount] = useState(0);
-
-  const [isLoading, setIsLoading] = useState(true);
-
-  /* =========================
-     LOAD DATA
-  ========================= */
-
-  useEffect(() => {
-    const loadSidebarData = async () => {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        setIsLoading(false);
-
-        return;
-      }
-
-      try {
-        setIsLoading(true);
-
-        const headers = {
-          Authorization: `Bearer ${token}`,
-        };
-
-        const [currentResponse, wishlistResponse, finishedResponse] =
-          await Promise.all([
-            fetch(`${API_URL}/api/user-books/current`, {
-              headers,
-            }),
-
-            fetch(`${API_URL}/api/user-books/wishlist`, {
-              headers,
-            }),
-
-            fetch(`${API_URL}/api/user-books/finished`, {
-              headers,
-            }),
-          ]);
-
-        if (currentResponse.ok) {
-          const data = await currentResponse.json();
-
-          setCurrentBooks(Array.isArray(data.books) ? data.books : []);
-        }
-
-        if (wishlistResponse.ok) {
-          const data = await wishlistResponse.json();
-
-          setWishlistCount(Number(data.count) || 0);
-        }
-
-        if (finishedResponse.ok) {
-          const data = await finishedResponse.json();
-
-          setFinishedCount(Number(data.count) || 0);
-        }
-      } catch (error) {
-        console.error("Right sidebar load error:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadSidebarData();
-  }, []);
-
-  /* =========================
-     HELPERS
-  ========================= */
-
-  const getProgress = (currentPage, totalPages) => {
-    if (!totalPages || totalPages <= 0) {
-      return 0;
-    }
-
-    return Math.min(Math.round((currentPage / totalPages) * 100), 100);
-  };
+  const { currentBooks, wishlistCount, finishedCount, isLoading } =
+    useRightSidebarData();
 
   const mainCurrentBook = currentBooks[0] ?? null;
 
@@ -168,10 +100,6 @@ const RightSidebar = () => {
 
     setSearchParams(params);
   };
-
-  /* =========================
-     RENDER
-  ========================= */
 
   return (
     <aside className="right-sidebar">

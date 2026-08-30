@@ -1,0 +1,56 @@
+.achievements-filters {
+  display: flex;
+
+  gap: 8px;
+
+  margin-bottom: 20px;
+  padding-bottom: 4px;
+
+  overflow-x: auto;
+
+  scrollbar-width: none;
+}
+
+.achievements-filters::-webkit-scrollbar {
+  display: none;
+}
+
+.achievements-filter {
+  flex: 0 0 auto;
+
+  min-height: 38px;
+  padding: 0 16px;
+
+  color: var(--text-secondary);
+
+  background: var(--surface);
+
+  border: 1px solid var(--border);
+  border-radius: 999px;
+
+  font: inherit;
+  font-size: 13px;
+  font-weight: 700;
+
+  cursor: pointer;
+
+  transition:
+    color 0.18s ease,
+    background 0.18s ease,
+    border-color 0.18s ease,
+    transform 0.18s ease;
+}
+
+.achievements-filter:hover {
+  border-color: rgba(139, 92, 246, 0.55);
+
+  transform: translateY(-1px);
+}
+
+.achievements-filter--active {
+  color: #ffffff;
+
+  background: linear-gradient(135deg, #7c3aed, #9333ea);
+
+  border-color: transparent;
+}

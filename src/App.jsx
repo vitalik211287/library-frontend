@@ -26,11 +26,10 @@ import AchievementsPage from "./pages/AchievementsPage/AchievementsPage.jsx";
 import RightSidebar from "./components/RightSidebar/RightSidebar.jsx";
 import ReadingModal from "./components/ReadingModal/ReadingModal.jsx";
 
+import { API_URL, apiFetch, hasToken } from "./utils/apiClient.js";
+
 import { useAuth } from "./context/AuthContext.jsx";
-
 import { useTheme } from "./context/ThemeContext.jsx";
-
-const API_URL = "https://library-backend-production-5d60.up.railway.app";
 
 /* =========================
    ICONS
@@ -84,7 +83,9 @@ const StatsIcon = () => (
 const AchievementsIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <circle cx="12" cy="9" r="5" />
+
     <path d="M8.5 13 7 22l5-3 5 3-1.5-9" />
+
     <path d="m10 9 1.3 1.3L14 7.5" />
   </svg>
 );
@@ -246,25 +247,21 @@ const App = () => {
       try {
         setIsReadingBookLoading(true);
 
-        const response = await fetch(`${API_URL}/api/books`);
-
-        if (!response.ok) {
-          throw new Error("Не вдалося завантажити книгу");
-        }
-
-        const data = await response.json();
+        const data = await apiFetch("/api/books", {
+          auth: false,
+        });
 
         const books = Array.isArray(data)
           ? data
-          : Array.isArray(data.books)
+          : Array.isArray(data?.books)
             ? data.books
             : [];
 
-        const book =
+        const foundBook =
           books.find((item) => String(item.id) === String(readingBookId)) ??
           null;
 
-        if (!book) {
+        if (!foundBook) {
           const params = new URLSearchParams(searchParams);
 
           params.delete("reading");
@@ -278,7 +275,7 @@ const App = () => {
           return;
         }
 
-        setReadingBook(book);
+        setReadingBook(foundBook);
       } catch (error) {
         console.error("Load reading book error:", error);
 
@@ -326,28 +323,16 @@ const App = () => {
       return;
     }
 
-    const token = localStorage.getItem("token");
-
-    if (!token) {
+    if (!hasToken()) {
       navigate("/login");
 
       return;
     }
 
     try {
-      const response = await fetch(`${API_URL}/api/user-books/current`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const data = await apiFetch("/api/user-books/current");
 
-      if (!response.ok) {
-        throw new Error("Не вдалося завантажити поточне читання");
-      }
-
-      const data = await response.json();
-
-      const books = Array.isArray(data.books) ? data.books : [];
+      const books = Array.isArray(data?.books) ? data.books : [];
 
       const currentBook = books[0];
 

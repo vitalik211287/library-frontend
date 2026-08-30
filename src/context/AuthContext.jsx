@@ -5,65 +5,66 @@ import {
   useState,
 } from "react";
 
-const API_URL =
-  "https://library-backend-production-5d60.up.railway.app";
+import {
+  apiFetch,
+  getToken,
+} from "../utils/apiClient.js";
 
-const AuthContext = createContext(null);
+const AuthContext =
+  createContext(null);
 
-export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null);
-  const [isAuthLoading, setIsAuthLoading] =
-    useState(true);
+const AuthProvider = ({
+  children,
+}) => {
+  const [user, setUser] =
+    useState(null);
+
+  const [
+    isAuthLoading,
+    setIsAuthLoading,
+  ] = useState(true);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      const token =
-        localStorage.getItem("token");
+    const checkAuth =
+      async () => {
+        const token =
+          getToken();
 
-      if (!token) {
-        setIsAuthLoading(false);
-        return;
-      }
+        if (!token) {
+          setIsAuthLoading(
+            false,
+          );
 
-      try {
-        const response = await fetch(
-          `${API_URL}/api/auth/me`,
-          {
-            headers: {
-              Authorization:
-                `Bearer ${token}`,
-            },
-          },
-        );
+          return;
+        }
 
-        if (!response.ok) {
+        try {
+          const data =
+            await apiFetch(
+              "/api/auth/me",
+            );
+
+          setUser(
+            data?.user ??
+              null,
+          );
+        } catch (error) {
+          console.error(
+            "Auth check error:",
+            error,
+          );
+
           localStorage.removeItem(
             "token",
           );
 
           setUser(null);
-          return;
+        } finally {
+          setIsAuthLoading(
+            false,
+          );
         }
-
-        const data =
-          await response.json();
-
-        setUser(
-          data.user ?? null,
-        );
-      } catch (error) {
-        console.error(
-          "Auth check error:",
-          error,
-        );
-
-        setUser(null);
-      } finally {
-        setIsAuthLoading(
-          false,
-        );
-      }
-    };
+      };
 
     checkAuth();
   }, []);
@@ -91,10 +92,12 @@ export const AuthProvider = ({ children }) => {
   const updateUser = (
     userData,
   ) => {
-    setUser((currentUser) => ({
-      ...currentUser,
-      ...userData,
-    }));
+    setUser(
+      (currentUser) => ({
+        ...currentUser,
+        ...userData,
+      }),
+    );
   };
 
   return (
@@ -114,8 +117,13 @@ export const AuthProvider = ({ children }) => {
   );
 };
 
-export const useAuth = () => {
+const useAuth = () => {
   return useContext(
     AuthContext,
   );
+};
+
+export {
+  AuthProvider,
+  useAuth,
 };

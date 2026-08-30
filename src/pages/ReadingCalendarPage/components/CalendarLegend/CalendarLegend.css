@@ -1,0 +1,99 @@
+.reading-calendar__legend {
+  display: grid;
+
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+
+  gap: 6px;
+
+  margin-top: 12px;
+  padding-top: 10px;
+
+  border-top: 1px solid var(--border);
+}
+
+.reading-calendar__legend div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 4px;
+
+  text-align: center;
+}
+
+.reading-calendar__legend small {
+  color: var(--text);
+
+  font-size: 10px;
+  line-height: 1.1;
+}
+
+.legend-dot {
+  width: 24px;
+  height: 24px;
+
+  background: var(--surface-secondary);
+
+  border-radius: 7px;
+}
+
+.legend-dot--read {
+  box-shadow: inset 0 0 0 7px #ffb020;
+}
+
+.legend-dot--10 {
+  box-shadow: inset 0 0 0 7px #c23ee8;
+}
+
+.legend-dot--30 {
+  box-shadow: inset 0 0 0 7px #6272ff;
+}
+
+.legend-dot--hour {
+  box-shadow: inset 0 0 0 7px #2ec27e;
+}
+
+/* =========================
+   VERY SMALL — до 370px
+========================= */
+
+@media (max-width: 370px) {
+  .legend-dot {
+    width: 22px;
+    height: 22px;
+  }
+
+  .reading-calendar__legend small {
+    font-size: 9px;
+  }
+}
+
+/* =========================
+   TABLET — 600+
+========================= */
+
+@media (min-width: 600px) {
+  .reading-calendar__legend {
+    margin-top: 16px;
+    padding-top: 12px;
+  }
+
+  .legend-dot {
+    width: 28px;
+    height: 28px;
+  }
+
+  .reading-calendar__legend small {
+    font-size: 10px;
+  }
+}
+
+/* =========================
+   DESKTOP — 900+
+========================= */
+
+@media (min-width: 900px) {
+  .reading-calendar__legend {
+    margin-top: 18px;
+  }
+}

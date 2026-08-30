@@ -61,7 +61,13 @@ const apiFetch = async (path, options = {}) => {
         ? data.message
         : `HTTP error ${response.status}`;
 
-    throw new Error(message);
+    const error = new Error(message);
+
+    error.status = response.status;
+
+    error.data = data;
+
+    throw error;
   }
 
   return data;

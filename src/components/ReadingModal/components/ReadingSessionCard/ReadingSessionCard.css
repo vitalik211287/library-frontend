@@ -1,0 +1,455 @@
+/* =========================
+   SESSION CARD
+========================= */
+
+.reading-modal__session-card {
+  display: flex;
+  flex-direction: column;
+
+  gap: 16px;
+
+  padding: 16px;
+
+  box-sizing: border-box;
+
+  border: 1px solid var(--border);
+  border-radius: 16px;
+
+  background: var(--surface-secondary);
+
+  box-shadow: inset 0 0 20px rgba(181, 107, 255, 0.025);
+
+  transition: border-color 0.2s ease;
+}
+
+.reading-modal__session-card:hover {
+  border-color: var(--accent);
+}
+
+/* =========================
+   EMPTY SESSION
+========================= */
+
+.reading-modal__session-empty {
+  display: flex;
+  align-items: center;
+
+  gap: 14px;
+}
+
+.reading-modal__session-icon {
+  flex: 0 0 50px;
+
+  width: 50px;
+  height: 50px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+
+  background: var(--accent-bg);
+  color: var(--accent);
+
+  font-size: 18px;
+
+  box-shadow: 0 0 18px rgba(181, 107, 255, 0.12);
+}
+
+.reading-modal__session-empty h3 {
+  margin: 0 0 5px;
+
+  color: var(--text-h);
+
+  font-size: 15px;
+  line-height: 1.2;
+}
+
+.reading-modal__session-empty p {
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+/* =========================
+   SESSION HEADER
+========================= */
+
+.reading-modal__session-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+}
+
+.reading-modal__session-header h3 {
+  margin: 0;
+
+  color: var(--accent);
+
+  font-size: 15px;
+  line-height: 1.2;
+}
+
+.reading-modal__session-status {
+  display: inline-flex;
+  align-items: center;
+
+  gap: 6px;
+
+  padding: 5px 8px;
+
+  border-radius: 999px;
+
+  background: var(--accent-bg);
+  color: var(--accent);
+
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.reading-modal__session-status > span {
+  width: 7px;
+  height: 7px;
+
+  border-radius: 50%;
+
+  background: #45d483;
+}
+
+.reading-modal__session-status--paused > span {
+  background: var(--accent);
+}
+
+/* =========================
+   TIMER
+========================= */
+
+.reading-modal__timer {
+  min-width: 0;
+
+  color: var(--accent);
+
+  font-size: 40px;
+  font-weight: 700;
+  line-height: 1;
+
+  letter-spacing: 1px;
+
+  font-variant-numeric: tabular-nums;
+
+  white-space: nowrap;
+
+  text-align: center;
+
+  text-shadow: 0 0 20px rgba(181, 107, 255, 0.18);
+}
+
+.reading-modal__timer-caption {
+  margin: -7px 0 0;
+
+  color: var(--text);
+
+  font-size: 12px;
+
+  text-align: center;
+}
+
+/* =========================
+   FINISH FORM
+========================= */
+
+.reading-modal__finish-form {
+  display: flex;
+  flex-direction: column;
+
+  gap: 6px;
+
+  padding-top: 12px;
+
+  border-top: 1px solid var(--border);
+}
+
+.reading-modal__finish-form label {
+  color: var(--text-h);
+
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.reading-modal__finish-form input {
+  width: 100%;
+  min-height: 42px;
+
+  padding: 8px 11px;
+
+  box-sizing: border-box;
+
+  border: 1px solid var(--border);
+  border-radius: 9px;
+
+  background: var(--surface);
+  color: var(--text-h);
+
+  font-family: inherit;
+  font-size: 15px;
+
+  outline: none;
+
+  transition:
+    border-color 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.reading-modal__finish-form input:focus {
+  border-color: var(--accent);
+
+  box-shadow: 0 0 0 3px var(--accent-bg);
+}
+
+.reading-modal__session-page {
+  color: var(--text);
+
+  font-size: 10px;
+}
+
+/* =========================
+   ACTIONS
+========================= */
+
+.reading-modal__session-actions {
+  display: grid;
+
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+
+  gap: 8px;
+
+  width: 100%;
+}
+
+.reading-modal__session-actions button,
+.reading-modal__start {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  gap: 6px;
+
+  padding: 10px 8px;
+
+  box-sizing: border-box;
+
+  border-radius: 10px;
+
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+
+  white-space: nowrap;
+
+  cursor: pointer;
+
+  overflow: hidden;
+
+  transition:
+    transform 0.15s ease,
+    opacity 0.2s ease,
+    border-color 0.2s ease,
+    background-color 0.2s ease;
+}
+
+.reading-modal__action-icon {
+  flex: 0 0 auto;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  color: currentColor;
+
+  font-size: 16px;
+  line-height: 1;
+}
+
+.reading-modal__action-text {
+  min-width: 0;
+
+  overflow: hidden;
+
+  text-overflow: ellipsis;
+}
+
+.reading-modal__action-icon svg {
+  width: 17px;
+  height: 17px;
+
+  fill: currentColor;
+}
+
+/* =========================
+   START
+========================= */
+
+.reading-modal__start {
+  border: 1px solid var(--accent);
+
+  background: var(--accent);
+  color: #ffffff;
+
+  box-shadow: 0 8px 22px rgba(181, 107, 255, 0.2);
+}
+
+.reading-modal__start:hover {
+  opacity: 0.9;
+}
+
+.reading-modal__start:active {
+  transform: scale(0.98);
+}
+
+/* =========================
+   PAUSE / RESUME / FINISH
+========================= */
+
+.reading-modal__pause {
+  border: 1px solid var(--accent);
+
+  background: var(--accent);
+  color: #ffffff;
+}
+
+.reading-modal__resume {
+  border: 1px solid var(--accent);
+
+  background: transparent;
+  color: var(--accent);
+}
+
+.reading-modal__finish {
+  border: 1px solid var(--accent);
+
+  background: transparent;
+  color: var(--text-h);
+}
+
+.reading-modal__pause:hover,
+.reading-modal__resume:hover,
+.reading-modal__finish:hover {
+  background: var(--accent-bg);
+}
+
+.reading-modal__pause:hover {
+  color: var(--accent);
+}
+
+.reading-modal__session-actions button:active {
+  transform: scale(0.97);
+}
+
+.reading-modal__session-actions button:disabled,
+.reading-modal__start:disabled {
+  opacity: 0.5;
+
+  cursor: not-allowed;
+}
+
+/* =========================
+   VERY SMALL PHONES
+========================= */
+
+@media (max-width: 370px) {
+  .reading-modal__session-card {
+    padding: 12px;
+  }
+
+  .reading-modal__timer {
+    font-size: 32px;
+  }
+
+  .reading-modal__session-actions button {
+    padding-inline: 6px;
+
+    font-size: 12px;
+  }
+}
+
+/* =========================
+   ULTRA SMALL PHONES
+========================= */
+
+@media (max-width: 340px) {
+  .reading-modal__session-actions button {
+    min-width: 0;
+    min-height: 44px;
+
+    padding: 8px;
+  }
+
+  .reading-modal__session-actions .reading-modal__action-text {
+    display: none;
+  }
+
+  .reading-modal__session-actions .reading-modal__action-icon {
+    font-size: 20px;
+  }
+}
+
+/* =========================
+   TABLET — 600+
+========================= */
+
+@media (min-width: 600px) {
+  .reading-modal__session-card {
+    padding: 16px;
+  }
+
+  .reading-modal__session-empty h3,
+  .reading-modal__session-header h3 {
+    font-size: 16px;
+  }
+
+  .reading-modal__session-empty p {
+    font-size: 12px;
+  }
+
+  .reading-modal__timer {
+    font-size: 42px;
+  }
+
+  .reading-modal__finish-form label {
+    font-size: 12px;
+  }
+
+  .reading-modal__session-actions button,
+  .reading-modal__start {
+    min-height: 44px;
+
+    font-size: 13px;
+  }
+}
+
+/* =========================
+   DESKTOP — 900+
+========================= */
+
+@media (min-width: 900px) {
+  .reading-modal__session-card {
+    padding: 22px;
+  }
+
+  .reading-modal__timer {
+    font-size: 56px;
+  }
+}

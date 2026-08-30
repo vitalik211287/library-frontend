@@ -1,0 +1,202 @@
+/* =========================
+   WEEKDAYS
+========================= */
+
+.reading-calendar__weekdays,
+.reading-calendar__grid {
+  display: grid;
+
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+
+  gap: 4px;
+}
+
+.reading-calendar__weekdays {
+  margin-bottom: 6px;
+}
+
+.reading-calendar__weekdays span {
+  text-align: center;
+
+  color: var(--text-h);
+
+  font-size: 12px;
+  font-weight: 600;
+  line-height: 1;
+}
+
+/* =========================
+   DAYS
+========================= */
+
+.calendar-day {
+  min-width: 0;
+  height: 62px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 3px;
+}
+
+.calendar-day--empty {
+  visibility: hidden;
+}
+
+/* =========================
+   BOOK COVER
+========================= */
+
+.calendar-day__media {
+  position: relative;
+
+  width: 100%;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  border-radius: 5px;
+}
+
+.calendar-day__media img {
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+}
+
+.calendar-day__books-count {
+  position: absolute;
+
+  right: 2px;
+  bottom: 2px;
+
+  min-width: 16px;
+  height: 16px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 3px;
+
+  color: #ffffff;
+  background: rgba(0, 0, 0, 0.75);
+
+  border-radius: 999px;
+
+  font-size: 9px;
+  font-weight: 700;
+}
+
+/* =========================
+   DAY NUMBER
+========================= */
+
+.calendar-day__number {
+  color: var(--text);
+
+  font-size: 13px;
+  line-height: 1;
+}
+
+.calendar-day--read .calendar-day__number {
+  color: #ffb020;
+}
+
+.calendar-day--10 .calendar-day__number {
+  color: #c23ee8;
+}
+
+.calendar-day--30 .calendar-day__number {
+  color: #6272ff;
+}
+
+.calendar-day--hour .calendar-day__number {
+  color: #2ec27e;
+}
+
+/* =========================
+   VERY SMALL — до 370px
+========================= */
+
+@media (max-width: 370px) {
+  .reading-calendar__weekdays,
+  .reading-calendar__grid {
+    gap: 3px;
+  }
+
+  .calendar-day {
+    height: 56px;
+  }
+
+  .calendar-day__media {
+    height: 39px;
+  }
+
+  .calendar-day__number {
+    font-size: 12px;
+  }
+}
+
+/* =========================
+   TABLET — 600+
+========================= */
+
+@media (min-width: 600px) {
+  .reading-calendar__weekdays,
+  .reading-calendar__grid {
+    gap: 6px;
+  }
+
+  .reading-calendar__weekdays {
+    margin-bottom: 8px;
+  }
+
+  .reading-calendar__weekdays span {
+    font-size: 13px;
+  }
+
+  .calendar-day {
+    height: 74px;
+  }
+
+  .calendar-day__media {
+    height: 53px;
+
+    border-radius: 6px;
+  }
+
+  .calendar-day__number {
+    font-size: 14px;
+  }
+}
+
+/* =========================
+   DESKTOP — 900+
+========================= */
+
+@media (min-width: 900px) {
+  .reading-calendar__weekdays,
+  .reading-calendar__grid {
+    gap: 7px;
+  }
+
+  .calendar-day {
+    height: 80px;
+  }
+
+  .calendar-day__media {
+    height: 58px;
+  }
+
+  .calendar-day__number {
+    font-size: 15px;
+  }
+}

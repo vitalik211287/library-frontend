@@ -1,10 +1,12 @@
 import { useEffect, useState } from "react";
+
 import toast from "react-hot-toast";
+
+import { API_URL, apiFetch } from "../../utils/apiClient.js";
+
 import "./EditBookModal.css";
 
-const API_URL = "https://library-backend-production-5d60.up.railway.app";
-
-function EditBookModal({ book, onClose, onUpdated }) {
+const EditBookModal = ({ book, onClose, onUpdated }) => {
   const [formData, setFormData] = useState({
     title: book.title || "",
     author: book.author || "",
@@ -17,7 +19,9 @@ function EditBookModal({ book, onClose, onUpdated }) {
   });
 
   const [cover, setCover] = useState(null);
+
   const [coverPreview, setCoverPreview] = useState(null);
+
   const [isSaving, setIsSaving] = useState(false);
 
   useEffect(() => {
@@ -60,24 +64,26 @@ function EditBookModal({ book, onClose, onUpdated }) {
 
     if (!formData.title.trim()) {
       toast.error("Вкажіть назву книги");
+
       return;
     }
 
     if (!formData.author.trim()) {
       toast.error("Вкажіть автора");
+
       return;
     }
 
     setIsSaving(true);
 
     try {
-      const response = await fetch(`${API_URL}/api/books/${book.id}`, {
+      const updatedBook = await apiFetch(`/api/books/${book.id}`, {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
+        auth: false,
+
+        body: {
           title: formData.title.trim(),
+
           author: formData.author.trim(),
 
           ...(formData.publisher.trim() && {
@@ -103,16 +109,8 @@ function EditBookModal({ book, onClose, onUpdated }) {
           ...(formData.description.trim() && {
             description: formData.description.trim(),
           }),
-        }),
+        },
       });
-
-      const updatedBook = await response.json();
-
-      if (!response.ok) {
-        toast.error(updatedBook.message || "Не вдалося оновити книгу");
-
-        return;
-      }
 
       let finalBook = updatedBook;
 
@@ -121,27 +119,24 @@ function EditBookModal({ book, onClose, onUpdated }) {
 
         coverData.append("cover", cover);
 
-        const coverResponse = await fetch(
-          `${API_URL}/api/books/${book.id}/cover`,
-          {
+        try {
+          finalBook = await apiFetch(`/api/books/${book.id}/cover`, {
             method: "POST",
+            auth: false,
             body: coverData,
-          },
-        );
+          });
+        } catch (coverError) {
+          console.error("Помилка оновлення обкладинки:", coverError);
 
-        const coverResult = await coverResponse.json();
-
-        if (!coverResponse.ok) {
           toast.error(
-            coverResult.message ||
+            coverError.message ||
               "Дані оновлено, але обкладинку змінити не вдалося",
           );
 
           onUpdated(updatedBook);
+
           return;
         }
-
-        finalBook = coverResult;
       }
 
       toast.success("Книгу оновлено");
@@ -150,7 +145,7 @@ function EditBookModal({ book, onClose, onUpdated }) {
     } catch (error) {
       console.error("Помилка редагування книги:", error);
 
-      toast.error("Не вдалося з'єднатися із сервером");
+      toast.error(error.message || "Не вдалося з'єднатися із сервером");
     } finally {
       setIsSaving(false);
     }
@@ -320,6 +315,7 @@ function EditBookModal({ book, onClose, onUpdated }) {
               type="button"
               className="edit-modal__cancel"
               onClick={onClose}
+              disabled={isSaving}
             >
               Скасувати
             </button>
@@ -328,6 +324,6 @@ function EditBookModal({ book, onClose, onUpdated }) {
       </div>
     </div>
   );
-}
+};
 
 export default EditBookModal;
