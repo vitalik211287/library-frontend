@@ -1,6 +1,8 @@
+// src/pages/UserPage/hooks/useReadingActivity.js
+
 import { useEffect, useState } from "react";
 
-import { apiFetch } from "../../../utils/apiClient.js";
+import { apiFetch, hasToken } from "../../../utils/apiClient.js";
 
 import {
   buildCurrentMonthWeeks,
@@ -11,6 +13,7 @@ import {
 
 const INITIAL_ACTIVITY = {
   weeks: [],
+
   currentMonthSeconds: 0,
 
   currentWeek: {
@@ -29,9 +32,7 @@ const useReadingActivity = ({ readingBookId }) => {
 
   useEffect(() => {
     const loadReadingActivity = async () => {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
+      if (!hasToken()) {
         setReadingActivity(INITIAL_ACTIVITY);
 
         setError("");

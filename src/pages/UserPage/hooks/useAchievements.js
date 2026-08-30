@@ -1,6 +1,8 @@
+// src/pages/UserPage/hooks/useAchievements.js
+
 import { useEffect, useMemo, useState } from "react";
 
-import { apiFetch } from "../../../utils/apiClient.js";
+import { apiFetch, hasToken } from "../../../utils/apiClient.js";
 
 const useAchievements = ({ readingBookId }) => {
   const [achievements, setAchievements] = useState([]);
@@ -17,9 +19,7 @@ const useAchievements = ({ readingBookId }) => {
 
   useEffect(() => {
     const loadAchievements = async () => {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
+      if (!hasToken()) {
         setAchievements([]);
 
         setSummary({

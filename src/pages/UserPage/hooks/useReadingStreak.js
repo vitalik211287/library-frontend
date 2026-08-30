@@ -1,6 +1,8 @@
+// src/pages/UserPage/hooks/useReadingStreak.js
+
 import { useEffect, useState } from "react";
 
-import { apiFetch } from "../../../utils/apiClient.js";
+import { apiFetch, hasToken } from "../../../utils/apiClient.js";
 
 const useReadingStreak = ({ readingBookId }) => {
   const [currentStreak, setCurrentStreak] = useState(0);
@@ -9,10 +11,9 @@ const useReadingStreak = ({ readingBookId }) => {
 
   useEffect(() => {
     const loadStreak = async () => {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
+      if (!hasToken()) {
         setCurrentStreak(0);
+
         setIsStreakLoading(false);
 
         return;

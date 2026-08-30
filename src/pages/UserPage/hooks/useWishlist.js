@@ -1,6 +1,8 @@
+// src/pages/UserPage/hooks/useWishlist.js
+
 import { useEffect, useState } from "react";
 
-import { apiFetch } from "../../../utils/apiClient.js";
+import { apiFetch, hasToken } from "../../../utils/apiClient.js";
 
 const useWishlist = ({ onCountChange }) => {
   const [books, setBooks] = useState([]);
@@ -11,9 +13,7 @@ const useWishlist = ({ onCountChange }) => {
 
   useEffect(() => {
     const loadWishlist = async () => {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
+      if (!hasToken()) {
         setBooks([]);
         setIsLoading(false);
         setError("");

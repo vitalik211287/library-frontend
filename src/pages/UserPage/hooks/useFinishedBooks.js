@@ -1,6 +1,8 @@
+// src/pages/UserPage/hooks/useFinishedBooks.js
+
 import { useEffect, useState } from "react";
 
-import { apiFetch } from "../../../utils/apiClient.js";
+import { apiFetch, hasToken } from "../../../utils/apiClient.js";
 
 const useFinishedBooks = ({ readingBookId, onCountChange }) => {
   const [books, setBooks] = useState([]);
@@ -11,9 +13,7 @@ const useFinishedBooks = ({ readingBookId, onCountChange }) => {
 
   useEffect(() => {
     const loadFinishedBooks = async () => {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
+      if (!hasToken()) {
         setBooks([]);
         setIsLoading(false);
         setError("");

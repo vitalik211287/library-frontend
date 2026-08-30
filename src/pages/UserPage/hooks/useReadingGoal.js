@@ -1,6 +1,8 @@
+// src/pages/UserPage/hooks/useReadingGoal.js
+
 import { useEffect, useState } from "react";
 
-import { apiFetch } from "../../../utils/apiClient.js";
+import { apiFetch, hasToken } from "../../../utils/apiClient.js";
 
 const useReadingGoal = () => {
   const currentYear = new Date().getFullYear();
@@ -17,9 +19,7 @@ const useReadingGoal = () => {
 
   useEffect(() => {
     const loadReadingGoal = async () => {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
+      if (!hasToken()) {
         setReadingGoal(null);
         setGoalError("");
         setIsGoalLoading(false);
@@ -52,9 +52,7 @@ const useReadingGoal = () => {
   }, [currentYear]);
 
   const saveReadingGoal = async ({ books, pages, minutes }) => {
-    const token = localStorage.getItem("token");
-
-    if (!token) {
+    if (!hasToken()) {
       setGoalSaveError("Потрібно увійти в акаунт");
 
       return false;
@@ -62,6 +60,7 @@ const useReadingGoal = () => {
 
     try {
       setIsGoalSaving(true);
+
       setGoalSaveError("");
 
       const data = await apiFetch(`/api/user-books/goals?year=${currentYear}`, {
@@ -69,7 +68,9 @@ const useReadingGoal = () => {
 
         body: {
           booksGoal: books,
+
           pagesGoal: pages,
+
           minutesGoal: minutes,
         },
       });

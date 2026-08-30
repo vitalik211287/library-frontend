@@ -1,6 +1,8 @@
+// src/pages/UserPage/hooks/useCurrentBooks.js
+
 import { useEffect, useState } from "react";
 
-import { apiFetch } from "../../../utils/apiClient.js";
+import { apiFetch, hasToken } from "../../../utils/apiClient.js";
 
 const useCurrentBooks = ({ readingBookId, onBooksChange }) => {
   const [currentBooks, setCurrentBooks] = useState([]);
@@ -11,9 +13,7 @@ const useCurrentBooks = ({ readingBookId, onBooksChange }) => {
 
   useEffect(() => {
     const loadCurrentBooks = async () => {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
+      if (!hasToken()) {
         setCurrentBooks([]);
         setIsLoading(false);
         setError("");
