@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
+import useWishlist from "../../hooks/useWishlist.js";
 
 import "./WishlistSection.css";
-
-const API_URL = "https://library-backend-production-5d60.up.railway.app";
 
 const ArrowIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -17,95 +15,9 @@ const BookmarkIcon = () => (
 );
 
 const WishlistSection = ({ onCountChange }) => {
-  const [books, setBooks] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    const loadWishlist = async () => {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        setIsLoading(false);
-        onCountChange?.(0);
-        return;
-      }
-
-      try {
-        setIsLoading(true);
-        setError("");
-
-        const response = await fetch(
-          `${API_URL}/api/user-books/wishlist`,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          },
-        );
-
-        if (!response.ok) {
-          throw new Error();
-        }
-
-        const data = await response.json();
-        const items = Array.isArray(data.books) ? data.books : [];
-
-        setBooks(items);
-        onCountChange?.(Number(data.count) || items.length);
-      } catch (loadError) {
-        console.error("Load wishlist error:", loadError);
-
-        setError("Не вдалося завантажити список");
-        onCountChange?.(0);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadWishlist();
-  }, [onCountChange]);
-
-  const handleRemoveFromWishlist = async (bookId) => {
-    const token = localStorage.getItem("token");
-
-    if (!token || !bookId) {
-      return;
-    }
-
-    try {
-      const response = await fetch(
-        `${API_URL}/api/user-books/${bookId}/wishlist`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      );
-
-      if (!response.ok) {
-        throw new Error(
-          "Не вдалося прибрати книгу зі списку бажань",
-        );
-      }
-
-      setBooks((currentBooks) => {
-        const nextBooks = currentBooks.filter(
-          ({ book }) => book.id !== bookId,
-        );
-
-        onCountChange?.(nextBooks.length);
-
-        return nextBooks;
-      });
-    } catch (removeError) {
-      console.error(
-        "Remove wishlist error:",
-        removeError,
-      );
-    }
-  };
+  const { books, isLoading, error, removeFromWishlist } = useWishlist({
+    onCountChange,
+  });
 
   return (
     <section className="profile-section">
@@ -121,30 +33,18 @@ const WishlistSection = ({ onCountChange }) => {
       </div>
 
       {isLoading ? (
-        <div className="profile-empty">
-          Завантаження...
-        </div>
+        <div className="profile-empty">Завантаження...</div>
       ) : error ? (
-        <div className="profile-empty">
-          {error}
-        </div>
+        <div className="profile-empty">{error}</div>
       ) : books.length === 0 ? (
-        <div className="profile-empty">
-          Список поки порожній
-        </div>
+        <div className="profile-empty">Список поки порожній</div>
       ) : (
         <div className="profile-books">
           {books.map(({ book, userBook }) => (
-            <article
-              className="profile-book"
-              key={userBook.id}
-            >
+            <article className="profile-book" key={userBook.id}>
               <div className="profile-book__cover">
                 {book.coverUrl ? (
-                  <img
-                    src={book.coverUrl}
-                    alt={book.title}
-                  />
+                  <img src={book.coverUrl} alt={book.title} />
                 ) : (
                   <div className="book-no-cover">
                     Немає
@@ -156,11 +56,7 @@ const WishlistSection = ({ onCountChange }) => {
                 <button
                   type="button"
                   className="profile-book__bookmark"
-                  onClick={() =>
-                    handleRemoveFromWishlist(
-                      book.id,
-                    )
-                  }
+                  onClick={() => removeFromWishlist(book.id)}
                   aria-label="Прибрати зі списку бажань"
                   title="Прибрати зі списку бажань"
                 >

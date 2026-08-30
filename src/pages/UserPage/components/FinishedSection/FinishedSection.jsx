@@ -1,8 +1,6 @@
-import { useEffect, useState } from "react";
+import useFinishedBooks from "../../hooks/useFinishedBooks.js";
 
 import "./FinishedSection.css";
-
-const API_URL = "https://library-backend-production-5d60.up.railway.app";
 
 const ArrowIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -11,52 +9,10 @@ const ArrowIcon = () => (
 );
 
 const FinishedSection = ({ readingBookId, onCountChange }) => {
-  const [books, setBooks] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [error, setError] = useState("");
-
-  useEffect(() => {
-    const loadFinishedBooks = async () => {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
-        setIsLoading(false);
-        onCountChange?.(0);
-        return;
-      }
-
-      try {
-        setIsLoading(true);
-        setError("");
-
-        const response = await fetch(`${API_URL}/api/user-books/finished`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-
-        if (!response.ok) {
-          throw new Error();
-        }
-
-        const data = await response.json();
-        const items = Array.isArray(data.books) ? data.books : [];
-
-        setBooks(items);
-        onCountChange?.(Number(data.count) || items.length);
-      } catch (loadError) {
-        console.error("Load finished error:", loadError);
-
-        setError("Не вдалося завантажити прочитані книги");
-
-        onCountChange?.(0);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadFinishedBooks();
-  }, [readingBookId, onCountChange]);
+  const { books, isLoading, error } = useFinishedBooks({
+    readingBookId,
+    onCountChange,
+  });
 
   return (
     <section className="profile-section">
