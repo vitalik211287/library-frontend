@@ -30,6 +30,9 @@ import { API_URL, apiFetch, hasToken } from "./utils/apiClient.js";
 
 import { useAuth } from "./context/AuthContext.jsx";
 import { useTheme } from "./context/ThemeContext.jsx";
+import UserSearchPage from "./pages/UserPage/components/Users/UserSearchPage/UserSearchPage.jsx";
+import FollowingPage from "./pages/UserPage/components/Users/FollowingPage/FollowingPage.jsx";
+import FollowersPage from "./pages/UserPage/components/Users/FollowersPage/FollowersPage.jsx";
 
 /* =========================
    ICONS
@@ -689,6 +692,9 @@ const App = () => {
               <Route path="/account" element={<UserPage />} />
 
               <Route path="/settings" element={<SettingsPage />} />
+              <Route path="/users" element={<UserSearchPage />} />
+              <Route path="/users/following" element={<FollowingPage />} />
+              <Route path="/users/followers" element={<FollowersPage />} />
             </Routes>
           </div>
 
