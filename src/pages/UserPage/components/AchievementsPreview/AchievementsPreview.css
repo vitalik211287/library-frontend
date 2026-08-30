@@ -2,35 +2,35 @@
    ACHIEVEMENTS PREVIEW
 ========================= */
 
-.profile-section--achievements
-  .profile-section__header
-  > div {
+.profile-section--achievements .profile-section__header > div {
   min-width: 0;
 }
 
 .profile-achievements__summary {
   display: block;
 
-  margin-top: 3px;
+  margin-top: 4px;
 
   color: var(--text);
 
-  font-size: 9px;
+  font-size: 11px;
+  line-height: 1.25;
 }
 
 .profile-achievements {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
+
   gap: 8px;
 }
 
 .profile-achievement {
   min-width: 0;
-  min-height: 76px;
+  min-height: 84px;
 
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 9px;
 
   padding: 10px;
 
@@ -48,11 +48,7 @@
 }
 
 .profile-achievement--unlocked {
-  border-color: color-mix(
-    in srgb,
-    var(--accent) 38%,
-    var(--border)
-  );
+  border-color: color-mix(in srgb, var(--accent) 38%, var(--border));
 }
 
 .profile-achievement--locked {
@@ -75,8 +71,7 @@
   font-size: 21px;
 }
 
-.profile-achievement--locked
-  .profile-achievement__medal {
+.profile-achievement--locked .profile-achievement__medal {
   filter: grayscale(1);
 }
 
@@ -86,7 +81,8 @@
   display: flex;
   flex: 1;
   flex-direction: column;
-  gap: 4px;
+
+  gap: 5px;
 }
 
 .profile-achievement__content strong {
@@ -94,8 +90,9 @@
 
   color: var(--text-h);
 
-  font-size: 10px;
+  font-size: 12px;
   line-height: 1.2;
+  font-weight: 700;
 
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -104,18 +101,29 @@
 .profile-achievement__content small {
   color: var(--text);
 
-  font-size: 8px;
+  font-size: 10px;
+  line-height: 1.2;
 }
 
 .profile-achievement__lock {
   flex-shrink: 0;
 
-  font-size: 10px;
+  font-size: 12px;
 }
 
+/* =========================
+   SMALL MOBILE
+========================= */
+
 @media (max-width: 390px) {
+  .profile-achievements__summary {
+    font-size: 10px;
+  }
+
   .profile-achievement {
-    min-height: 70px;
+    min-height: 78px;
+
+    gap: 7px;
 
     padding: 8px;
   }
@@ -128,18 +136,31 @@
   }
 
   .profile-achievement__content strong {
+    font-size: 11px;
+  }
+
+  .profile-achievement__content small {
     font-size: 9px;
   }
+
+  .profile-achievement__lock {
+    font-size: 11px;
+  }
 }
+
+/* =========================
+   TABLET
+========================= */
 
 @media (min-width: 600px) {
   .profile-achievements {
     grid-template-columns: repeat(4, minmax(0, 1fr));
+
     gap: 10px;
   }
 
   .profile-achievement {
-    min-height: 86px;
+    min-height: 90px;
 
     padding: 12px;
   }
@@ -149,5 +170,31 @@
     height: 46px;
 
     font-size: 23px;
+  }
+
+  .profile-achievement__content strong {
+    font-size: 13px;
+  }
+
+  .profile-achievement__content small {
+    font-size: 11px;
+  }
+}
+
+/* =========================
+   DESKTOP
+========================= */
+
+@media (min-width: 1100px) {
+  .profile-achievement {
+    min-height: 96px;
+  }
+
+  .profile-achievement__content strong {
+    font-size: 14px;
+  }
+
+  .profile-achievement__content small {
+    font-size: 12px;
   }
 }

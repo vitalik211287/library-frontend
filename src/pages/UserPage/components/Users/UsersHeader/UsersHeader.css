@@ -1,0 +1,65 @@
+.users-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.users-header__icon {
+  display: grid;
+  place-items: center;
+
+  flex: 0 0 42px;
+
+  width: 42px;
+  height: 42px;
+
+  color: var(--accent);
+  background: var(--accent-bg);
+
+  border: 1px solid var(--accent-border);
+  border-radius: 12px;
+}
+
+.users-header__icon svg {
+  width: 22px;
+  height: 22px;
+
+  fill: none;
+  stroke: currentColor;
+
+  stroke-width: 1.7;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.users-header__content {
+  min-width: 0;
+}
+
+.users-header__content h2 {
+  margin: 0;
+
+  color: var(--text-h);
+
+  font-size: 18px;
+  line-height: 1.25;
+}
+
+.users-header__content p {
+  margin: 4px 0 0;
+
+  color: var(--text);
+
+  font-size: 13px;
+  line-height: 1.45;
+}
+
+@media (min-width: 600px) {
+  .users-header__content h2 {
+    font-size: 20px;
+  }
+
+  .users-header__content p {
+    font-size: 14px;
+  }
+}

@@ -4,12 +4,14 @@
 
 .profile-section--goal .profile-section__header button:disabled {
   opacity: 0.5;
+
   cursor: default;
 }
 
 .reading-goal-card {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+
   gap: 8px;
 
   padding: 12px;
@@ -27,6 +29,7 @@
 
   display: flex;
   align-items: center;
+
   gap: 8px;
 
   padding: 10px 8px;
@@ -66,8 +69,9 @@
 
   color: var(--text-h);
 
-  font-size: 15px;
+  font-size: 16px;
   line-height: 1.1;
+  font-weight: 700;
 
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -78,7 +82,7 @@
 
   color: var(--text);
 
-  font-size: 8px;
+  font-size: 10px;
   line-height: 1.2;
 }
 
@@ -89,6 +93,7 @@
 .goal-modal-overlay {
   position: fixed;
   inset: 0;
+
   z-index: 2000;
 
   display: flex;
@@ -112,6 +117,7 @@
   padding: 20px;
 
   box-sizing: border-box;
+
   overflow-y: auto;
 
   border: 1px solid var(--border);
@@ -127,6 +133,7 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
+
   gap: 12px;
 
   margin-bottom: 20px;
@@ -146,7 +153,7 @@
 
   color: var(--text);
 
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.35;
 }
 
@@ -177,19 +184,21 @@
 .goal-modal__form {
   display: flex;
   flex-direction: column;
+
   gap: 14px;
 }
 
 .goal-modal__form label {
   display: flex;
   flex-direction: column;
+
   gap: 6px;
 }
 
 .goal-modal__form label span {
   color: var(--text);
 
-  font-size: 11px;
+  font-size: 12px;
   font-weight: 600;
 }
 
@@ -231,13 +240,14 @@
   background: rgba(239, 68, 68, 0.1);
   color: #ef4444;
 
-  font-size: 11px;
+  font-size: 12px;
   line-height: 1.35;
 }
 
 .goal-modal__actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
+
   gap: 8px;
 
   margin-top: 6px;
@@ -273,6 +283,7 @@
 
 .goal-modal__actions button:disabled {
   opacity: 0.6;
+
   cursor: default;
 }
 
@@ -301,15 +312,21 @@
   }
 
   .reading-goal-card__item strong {
-    font-size: 13px;
+    font-size: 14px;
   }
 
   .reading-goal-card__item span {
-    font-size: 7px;
+    font-size: 9px;
   }
 
   .goal-modal {
     padding: 17px;
+  }
+
+  .goal-modal__header p,
+  .goal-modal__form label span,
+  .goal-modal__error {
+    font-size: 11px;
   }
 }
 
@@ -340,7 +357,7 @@
   }
 
   .reading-goal-card__item span {
-    font-size: 10px;
+    font-size: 11px;
   }
 }
 
@@ -358,6 +375,6 @@
   }
 
   .reading-goal-card__item span {
-    font-size: 11px;
+    font-size: 12px;
   }
 }

@@ -20,7 +20,9 @@ const UserPage = () => {
   const readingBookId = searchParams.get("reading");
 
   const [currentBooksCount, setCurrentBooksCount] = useState(0);
+
   const [wishlistCount, setWishlistCount] = useState(0);
+
   const [finishedCount, setFinishedCount] = useState(0);
 
   return (
