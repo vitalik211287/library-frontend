@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { apiFetch } from "../../../utils/apiClient.js";
+import { apiFetch, hasToken } from "../../../utils/apiClient.js";
 
 const useReadingStats = ({ year }) => {
   const [stats, setStats] = useState(null);
@@ -13,9 +13,7 @@ const useReadingStats = ({ year }) => {
 
   useEffect(() => {
     const loadReadingStats = async () => {
-      const token = localStorage.getItem("token");
-
-      if (!token) {
+      if (!hasToken()) {
         setStats(null);
         setGoal(null);
 

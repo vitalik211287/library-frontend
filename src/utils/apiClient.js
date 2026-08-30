@@ -4,6 +4,8 @@ const API_URL =
 
 const getToken = () => localStorage.getItem("token");
 
+const hasToken = () => Boolean(getToken());
+
 const apiFetch = async (path, options = {}) => {
   const {
     auth = true,
@@ -65,4 +67,4 @@ const apiFetch = async (path, options = {}) => {
   return data;
 };
 
-export { API_URL, apiFetch };
+export { API_URL, apiFetch, getToken, hasToken };
