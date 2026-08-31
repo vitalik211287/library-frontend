@@ -40,15 +40,31 @@ const formatDuration = (totalSeconds) => {
     return "";
   }
 
-  const hours = Math.floor(totalSeconds / 3600);
+  const safeSeconds = Math.max(Math.floor(totalSeconds), 0);
 
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const hours = Math.floor(safeSeconds / 3600);
+
+  const minutes = Math.floor((safeSeconds % 3600) / 60);
+
+  const seconds = safeSeconds % 60;
 
   if (hours > 0) {
+    if (minutes === 0) {
+      return `${hours} год`;
+    }
+
     return `${hours} год ${minutes} хв`;
   }
 
-  return `${minutes} хв`;
+  if (minutes > 0) {
+    if (seconds === 0) {
+      return `${minutes} хв`;
+    }
+
+    return `${minutes} хв ${seconds} сек`;
+  }
+
+  return `${seconds} сек`;
 };
 
 export {
