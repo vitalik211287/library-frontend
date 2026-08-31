@@ -15,22 +15,34 @@ export const MONTH_NAMES = [
 
 export const formatReadingTime = (seconds = 0) => {
   if (!seconds) {
-    return "0 хв";
+    return "0 сек";
   }
 
-  const hours = Math.floor(seconds / 3600);
+  const totalSeconds = Math.max(Math.floor(seconds), 0);
 
-  const minutes = Math.floor((seconds % 3600) / 60);
+  const hours = Math.floor(totalSeconds / 3600);
 
-  if (hours === 0) {
-    return `${minutes} хв`;
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+
+  const remainingSeconds = totalSeconds % 60;
+
+  if (hours > 0) {
+    if (minutes === 0) {
+      return `${hours} год`;
+    }
+
+    return `${hours} год ${minutes} хв`;
   }
 
-  if (minutes === 0) {
-    return `${hours} год`;
+  if (minutes > 0) {
+    if (remainingSeconds === 0) {
+      return `${minutes} хв`;
+    }
+
+    return `${minutes} хв ${remainingSeconds} сек`;
   }
 
-  return `${hours} год ${minutes} хв`;
+  return `${remainingSeconds} сек`;
 };
 
 export const formatGoalMinutes = (minutes = 0) => {
