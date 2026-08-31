@@ -5,6 +5,27 @@ import { formatDuration, formatTime } from "../../utils/readingModalHelpers.js";
 
 import "./ReadingStats.css";
 
+const formatEstimatedTime = (seconds) => {
+  if (seconds === null || seconds === undefined || seconds <= 0) {
+    return "—";
+  }
+
+  const totalMinutes = Math.ceil(seconds / 60);
+
+  const hours = Math.floor(totalMinutes / 60);
+  const minutes = totalMinutes % 60;
+
+  if (hours === 0) {
+    return `${minutes} хв`;
+  }
+
+  if (minutes === 0) {
+    return `${hours} год`;
+  }
+
+  return `${hours} год ${minutes} хв`;
+};
+
 const ReadingStats = ({ stats, activeSession, elapsedSeconds, bookId }) => {
   const navigate = useNavigate();
 
@@ -23,6 +44,8 @@ const ReadingStats = ({ stats, activeSession, elapsedSeconds, bookId }) => {
     });
   };
 
+  const isPercentMode = stats.progressMode === "PERCENT";
+
   const longestSessionSeconds = Math.max(
     stats.longestSessionSeconds ?? 0,
     activeSession ? elapsedSeconds : 0,
@@ -32,9 +55,33 @@ const ReadingStats = ({ stats, activeSession, elapsedSeconds, bookId }) => {
 
   const pagesRead = stats.pagesRead ?? 0;
 
+  const percentRead = stats.percentRead ?? 0;
+
   const sessionsCount = stats.sessionsCount ?? 0;
 
   const pagesPerHour = stats.pagesPerHour ?? 0;
+
+  const percentPerHour = stats.percentPerHour ?? 0;
+
+  const progressReadValue = isPercentMode
+    ? `${percentRead}%`
+    : `${pagesRead} стор.`;
+
+  const speedValue = isPercentMode ? percentPerHour : pagesPerHour;
+
+  const speedUnit = isPercentMode ? "%/год" : "стор./год";
+
+  const remainingValue = isPercentMode
+    ? stats.remainingPercent !== null && stats.remainingPercent !== undefined
+      ? `${stats.remainingPercent}%`
+      : "—"
+    : stats.remainingPages !== null && stats.remainingPages !== undefined
+      ? `${stats.remainingPages} стор.`
+      : "—";
+
+  const estimatedTimeValue = formatEstimatedTime(
+    stats.estimatedRemainingSeconds,
+  );
 
   return (
     <section className="reading-modal__stats-section">
@@ -63,7 +110,7 @@ const ReadingStats = ({ stats, activeSession, elapsedSeconds, bookId }) => {
               </svg>
             </span>
 
-            <strong>{pagesRead} стор.</strong>
+            <strong>{progressReadValue}</strong>
 
             <span>Прочитано</span>
           </div>
@@ -79,9 +126,9 @@ const ReadingStats = ({ stats, activeSession, elapsedSeconds, bookId }) => {
               </svg>
             </span>
 
-            <strong>{pagesPerHour}</strong>
+            <strong>{speedValue}</strong>
 
-            <span>стор./год</span>
+            <span>{speedUnit}</span>
           </div>
 
           <div className="reading-modal__quick-stat">
@@ -176,7 +223,7 @@ const ReadingStats = ({ stats, activeSession, elapsedSeconds, bookId }) => {
             <span className="reading-modal__stats-label">Прочитано</span>
 
             <span className="reading-modal__stats-value">
-              {pagesRead} стор.
+              {progressReadValue}
             </span>
           </div>
 
@@ -192,26 +239,21 @@ const ReadingStats = ({ stats, activeSession, elapsedSeconds, bookId }) => {
             <span className="reading-modal__stats-label">Швидкість</span>
 
             <span className="reading-modal__stats-value">
-              {pagesPerHour} стор./год
+              {speedValue} {speedUnit}
             </span>
           </div>
 
           <div className="reading-modal__stats-item">
             <span className="reading-modal__stats-label">Залишилось</span>
 
-            <span className="reading-modal__stats-value">
-              {stats.remainingPages ?? "—"} стор.
-            </span>
+            <span className="reading-modal__stats-value">{remainingValue}</span>
           </div>
 
           <div className="reading-modal__stats-item">
             <span className="reading-modal__stats-label">Орієнтовний час</span>
 
             <span className="reading-modal__stats-value">
-              {stats.estimatedRemainingSeconds !== null &&
-              stats.estimatedRemainingSeconds !== undefined
-                ? formatDuration(stats.estimatedRemainingSeconds)
-                : "—"}
+              {estimatedTimeValue}
             </span>
           </div>
 
