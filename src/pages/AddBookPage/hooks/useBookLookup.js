@@ -11,20 +11,22 @@ const useBookLookup = ({ isbn, setIsbn, setBook, focusIsbnInput }) => {
 
   const searchTimerRef = useRef(null);
 
-  const lastSearchedIsbnRef = useRef("");
+  const activeSearchRef = useRef("");
+
+  const lastAutoSearchRef = useRef("");
 
   const resetLastSearch = useCallback(() => {
-    lastSearchedIsbnRef.current = "";
+    lastAutoSearchRef.current = "";
   }, []);
 
   const lookupBook = useCallback(
-    async (isbnValue) => {
+    async (isbnValue, options = {}) => {
+      const { force = false } = options;
+
       const cleanIsbn = normalizeIsbn(isbnValue);
 
       if (!cleanIsbn) {
-        toast.error("Введіть ISBN", {
-          id: "isbn-empty",
-        });
+        toast.error("Введіть ISBN");
 
         focusIsbnInput();
 
@@ -36,20 +38,29 @@ const useBookLookup = ({ isbn, setIsbn, setBook, focusIsbnInput }) => {
       }
 
       /*
-       * Якщо цей ISBN уже шукається
-       * або вже був знайдений /
-       * не знайдений — автоматично
-       * повторний запит не робимо.
-       *
-       * Для ручного повторного
-       * пошуку AddBookPage викликає
-       * resetLastSearch().
+       * Не запускаємо другий такий самий
+       * запит, поки перший ще виконується.
        */
-      if (lastSearchedIsbnRef.current === cleanIsbn) {
+      if (activeSearchRef.current === cleanIsbn) {
         return;
       }
 
-      lastSearchedIsbnRef.current = cleanIsbn;
+      /*
+       * Автоматичний пошук одного ISBN
+       * вдруге не запускаємо.
+       *
+       * Ручний submit може повторити
+       * пошук через force: true.
+       */
+      if (!force && lastAutoSearchRef.current === cleanIsbn) {
+        return;
+      }
+
+      activeSearchRef.current = cleanIsbn;
+
+      if (!force) {
+        lastAutoSearchRef.current = cleanIsbn;
+      }
 
       setIsbn(cleanIsbn);
       setBook(null);
@@ -67,16 +78,7 @@ const useBookLookup = ({ isbn, setIsbn, setBook, focusIsbnInput }) => {
       } catch (error) {
         console.error("Помилка пошуку книги:", error);
 
-        /*
-         * Тут НЕ скидаємо
-         * lastSearchedIsbnRef.
-         *
-         * Інакше useEffect одразу
-         * повторно шукає той самий
-         * ISBN і показує ще один toast.
-         */
-
-        if (error.status === 404 || error.status === 500) {
+        if (error?.status === 404 || error?.status === 500) {
           toast.error("Книгу з таким ISBN не знайдено", {
             id: `isbn-not-found-${cleanIsbn}`,
           });
@@ -84,10 +86,14 @@ const useBookLookup = ({ isbn, setIsbn, setBook, focusIsbnInput }) => {
           return;
         }
 
-        toast.error(error.message || "Не вдалося з'єднатися із сервером", {
+        toast.error(error?.message || "Не вдалося з'єднатися із сервером", {
           id: `isbn-error-${cleanIsbn}`,
         });
       } finally {
+        if (activeSearchRef.current === cleanIsbn) {
+          activeSearchRef.current = "";
+        }
+
         setIsSearching(false);
 
         focusIsbnInput();
@@ -103,7 +109,11 @@ const useBookLookup = ({ isbn, setIsbn, setBook, focusIsbnInput }) => {
       return undefined;
     }
 
-    if (lastSearchedIsbnRef.current === cleanIsbn) {
+    if (lastAutoSearchRef.current === cleanIsbn) {
+      return undefined;
+    }
+
+    if (activeSearchRef.current === cleanIsbn) {
       return undefined;
     }
 
