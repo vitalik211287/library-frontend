@@ -7,6 +7,12 @@ const PROGRESS_MODES = {
   PERCENT: "PERCENT",
 };
 
+const getProgressInputValue = (value) => {
+  const progress = Number(value ?? 0);
+
+  return progress > 0 ? String(progress) : "";
+};
+
 const useReadingSession = (book) => {
   const [activeSession, setActiveSession] = useState(null);
 
@@ -107,13 +113,12 @@ const useReadingSession = (book) => {
         rating: data.rating ?? null,
       });
 
-      setStartProgress(
-        String(
-          nextProgressMode === PROGRESS_MODES.PERCENT
-            ? (data.currentPercent ?? 0)
-            : (data.currentPage ?? 0),
-        ),
-      );
+      const savedProgress =
+        nextProgressMode === PROGRESS_MODES.PERCENT
+          ? data.currentPercent
+          : data.currentPage;
+
+      setStartProgress(getProgressInputValue(savedProgress));
     } catch (error) {
       if (error?.status === 401) {
         return;
@@ -152,12 +157,12 @@ const useReadingSession = (book) => {
     setMessage("");
 
     if (mode === PROGRESS_MODES.PERCENT) {
-      setStartProgress(String(currentBook.currentPercent ?? 0));
+      setStartProgress(getProgressInputValue(currentBook.currentPercent));
 
       return;
     }
 
-    setStartProgress(String(currentBook.currentPage ?? 0));
+    setStartProgress(getProgressInputValue(currentBook.currentPage));
   };
 
   const changeBookStatus = async (status) => {
@@ -203,7 +208,7 @@ const useReadingSession = (book) => {
       }
 
       if (status === "NOT_STARTED") {
-        setStartProgress("0");
+        setStartProgress("");
       }
 
       await fetchReadingStats();
@@ -225,6 +230,12 @@ const useReadingSession = (book) => {
   };
 
   const validateStartProgress = () => {
+    if (startProgress.trim() === "") {
+      return progressMode === PROGRESS_MODES.PERCENT
+        ? "Вкажи початковий відсоток"
+        : "Вкажи початкову сторінку";
+    }
+
     const value = Number(startProgress);
 
     if (!Number.isInteger(value)) {
@@ -403,6 +414,12 @@ const useReadingSession = (book) => {
   };
 
   const validateEndProgress = () => {
+    if (endProgress.trim() === "") {
+      return isPercentMode
+        ? "Вкажи кінцевий відсоток"
+        : "Вкажи сторінку, на якій зупинилися";
+    }
+
     const value = Number(endProgress);
 
     if (!Number.isInteger(value)) {
@@ -511,7 +528,7 @@ const useReadingSession = (book) => {
 
       setEndProgress("");
 
-      setStartProgress(String(value));
+      setStartProgress(getProgressInputValue(value));
 
       await fetchReadingStats();
     } catch (error) {

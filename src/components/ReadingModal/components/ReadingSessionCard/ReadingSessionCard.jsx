@@ -192,9 +192,6 @@ const ReadingSessionCard = ({
             step="1"
             value={endProgress}
             onChange={(event) => setEndProgress(event.target.value)}
-            placeholder={String(
-              isPercentMode ? Math.min(startValue + 5, 100) : startValue + 10,
-            )}
             inputMode="numeric"
           />
 
