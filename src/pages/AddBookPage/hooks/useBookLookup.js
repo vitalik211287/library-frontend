@@ -6,7 +6,7 @@ import { apiFetch } from "../../../utils/apiClient.js";
 
 import { isValidIsbnLength, normalizeIsbn } from "../utils/bookHelpers.js";
 
-const useBookLookup = ({ isbn, setIsbn, book, setBook, focusIsbnInput }) => {
+const useBookLookup = ({ isbn, setIsbn, setBook, focusIsbnInput }) => {
   const [isSearching, setIsSearching] = useState(false);
 
   const searchTimerRef = useRef(null);
@@ -22,7 +22,9 @@ const useBookLookup = ({ isbn, setIsbn, book, setBook, focusIsbnInput }) => {
       const cleanIsbn = normalizeIsbn(isbnValue);
 
       if (!cleanIsbn) {
-        toast.error("Введіть ISBN");
+        toast.error("Введіть ISBN", {
+          id: "isbn-empty",
+        });
 
         focusIsbnInput();
 
@@ -33,7 +35,17 @@ const useBookLookup = ({ isbn, setIsbn, book, setBook, focusIsbnInput }) => {
         return;
       }
 
-      if (lastSearchedIsbnRef.current === cleanIsbn && book) {
+      /*
+       * Якщо цей ISBN уже шукається
+       * або вже був знайдений /
+       * не знайдений — автоматично
+       * повторний запит не робимо.
+       *
+       * Для ручного повторного
+       * пошуку AddBookPage викликає
+       * resetLastSearch().
+       */
+      if (lastSearchedIsbnRef.current === cleanIsbn) {
         return;
       }
 
@@ -55,21 +67,33 @@ const useBookLookup = ({ isbn, setIsbn, book, setBook, focusIsbnInput }) => {
       } catch (error) {
         console.error("Помилка пошуку книги:", error);
 
-        resetLastSearch();
+        /*
+         * Тут НЕ скидаємо
+         * lastSearchedIsbnRef.
+         *
+         * Інакше useEffect одразу
+         * повторно шукає той самий
+         * ISBN і показує ще один toast.
+         */
 
         if (error.status === 404 || error.status === 500) {
-          toast.error("Книгу з таким ISBN не знайдено");
+          toast.error("Книгу з таким ISBN не знайдено", {
+            id: `isbn-not-found-${cleanIsbn}`,
+          });
 
           return;
         }
 
-        toast.error(error.message || "Не вдалося з'єднатися із сервером");
+        toast.error(error.message || "Не вдалося з'єднатися із сервером", {
+          id: `isbn-error-${cleanIsbn}`,
+        });
       } finally {
         setIsSearching(false);
+
         focusIsbnInput();
       }
     },
-    [book, focusIsbnInput, resetLastSearch, setBook, setIsbn],
+    [focusIsbnInput, setBook, setIsbn],
   );
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import toast from "react-hot-toast";
 
@@ -26,15 +26,15 @@ const AddBookPage = () => {
 
   const isbnInputRef = useRef(null);
 
-  const focusIsbnInput = () => {
+  const focusIsbnInput = useCallback(() => {
     requestAnimationFrame(() => {
       isbnInputRef.current?.focus();
     });
-  };
+  }, []);
 
   useEffect(() => {
     focusIsbnInput();
-  }, []);
+  }, [focusIsbnInput]);
 
   /* =========================
      ПОШУК КНИГИ
@@ -93,7 +93,9 @@ const AddBookPage = () => {
     const cleanIsbn = normalizeIsbn(scannedValue);
 
     if (!isValidIsbnLength(cleanIsbn)) {
-      toast.error("Не вдалося розпізнати ISBN");
+      toast.error("Не вдалося розпізнати ISBN", {
+        id: "scanner-invalid-isbn",
+      });
 
       return;
     }
