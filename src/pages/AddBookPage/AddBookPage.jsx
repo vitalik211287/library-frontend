@@ -41,9 +41,7 @@ const AddBookPage = () => {
   ========================= */
 
   const { isSearching, lookupBook, resetLastSearch } = useBookLookup({
-    isbn,
     setIsbn,
-    book,
     setBook,
     focusIsbnInput,
   });
@@ -72,17 +70,11 @@ const AddBookPage = () => {
       return;
     }
 
-    resetLastSearch();
-
-    await lookupBook(isbn, {
-      force: true,
-    });
+    await lookupBook(isbn);
   };
 
   const handleIsbnChange = (event) => {
     const cleanValue = normalizeIsbn(event.target.value);
-
-    resetLastSearch();
 
     setIsbn(cleanValue);
   };
@@ -91,7 +83,7 @@ const AddBookPage = () => {
      СКАНЕР
   ========================= */
 
-  const handleScan = (scannedValue) => {
+  const handleScan = async (scannedValue) => {
     const cleanIsbn = normalizeIsbn(scannedValue);
 
     if (!isValidIsbnLength(cleanIsbn)) {
@@ -102,11 +94,11 @@ const AddBookPage = () => {
       return;
     }
 
-    resetLastSearch();
+    setScannerOpen(false);
 
     setIsbn(cleanIsbn);
 
-    setScannerOpen(false);
+    await lookupBook(cleanIsbn);
   };
 
   const handleCloseScanner = () => {

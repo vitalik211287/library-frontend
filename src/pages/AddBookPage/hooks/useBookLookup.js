@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useRef, useState } from "react";
 
 import toast from "react-hot-toast";
 
@@ -6,27 +6,19 @@ import { apiFetch } from "../../../utils/apiClient.js";
 
 import { isValidIsbnLength, normalizeIsbn } from "../utils/bookHelpers.js";
 
-const useBookLookup = ({ isbn, setIsbn, setBook, focusIsbnInput }) => {
+const useBookLookup = ({ setIsbn, setBook, focusIsbnInput }) => {
   const [isSearching, setIsSearching] = useState(false);
-
-  const searchTimerRef = useRef(null);
 
   const activeSearchRef = useRef("");
 
-  const lastAutoSearchRef = useRef("");
-
-  const resetLastSearch = useCallback(() => {
-    lastAutoSearchRef.current = "";
-  }, []);
-
   const lookupBook = useCallback(
-    async (isbnValue, options = {}) => {
-      const { force = false } = options;
-
+    async (isbnValue) => {
       const cleanIsbn = normalizeIsbn(isbnValue);
 
       if (!cleanIsbn) {
-        toast.error("Введіть ISBN");
+        toast.error("Введіть ISBN", {
+          id: "isbn-empty",
+        });
 
         focusIsbnInput();
 
@@ -34,33 +26,24 @@ const useBookLookup = ({ isbn, setIsbn, setBook, focusIsbnInput }) => {
       }
 
       if (!isValidIsbnLength(cleanIsbn)) {
+        toast.error("ISBN повинен містити 10 або 13 цифр", {
+          id: "isbn-invalid",
+        });
+
+        focusIsbnInput();
+
         return;
       }
 
       /*
-       * Не запускаємо другий такий самий
-       * запит, поки перший ще виконується.
+       * Якщо такий самий запит уже виконується,
+       * другий не запускаємо.
        */
       if (activeSearchRef.current === cleanIsbn) {
         return;
       }
 
-      /*
-       * Автоматичний пошук одного ISBN
-       * вдруге не запускаємо.
-       *
-       * Ручний submit може повторити
-       * пошук через force: true.
-       */
-      if (!force && lastAutoSearchRef.current === cleanIsbn) {
-        return;
-      }
-
       activeSearchRef.current = cleanIsbn;
-
-      if (!force) {
-        lastAutoSearchRef.current = cleanIsbn;
-      }
 
       setIsbn(cleanIsbn);
       setBook(null);
@@ -102,35 +85,9 @@ const useBookLookup = ({ isbn, setIsbn, setBook, focusIsbnInput }) => {
     [focusIsbnInput, setBook, setIsbn],
   );
 
-  useEffect(() => {
-    const cleanIsbn = normalizeIsbn(isbn);
-
-    if (!isValidIsbnLength(cleanIsbn)) {
-      return undefined;
-    }
-
-    if (lastAutoSearchRef.current === cleanIsbn) {
-      return undefined;
-    }
-
-    if (activeSearchRef.current === cleanIsbn) {
-      return undefined;
-    }
-
-    if (searchTimerRef.current) {
-      clearTimeout(searchTimerRef.current);
-    }
-
-    searchTimerRef.current = setTimeout(() => {
-      lookupBook(cleanIsbn);
-    }, 200);
-
-    return () => {
-      if (searchTimerRef.current) {
-        clearTimeout(searchTimerRef.current);
-      }
-    };
-  }, [isbn, lookupBook]);
+  const resetLastSearch = useCallback(() => {
+    activeSearchRef.current = "";
+  }, []);
 
   return {
     isSearching,
