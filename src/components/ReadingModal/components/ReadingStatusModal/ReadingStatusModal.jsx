@@ -38,30 +38,29 @@ const ReadingStatusModal = ({
     }
   };
 
+  const handleOverlayClick = (event) => {
+    if (event.target === event.currentTarget) {
+      onClose();
+    }
+  };
+
   return (
-    <div
-      className="reading-status-overlay"
-      onMouseDown={(event) => {
-        if (event.target === event.currentTarget) {
-          onClose();
-        }
-      }}
-    >
+    <div className="reading-status-overlay" onMouseDown={handleOverlayClick}>
       <div
         className="reading-status-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="reading-status-title"
         onMouseDown={(event) => event.stopPropagation()}
       >
         <div className="reading-status-modal__header">
-          <div>
-            <h3>Статус книги</h3>
-
-            <p>Змініть статус без створення сесії читання</p>
-          </div>
+          <h3 id="reading-status-title">Статус книги</h3>
 
           <button
             type="button"
             className="reading-status-modal__close"
             onClick={onClose}
+            disabled={loading}
             aria-label="Закрити"
           >
             ×
@@ -101,11 +100,6 @@ const ReadingStatusModal = ({
             );
           })}
         </div>
-
-        <p className="reading-status-modal__note">
-          Ручна зміна статусу не створює сесію читання і не додає час до
-          статистики.
-        </p>
       </div>
     </div>
   );
