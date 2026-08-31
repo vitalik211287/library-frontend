@@ -282,12 +282,10 @@ const useReadingSession = (book) => {
         progressMode === PROGRESS_MODES.PERCENT
           ? {
               progressMode: PROGRESS_MODES.PERCENT,
-
               startPercent: value,
             }
           : {
               progressMode: PROGRESS_MODES.PAGES,
-
               startPage: value,
             };
 
@@ -643,6 +641,9 @@ const useReadingSession = (book) => {
     finishReading,
     changeRating,
     changeBookStatus,
+
+    fetchUserBook,
+    fetchReadingStats,
   };
 };
 

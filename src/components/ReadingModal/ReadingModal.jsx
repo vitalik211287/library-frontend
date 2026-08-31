@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import { createPortal } from "react-dom";
 
 import useReadingSession from "./hooks/useReadingSession.js";
@@ -8,6 +7,7 @@ import ReadingBookInfo from "./components/ReadingBookInfo/ReadingBookInfo.jsx";
 import ReadingSessionCard from "./components/ReadingSessionCard/ReadingSessionCard.jsx";
 import ReadingStats from "./components/ReadingStats/ReadingStats.jsx";
 import ReadingStatusModal from "./components/ReadingStatusModal/ReadingStatusModal.jsx";
+import ReadingSessionsModal from "./components/ReadingSessionsModal/ReadingSessionsModal.jsx";
 
 import { getReadingStatusLabel } from "./utils/readingModalHelpers.js";
 
@@ -15,6 +15,8 @@ import "./ReadingModal.css";
 
 const ReadingModal = ({ book, apiUrl, onClose }) => {
   const [statusModalOpen, setStatusModalOpen] = useState(false);
+
+  const [sessionsModalOpen, setSessionsModalOpen] = useState(false);
 
   const {
     activeSession,
@@ -53,6 +55,9 @@ const ReadingModal = ({ book, apiUrl, onClose }) => {
     finishReading,
     changeRating,
     changeBookStatus,
+
+    fetchUserBook,
+    fetchReadingStats,
   } = useReadingSession(book);
 
   const statusLabel = getReadingStatusLabel(currentBook.status, activeSession);
@@ -86,6 +91,10 @@ const ReadingModal = ({ book, apiUrl, onClose }) => {
         return;
       }
 
+      if (sessionsModalOpen) {
+        return;
+      }
+
       if (statusModalOpen) {
         setStatusModalOpen(false);
 
@@ -100,7 +109,7 @@ const ReadingModal = ({ book, apiUrl, onClose }) => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [onClose, statusModalOpen]);
+  }, [onClose, statusModalOpen, sessionsModalOpen]);
 
   const handleOverlayClick = (event) => {
     if (event.target === event.currentTarget) {
@@ -118,6 +127,18 @@ const ReadingModal = ({ book, apiUrl, onClose }) => {
     }
 
     setStatusModalOpen(false);
+  };
+
+  const handleSessionsOpen = () => {
+    setSessionsModalOpen(true);
+  };
+
+  const handleSessionsClose = () => {
+    setSessionsModalOpen(false);
+  };
+
+  const handleSessionsChanged = async () => {
+    await Promise.all([fetchUserBook(), fetchReadingStats()]);
   };
 
   return createPortal(
@@ -189,6 +210,7 @@ const ReadingModal = ({ book, apiUrl, onClose }) => {
               activeSession={activeSession}
               elapsedSeconds={elapsedSeconds}
               bookId={book.id}
+              onOpenSessions={handleSessionsOpen}
             />
           </div>
         </div>
@@ -201,6 +223,15 @@ const ReadingModal = ({ book, apiUrl, onClose }) => {
           loading={statusLoading}
           onChange={changeBookStatus}
           onClose={handleStatusClose}
+        />
+      )}
+
+      {sessionsModalOpen && (
+        <ReadingSessionsModal
+          bookId={book.id}
+          totalPages={currentBook.pages}
+          onClose={handleSessionsClose}
+          onChanged={handleSessionsChanged}
         />
       )}
     </>,

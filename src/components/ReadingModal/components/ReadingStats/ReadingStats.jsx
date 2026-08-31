@@ -13,6 +13,7 @@ const formatEstimatedTime = (seconds) => {
   const totalMinutes = Math.ceil(seconds / 60);
 
   const hours = Math.floor(totalMinutes / 60);
+
   const minutes = totalMinutes % 60;
 
   if (hours === 0) {
@@ -26,7 +27,13 @@ const formatEstimatedTime = (seconds) => {
   return `${hours} год ${minutes} хв`;
 };
 
-const ReadingStats = ({ stats, activeSession, elapsedSeconds, bookId }) => {
+const ReadingStats = ({
+  stats,
+  activeSession,
+  elapsedSeconds,
+  bookId,
+  onOpenSessions,
+}) => {
   const navigate = useNavigate();
 
   const [detailsOpen, setDetailsOpen] = useState(false);
@@ -42,6 +49,12 @@ const ReadingStats = ({ stats, activeSession, elapsedSeconds, bookId }) => {
         bookId,
       },
     });
+  };
+
+  const handleOpenSessions = () => {
+    if (onOpenSessions) {
+      onOpenSessions();
+    }
   };
 
   const isPercentMode = stats.progressMode === "PERCENT";
@@ -260,8 +273,8 @@ const ReadingStats = ({ stats, activeSession, elapsedSeconds, bookId }) => {
           <button
             type="button"
             className="reading-modal__stats-item reading-modal__stats-item--calendar"
-            onClick={handleOpenCalendar}
-            aria-label="Відкрити календар читання"
+            onClick={handleOpenSessions}
+            aria-label="Відкрити історію сесій"
           >
             <span className="reading-modal__stats-label">Сесій</span>
 
@@ -272,13 +285,9 @@ const ReadingStats = ({ stats, activeSession, elapsedSeconds, bookId }) => {
 
               <span className="reading-modal__stats-calendar-icon">
                 <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <rect x="3" y="5" width="18" height="16" rx="2" />
+                  <circle cx="12" cy="12" r="8" />
 
-                  <path d="M16 3v4" />
-
-                  <path d="M8 3v4" />
-
-                  <path d="M3 10h18" />
+                  <path d="M12 8v4l3 2" />
                 </svg>
               </span>
             </span>
@@ -301,6 +310,31 @@ const ReadingStats = ({ stats, activeSession, elapsedSeconds, bookId }) => {
               </span>
             </span>
           </div>
+
+          <button
+            type="button"
+            className="reading-modal__stats-item reading-modal__stats-item--calendar"
+            onClick={handleOpenCalendar}
+            aria-label="Відкрити календар читання"
+          >
+            <span className="reading-modal__stats-label">Календар</span>
+
+            <span className="reading-modal__stats-calendar-row">
+              <span className="reading-modal__stats-value">Відкрити</span>
+
+              <span className="reading-modal__stats-calendar-icon">
+                <svg viewBox="0 0 24 24" aria-hidden="true">
+                  <rect x="3" y="5" width="18" height="16" rx="2" />
+
+                  <path d="M16 3v4" />
+
+                  <path d="M8 3v4" />
+
+                  <path d="M3 10h18" />
+                </svg>
+              </span>
+            </span>
+          </button>
         </div>
       </div>
     </section>
