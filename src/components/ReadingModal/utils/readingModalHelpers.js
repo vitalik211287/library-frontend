@@ -6,12 +6,21 @@ const getReadingProgress = (currentPage, totalPages) => {
   return Math.round(((currentPage ?? 0) / totalPages) * 1000) / 10;
 };
 
+const READING_STATUS_LABELS = {
+  NOT_STARTED: "Не почато",
+  READING: "Читаю",
+  PAUSED: "Пауза",
+  FINISHED: "Прочитано",
+};
+
 const getReadingStatusLabel = (status, activeSession) => {
   if (activeSession) {
-    return activeSession.pausedAt ? "PAUSED" : "READING";
+    return activeSession.pausedAt
+      ? READING_STATUS_LABELS.PAUSED
+      : READING_STATUS_LABELS.READING;
   }
 
-  return status;
+  return READING_STATUS_LABELS[status] ?? "Не почато";
 };
 
 const formatTime = (totalSeconds) => {
@@ -47,4 +56,5 @@ export {
   formatTime,
   getReadingProgress,
   getReadingStatusLabel,
+  READING_STATUS_LABELS,
 };

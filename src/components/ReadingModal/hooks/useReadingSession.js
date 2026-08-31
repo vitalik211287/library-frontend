@@ -1,47 +1,119 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { apiFetch } from "../../../utils/apiClient.js";
 
+const PROGRESS_MODES = {
+  PAGES: "PAGES",
+  PERCENT: "PERCENT",
+};
+
 const useReadingSession = (book) => {
   const [activeSession, setActiveSession] = useState(null);
-
-  const [message, setMessage] = useState("");
-
-  const [loading, setLoading] = useState(false);
-
-  const [elapsedSeconds, setElapsedSeconds] = useState(0);
-
-  const [endPage, setEndPage] = useState("");
-
-  const [finishing, setFinishing] = useState(false);
 
   const [currentBook, setCurrentBook] = useState(book);
 
   const [stats, setStats] = useState(null);
 
+  const [message, setMessage] = useState("");
+
+  const [loading, setLoading] = useState(false);
+
+  const [finishing, setFinishing] = useState(false);
+
   const [ratingLoading, setRatingLoading] = useState(false);
 
   const [pauseLoading, setPauseLoading] = useState(false);
 
+  const [statusLoading, setStatusLoading] = useState(false);
+
+  const [elapsedSeconds, setElapsedSeconds] = useState(0);
+
+  const [progressMode, setProgressMode] = useState(
+    book.progressMode ?? PROGRESS_MODES.PAGES,
+  );
+
+  const [startProgress, setStartProgress] = useState("");
+
+  const [endProgress, setEndProgress] = useState("");
+
   const isPaused = Boolean(activeSession?.pausedAt);
 
-  /* =========================
-     USER BOOK
-  ========================= */
+  const sessionProgressMode =
+    activeSession?.progressMode ??
+    progressMode ??
+    currentBook.progressMode ??
+    PROGRESS_MODES.PAGES;
+
+  const isPagesMode = sessionProgressMode === PROGRESS_MODES.PAGES;
+
+  const isPercentMode = sessionProgressMode === PROGRESS_MODES.PERCENT;
+
+  const currentProgress = useMemo(() => {
+    if ((currentBook.progressMode ?? progressMode) === PROGRESS_MODES.PERCENT) {
+      return currentBook.currentPercent ?? 0;
+    }
+
+    return currentBook.currentPage ?? 0;
+  }, [
+    currentBook.currentPage,
+    currentBook.currentPercent,
+    currentBook.progressMode,
+    progressMode,
+  ]);
+
+  const progressPercent = useMemo(() => {
+    if ((currentBook.progressMode ?? progressMode) === PROGRESS_MODES.PERCENT) {
+      return Math.min(Math.max(currentBook.currentPercent ?? 0, 0), 100);
+    }
+
+    if (!currentBook.pages || currentBook.pages <= 0) {
+      return 0;
+    }
+
+    return Math.min(
+      Math.max(
+        Math.round(((currentBook.currentPage ?? 0) / currentBook.pages) * 100),
+        0,
+      ),
+      100,
+    );
+  }, [
+    currentBook.currentPage,
+    currentBook.currentPercent,
+    currentBook.pages,
+    currentBook.progressMode,
+    progressMode,
+  ]);
 
   const fetchUserBook = async () => {
     try {
       const data = await apiFetch(`/api/user-books/${book.id}`);
 
+      const nextProgressMode = data.progressMode ?? PROGRESS_MODES.PAGES;
+
+      setProgressMode(nextProgressMode);
+
       setCurrentBook({
         ...data.book,
 
+        progressMode: nextProgressMode,
+
         currentPage: data.currentPage ?? 0,
+
+        currentPercent: data.currentPercent ?? 0,
 
         status: data.status ?? "NOT_STARTED",
 
         rating: data.rating ?? null,
       });
+
+      setStartProgress(
+        String(
+          nextProgressMode === PROGRESS_MODES.PERCENT
+            ? (data.currentPercent ?? 0)
+            : (data.currentPage ?? 0),
+        ),
+      );
     } catch (error) {
       if (error?.status === 401) {
         return;
@@ -57,10 +129,6 @@ const useReadingSession = (book) => {
     }
   };
 
-  /* =========================
-     STATS
-  ========================= */
-
   const fetchReadingStats = async () => {
     try {
       const data = await apiFetch(`/api/user-books/${book.id}/reading/stats`);
@@ -71,25 +139,171 @@ const useReadingSession = (book) => {
     }
   };
 
-  /* =========================
-     START
-  ========================= */
+  const changeProgressMode = (mode) => {
+    if (activeSession) {
+      return;
+    }
+
+    if (mode !== PROGRESS_MODES.PAGES && mode !== PROGRESS_MODES.PERCENT) {
+      return;
+    }
+
+    setProgressMode(mode);
+    setMessage("");
+
+    if (mode === PROGRESS_MODES.PERCENT) {
+      setStartProgress(String(currentBook.currentPercent ?? 0));
+
+      return;
+    }
+
+    setStartProgress(String(currentBook.currentPage ?? 0));
+  };
+
+  const changeBookStatus = async (status) => {
+    if (activeSession) {
+      setMessage("Спочатку завершіть активну сесію читання.");
+
+      return false;
+    }
+
+    try {
+      setStatusLoading(true);
+      setMessage("");
+
+      const data = await apiFetch(`/api/user-books/${book.id}`, {
+        method: "PATCH",
+
+        body: {
+          status,
+        },
+      });
+
+      setCurrentBook((current) => ({
+        ...current,
+
+        status: data.status ?? status,
+
+        progressMode: data.progressMode ?? current.progressMode,
+
+        currentPage: data.currentPage ?? current.currentPage ?? 0,
+
+        currentPercent: data.currentPercent ?? current.currentPercent ?? 0,
+      }));
+
+      if (status === "FINISHED") {
+        if (
+          (data.progressMode ?? currentBook.progressMode) ===
+          PROGRESS_MODES.PERCENT
+        ) {
+          setStartProgress("100");
+        } else if (currentBook.pages) {
+          setStartProgress(String(currentBook.pages));
+        }
+      }
+
+      if (status === "NOT_STARTED") {
+        setStartProgress("0");
+      }
+
+      await fetchReadingStats();
+
+      return true;
+    } catch (error) {
+      console.error("Помилка зміни статусу книги:", error);
+
+      setMessage(
+        error instanceof Error
+          ? error.message
+          : "Не вдалося змінити статус книги",
+      );
+
+      return false;
+    } finally {
+      setStatusLoading(false);
+    }
+  };
+
+  const validateStartProgress = () => {
+    const value = Number(startProgress);
+
+    if (!Number.isInteger(value)) {
+      return progressMode === PROGRESS_MODES.PERCENT
+        ? "Вкажи цілий відсоток"
+        : "Вкажи коректний номер сторінки";
+    }
+
+    if (value < 0) {
+      return "Прогрес не може бути меншим за 0";
+    }
+
+    if (progressMode === PROGRESS_MODES.PERCENT && value > 100) {
+      return "Відсоток має бути від 0 до 100";
+    }
+
+    if (
+      progressMode === PROGRESS_MODES.PAGES &&
+      currentBook.pages &&
+      value > currentBook.pages
+    ) {
+      return `У книзі всього ${currentBook.pages} сторінок`;
+    }
+
+    return "";
+  };
 
   const startReading = async () => {
+    const validationMessage = validateStartProgress();
+
+    if (validationMessage) {
+      setMessage(validationMessage);
+
+      return;
+    }
+
+    const value = Number(startProgress);
+
     try {
       setLoading(true);
       setMessage("");
 
+      const body =
+        progressMode === PROGRESS_MODES.PERCENT
+          ? {
+              progressMode: PROGRESS_MODES.PERCENT,
+
+              startPercent: value,
+            }
+          : {
+              progressMode: PROGRESS_MODES.PAGES,
+
+              startPage: value,
+            };
+
       const data = await apiFetch(`/api/user-books/${book.id}/reading/start`, {
         method: "POST",
+        body,
       });
 
       setElapsedSeconds(0);
 
       setActiveSession(data.session);
 
+      setEndProgress("");
+
       setCurrentBook((current) => ({
         ...current,
+
+        progressMode,
+
+        ...(progressMode === PROGRESS_MODES.PAGES
+          ? {
+              currentPage: value,
+            }
+          : {
+              currentPercent: value,
+            }),
+
         status: "READING",
       }));
     } catch (error) {
@@ -103,14 +317,9 @@ const useReadingSession = (book) => {
     }
   };
 
-  /* =========================
-     PAUSE
-  ========================= */
-
   const pauseReading = async () => {
     try {
       setPauseLoading(true);
-
       setMessage("");
 
       const data = await apiFetch(`/api/user-books/${book.id}/reading/pause`, {
@@ -118,6 +327,11 @@ const useReadingSession = (book) => {
       });
 
       setActiveSession(data.session);
+
+      setCurrentBook((current) => ({
+        ...current,
+        status: "PAUSED",
+      }));
     } catch (error) {
       console.error("Помилка паузи читання:", error);
 
@@ -131,14 +345,9 @@ const useReadingSession = (book) => {
     }
   };
 
-  /* =========================
-     RESUME
-  ========================= */
-
   const resumeReading = async () => {
     try {
       setPauseLoading(true);
-
       setMessage("");
 
       const data = await apiFetch(`/api/user-books/${book.id}/reading/resume`, {
@@ -146,6 +355,11 @@ const useReadingSession = (book) => {
       });
 
       setActiveSession(data.session);
+
+      setCurrentBook((current) => ({
+        ...current,
+        status: "READING",
+      }));
     } catch (error) {
       console.error("Помилка продовження читання:", error);
 
@@ -159,14 +373,9 @@ const useReadingSession = (book) => {
     }
   };
 
-  /* =========================
-     RATING
-  ========================= */
-
   const changeRating = async (rating) => {
     try {
       setRatingLoading(true);
-
       setMessage("");
 
       const data = await apiFetch(`/api/user-books/${book.id}`, {
@@ -193,56 +402,116 @@ const useReadingSession = (book) => {
     }
   };
 
-  /* =========================
-     FINISH
-  ========================= */
+  const validateEndProgress = () => {
+    const value = Number(endProgress);
+
+    if (!Number.isInteger(value)) {
+      return isPercentMode
+        ? "Вкажи цілий відсоток"
+        : "Вкажи коректний номер сторінки";
+    }
+
+    if (value < 0) {
+      return "Прогрес не може бути меншим за 0";
+    }
+
+    if (isPercentMode) {
+      const sessionStartPercent = activeSession?.startPercent ?? 0;
+
+      if (value > 100) {
+        return "Відсоток має бути від 0 до 100";
+      }
+
+      if (value < sessionStartPercent) {
+        return `Відсоток не може бути меншим за ${sessionStartPercent}%`;
+      }
+
+      return "";
+    }
+
+    const sessionStartPage = activeSession?.startPage ?? 0;
+
+    if (value < sessionStartPage) {
+      return `Сторінка не може бути меншою за ${sessionStartPage}`;
+    }
+
+    if (currentBook.pages && value > currentBook.pages) {
+      return `У книзі всього ${currentBook.pages} сторінок`;
+    }
+
+    return "";
+  };
+
+  const finishValidationMessage =
+    activeSession && endProgress !== "" ? validateEndProgress() : "";
+
+  const canFinish =
+    Boolean(activeSession) &&
+    endProgress !== "" &&
+    !finishValidationMessage &&
+    !finishing;
 
   const finishReading = async () => {
-    const page = Number(endPage);
+    const validationMessage = validateEndProgress();
 
-    if (!Number.isInteger(page)) {
-      setMessage("Вкажи коректний номер сторінки");
-
-      return;
-    }
-
-    if (activeSession && page < activeSession.startPage) {
-      setMessage(`Сторінка не може бути меншою за ${activeSession.startPage}`);
+    if (validationMessage) {
+      setMessage(validationMessage);
 
       return;
     }
 
-    if (currentBook.pages && page > currentBook.pages) {
-      setMessage(`У книзі всього ${currentBook.pages} сторінок`);
-
-      return;
-    }
+    const value = Number(endProgress);
 
     try {
       setFinishing(true);
       setMessage("");
 
+      const body =
+        sessionProgressMode === PROGRESS_MODES.PERCENT
+          ? {
+              endPercent: value,
+            }
+          : {
+              endPage: value,
+            };
+
       await apiFetch(`/api/user-books/${book.id}/reading/finish`, {
         method: "POST",
-
-        body: {
-          endPage: page,
-        },
+        body,
       });
 
-      setCurrentBook((current) => ({
-        ...current,
+      setCurrentBook((current) => {
+        const finished =
+          sessionProgressMode === PROGRESS_MODES.PERCENT
+            ? value >= 100
+            : Boolean(current.pages && value >= current.pages);
 
-        currentPage: page,
+        return {
+          ...current,
 
-        status: current.pages && page >= current.pages ? "FINISHED" : "READING",
-      }));
+          progressMode: sessionProgressMode,
+
+          ...(sessionProgressMode === PROGRESS_MODES.PERCENT
+            ? {
+                currentPercent: value,
+              }
+            : {
+                currentPage: value,
+              }),
+
+          status: finished ? "FINISHED" : "READING",
+        };
+      });
+
+      setProgressMode(sessionProgressMode);
 
       setActiveSession(null);
 
       setElapsedSeconds(0);
 
-      setEndPage("");
+      setEndProgress("");
+
+      setStartProgress(String(value));
 
       await fetchReadingStats();
     } catch (error) {
@@ -256,13 +525,9 @@ const useReadingSession = (book) => {
     }
   };
 
-  /* =========================
-     TIMER
-  ========================= */
-
   useEffect(() => {
     if (!activeSession || activeSession.pausedAt) {
-      return;
+      return undefined;
     }
 
     const intervalId = setInterval(() => {
@@ -274,10 +539,6 @@ const useReadingSession = (book) => {
     };
   }, [activeSession]);
 
-  /* =========================
-     ACTIVE SESSION
-  ========================= */
-
   useEffect(() => {
     const fetchActiveSession = async () => {
       try {
@@ -285,17 +546,28 @@ const useReadingSession = (book) => {
           `/api/user-books/${book.id}/reading/active`,
         );
 
-        if (data.session) {
-          setElapsedSeconds(data.elapsedSeconds ?? 0);
+        if (!data.session) {
+          setActiveSession(null);
 
-          setActiveSession(data.session);
-
-          setCurrentBook((current) => ({
-            ...current,
-
-            status: "READING",
-          }));
+          return;
         }
+
+        setElapsedSeconds(data.elapsedSeconds ?? 0);
+
+        setActiveSession(data.session);
+
+        setProgressMode(data.session.progressMode ?? PROGRESS_MODES.PAGES);
+
+        setCurrentBook((current) => ({
+          ...current,
+
+          progressMode:
+            data.session.progressMode ??
+            current.progressMode ??
+            PROGRESS_MODES.PAGES,
+
+          status: data.session.pausedAt ? "PAUSED" : "READING",
+        }));
       } catch (error) {
         console.error("Помилка отримання активної сесії:", error);
       }
@@ -304,17 +576,9 @@ const useReadingSession = (book) => {
     fetchActiveSession();
   }, [book.id]);
 
-  /* =========================
-     LOAD BOOK
-  ========================= */
-
   useEffect(() => {
     fetchUserBook();
   }, [book.id]);
-
-  /* =========================
-     LOAD STATS
-  ========================= */
 
   useEffect(() => {
     fetchReadingStats();
@@ -331,11 +595,28 @@ const useReadingSession = (book) => {
     finishing,
     ratingLoading,
     pauseLoading,
+    statusLoading,
 
     elapsedSeconds,
 
-    endPage,
-    setEndPage,
+    progressMode,
+    changeProgressMode,
+
+    startProgress,
+    setStartProgress,
+
+    endProgress,
+    setEndProgress,
+
+    currentProgress,
+    progressPercent,
+
+    sessionProgressMode,
+    isPagesMode,
+    isPercentMode,
+
+    finishValidationMessage,
+    canFinish,
 
     isPaused,
 
@@ -344,6 +625,7 @@ const useReadingSession = (book) => {
     resumeReading,
     finishReading,
     changeRating,
+    changeBookStatus,
   };
 };
 

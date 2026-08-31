@@ -12,26 +12,122 @@ const ReadingSessionCard = ({
 
   elapsedSeconds,
 
-  endPage,
-  setEndPage,
+  progressMode,
+  onProgressModeChange,
+
+  startProgress,
+  setStartProgress,
+
+  endProgress,
+  setEndProgress,
 
   isPaused,
+
+  finishValidationMessage,
+  canFinish,
 
   onStart,
   onPause,
   onResume,
   onFinish,
 }) => {
+  const isPagesMode = (activeSession?.progressMode ?? progressMode) === "PAGES";
+
+  const isPercentMode = !isPagesMode;
+
+  const startValue = isPercentMode
+    ? (activeSession?.startPercent ?? 0)
+    : (activeSession?.startPage ?? 0);
+
   if (!activeSession) {
     return (
       <section className="reading-modal__session-card">
-        <div className="reading-modal__session-empty">
-          <div className="reading-modal__session-icon">▶</div>
+        <div className="reading-modal__session-setup">
+          <div className="reading-modal__setup-section">
+            <div className="reading-modal__setup-heading">
+              <span className="reading-modal__setup-number">1</span>
 
-          <div>
-            <h3>Сесія читання не активна</h3>
+              <h3>Спосіб підрахунку прогресу</h3>
+            </div>
 
-            <p>Почніть читати, щоб відстежувати час та прогрес.</p>
+            <div
+              className="reading-modal__mode-switch"
+              role="group"
+              aria-label="Спосіб підрахунку прогресу"
+            >
+              <button
+                type="button"
+                className={
+                  progressMode === "PAGES"
+                    ? "reading-modal__mode-button reading-modal__mode-button--active"
+                    : "reading-modal__mode-button"
+                }
+                onClick={() => onProgressModeChange("PAGES")}
+              >
+                Сторінки
+              </button>
+
+              <button
+                type="button"
+                className={
+                  progressMode === "PERCENT"
+                    ? "reading-modal__mode-button reading-modal__mode-button--active"
+                    : "reading-modal__mode-button"
+                }
+                onClick={() => onProgressModeChange("PERCENT")}
+              >
+                Відсотки
+              </button>
+            </div>
+
+            <p className="reading-modal__mode-note">
+              Цей спосіб збережеться для цієї книги. Його можна буде змінити
+              пізніше.
+            </p>
+          </div>
+
+          <div className="reading-modal__setup-section">
+            <div className="reading-modal__setup-heading">
+              <span className="reading-modal__setup-number">2</span>
+
+              <h3>
+                {progressMode === "PERCENT"
+                  ? "З якого відсотка починаєте?"
+                  : "З якої сторінки починаєте?"}
+              </h3>
+            </div>
+
+            <div className="reading-modal__progress-input-wrap">
+              <input
+                id="reading-start-progress"
+                type="number"
+                min="0"
+                max={
+                  progressMode === "PERCENT"
+                    ? 100
+                    : (currentBook.pages ?? undefined)
+                }
+                step="1"
+                value={startProgress}
+                onChange={(event) => setStartProgress(event.target.value)}
+                placeholder="0"
+                inputMode="numeric"
+              />
+
+              <span className="reading-modal__progress-input-suffix">
+                {progressMode === "PERCENT"
+                  ? "%"
+                  : currentBook.pages
+                    ? `/ ${currentBook.pages}`
+                    : "стор."}
+              </span>
+            </div>
+
+            {progressMode === "PAGES" && currentBook.pages && (
+              <p className="reading-modal__mode-note">
+                У книзі {currentBook.pages} сторінок
+              </p>
+            )}
           </div>
         </div>
 
@@ -39,7 +135,7 @@ const ReadingSessionCard = ({
           type="button"
           className="reading-modal__start"
           onClick={onStart}
-          disabled={loading}
+          disabled={loading || startProgress === ""}
         >
           <span className="reading-modal__action-icon">▶</span>
 
@@ -54,7 +150,7 @@ const ReadingSessionCard = ({
   return (
     <section className="reading-modal__session-card">
       <div className="reading-modal__session-header">
-        <h3>◉ Сесія читання</h3>
+        <h3>Сесія читання</h3>
 
         <span
           className={`reading-modal__session-status ${
@@ -73,22 +169,54 @@ const ReadingSessionCard = ({
         {isPaused ? "Читання на паузі" : "Тривалість сесії"}
       </p>
 
+      <div className="reading-modal__session-start-progress">
+        Початок сесії:{" "}
+        <strong>
+          {startValue}
+          {isPercentMode
+            ? "%"
+            : currentBook.pages
+              ? ` / ${currentBook.pages}`
+              : " стор."}
+        </strong>
+      </div>
+
       <div className="reading-modal__finish-form">
-        <label htmlFor="reading-end-page">На якій сторінці зупинився?</label>
+        <label htmlFor="reading-end-progress">
+          {isPercentMode
+            ? "До якого відсотка дочитали?"
+            : "На якій сторінці зупинилися?"}
+        </label>
 
-        <input
-          id="reading-end-page"
-          type="number"
-          min={activeSession.startPage}
-          max={currentBook.pages ?? undefined}
-          value={endPage}
-          onChange={(event) => setEndPage(event.target.value)}
-          placeholder={`Наприклад, ${activeSession.startPage + 10}`}
-        />
+        <div className="reading-modal__progress-input-wrap">
+          <input
+            id="reading-end-progress"
+            type="number"
+            min={startValue}
+            max={isPercentMode ? 100 : (currentBook.pages ?? undefined)}
+            step="1"
+            value={endProgress}
+            onChange={(event) => setEndProgress(event.target.value)}
+            placeholder={String(
+              isPercentMode ? Math.min(startValue + 5, 100) : startValue + 10,
+            )}
+            inputMode="numeric"
+          />
 
-        <span className="reading-modal__session-page">
-          Початкова сторінка: {activeSession.startPage}
-        </span>
+          <span className="reading-modal__progress-input-suffix">
+            {isPercentMode
+              ? "%"
+              : currentBook.pages
+                ? `/ ${currentBook.pages}`
+                : "стор."}
+          </span>
+        </div>
+
+        {finishValidationMessage && (
+          <p className="reading-modal__validation-error">
+            {finishValidationMessage}
+          </p>
+        )}
       </div>
 
       <div className="reading-modal__session-actions">
@@ -132,7 +260,7 @@ const ReadingSessionCard = ({
           type="button"
           className="reading-modal__finish"
           onClick={onFinish}
-          disabled={finishing || endPage === ""}
+          disabled={finishing || !canFinish}
         >
           <span className="reading-modal__action-icon">■</span>
 

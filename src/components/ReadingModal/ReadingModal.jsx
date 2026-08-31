@@ -7,10 +7,7 @@ import ReadingBookInfo from "./components/ReadingBookInfo/ReadingBookInfo.jsx";
 import ReadingSessionCard from "./components/ReadingSessionCard/ReadingSessionCard.jsx";
 import ReadingStats from "./components/ReadingStats/ReadingStats.jsx";
 
-import {
-  getReadingProgress,
-  getReadingStatusLabel,
-} from "./utils/readingModalHelpers.js";
+import { getReadingStatusLabel } from "./utils/readingModalHelpers.js";
 
 import "./ReadingModal.css";
 
@@ -26,11 +23,23 @@ const ReadingModal = ({ book, apiUrl, onClose }) => {
     finishing,
     ratingLoading,
     pauseLoading,
+    statusLoading,
 
     elapsedSeconds,
 
-    endPage,
-    setEndPage,
+    progressMode,
+    changeProgressMode,
+
+    startProgress,
+    setStartProgress,
+
+    endProgress,
+    setEndProgress,
+
+    progressPercent,
+
+    finishValidationMessage,
+    canFinish,
 
     isPaused,
 
@@ -39,18 +48,12 @@ const ReadingModal = ({ book, apiUrl, onClose }) => {
     resumeReading,
     finishReading,
     changeRating,
+    changeBookStatus,
   } = useReadingSession(book);
-
-  const progress = getReadingProgress(
-    currentBook.currentPage,
-    currentBook.pages,
-  );
 
   const statusLabel = getReadingStatusLabel(currentBook.status, activeSession);
 
-  /* =========================
-     LOCK PAGE SCROLL
-  ========================= */
+  const modalTitle = activeSession ? "Сесія читання" : "Нова сесія читання";
 
   useEffect(() => {
     const previousOverflow = document.body.style.overflow;
@@ -73,10 +76,6 @@ const ReadingModal = ({ book, apiUrl, onClose }) => {
     };
   }, []);
 
-  /* =========================
-     ESC CLOSE
-  ========================= */
-
   useEffect(() => {
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
@@ -91,19 +90,11 @@ const ReadingModal = ({ book, apiUrl, onClose }) => {
     };
   }, [onClose]);
 
-  /* =========================
-     OVERLAY CLICK
-  ========================= */
-
   const handleOverlayClick = (event) => {
     if (event.target === event.currentTarget) {
       onClose();
     }
   };
-
-  /* =========================
-     PORTAL
-  ========================= */
 
   return createPortal(
     <div
@@ -128,9 +119,9 @@ const ReadingModal = ({ book, apiUrl, onClose }) => {
         </button>
 
         <div className="reading-modal__header">
-          <h2 id="reading-modal-title">{currentBook.title}</h2>
+          <h2 id="reading-modal-title">{modalTitle}</h2>
 
-          <p className="reading-modal__author">{currentBook.author}</p>
+          <p className="reading-modal__author">{currentBook.title}</p>
         </div>
 
         {message && <p className="reading-modal__message">{message}</p>}
@@ -140,9 +131,12 @@ const ReadingModal = ({ book, apiUrl, onClose }) => {
             currentBook={currentBook}
             apiUrl={apiUrl}
             statusLabel={statusLabel}
-            progress={progress}
+            progress={progressPercent}
             ratingLoading={ratingLoading}
+            statusLoading={statusLoading}
+            activeSession={activeSession}
             onRatingChange={changeRating}
+            onStatusChange={changeBookStatus}
           />
 
           <ReadingSessionCard
@@ -152,9 +146,15 @@ const ReadingModal = ({ book, apiUrl, onClose }) => {
             finishing={finishing}
             pauseLoading={pauseLoading}
             elapsedSeconds={elapsedSeconds}
-            endPage={endPage}
-            setEndPage={setEndPage}
+            progressMode={progressMode}
+            onProgressModeChange={changeProgressMode}
+            startProgress={startProgress}
+            setStartProgress={setStartProgress}
+            endProgress={endProgress}
+            setEndProgress={setEndProgress}
             isPaused={isPaused}
+            finishValidationMessage={finishValidationMessage}
+            canFinish={canFinish}
             onStart={startReading}
             onPause={pauseReading}
             onResume={resumeReading}
