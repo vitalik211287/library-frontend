@@ -1,4 +1,5 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
+
 import { createPortal } from "react-dom";
 
 import useReadingSession from "./hooks/useReadingSession.js";
@@ -6,12 +7,15 @@ import useReadingSession from "./hooks/useReadingSession.js";
 import ReadingBookInfo from "./components/ReadingBookInfo/ReadingBookInfo.jsx";
 import ReadingSessionCard from "./components/ReadingSessionCard/ReadingSessionCard.jsx";
 import ReadingStats from "./components/ReadingStats/ReadingStats.jsx";
+import ReadingStatusModal from "./components/ReadingStatusModal/ReadingStatusModal.jsx";
 
 import { getReadingStatusLabel } from "./utils/readingModalHelpers.js";
 
 import "./ReadingModal.css";
 
 const ReadingModal = ({ book, apiUrl, onClose }) => {
+  const [statusModalOpen, setStatusModalOpen] = useState(false);
+
   const {
     activeSession,
     currentBook,
@@ -78,9 +82,17 @@ const ReadingModal = ({ book, apiUrl, onClose }) => {
 
   useEffect(() => {
     const handleKeyDown = (event) => {
-      if (event.key === "Escape") {
-        onClose();
+      if (event.key !== "Escape") {
+        return;
       }
+
+      if (statusModalOpen) {
+        setStatusModalOpen(false);
+
+        return;
+      }
+
+      onClose();
     };
 
     window.addEventListener("keydown", handleKeyDown);
@@ -88,7 +100,7 @@ const ReadingModal = ({ book, apiUrl, onClose }) => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [onClose]);
+  }, [onClose, statusModalOpen]);
 
   const handleOverlayClick = (event) => {
     if (event.target === event.currentTarget) {
@@ -96,80 +108,102 @@ const ReadingModal = ({ book, apiUrl, onClose }) => {
     }
   };
 
+  const handleStatusOpen = () => {
+    setStatusModalOpen(true);
+  };
+
+  const handleStatusClose = () => {
+    if (statusLoading) {
+      return;
+    }
+
+    setStatusModalOpen(false);
+  };
+
   return createPortal(
-    <div
-      className="reading-modal-overlay"
-      onMouseDown={handleOverlayClick}
-      role="presentation"
-    >
+    <>
       <div
-        className="reading-modal"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="reading-modal-title"
-        onMouseDown={(event) => event.stopPropagation()}
+        className="reading-modal-overlay"
+        onMouseDown={handleOverlayClick}
+        role="presentation"
       >
-        <button
-          type="button"
-          className="reading-modal__close"
-          onClick={onClose}
-          aria-label="Закрити"
+        <div
+          className="reading-modal"
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="reading-modal-title"
+          onMouseDown={(event) => event.stopPropagation()}
         >
-          ×
-        </button>
+          <button
+            type="button"
+            className="reading-modal__close"
+            onClick={onClose}
+            aria-label="Закрити"
+          >
+            ×
+          </button>
 
-        <div className="reading-modal__header">
-          <h2 id="reading-modal-title">{modalTitle}</h2>
+          <div className="reading-modal__header">
+            <h2 id="reading-modal-title">{modalTitle}</h2>
 
-          <p className="reading-modal__author">{currentBook.title}</p>
-        </div>
+            <p className="reading-modal__author">{currentBook.title}</p>
+          </div>
 
-        {message && <p className="reading-modal__message">{message}</p>}
+          {message && <p className="reading-modal__message">{message}</p>}
 
-        <div className="reading-modal__layout">
-          <ReadingBookInfo
-            currentBook={currentBook}
-            apiUrl={apiUrl}
-            statusLabel={statusLabel}
-            progress={progressPercent}
-            ratingLoading={ratingLoading}
-            statusLoading={statusLoading}
-            activeSession={activeSession}
-            onRatingChange={changeRating}
-            onStatusChange={changeBookStatus}
-          />
+          <div className="reading-modal__layout">
+            <ReadingBookInfo
+              currentBook={currentBook}
+              apiUrl={apiUrl}
+              statusLabel={statusLabel}
+              progress={progressPercent}
+              ratingLoading={ratingLoading}
+              onRatingChange={changeRating}
+              onStatusClick={handleStatusOpen}
+            />
 
-          <ReadingSessionCard
-            activeSession={activeSession}
-            currentBook={currentBook}
-            loading={loading}
-            finishing={finishing}
-            pauseLoading={pauseLoading}
-            elapsedSeconds={elapsedSeconds}
-            progressMode={progressMode}
-            onProgressModeChange={changeProgressMode}
-            startProgress={startProgress}
-            setStartProgress={setStartProgress}
-            endProgress={endProgress}
-            setEndProgress={setEndProgress}
-            isPaused={isPaused}
-            finishValidationMessage={finishValidationMessage}
-            canFinish={canFinish}
-            onStart={startReading}
-            onPause={pauseReading}
-            onResume={resumeReading}
-            onFinish={finishReading}
-          />
+            <ReadingSessionCard
+              activeSession={activeSession}
+              currentBook={currentBook}
+              loading={loading}
+              finishing={finishing}
+              pauseLoading={pauseLoading}
+              elapsedSeconds={elapsedSeconds}
+              progressMode={progressMode}
+              onProgressModeChange={changeProgressMode}
+              startProgress={startProgress}
+              setStartProgress={setStartProgress}
+              endProgress={endProgress}
+              setEndProgress={setEndProgress}
+              isPaused={isPaused}
+              finishValidationMessage={finishValidationMessage}
+              canFinish={canFinish}
+              onStart={startReading}
+              onPause={pauseReading}
+              onResume={resumeReading}
+              onFinish={finishReading}
+            />
 
-          <ReadingStats
-            stats={stats}
-            activeSession={activeSession}
-            elapsedSeconds={elapsedSeconds}
-            bookId={book.id}
-          />
+            <ReadingStats
+              stats={stats}
+              activeSession={activeSession}
+              elapsedSeconds={elapsedSeconds}
+              bookId={book.id}
+            />
+          </div>
         </div>
       </div>
-    </div>,
+
+      {statusModalOpen && (
+        <ReadingStatusModal
+          currentStatus={currentBook.status}
+          activeSession={activeSession}
+          loading={statusLoading}
+          onChange={changeBookStatus}
+          onClose={handleStatusClose}
+        />
+      )}
+    </>,
     document.body,
   );
 };
