@@ -74,7 +74,9 @@ const AddBookPage = () => {
 
     resetLastSearch();
 
-    await lookupBook(isbn);
+    await lookupBook(isbn, {
+      force: true,
+    });
   };
 
   const handleIsbnChange = (event) => {
