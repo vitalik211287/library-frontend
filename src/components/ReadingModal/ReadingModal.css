@@ -5,7 +5,8 @@
 .reading-modal-overlay {
   position: fixed;
   inset: 0;
-  z-index: 1000;
+
+  z-index: 5000;
 
   display: flex;
   align-items: center;
@@ -20,6 +21,7 @@
   background: rgba(0, 0, 0, 0.68);
 
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
 }
 
 /* =========================
@@ -37,12 +39,12 @@
 
   padding: 20px;
 
+  box-sizing: border-box;
+
   overflow-y: auto;
   overflow-x: hidden;
 
   overscroll-behavior: contain;
-
-  box-sizing: border-box;
 
   background: var(--surface);
   color: var(--text);
@@ -60,6 +62,8 @@
 ========================= */
 
 .reading-modal__header {
+  min-width: 0;
+
   padding-right: 44px;
 }
 
@@ -70,6 +74,8 @@
 
   font-size: 26px;
   line-height: 1.15;
+
+  overflow-wrap: anywhere;
 }
 
 .reading-modal__author {
@@ -90,6 +96,8 @@
 
   top: 14px;
   right: 14px;
+
+  z-index: 2;
 
   width: 38px;
   height: 38px;
@@ -127,6 +135,11 @@
   transform: scale(0.92);
 }
 
+.reading-modal__close:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
 /* =========================
    MESSAGE
 ========================= */
@@ -162,6 +175,29 @@
 }
 
 /* =========================
+   SCROLLBAR
+========================= */
+
+.reading-modal {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) transparent;
+}
+
+.reading-modal::-webkit-scrollbar {
+  width: 6px;
+}
+
+.reading-modal::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.reading-modal::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+
+  background: var(--accent);
+}
+
+/* =========================
    VERY SMALL PHONES
 ========================= */
 
@@ -178,8 +214,32 @@
     border-radius: 18px;
   }
 
+  .reading-modal__header {
+    padding-right: 40px;
+  }
+
   .reading-modal h2 {
     font-size: 22px;
+  }
+
+  .reading-modal__author {
+    font-size: 14px;
+  }
+
+  .reading-modal__close {
+    top: 10px;
+    right: 10px;
+
+    width: 36px;
+    height: 36px;
+
+    font-size: 28px;
+  }
+
+  .reading-modal__layout {
+    gap: 16px;
+
+    margin-top: 18px;
   }
 }
 

@@ -1,3 +1,6 @@
+import { useEffect } from "react";
+import { createPortal } from "react-dom";
+
 import useReadingSession from "./hooks/useReadingSession.js";
 
 import ReadingBookInfo from "./components/ReadingBookInfo/ReadingBookInfo.jsx";
@@ -45,16 +48,74 @@ const ReadingModal = ({ book, apiUrl, onClose }) => {
 
   const statusLabel = getReadingStatusLabel(currentBook.status, activeSession);
 
+  /* =========================
+     LOCK PAGE SCROLL
+  ========================= */
+
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+
+    const previousPaddingRight = document.body.style.paddingRight;
+
+    const scrollbarWidth =
+      window.innerWidth - document.documentElement.clientWidth;
+
+    document.body.style.overflow = "hidden";
+
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    }
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+
+      document.body.style.paddingRight = previousPaddingRight;
+    };
+  }, []);
+
+  /* =========================
+     ESC CLOSE
+  ========================= */
+
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [onClose]);
+
+  /* =========================
+     OVERLAY CLICK
+  ========================= */
+
   const handleOverlayClick = (event) => {
     if (event.target === event.currentTarget) {
       onClose();
     }
   };
 
-  return (
-    <div className="reading-modal-overlay" onMouseDown={handleOverlayClick}>
+  /* =========================
+     PORTAL
+  ========================= */
+
+  return createPortal(
+    <div
+      className="reading-modal-overlay"
+      onMouseDown={handleOverlayClick}
+      role="presentation"
+    >
       <div
         className="reading-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="reading-modal-title"
         onMouseDown={(event) => event.stopPropagation()}
       >
         <button
@@ -67,7 +128,7 @@ const ReadingModal = ({ book, apiUrl, onClose }) => {
         </button>
 
         <div className="reading-modal__header">
-          <h2>{currentBook.title}</h2>
+          <h2 id="reading-modal-title">{currentBook.title}</h2>
 
           <p className="reading-modal__author">{currentBook.author}</p>
         </div>
@@ -108,7 +169,8 @@ const ReadingModal = ({ book, apiUrl, onClose }) => {
           />
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   );
 };
 
