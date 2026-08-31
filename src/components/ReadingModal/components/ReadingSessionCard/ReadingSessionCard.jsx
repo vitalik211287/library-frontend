@@ -79,11 +79,6 @@ const ReadingSessionCard = ({
                 Відсотки
               </button>
             </div>
-
-            <p className="reading-modal__mode-note">
-              Цей спосіб збережеться для цієї книги. Його можна буде змінити
-              пізніше.
-            </p>
           </div>
 
           <div className="reading-modal__setup-section">
