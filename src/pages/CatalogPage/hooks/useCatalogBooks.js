@@ -4,28 +4,35 @@ import { apiFetch } from "../../../utils/apiClient.js";
 
 import { getDefaultUserBookData } from "../utils/catalogHelpers.js";
 
-const useCatalogBooks = ({ isAuthenticated, isAuthLoading }) => {
+const useCatalogBooks = ({
+  isAuthenticated,
+  isAuthLoading,
+  activeLibraryId,
+  isLibrariesLoading,
+}) => {
   const [books, setBooks] = useState([]);
-
   const [message, setMessage] = useState("");
-
   const [wishlistLoadingId, setWishlistLoadingId] = useState(null);
 
   const fetchBooks = useCallback(async () => {
+    if (!isAuthenticated) {
+      setBooks([]);
+      setMessage("");
+      return;
+    }
+
+    if (!activeLibraryId) {
+      setBooks([]);
+      setMessage("Створіть або виберіть бібліотеку");
+      return;
+    }
+
     try {
       setMessage("");
 
-      const data = await apiFetch("/api/books", {
-        auth: false,
-      });
+      const data = await apiFetch(`/api/libraries/${activeLibraryId}/books`);
 
       const catalogBooks = Array.isArray(data) ? data : [];
-
-      if (!isAuthenticated) {
-        setBooks(catalogBooks);
-
-        return;
-      }
 
       const booksWithReadingData = await Promise.all(
         catalogBooks.map(async (book) => {
@@ -34,13 +41,9 @@ const useCatalogBooks = ({ isAuthenticated, isAuthLoading }) => {
 
             return {
               ...book,
-
               currentPage: userBook?.currentPage ?? 0,
-
               status: userBook?.status ?? "NOT_STARTED",
-
               rating: userBook?.rating ?? null,
-
               isWishlist: userBook?.isWishlist ?? false,
             };
           } catch (loadError) {
@@ -62,23 +65,21 @@ const useCatalogBooks = ({ isAuthenticated, isAuthLoading }) => {
       console.error("Помилка завантаження книг:", loadError);
 
       setBooks([]);
-
       setMessage("Помилка завантаження бібліотеки");
     }
-  }, [isAuthenticated]);
+  }, [isAuthenticated, activeLibraryId]);
 
   useEffect(() => {
-    if (isAuthLoading) {
+    if (isAuthLoading || isLibrariesLoading) {
       return;
     }
 
     fetchBooks();
-  }, [isAuthLoading, fetchBooks]);
+  }, [isAuthLoading, isLibrariesLoading, fetchBooks]);
 
   const toggleWishlist = async (book) => {
     try {
       setWishlistLoadingId(book.id);
-
       setMessage("");
 
       const isWishlist = Boolean(book.isWishlist);
@@ -92,7 +93,6 @@ const useCatalogBooks = ({ isAuthenticated, isAuthLoading }) => {
           currentBook.id === book.id
             ? {
                 ...currentBook,
-
                 isWishlist: !isWishlist,
               }
             : currentBook,
@@ -128,7 +128,6 @@ const useCatalogBooks = ({ isAuthenticated, isAuthLoading }) => {
     books,
     message,
     wishlistLoadingId,
-
     toggleWishlist,
     updateBook,
     fetchBooks,

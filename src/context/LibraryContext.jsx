@@ -19,10 +19,6 @@ const LibraryProvider = ({ children }) => {
 
   const [librariesError, setLibrariesError] = useState("");
 
-  /* =========================
-     LOAD LIBRARIES
-  ========================= */
-
   useEffect(() => {
     const loadLibraries = async () => {
       if (isAuthLoading) {
@@ -31,17 +27,16 @@ const LibraryProvider = ({ children }) => {
 
       if (!isAuthenticated) {
         setLibraries([]);
-
         setActiveLibraryIdState("");
-
         setLibrariesError("");
+
+        localStorage.removeItem("activeLibraryId");
 
         return;
       }
 
       try {
         setIsLibrariesLoading(true);
-
         setLibrariesError("");
 
         const data = await apiFetch("/api/libraries");
@@ -89,10 +84,6 @@ const LibraryProvider = ({ children }) => {
     loadLibraries();
   }, [isAuthenticated, isAuthLoading]);
 
-  /* =========================
-     ACTIVE LIBRARY
-  ========================= */
-
   const activeLibrary = useMemo(
     () =>
       libraries.find((library) => library.id === activeLibraryId) ??
@@ -113,10 +104,6 @@ const LibraryProvider = ({ children }) => {
     localStorage.setItem("activeLibraryId", libraryId);
   };
 
-  /* =========================
-     REFRESH
-  ========================= */
-
   const refreshLibraries = async () => {
     if (!isAuthenticated) {
       return [];
@@ -128,12 +115,30 @@ const LibraryProvider = ({ children }) => {
 
     setLibraries(loadedLibraries);
 
+    setActiveLibraryIdState((currentLibraryId) => {
+      const existingLibrary = loadedLibraries.find(
+        (library) => library.id === currentLibraryId,
+      );
+
+      if (existingLibrary) {
+        return existingLibrary.id;
+      }
+
+      const firstLibrary = loadedLibraries[0];
+
+      if (!firstLibrary) {
+        localStorage.removeItem("activeLibraryId");
+
+        return "";
+      }
+
+      localStorage.setItem("activeLibraryId", firstLibrary.id);
+
+      return firstLibrary.id;
+    });
+
     return loadedLibraries;
   };
-
-  /* =========================
-     CREATE LIBRARY
-  ========================= */
 
   const createLibrary = async (name) => {
     const trimmedName = name.trim();
@@ -144,24 +149,68 @@ const LibraryProvider = ({ children }) => {
 
     const library = await apiFetch("/api/libraries", {
       method: "POST",
-
       body: {
         name: trimmedName,
       },
     });
 
-    setLibraries((currentLibraries) => [...currentLibraries, library]);
+    const loadedLibraries = await refreshLibraries();
 
-    setActiveLibraryIdState(library.id);
+    const createdLibrary =
+      loadedLibraries.find((item) => item.id === library.id) ?? library;
 
-    localStorage.setItem("activeLibraryId", library.id);
+    setActiveLibraryIdState(createdLibrary.id);
+
+    localStorage.setItem("activeLibraryId", createdLibrary.id);
+
+    return createdLibrary;
+  };
+
+  const renameLibrary = async (libraryId, name) => {
+    const trimmedName = name.trim();
+
+    if (!trimmedName) {
+      throw new Error("Введіть назву бібліотеки");
+    }
+
+    if (!libraryId) {
+      throw new Error("Бібліотеку не вибрано");
+    }
+
+    const library = await apiFetch(`/api/libraries/${libraryId}`, {
+      method: "PATCH",
+      body: {
+        name: trimmedName,
+      },
+    });
+
+    setLibraries((currentLibraries) =>
+      currentLibraries.map((item) =>
+        item.id === libraryId
+          ? {
+              ...item,
+              ...library,
+            }
+          : item,
+      ),
+    );
 
     return library;
   };
 
-  /* =========================
-     ADD MEMBER
-  ========================= */
+  const deleteLibrary = async (libraryId) => {
+    if (!libraryId) {
+      throw new Error("Бібліотеку не вибрано");
+    }
+
+    await apiFetch(`/api/libraries/${libraryId}`, {
+      method: "DELETE",
+    });
+
+    const loadedLibraries = await refreshLibraries();
+
+    return loadedLibraries;
+  };
 
   const addLibraryMember = async (libraryId, email) => {
     const normalizedEmail = email.trim().toLowerCase();
@@ -176,7 +225,6 @@ const LibraryProvider = ({ children }) => {
 
     const member = await apiFetch(`/api/libraries/${libraryId}/members`, {
       method: "POST",
-
       body: {
         email: normalizedEmail,
       },
@@ -187,28 +235,18 @@ const LibraryProvider = ({ children }) => {
     return member;
   };
 
-  /* =========================
-     VALUE
-  ========================= */
-
   const value = useMemo(
     () => ({
       libraries,
-
       activeLibrary,
-
       activeLibraryId: activeLibrary?.id ?? "",
-
       setActiveLibraryId,
-
       isLibrariesLoading,
-
       librariesError,
-
       refreshLibraries,
-
       createLibrary,
-
+      renameLibrary,
+      deleteLibrary,
       addLibraryMember,
     }),
     [libraries, activeLibrary, isLibrariesLoading, librariesError],

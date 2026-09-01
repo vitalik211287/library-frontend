@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import toast from "react-hot-toast";
 
@@ -18,7 +18,6 @@ import { apiFetch } from "../../utils/apiClient.js";
 const BookIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11a2 2 0 0 1 2 2v16a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 21.5v-16Z" />
-
     <path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v18a2 2 0 0 1 2-2h2.5a2.5 2.5 0 0 1 2.5 2.5v-16Z" />
   </svg>
 );
@@ -41,11 +40,8 @@ const ChevronIcon = () => (
 const ShareIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <circle cx="18" cy="5" r="2.5" />
-
     <circle cx="6" cy="12" r="2.5" />
-
     <circle cx="18" cy="19" r="2.5" />
-
     <path d="m8.2 10.8 7.6-4.5" />
     <path d="m8.2 13.2 7.6 4.5" />
   </svg>
@@ -195,6 +191,8 @@ const formatReadingTime = (seconds) => {
 const HomePage = () => {
   const { user } = useAuth();
 
+  const navigate = useNavigate();
+
   const [searchParams, setSearchParams] = useSearchParams();
 
   const {
@@ -235,10 +233,6 @@ const HomePage = () => {
   const currentYear = now.getFullYear();
 
   const currentMonth = now.getMonth() + 1;
-
-  /* =========================
-     LOAD HOME DATA
-  ========================= */
 
   useEffect(() => {
     const loadHomeData = async () => {
@@ -293,11 +287,6 @@ const HomePage = () => {
 
     loadHomeData();
   }, [currentYear]);
-
-  /* =========================
-     LOAD ACTIVITY
-     CURRENT + PREVIOUS MONTH
-  ========================= */
 
   useEffect(() => {
     const loadActivity = async () => {
@@ -360,10 +349,6 @@ const HomePage = () => {
     loadActivity();
   }, [now]);
 
-  /* =========================
-     ACTIVE LIBRARY
-  ========================= */
-
   const handleSelectLibrary = (libraryId) => {
     setActiveLibraryId(libraryId);
 
@@ -422,10 +407,6 @@ const HomePage = () => {
     }
   };
 
-  /* =========================
-     CURRENT BOOK
-  ========================= */
-
   const currentBook = currentBooks[0] ?? null;
 
   const book = currentBook?.book ?? null;
@@ -452,10 +433,6 @@ const HomePage = () => {
     });
   };
 
-  /* =========================
-     WEEK
-  ========================= */
-
   const weeklyActivity = useMemo(() => {
     const monday = getMonday(now);
 
@@ -469,13 +446,9 @@ const HomePage = () => {
 
       return {
         day,
-
         date: date.getDate(),
-
         active: (activity?.sessions ?? 0) > 0,
-
         today: getDateKey(date) === getDateKey(now),
-
         activity: activity ?? {
           seconds: 0,
           pages: 0,
@@ -484,10 +457,6 @@ const HomePage = () => {
       };
     });
   }, [activityData, now]);
-
-  /* =========================
-     TODAY
-  ========================= */
 
   const todayActivity = useMemo(() => {
     if (!(activityData instanceof Map)) {
@@ -503,19 +472,7 @@ const HomePage = () => {
 
   const todaySessions = todayActivity?.sessions ?? 0;
 
-  /* =========================
-     STREAK
-  ========================= */
-
   const streak = stats?.streak?.current ?? 0;
-
-  /* =========================
-     GOAL
-
-     Backend goal is annual.
-     Here we show annual reading
-     minutes progress.
-  ========================= */
 
   const goalMinutes = readingGoal?.minutes ?? 0;
 
@@ -528,17 +485,9 @@ const HomePage = () => {
       ? Math.min(100, Math.round((totalReadingMinutes / goalMinutes) * 100))
       : 0;
 
-  /* =========================
-     ACHIEVEMENT
-  ========================= */
-
   const latestAchievement =
     [...achievements].reverse().find((achievement) => achievement.unlocked) ??
     null;
-
-  /* =========================
-     MONTH SUMMARY
-  ========================= */
 
   const monthStats = stats?.months?.[currentMonth - 1] ?? null;
 
@@ -548,15 +497,7 @@ const HomePage = () => {
 
   const monthBooks = monthStats?.books ?? 0;
 
-  /* =========================
-     USER NAME
-  ========================= */
-
   const firstName = getFirstName(user?.name);
-
-  /* =========================
-     SHARE
-  ========================= */
 
   const handleShare = async () => {
     const text =
@@ -580,10 +521,6 @@ const HomePage = () => {
     }
   };
 
-  /* =========================
-     LOADING
-  ========================= */
-
   if (isLoading) {
     return (
       <main className="home-page">
@@ -591,10 +528,6 @@ const HomePage = () => {
       </main>
     );
   }
-
-  /* =========================
-     ERROR
-  ========================= */
 
   if (error) {
     return (
@@ -606,10 +539,6 @@ const HomePage = () => {
 
   return (
     <main className="home-page">
-      {/* =====================
-          LIBRARY
-      ===================== */}
-
       <div className="library-switcher">
         <button
           type="button"
@@ -666,16 +595,20 @@ const HomePage = () => {
               👥 Додати учасника
             </button>
 
-            <button type="button" className="library-switcher__item">
+            <button
+              type="button"
+              className="library-switcher__item"
+              disabled={!activeLibrary}
+              onClick={() => {
+                setIsLibraryMenuOpen(false);
+                navigate("/library/manage");
+              }}
+            >
               ⚙ Керування бібліотекою
             </button>
           </div>
         )}
       </div>
-
-      {/* =====================
-          GREETING
-      ===================== */}
 
       <section className="home-welcome">
         <span className="home-welcome__eyebrow">Твій читацький простір</span>
@@ -689,15 +622,10 @@ const HomePage = () => {
         <p>Продовжуємо читати?</p>
       </section>
 
-      {/* =====================
-          STREAK
-      ===================== */}
-
       <section className="streak-card">
         <div className="streak-card__top">
           <div>
             <span className="home-section__kicker">Активність</span>
-
             <h2>Твоя серія читання</h2>
           </div>
 
@@ -757,10 +685,6 @@ const HomePage = () => {
           <span className="streak-card__page-dot" />
         </div>
       </section>
-
-      {/* =====================
-          CURRENT READING
-      ===================== */}
 
       <section className="home-panel current-reading-section">
         <div className="home-panel__header">
@@ -839,10 +763,6 @@ const HomePage = () => {
         )}
       </section>
 
-      {/* =====================
-          TODAY
-      ===================== */}
-
       <section className="home-panel">
         <div className="home-panel__header">
           <div>
@@ -877,10 +797,6 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-
-      {/* =====================
-          GOAL
-      ===================== */}
 
       <section className="home-panel">
         <div className="home-panel__header">
@@ -932,10 +848,6 @@ const HomePage = () => {
         )}
       </section>
 
-      {/* =====================
-          ACHIEVEMENT
-      ===================== */}
-
       <section className="home-panel achievement-card">
         <div className="achievement-card__icon">
           <TrophyIcon />
@@ -957,10 +869,6 @@ const HomePage = () => {
           </p>
         </div>
       </section>
-
-      {/* =====================
-          MONTH
-      ===================== */}
 
       <section className="home-panel month-panel">
         <div className="home-panel__header">

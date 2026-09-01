@@ -25,6 +25,7 @@ import StatsPage from "./pages/StatsPage/StatsPage.jsx";
 import AchievementsPage from "./pages/AchievementsPage/AchievementsPage.jsx";
 import HomePage from "./pages/HomePage/HomePage.jsx";
 import LandingPage from "./pages/LandingPage/LandingPage.jsx";
+import LibraryManagementPage from "./pages/LibraryManagementPage/LibraryManagementPage.jsx";
 
 import RightSidebar from "./components/RightSidebar/RightSidebar.jsx";
 import ReadingModal from "./components/ReadingModal/ReadingModal.jsx";
@@ -44,7 +45,6 @@ import FollowersPage from "./pages/UserPage/components/Users/FollowersPage/Follo
 const CatalogIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11a2 2 0 0 1 2 2v16a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 21.5v-16Z" />
-
     <path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v18a2 2 0 0 1 2-2h2.5a2.5 2.5 0 0 1 2.5 2.5v-16Z" />
   </svg>
 );
@@ -59,7 +59,6 @@ const AddIcon = () => (
 const CalendarIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <rect x="3" y="5" width="18" height="16" rx="2" />
-
     <path d="M16 3v4" />
     <path d="M8 3v4" />
     <path d="M3 10h18" />
@@ -69,9 +68,7 @@ const CalendarIcon = () => (
 const ReaderIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <path d="M3.5 5.5A2.5 2.5 0 0 1 6 3h4a2 2 0 0 1 2 2v15a2 2 0 0 0-2-2H6a2.5 2.5 0 0 0-2.5 2.5v-15Z" />
-
     <path d="M20.5 5.5A2.5 2.5 0 0 0 18 3h-4a2 2 0 0 0-2 2v15a2 2 0 0 1 2-2h4a2.5 2.5 0 0 1 2.5 2.5v-15Z" />
-
     <path d="M7 7h2" />
     <path d="M15 7h2" />
   </svg>
@@ -89,9 +86,7 @@ const StatsIcon = () => (
 const AchievementsIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <circle cx="12" cy="9" r="5" />
-
     <path d="M8.5 13 7 22l5-3 5 3-1.5-9" />
-
     <path d="m10 9 1.3 1.3L14 7.5" />
   </svg>
 );
@@ -99,7 +94,6 @@ const AchievementsIcon = () => (
 const ProfileIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <circle cx="12" cy="8" r="4" />
-
     <path d="M4 21a8 8 0 0 1 16 0" />
   </svg>
 );
@@ -107,7 +101,6 @@ const ProfileIcon = () => (
 const SettingsIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <circle cx="12" cy="12" r="3" />
-
     <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V21h-4v-.08a1.7 1.7 0 0 0-1.03-1.56 1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.03H3v-4h.08A1.7 1.7 0 0 0 4.64 8.9a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 9 4.53a1.7 1.7 0 0 0 1.03-1.56V3h4v.08a1.7 1.7 0 0 0 1.07 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06a1.7 1.7 0 0 0-.34 1.88 1.7 1.7 0 0 0 1.56 1.03H21v4h-.08A1.7 1.7 0 0 0 19.4 15Z" />
   </svg>
 );
@@ -115,7 +108,6 @@ const SettingsIcon = () => (
 const SystemIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <rect x="3" y="4" width="18" height="14" rx="2" />
-
     <path d="M8 21h8" />
     <path d="M12 18v3" />
   </svg>
@@ -124,7 +116,6 @@ const SystemIcon = () => (
 const SunIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <circle cx="12" cy="12" r="4" />
-
     <path d="M12 2v2" />
     <path d="M12 20v2" />
     <path d="M4.93 4.93l1.41 1.41" />
@@ -148,7 +139,6 @@ const MoonIcon = () => (
 
 const ProtectedRoute = ({ children }) => {
   const { isAuthenticated, isAuthLoading } = useAuth();
-
   const location = useLocation();
 
   if (isAuthLoading) {
@@ -176,25 +166,17 @@ const ProtectedRoute = ({ children }) => {
 
 const App = () => {
   const { user, isAuthenticated, isAuthLoading } = useAuth();
-
   const { themeMode, setThemeMode } = useTheme();
-
   const location = useLocation();
-
   const navigate = useNavigate();
-
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [readingBook, setReadingBook] = useState(null);
-
   const [isReadingBookLoading, setIsReadingBookLoading] = useState(false);
-
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const readingBookId = searchParams.get("reading");
-
   const accountPath = isAuthenticated ? "/account" : "/login";
-
   const showRightSidebar = isAuthenticated && location.pathname === "/account";
 
   const isPublicPage =
@@ -202,18 +184,9 @@ const App = () => {
     location.pathname === "/login" ||
     location.pathname === "/register";
 
-  /* =========================
-     CLOSE MOBILE MENU
-     AFTER NAVIGATION
-  ========================= */
-
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [location.pathname]);
-
-  /* =========================
-     LOCK BODY
-  ========================= */
 
   useEffect(() => {
     if (!isMobileMenuOpen) {
@@ -221,17 +194,12 @@ const App = () => {
     }
 
     const previousOverflow = document.body.style.overflow;
-
     document.body.style.overflow = "hidden";
 
     return () => {
       document.body.style.overflow = previousOverflow;
     };
   }, [isMobileMenuOpen]);
-
-  /* =========================
-     ESC CLOSE
-  ========================= */
 
   useEffect(() => {
     if (!isMobileMenuOpen) {
@@ -251,15 +219,10 @@ const App = () => {
     };
   }, [isMobileMenuOpen]);
 
-  /* =========================
-     GLOBAL READING MODAL
-  ========================= */
-
   useEffect(() => {
     const loadReadingBook = async () => {
       if (!readingBookId) {
         setReadingBook(null);
-
         return;
       }
 
@@ -310,14 +273,12 @@ const App = () => {
           });
 
           setReadingBook(null);
-
           return;
         }
 
         setReadingBook(foundBook);
       } catch (error) {
         console.error("Load reading book error:", error);
-
         setReadingBook(null);
       } finally {
         setIsReadingBookLoading(false);
@@ -326,10 +287,6 @@ const App = () => {
 
     loadReadingBook();
   }, [readingBookId, isAuthenticated, isAuthLoading]);
-
-  /* =========================
-     CLOSE READING
-  ========================= */
 
   const handleCloseReading = () => {
     const params = new URLSearchParams(searchParams);
@@ -343,10 +300,6 @@ const App = () => {
     setReadingBook(null);
   };
 
-  /* =========================
-     OPEN READER
-  ========================= */
-
   const handleOpenReader = async () => {
     setIsMobileMenuOpen(false);
 
@@ -356,30 +309,23 @@ const App = () => {
 
     if (!isAuthenticated) {
       toast.error("Спочатку увійдіть в акаунт");
-
       navigate("/login");
-
       return;
     }
 
     if (!hasToken()) {
       navigate("/login");
-
       return;
     }
 
     try {
       const data = await apiFetch("/api/user-books/current");
-
       const books = Array.isArray(data?.books) ? data.books : [];
-
       const currentBook = books[0];
-
       const bookId = currentBook?.book?.id;
 
       if (!bookId) {
         toast("Немає активного читання");
-
         return;
       }
 
@@ -392,22 +338,13 @@ const App = () => {
       });
     } catch (error) {
       console.error("Open reader error:", error);
-
       toast.error("Не вдалося відкрити читалку");
     }
   };
 
-  /* =========================
-     THEME
-  ========================= */
-
   const handleThemeChange = (mode) => {
     setThemeMode(mode);
   };
-
-  /* =========================
-     PUBLIC PAGES
-  ========================= */
 
   if (isPublicPage) {
     return (
@@ -450,14 +387,9 @@ const App = () => {
 
   return (
     <div className="app-shell">
-      {/* =========================
-          MOBILE HEADER
-      ========================= */}
-
       <header className="mobile-header">
         <NavLink to="/home" className="mobile-header__brand">
           <CatalogIcon />
-
           <span>Бібліотека</span>
         </NavLink>
 
@@ -492,10 +424,6 @@ const App = () => {
         </div>
       </header>
 
-      {/* =========================
-          MOBILE MENU OVERLAY
-      ========================= */}
-
       <div
         className={`mobile-menu-overlay ${
           isMobileMenuOpen ? "mobile-menu-overlay--open" : ""
@@ -503,168 +431,140 @@ const App = () => {
         onClick={() => setIsMobileMenuOpen(false)}
         aria-hidden={!isMobileMenuOpen}
       />
-
-      {/* =========================
-          MOBILE DRAWER
-      ========================= */}
-
-      <aside
-        className={`mobile-drawer ${
-          isMobileMenuOpen ? "mobile-drawer--open" : ""
-        }`}
-        aria-hidden={!isMobileMenuOpen}
-      >
-        <div className="mobile-drawer__header">
-          <div className="mobile-drawer__brand">
-            <CatalogIcon />
-
-            <span>Бібліотека</span>
-          </div>
-
-          <button
-            type="button"
-            className="mobile-drawer__close"
-            onClick={() => setIsMobileMenuOpen(false)}
-            aria-label="Закрити меню"
-          >
-            ×
-          </button>
-        </div>
-
-        <nav className="mobile-drawer__nav">
-          <NavLink to="/catalog" className="mobile-drawer__link">
-            <CatalogIcon />
-
-            <span>Каталог</span>
-          </NavLink>
-
-          <NavLink to="/add" className="mobile-drawer__link">
-            <AddIcon />
-
-            <span>Додати книгу</span>
-          </NavLink>
-
-          <NavLink to="/calendar" className="mobile-drawer__link">
-            <CalendarIcon />
-
-            <span>Календар</span>
-          </NavLink>
-
-          <button
-            type="button"
-            className="mobile-drawer__link"
-            onClick={handleOpenReader}
-          >
-            <ReaderIcon />
-
-            <span>Читалка</span>
-          </button>
-
-          <NavLink to="/stats" className="mobile-drawer__link">
-            <StatsIcon />
-
-            <span>Статистика</span>
-          </NavLink>
-
-          <NavLink to="/achievements" className="mobile-drawer__link">
-            <AchievementsIcon />
-
-            <span>Досягнення</span>
-          </NavLink>
-
-          <NavLink
-            to={accountPath}
-            className={`mobile-drawer__link ${
-              isAuthLoading ? "mobile-drawer__link--loading" : ""
-            }`}
-          >
-            <ProfileIcon />
-
-            <span>{isAuthenticated ? "Профіль" : "Увійти"}</span>
-          </NavLink>
-        </nav>
-
-        <div className="mobile-drawer__settings">
-          <NavLink
-            to="/settings"
-            className="mobile-drawer__link mobile-drawer__settings-link"
-          >
-            <SettingsIcon />
-
-            <span>Налаштування</span>
-          </NavLink>
-        </div>
-
-        <div className="mobile-theme">
-          <span className="mobile-theme__title">Тема</span>
-
-          <div className="mobile-theme__options">
-            <button
-              type="button"
-              className={`mobile-theme__option ${
-                themeMode === "system" ? "mobile-theme__option--active" : ""
-              }`}
-              onClick={() => handleThemeChange("system")}
-            >
-              <SystemIcon />
-
-              <span>Системна</span>
-            </button>
+      {isMobileMenuOpen && (
+        <aside className="mobile-drawer mobile-drawer--open">
+          <div className="mobile-drawer__header">
+            <div className="mobile-drawer__brand">
+              <CatalogIcon />
+              <span>Бібліотека</span>
+            </div>
 
             <button
               type="button"
-              className={`mobile-theme__option ${
-                themeMode === "light" ? "mobile-theme__option--active" : ""
-              }`}
-              onClick={() => handleThemeChange("light")}
+              className="mobile-drawer__close"
+              onClick={() => setIsMobileMenuOpen(false)}
+              aria-label="Закрити меню"
             >
-              <SunIcon />
-
-              <span>Світла</span>
-            </button>
-
-            <button
-              type="button"
-              className={`mobile-theme__option ${
-                themeMode === "dark" ? "mobile-theme__option--active" : ""
-              }`}
-              onClick={() => handleThemeChange("dark")}
-            >
-              <MoonIcon />
-
-              <span>Темна</span>
+              ×
             </button>
           </div>
-        </div>
-      </aside>
 
-      {/* =========================
-          DESKTOP SIDEBAR
-      ========================= */}
+          <nav className="mobile-drawer__nav">
+            <NavLink to="/catalog" className="mobile-drawer__link">
+              <CatalogIcon />
+              <span>Каталог</span>
+            </NavLink>
+
+            <NavLink to="/add" className="mobile-drawer__link">
+              <AddIcon />
+              <span>Додати книгу</span>
+            </NavLink>
+
+            <NavLink to="/calendar" className="mobile-drawer__link">
+              <CalendarIcon />
+              <span>Календар</span>
+            </NavLink>
+
+            <button
+              type="button"
+              className="mobile-drawer__link"
+              onClick={handleOpenReader}
+            >
+              <ReaderIcon />
+              <span>Читалка</span>
+            </button>
+
+            <NavLink to="/stats" className="mobile-drawer__link">
+              <StatsIcon />
+              <span>Статистика</span>
+            </NavLink>
+
+            <NavLink to="/achievements" className="mobile-drawer__link">
+              <AchievementsIcon />
+              <span>Досягнення</span>
+            </NavLink>
+
+            <NavLink
+              to={accountPath}
+              className={`mobile-drawer__link ${
+                isAuthLoading ? "mobile-drawer__link--loading" : ""
+              }`}
+            >
+              <ProfileIcon />
+              <span>{isAuthenticated ? "Профіль" : "Увійти"}</span>
+            </NavLink>
+          </nav>
+
+          <div className="mobile-drawer__settings">
+            <NavLink
+              to="/settings"
+              className="mobile-drawer__link mobile-drawer__settings-link"
+            >
+              <SettingsIcon />
+              <span>Налаштування</span>
+            </NavLink>
+          </div>
+
+          <div className="mobile-theme">
+            <span className="mobile-theme__title">Тема</span>
+
+            <div className="mobile-theme__options">
+              <button
+                type="button"
+                className={`mobile-theme__option ${
+                  themeMode === "system" ? "mobile-theme__option--active" : ""
+                }`}
+                onClick={() => handleThemeChange("system")}
+              >
+                <SystemIcon />
+                <span>Системна</span>
+              </button>
+
+              <button
+                type="button"
+                className={`mobile-theme__option ${
+                  themeMode === "light" ? "mobile-theme__option--active" : ""
+                }`}
+                onClick={() => handleThemeChange("light")}
+              >
+                <SunIcon />
+                <span>Світла</span>
+              </button>
+
+              <button
+                type="button"
+                className={`mobile-theme__option ${
+                  themeMode === "dark" ? "mobile-theme__option--active" : ""
+                }`}
+                onClick={() => handleThemeChange("dark")}
+              >
+                <MoonIcon />
+                <span>Темна</span>
+              </button>
+            </div>
+          </div>
+        </aside>
+      )}
 
       <aside className="app-sidebar">
         <NavLink to="/home" className="app-brand">
           <CatalogIcon />
-
           <span>Бібліотека</span>
         </NavLink>
 
         <nav className="desktop-nav">
           <NavLink to="/catalog" className="desktop-nav__link">
             <CatalogIcon />
-
             <span>Каталог</span>
           </NavLink>
 
           <NavLink to="/add" className="desktop-nav__link">
             <AddIcon />
-
             <span>Додати книгу</span>
           </NavLink>
 
           <NavLink to="/calendar" className="desktop-nav__link">
             <CalendarIcon />
-
             <span>Календар</span>
           </NavLink>
 
@@ -674,19 +574,16 @@ const App = () => {
             onClick={handleOpenReader}
           >
             <ReaderIcon />
-
             <span>Читалка</span>
           </button>
 
           <NavLink to="/stats" className="desktop-nav__link">
             <StatsIcon />
-
             <span>Статистика</span>
           </NavLink>
 
           <NavLink to="/achievements" className="desktop-nav__link">
             <AchievementsIcon />
-
             <span>Досягнення</span>
           </NavLink>
 
@@ -697,13 +594,11 @@ const App = () => {
             }`}
           >
             <ProfileIcon />
-
             <span>{isAuthenticated ? "Мій профіль" : "Увійти"}</span>
           </NavLink>
 
           <NavLink to="/settings" className="desktop-nav__link">
             <SettingsIcon />
-
             <span>Налаштування</span>
           </NavLink>
         </nav>
@@ -741,10 +636,6 @@ const App = () => {
           </div>
         </div>
       </aside>
-
-      {/* =========================
-          MAIN CONTENT
-      ========================= */}
 
       <div className="app-content">
         <div
@@ -827,6 +718,15 @@ const App = () => {
               />
 
               <Route
+                path="/library/manage"
+                element={
+                  <ProtectedRoute>
+                    <LibraryManagementPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
                 path="/users"
                 element={
                   <ProtectedRoute>
@@ -860,10 +760,6 @@ const App = () => {
           {showRightSidebar && <RightSidebar />}
         </div>
       </div>
-
-      {/* =========================
-          GLOBAL READING MODAL
-      ========================= */}
 
       {readingBook &&
         isAuthenticated &&

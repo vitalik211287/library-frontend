@@ -1,8 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-
 import toast from "react-hot-toast";
 
 import BarcodeScanner from "../../components/BarcodeScanner/BarcodeScanner.jsx";
+import { useLibrary } from "../../context/LibraryContext.jsx";
 
 import IsbnSearch from "./components/IsbnSearch/IsbnSearch.jsx";
 import BookPreview from "./components/BookPreview/BookPreview.jsx";
@@ -17,14 +17,13 @@ import "./AddBookPage.css";
 
 const AddBookPage = () => {
   const [isbn, setIsbn] = useState("");
-
   const [book, setBook] = useState(null);
-
   const [manualMode, setManualMode] = useState(false);
-
   const [scannerOpen, setScannerOpen] = useState(false);
 
   const isbnInputRef = useRef(null);
+
+  const { activeLibrary, activeLibraryId } = useLibrary();
 
   const focusIsbnInput = useCallback(() => {
     requestAnimationFrame(() => {
@@ -36,19 +35,11 @@ const AddBookPage = () => {
     focusIsbnInput();
   }, [focusIsbnInput]);
 
-  /* =========================
-     ПОШУК КНИГИ
-  ========================= */
-
   const { isSearching, lookupBook, resetLastSearch } = useBookLookup({
     setIsbn,
     setBook,
     focusIsbnInput,
   });
-
-  /* =========================
-     ДОДАВАННЯ КНИГИ
-  ========================= */
 
   const { addFoundBook, addManualBook } = useAddBook({
     book,
@@ -57,11 +48,9 @@ const AddBookPage = () => {
     setManualMode,
     resetLastSearch,
     focusIsbnInput,
+    activeLibraryId,
+    activeLibraryName: activeLibrary?.name ?? "",
   });
-
-  /* =========================
-     ISBN
-  ========================= */
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -75,13 +64,8 @@ const AddBookPage = () => {
 
   const handleIsbnChange = (event) => {
     const cleanValue = normalizeIsbn(event.target.value);
-
     setIsbn(cleanValue);
   };
-
-  /* =========================
-     СКАНЕР
-  ========================= */
 
   const handleScan = async (scannedValue) => {
     const cleanIsbn = normalizeIsbn(scannedValue);
@@ -90,26 +74,18 @@ const AddBookPage = () => {
       toast.error("Не вдалося розпізнати ISBN", {
         id: "scanner-invalid-isbn",
       });
-
       return;
     }
 
     setScannerOpen(false);
-
     setIsbn(cleanIsbn);
-
     await lookupBook(cleanIsbn);
   };
 
   const handleCloseScanner = () => {
     setScannerOpen(false);
-
     focusIsbnInput();
   };
-
-  /* =========================
-     RENDER
-  ========================= */
 
   return (
     <div className="add-book-page">

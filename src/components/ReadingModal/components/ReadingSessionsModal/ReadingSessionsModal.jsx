@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { createPortal } from "react-dom";
 
+import ConfirmDeleteModal from "../../../ConfirmDeleteModal/ConfirmDeleteModal.jsx";
+
 import { apiFetch } from "../../../../utils/apiClient.js";
 
 import "./ReadingSessionsModal.css";
@@ -32,9 +34,7 @@ const formatDuration = (seconds = 0) => {
   const totalSeconds = Math.max(Math.floor(seconds), 0);
 
   const hours = Math.floor(totalSeconds / 3600);
-
   const minutes = Math.floor((totalSeconds % 3600) / 60);
-
   const remainingSeconds = totalSeconds % 60;
 
   if (hours > 0) {
@@ -58,19 +58,14 @@ const formatDuration = (seconds = 0) => {
 
 const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
   const [sessions, setSessions] = useState([]);
-
   const [loading, setLoading] = useState(true);
-
   const [message, setMessage] = useState("");
 
   const [editingSession, setEditingSession] = useState(null);
-
   const [editValue, setEditValue] = useState("");
-
   const [saving, setSaving] = useState(false);
 
   const [deletingSession, setDeletingSession] = useState(null);
-
   const [deleting, setDeleting] = useState(false);
 
   const loadSessions = async () => {
@@ -105,10 +100,6 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
       }
 
       if (deletingSession) {
-        if (!deleting) {
-          setDeletingSession(null);
-        }
-
         return;
       }
 
@@ -129,7 +120,7 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [deleting, deletingSession, editingSession, onClose, saving]);
+  }, [deletingSession, editingSession, onClose, saving]);
 
   const handleOverlayClick = (event) => {
     if (event.target === event.currentTarget) {
@@ -139,7 +130,6 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
 
   const handleEdit = (session) => {
     setMessage("");
-
     setEditingSession(session);
 
     setEditValue(
@@ -218,7 +208,6 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
 
     if (validationMessage) {
       setMessage(validationMessage);
-
       return;
     }
 
@@ -523,53 +512,15 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
           </div>
         )}
 
-        {deletingSession && (
-          <div className="reading-sessions-delete-overlay" role="presentation">
-            <div
-              className="reading-sessions-delete"
-              role="alertdialog"
-              aria-modal="true"
-              aria-labelledby="reading-session-delete-title"
-              aria-describedby="reading-session-delete-description"
-            >
-              <div className="reading-sessions-delete__icon">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M3 6h18" />
-                  <path d="M8 6V4h8v2" />
-                  <path d="M19 6l-1 14H6L5 6" />
-                  <path d="M10 10v6" />
-                  <path d="M14 10v6" />
-                </svg>
-              </div>
-
-              <h3 id="reading-session-delete-title">Видалити сесію?</h3>
-
-              <p id="reading-session-delete-description">
-                Ця сесія буде видалена з історії читання. Статистика книги
-                перераховується автоматично.
-              </p>
-
-              <div className="reading-sessions-delete__actions">
-                <button
-                  type="button"
-                  onClick={handleCancelDelete}
-                  disabled={deleting}
-                >
-                  Скасувати
-                </button>
-
-                <button
-                  type="button"
-                  className="reading-sessions-delete__confirm"
-                  onClick={handleConfirmDelete}
-                  disabled={deleting}
-                >
-                  {deleting ? "Видалення..." : "Видалити"}
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
+        <ConfirmDeleteModal
+          isOpen={Boolean(deletingSession)}
+          title="Видалити сесію?"
+          description="Ця сесія буде видалена з історії читання. Статистика книги перераховується автоматично."
+          confirmText="Видалити"
+          isLoading={deleting}
+          onCancel={handleCancelDelete}
+          onConfirm={handleConfirmDelete}
+        />
       </div>
     </div>,
     document.body,

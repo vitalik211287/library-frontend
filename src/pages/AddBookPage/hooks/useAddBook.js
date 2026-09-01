@@ -13,6 +13,8 @@ const useAddBook = ({
   setManualMode,
   resetLastSearch,
   focusIsbnInput,
+  activeLibraryId,
+  activeLibraryName,
 }) => {
   const [isAdding, setIsAdding] = useState(false);
 
@@ -25,14 +27,32 @@ const useAddBook = ({
     focusIsbnInput();
   };
 
+  const ensureActiveLibrary = () => {
+    if (activeLibraryId) {
+      return true;
+    }
+
+    toast.error("Спочатку створіть або виберіть бібліотеку");
+
+    return false;
+  };
+
+  const getSuccessMessage = () =>
+    activeLibraryName
+      ? `Книгу додано: ${activeLibraryName}`
+      : "Книгу додано в бібліотеку";
+
   const addFoundBook = async () => {
     if (!book || isAdding) {
       return;
     }
 
+    if (!ensureActiveLibrary()) {
+      return;
+    }
+
     if (!book.author?.trim()) {
       toast.error("Вкажіть автора");
-
       return;
     }
 
@@ -41,13 +61,12 @@ const useAddBook = ({
     setIsAdding(true);
 
     try {
-      await apiFetch("/api/books", {
+      await apiFetch(`/api/libraries/${activeLibraryId}/books`, {
         method: "POST",
-        auth: false,
         body: bookData,
       });
 
-      toast.success("Книгу додано в бібліотеку");
+      toast.success(getSuccessMessage());
 
       resetAfterAdd();
     } catch (error) {
@@ -66,17 +85,17 @@ const useAddBook = ({
       return;
     }
 
+    if (!ensureActiveLibrary()) {
+      return;
+    }
+
     const form = event.currentTarget;
-
     const formData = new FormData(form);
-
     const cover = formData.get("cover");
 
     const bookData = {
       isbn: normalizeIsbn(formData.get("isbn")),
-
       title: formData.get("title"),
-
       author: formData.get("author"),
 
       ...(formData.get("publisher") && {
@@ -107,11 +126,13 @@ const useAddBook = ({
     setIsAdding(true);
 
     try {
-      const createdBook = await apiFetch("/api/books", {
-        method: "POST",
-        auth: false,
-        body: bookData,
-      });
+      const createdBook = await apiFetch(
+        `/api/libraries/${activeLibraryId}/books`,
+        {
+          method: "POST",
+          body: bookData,
+        },
+      );
 
       if (cover instanceof File && cover.size > 0) {
         const coverData = new FormData();
@@ -121,7 +142,6 @@ const useAddBook = ({
         try {
           await apiFetch(`/api/books/${createdBook.id}/cover`, {
             method: "POST",
-            auth: false,
             body: coverData,
           });
         } catch (error) {
@@ -137,7 +157,7 @@ const useAddBook = ({
         }
       }
 
-      toast.success("Книгу додано в бібліотеку");
+      toast.success(getSuccessMessage());
 
       setManualMode(false);
 
