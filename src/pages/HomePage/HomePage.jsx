@@ -342,11 +342,11 @@ const HomePage = () => {
         const activityMap = new Map();
 
         responses.forEach((response) => {
-          const year = response?.year;
+          const activity = response?.activity;
 
-          const month = response?.month;
-
-          const days = Array.isArray(response?.days) ? response.days : [];
+          const year = activity?.year;
+          const month = activity?.month;
+          const days = Array.isArray(activity?.days) ? activity.days : [];
 
           days.forEach((day) => {
             const date = new Date(year, month - 1, day.day);
