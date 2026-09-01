@@ -1,5 +1,6 @@
 import {
   NavLink,
+  Navigate,
   Route,
   Routes,
   useLocation,
@@ -22,6 +23,8 @@ import UserPage from "./pages/UserPage/UserPage.jsx";
 import SettingsPage from "./pages/SettingsPage/SettingsPage.jsx";
 import StatsPage from "./pages/StatsPage/StatsPage.jsx";
 import AchievementsPage from "./pages/AchievementsPage/AchievementsPage.jsx";
+import HomePage from "./pages/HomePage/HomePage.jsx";
+import LandingPage from "./pages/LandingPage/LandingPage.jsx";
 
 import RightSidebar from "./components/RightSidebar/RightSidebar.jsx";
 import ReadingModal from "./components/ReadingModal/ReadingModal.jsx";
@@ -140,6 +143,34 @@ const MoonIcon = () => (
 );
 
 /* =========================
+   PROTECTED ROUTE
+========================= */
+
+const ProtectedRoute = ({ children }) => {
+  const { isAuthenticated, isAuthLoading } = useAuth();
+
+  const location = useLocation();
+
+  if (isAuthLoading) {
+    return null;
+  }
+
+  if (!isAuthenticated) {
+    return (
+      <Navigate
+        to="/login"
+        replace
+        state={{
+          from: `${location.pathname}${location.search}`,
+        }}
+      />
+    );
+  }
+
+  return children;
+};
+
+/* =========================
    APP
 ========================= */
 
@@ -165,6 +196,11 @@ const App = () => {
   const accountPath = isAuthenticated ? "/account" : "/login";
 
   const showRightSidebar = isAuthenticated && location.pathname === "/account";
+
+  const isPublicPage =
+    location.pathname === "/" ||
+    location.pathname === "/login" ||
+    location.pathname === "/register";
 
   /* =========================
      CLOSE MOBILE MENU
@@ -369,6 +405,49 @@ const App = () => {
     setThemeMode(mode);
   };
 
+  /* =========================
+     PUBLIC PAGES
+  ========================= */
+
+  if (isPublicPage) {
+    return (
+      <>
+        <Routes>
+          <Route
+            path="/"
+            element={
+              isAuthenticated ? (
+                <Navigate to="/home" replace />
+              ) : (
+                <LandingPage />
+              )
+            }
+          />
+
+          <Route
+            path="/login"
+            element={
+              isAuthenticated ? <Navigate to="/home" replace /> : <LoginPage />
+            }
+          />
+
+          <Route
+            path="/register"
+            element={
+              isAuthenticated ? (
+                <Navigate to="/home" replace />
+              ) : (
+                <RegisterPage />
+              )
+            }
+          />
+        </Routes>
+
+        <Toaster position="top-right" />
+      </>
+    );
+  }
+
   return (
     <div className="app-shell">
       {/* =========================
@@ -376,7 +455,7 @@ const App = () => {
       ========================= */}
 
       <header className="mobile-header">
-        <NavLink to="/" end className="mobile-header__brand">
+        <NavLink to="/home" className="mobile-header__brand">
           <CatalogIcon />
 
           <span>Бібліотека</span>
@@ -453,7 +532,7 @@ const App = () => {
         </div>
 
         <nav className="mobile-drawer__nav">
-          <NavLink to="/" end className="mobile-drawer__link">
+          <NavLink to="/catalog" className="mobile-drawer__link">
             <CatalogIcon />
 
             <span>Каталог</span>
@@ -564,14 +643,14 @@ const App = () => {
       ========================= */}
 
       <aside className="app-sidebar">
-        <NavLink to="/" end className="app-brand">
+        <NavLink to="/home" className="app-brand">
           <CatalogIcon />
 
           <span>Бібліотека</span>
         </NavLink>
 
         <nav className="desktop-nav">
-          <NavLink to="/" end className="desktop-nav__link">
+          <NavLink to="/catalog" className="desktop-nav__link">
             <CatalogIcon />
 
             <span>Каталог</span>
@@ -675,26 +754,106 @@ const App = () => {
         >
           <div className="app-main-column">
             <Routes>
-              <Route path="/" element={<CatalogPage />} />
+              <Route
+                path="/home"
+                element={
+                  <ProtectedRoute>
+                    <HomePage />
+                  </ProtectedRoute>
+                }
+              />
 
-              <Route path="/add" element={<AddBookPage />} />
+              <Route
+                path="/catalog"
+                element={
+                  <ProtectedRoute>
+                    <CatalogPage />
+                  </ProtectedRoute>
+                }
+              />
 
-              <Route path="/calendar" element={<ReadingCalendarPage />} />
+              <Route
+                path="/add"
+                element={
+                  <ProtectedRoute>
+                    <AddBookPage />
+                  </ProtectedRoute>
+                }
+              />
 
-              <Route path="/stats" element={<StatsPage />} />
+              <Route
+                path="/calendar"
+                element={
+                  <ProtectedRoute>
+                    <ReadingCalendarPage />
+                  </ProtectedRoute>
+                }
+              />
 
-              <Route path="/achievements" element={<AchievementsPage />} />
+              <Route
+                path="/stats"
+                element={
+                  <ProtectedRoute>
+                    <StatsPage />
+                  </ProtectedRoute>
+                }
+              />
 
-              <Route path="/register" element={<RegisterPage />} />
+              <Route
+                path="/achievements"
+                element={
+                  <ProtectedRoute>
+                    <AchievementsPage />
+                  </ProtectedRoute>
+                }
+              />
 
-              <Route path="/login" element={<LoginPage />} />
+              <Route
+                path="/account"
+                element={
+                  <ProtectedRoute>
+                    <UserPage />
+                  </ProtectedRoute>
+                }
+              />
 
-              <Route path="/account" element={<UserPage />} />
+              <Route
+                path="/settings"
+                element={
+                  <ProtectedRoute>
+                    <SettingsPage />
+                  </ProtectedRoute>
+                }
+              />
 
-              <Route path="/settings" element={<SettingsPage />} />
-              <Route path="/users" element={<UserSearchPage />} />
-              <Route path="/users/following" element={<FollowingPage />} />
-              <Route path="/users/followers" element={<FollowersPage />} />
+              <Route
+                path="/users"
+                element={
+                  <ProtectedRoute>
+                    <UserSearchPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/users/following"
+                element={
+                  <ProtectedRoute>
+                    <FollowingPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/users/followers"
+                element={
+                  <ProtectedRoute>
+                    <FollowersPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route path="*" element={<Navigate to="/home" replace />} />
             </Routes>
           </div>
 
