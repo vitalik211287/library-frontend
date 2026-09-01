@@ -280,7 +280,7 @@ const HomePage = () => {
           libraryBooks.filter((book) => book.status === "READING"),
         );
 
-        setStats(statsResponse ?? null);
+        setStats(statsResponse?.stats ?? null);
 
         setReadingGoal(goalResponse?.goal ?? null);
 
