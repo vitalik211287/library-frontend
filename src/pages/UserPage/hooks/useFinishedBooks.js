@@ -1,10 +1,12 @@
-// src/pages/UserPage/hooks/useFinishedBooks.js
-
 import { useEffect, useState } from "react";
+
+import { useLibrary } from "../../../context/LibraryContext.jsx";
 
 import { apiFetch, hasToken } from "../../../utils/apiClient.js";
 
 const useFinishedBooks = ({ readingBookId, onCountChange }) => {
+  const { activeLibraryId } = useLibrary();
+
   const [books, setBooks] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -27,13 +29,27 @@ const useFinishedBooks = ({ readingBookId, onCountChange }) => {
         setIsLoading(true);
         setError("");
 
-        const data = await apiFetch("/api/user-books/finished");
+        const params = new URLSearchParams();
+
+        params.set("page", "1");
+
+        params.set("limit", "12");
+
+        if (activeLibraryId) {
+          params.set("libraryId", activeLibraryId);
+        }
+
+        const data = await apiFetch(
+          `/api/user-books/finished?${params.toString()}`,
+        );
 
         const items = Array.isArray(data?.books) ? data.books : [];
 
         setBooks(items);
 
-        onCountChange?.(Number(data?.count) || items.length);
+        onCountChange?.(
+          Number(data?.total) || Number(data?.count) || items.length,
+        );
       } catch (loadError) {
         console.error("Load finished books error:", loadError);
 
@@ -48,7 +64,7 @@ const useFinishedBooks = ({ readingBookId, onCountChange }) => {
     };
 
     loadFinishedBooks();
-  }, [readingBookId, onCountChange]);
+  }, [readingBookId, activeLibraryId, onCountChange]);
 
   return {
     books,

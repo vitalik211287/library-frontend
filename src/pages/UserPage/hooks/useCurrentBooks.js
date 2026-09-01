@@ -15,7 +15,7 @@ const useCurrentBooks = ({ readingBookId, onBooksChange }) => {
 
   useEffect(() => {
     const loadCurrentBooks = async () => {
-      if (!hasToken() || !activeLibraryId) {
+      if (!hasToken()) {
         setCurrentBooks([]);
         setIsLoading(false);
         setError("");
@@ -29,15 +29,17 @@ const useCurrentBooks = ({ readingBookId, onBooksChange }) => {
         setIsLoading(true);
         setError("");
 
-        const data = await apiFetch(`/api/libraries/${activeLibraryId}/books`);
+        const query = activeLibraryId
+          ? `?libraryId=${encodeURIComponent(activeLibraryId)}`
+          : "";
 
-        const books = Array.isArray(data)
-          ? data.filter((book) => book.status === "READING")
-          : [];
+        const data = await apiFetch(`/api/user-books/current${query}`);
+
+        const books = Array.isArray(data?.books) ? data.books : [];
 
         setCurrentBooks(books);
 
-        onBooksChange?.(books.length);
+        onBooksChange?.(Number(data?.count) || books.length);
       } catch (loadError) {
         console.error("Load current reading error:", loadError);
 
@@ -52,7 +54,7 @@ const useCurrentBooks = ({ readingBookId, onBooksChange }) => {
     };
 
     loadCurrentBooks();
-  }, [readingBookId, onBooksChange, activeLibraryId]);
+  }, [readingBookId, activeLibraryId, onBooksChange]);
 
   return {
     currentBooks,

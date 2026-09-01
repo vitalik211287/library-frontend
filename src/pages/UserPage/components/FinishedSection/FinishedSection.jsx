@@ -35,8 +35,8 @@ const FinishedSection = ({ readingBookId, onCountChange }) => {
         <div className="profile-empty">Тут з’являться прочитані книги</div>
       ) : (
         <div className="profile-books">
-          {books.map(({ book, userBook }) => (
-            <article className="profile-book" key={userBook.id}>
+          {books.map((book) => (
+            <article className="profile-book" key={book.id}>
               <div className="profile-book__cover">
                 {book.coverUrl ? (
                   <img src={book.coverUrl} alt={book.title} />
@@ -50,13 +50,14 @@ const FinishedSection = ({ readingBookId, onCountChange }) => {
               </div>
 
               <h3>{book.title}</h3>
+
               <p>{book.author}</p>
 
-              {userBook.rating && (
+              {book.rating ? (
                 <div className="profile-book__rating">
-                  {"★".repeat(userBook.rating)}
+                  {"★".repeat(book.rating)}
                 </div>
-              )}
+              ) : null}
             </article>
           ))}
         </div>

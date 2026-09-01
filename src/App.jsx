@@ -278,35 +278,21 @@ const App = () => {
       try {
         setIsReadingBookLoading(true);
 
-        const data = await apiFetch(`/api/libraries/${activeLibraryId}/books`);
+        const book = await apiFetch(
+          `/api/libraries/${activeLibraryId}/books/${readingBookId}`,
+        );
 
-        const books = Array.isArray(data)
-          ? data
-          : Array.isArray(data?.books)
-            ? data.books
-            : [];
-
-        const foundBook =
-          books.find((item) => String(item.id) === String(readingBookId)) ??
-          null;
-
-        if (!foundBook) {
-          const params = new URLSearchParams(searchParams);
-
-          params.delete("reading");
-
-          setSearchParams(params, {
-            replace: true,
-          });
-
-          setReadingBook(null);
-
-          return;
-        }
-
-        setReadingBook(foundBook);
+        setReadingBook(book);
       } catch (error) {
         console.error("Load reading book error:", error);
+
+        const params = new URLSearchParams(searchParams);
+
+        params.delete("reading");
+
+        setSearchParams(params, {
+          replace: true,
+        });
 
         setReadingBook(null);
       } finally {
@@ -359,13 +345,17 @@ const App = () => {
     }
 
     try {
-      const data = await apiFetch("/api/user-books/current");
+      const query = activeLibraryId
+        ? `?libraryId=${encodeURIComponent(activeLibraryId)}`
+        : "";
+
+      const data = await apiFetch(`/api/user-books/current${query}`);
 
       const books = Array.isArray(data?.books) ? data.books : [];
 
       const currentBook = books[0];
 
-      const bookId = currentBook?.book?.id;
+      const bookId = currentBook?.id;
 
       if (!bookId) {
         toast("Немає активного читання");

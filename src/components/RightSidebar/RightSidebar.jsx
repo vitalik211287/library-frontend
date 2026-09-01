@@ -58,12 +58,43 @@ const ArrowIcon = () => (
    HELPERS
 ========================= */
 
-const getProgress = (currentPage, totalPages) => {
+const getProgress = (book) => {
+  if (!book) {
+    return 0;
+  }
+
+  if (book.progressMode === "PERCENT") {
+    return Math.min(Math.max(Number(book.currentPercent ?? 0), 0), 100);
+  }
+
+  const currentPage = Number(book.currentPage ?? 0);
+
+  const totalPages = Number(book.pages ?? 0);
+
   if (!totalPages || totalPages <= 0) {
     return 0;
   }
 
-  return Math.min(Math.round((currentPage / totalPages) * 100), 100);
+  return Math.min(
+    Math.max(Math.round((currentPage / totalPages) * 100), 0),
+    100,
+  );
+};
+
+const getProgressLabel = (book) => {
+  if (!book) {
+    return "";
+  }
+
+  if (book.progressMode === "PERCENT") {
+    return `${book.currentPercent ?? 0}%`;
+  }
+
+  if (book.pages) {
+    return `Сторінка ${book.currentPage ?? 0} з ${book.pages}`;
+  }
+
+  return `Сторінка ${book.currentPage ?? 0}`;
 };
 
 /* =========================
@@ -78,16 +109,10 @@ const RightSidebar = () => {
 
   const mainCurrentBook = currentBooks[0] ?? null;
 
-  const currentProgress = useMemo(() => {
-    if (!mainCurrentBook) {
-      return 0;
-    }
-
-    return getProgress(
-      mainCurrentBook.userBook?.currentPage ?? 0,
-      mainCurrentBook.book?.pages ?? 0,
-    );
-  }, [mainCurrentBook]);
+  const currentProgress = useMemo(
+    () => getProgress(mainCurrentBook),
+    [mainCurrentBook],
+  );
 
   const handleOpenReading = (bookId) => {
     if (!bookId) {
@@ -127,10 +152,10 @@ const RightSidebar = () => {
         ) : (
           <div className="right-current">
             <div className="right-current__cover">
-              {mainCurrentBook.book?.coverUrl ? (
+              {mainCurrentBook.coverUrl ? (
                 <img
-                  src={mainCurrentBook.book.coverUrl}
-                  alt={mainCurrentBook.book.title}
+                  src={mainCurrentBook.coverUrl}
+                  alt={mainCurrentBook.title}
                 />
               ) : (
                 <div className="right-no-cover">
@@ -142,9 +167,9 @@ const RightSidebar = () => {
             </div>
 
             <div className="right-current__content">
-              <h3>{mainCurrentBook.book?.title}</h3>
+              <h3>{mainCurrentBook.title}</h3>
 
-              <p>{mainCurrentBook.book?.author}</p>
+              <p>{mainCurrentBook.author}</p>
 
               <div className="right-current__progress-row">
                 <div className="right-current__progress">
@@ -159,16 +184,13 @@ const RightSidebar = () => {
               </div>
 
               <span className="right-current__page">
-                Сторінка {mainCurrentBook.userBook?.currentPage ?? 0}
-                {mainCurrentBook.book?.pages
-                  ? ` з ${mainCurrentBook.book.pages}`
-                  : ""}
+                {getProgressLabel(mainCurrentBook)}
               </span>
 
               <button
                 type="button"
                 className="right-current__button"
-                onClick={() => handleOpenReading(mainCurrentBook.book.id)}
+                onClick={() => handleOpenReading(mainCurrentBook.id)}
               >
                 Продовжити
                 <ArrowIcon />
@@ -179,17 +201,14 @@ const RightSidebar = () => {
 
         {currentBooks.length > 1 && (
           <div className="right-current-list">
-            {currentBooks.slice(1, 4).map(({ book, userBook }) => {
-              const progress = getProgress(
-                userBook?.currentPage ?? 0,
-                book?.pages ?? 0,
-              );
+            {currentBooks.slice(1, 4).map((book) => {
+              const progress = getProgress(book);
 
               return (
                 <button
                   type="button"
                   className="right-current-mini"
-                  key={userBook.id}
+                  key={book.id}
                   onClick={() => handleOpenReading(book.id)}
                 >
                   <div className="right-current-mini__cover">
@@ -331,9 +350,7 @@ const RightSidebar = () => {
             <strong>Продовжити читання</strong>
 
             <span>
-              {mainCurrentBook
-                ? mainCurrentBook.book?.title
-                : "Немає активної книги"}
+              {mainCurrentBook ? mainCurrentBook.title : "Немає активної книги"}
             </span>
           </div>
         </div>

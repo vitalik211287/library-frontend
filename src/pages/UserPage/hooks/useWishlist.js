@@ -1,10 +1,12 @@
-// src/pages/UserPage/hooks/useWishlist.js
-
 import { useEffect, useState } from "react";
 
 import { apiFetch, hasToken } from "../../../utils/apiClient.js";
 
+import { useLibrary } from "../../../context/LibraryContext.jsx";
+
 const useWishlist = ({ onCountChange }) => {
+  const { activeLibraryId } = useLibrary();
+
   const [books, setBooks] = useState([]);
 
   const [isLoading, setIsLoading] = useState(true);
@@ -27,7 +29,11 @@ const useWishlist = ({ onCountChange }) => {
         setIsLoading(true);
         setError("");
 
-        const data = await apiFetch("/api/user-books/wishlist");
+        const query = activeLibraryId
+          ? `?libraryId=${encodeURIComponent(activeLibraryId)}`
+          : "";
+
+        const data = await apiFetch(`/api/user-books/wishlist${query}`);
 
         const items = Array.isArray(data?.books) ? data.books : [];
 
@@ -48,7 +54,7 @@ const useWishlist = ({ onCountChange }) => {
     };
 
     loadWishlist();
-  }, [onCountChange]);
+  }, [activeLibraryId, onCountChange]);
 
   const removeFromWishlist = async (bookId) => {
     if (!bookId) {
@@ -61,7 +67,7 @@ const useWishlist = ({ onCountChange }) => {
       });
 
       setBooks((currentBooks) => {
-        const nextBooks = currentBooks.filter(({ book }) => book.id !== bookId);
+        const nextBooks = currentBooks.filter((book) => book.id !== bookId);
 
         onCountChange?.(nextBooks.length);
 
