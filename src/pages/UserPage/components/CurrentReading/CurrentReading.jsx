@@ -1,7 +1,9 @@
 import { useState } from "react";
+
 import { useSearchParams } from "react-router-dom";
 
 import useCurrentBooks from "../../hooks/useCurrentBooks.js";
+
 import { getProgress } from "../../utils/readingHelpers.js";
 
 import "./CurrentReading.css";
@@ -41,7 +43,20 @@ const CurrentReading = ({ readingBookId, onBooksChange }) => {
   };
 
   const mainCurrentBook = currentBooks[0] ?? null;
+
   const otherCurrentBooks = currentBooks.slice(1);
+
+  const getBookProgress = (book) => {
+    if (!book) {
+      return 0;
+    }
+
+    if (book.progressMode === "PERCENT") {
+      return Math.min(100, Math.max(0, book.currentPercent ?? 0));
+    }
+
+    return getProgress(book.currentPage ?? 0, book.pages ?? 0);
+  };
 
   return (
     <section className="profile-section">
@@ -71,10 +86,10 @@ const CurrentReading = ({ readingBookId, onBooksChange }) => {
         <>
           <article className="current-book">
             <div className="current-book__cover">
-              {mainCurrentBook.book?.coverUrl ? (
+              {mainCurrentBook.coverUrl ? (
                 <img
-                  src={mainCurrentBook.book.coverUrl}
-                  alt={mainCurrentBook.book.title}
+                  src={mainCurrentBook.coverUrl}
+                  alt={mainCurrentBook.title}
                 />
               ) : (
                 <div className="book-no-cover">
@@ -86,18 +101,16 @@ const CurrentReading = ({ readingBookId, onBooksChange }) => {
             </div>
 
             <div className="current-book__content">
-              <h3>{mainCurrentBook.book?.title}</h3>
+              <h3>{mainCurrentBook.title}</h3>
 
-              <p className="current-book__author">
-                {mainCurrentBook.book?.author}
-              </p>
+              <p className="current-book__author">{mainCurrentBook.author}</p>
 
               {(() => {
-                const currentPage = mainCurrentBook.userBook?.currentPage ?? 0;
+                const currentPage = mainCurrentBook.currentPage ?? 0;
 
-                const totalPages = mainCurrentBook.book?.pages ?? 0;
+                const totalPages = mainCurrentBook.pages ?? 0;
 
-                const progress = getProgress(currentPage, totalPages);
+                const progress = getBookProgress(mainCurrentBook);
 
                 return (
                   <>
@@ -124,7 +137,7 @@ const CurrentReading = ({ readingBookId, onBooksChange }) => {
               <button
                 type="button"
                 className="current-book__button"
-                onClick={() => handleOpenReading(mainCurrentBook.book.id)}
+                onClick={() => handleOpenReading(mainCurrentBook.id)}
               >
                 Продовжити читання
               </button>
@@ -138,17 +151,17 @@ const CurrentReading = ({ readingBookId, onBooksChange }) => {
               }`}
             >
               <div className="current-books-dropdown__inner">
-                {otherCurrentBooks.map(({ book, userBook }) => {
-                  const currentPage = userBook?.currentPage ?? 0;
+                {otherCurrentBooks.map((book) => {
+                  const currentPage = book.currentPage ?? 0;
 
-                  const totalPages = book?.pages ?? 0;
+                  const totalPages = book.pages ?? 0;
 
-                  const progress = getProgress(currentPage, totalPages);
+                  const progress = getBookProgress(book);
 
                   return (
                     <article
                       className="current-books-dropdown__book"
-                      key={userBook.id}
+                      key={book.id}
                     >
                       <div className="current-books-dropdown__cover">
                         {book.coverUrl ? (

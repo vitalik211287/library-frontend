@@ -1,14 +1,13 @@
 import { useEffect, useMemo, useRef, useState } from "react";
-
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import EditBookModal from "../../components/EditBookModal/EditBookModal";
 import BarcodeScanner from "../../components/BarcodeScanner/BarcodeScanner";
 
 import { useAuth } from "../../context/AuthContext.jsx";
+import { useLibrary } from "../../context/LibraryContext.jsx";
 
 import useCatalogBooks from "./hooks/useCatalogBooks.js";
-
 import { filterCatalogBooks } from "./utils/catalogHelpers.js";
 
 import CatalogSearch from "./components/CatalogSearch/CatalogSearch.jsx";
@@ -18,25 +17,25 @@ import "./CatalogPage.css";
 
 const CatalogPage = () => {
   const [search, setSearch] = useState("");
-
   const [searchBy, setSearchBy] = useState("title");
-
   const [editingBook, setEditingBook] = useState(null);
-
   const [scannerOpen, setScannerOpen] = useState(false);
 
   const [searchParams, setSearchParams] = useSearchParams();
-
   const navigate = useNavigate();
-
   const searchInputRef = useRef(null);
 
   const { isAuthenticated, isAuthLoading } = useAuth();
+  const { activeLibrary, activeLibraryId, isLibrariesLoading } = useLibrary();
 
+  const canEditLibrary =
+    activeLibrary?.role === "OWNER" || activeLibrary?.role === "ADMIN";
   const { books, message, wishlistLoadingId, toggleWishlist, updateBook } =
     useCatalogBooks({
       isAuthenticated,
       isAuthLoading,
+      activeLibraryId,
+      isLibrariesLoading,
     });
 
   useEffect(() => {
@@ -71,7 +70,6 @@ const CatalogPage = () => {
 
     if (!isAuthenticated) {
       navigate("/login");
-
       return;
     }
 
@@ -86,17 +84,14 @@ const CatalogPage = () => {
     if (!isAuthenticated) {
       navigate("/login", {
         state: {
-          from: `/?reading=${book.id}`,
+          from: `/catalog?reading=${book.id}`,
         },
       });
-
       return;
     }
 
     const params = new URLSearchParams(searchParams);
-
     params.set("reading", book.id);
-
     setSearchParams(params);
   };
 
@@ -104,7 +99,11 @@ const CatalogPage = () => {
     <div className="catalog-page">
       <h1>Каталог бібліотеки</h1>
 
-      <p className="books-count">Книг у бібліотеці: {books.length}</p>
+      <p className="books-count">
+        {activeLibrary
+          ? `${activeLibrary.name}: ${books.length} книг`
+          : `Книг у бібліотеці: ${books.length}`}
+      </p>
 
       {message && <p className="catalog-message">{message}</p>}
 
@@ -128,6 +127,7 @@ const CatalogPage = () => {
             onWishlistToggle={handleWishlistToggle}
             onEdit={setEditingBook}
             onRead={handleOpenReading}
+            canEdit={canEditLibrary}
           />
         ))}
       </div>
@@ -135,6 +135,7 @@ const CatalogPage = () => {
       {editingBook && (
         <EditBookModal
           book={editingBook}
+          activeLibraryId={activeLibraryId}
           onClose={() => setEditingBook(null)}
           onUpdated={handleBookUpdated}
         />

@@ -219,8 +219,7 @@
   color: #dc2626;
 }
 
-.reading-sessions-edit-overlay,
-.reading-sessions-delete-overlay {
+.reading-sessions-edit-overlay {
   position: fixed;
   inset: 0;
   z-index: 5300;
@@ -236,8 +235,7 @@
   box-sizing: border-box;
 }
 
-.reading-sessions-edit,
-.reading-sessions-delete {
+.reading-sessions-edit {
   width: min(100%, 410px);
 
   padding: 20px;
@@ -253,15 +251,13 @@
   box-shadow: 0 24px 80px rgba(0, 0, 0, 0.4);
 }
 
-.reading-sessions-edit h3,
-.reading-sessions-delete h3 {
+.reading-sessions-edit h3 {
   margin: 0 0 5px;
 
   font-size: 21px;
 }
 
-.reading-sessions-edit > p,
-.reading-sessions-delete > p {
+.reading-sessions-edit > p {
   margin: 0 0 18px;
 
   color: var(--text-secondary);
@@ -321,16 +317,14 @@
   font-weight: 500;
 }
 
-.reading-sessions-edit__actions,
-.reading-sessions-delete__actions {
+.reading-sessions-edit__actions {
   display: flex;
   gap: 9px;
 
   margin-top: 20px;
 }
 
-.reading-sessions-edit__actions button,
-.reading-sessions-delete__actions button {
+.reading-sessions-edit__actions button {
   flex: 1;
 
   min-height: 44px;
@@ -354,45 +348,7 @@
   color: #fff;
 }
 
-.reading-sessions-delete {
-  text-align: center;
-}
-
-.reading-sessions-delete__icon {
-  display: grid;
-  place-items: center;
-
-  width: 52px;
-  height: 52px;
-
-  margin: 0 auto 14px;
-
-  border-radius: 50%;
-
-  background: rgba(220, 38, 38, 0.12);
-  color: #dc2626;
-}
-
-.reading-sessions-delete__icon svg {
-  width: 24px;
-  height: 24px;
-
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.reading-sessions-delete__actions .reading-sessions-delete__confirm {
-  border-color: transparent;
-
-  background: #dc2626;
-  color: #fff;
-}
-
-.reading-sessions-edit__actions button:disabled,
-.reading-sessions-delete__actions button:disabled {
+.reading-sessions-edit__actions button:disabled {
   opacity: 0.55;
   cursor: default;
 }

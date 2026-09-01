@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+
 import { createPortal } from "react-dom";
 
 import useReadingSession from "./hooks/useReadingSession.js";
@@ -56,7 +57,6 @@ const ReadingModal = ({ book, apiUrl, onClose }) => {
     changeRating,
     changeBookStatus,
 
-    fetchUserBook,
     fetchReadingStats,
   } = useReadingSession(book);
 
@@ -138,7 +138,7 @@ const ReadingModal = ({ book, apiUrl, onClose }) => {
   };
 
   const handleSessionsChanged = async () => {
-    await Promise.all([fetchUserBook(), fetchReadingStats()]);
+    await fetchReadingStats();
   };
 
   return createPortal(
@@ -209,7 +209,7 @@ const ReadingModal = ({ book, apiUrl, onClose }) => {
               stats={stats}
               activeSession={activeSession}
               elapsedSeconds={elapsedSeconds}
-              bookId={book.id}
+              bookId={currentBook.id}
               onOpenSessions={handleSessionsOpen}
             />
           </div>
@@ -228,7 +228,7 @@ const ReadingModal = ({ book, apiUrl, onClose }) => {
 
       {sessionsModalOpen && (
         <ReadingSessionsModal
-          bookId={book.id}
+          bookId={currentBook.id}
           totalPages={currentBook.pages}
           onClose={handleSessionsClose}
           onChanged={handleSessionsChanged}

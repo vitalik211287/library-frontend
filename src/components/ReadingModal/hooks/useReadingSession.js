@@ -18,6 +18,21 @@ const useReadingSession = (book) => {
 
   const [currentBook, setCurrentBook] = useState(book);
 
+  useEffect(() => {
+    setCurrentBook(book);
+
+    const nextProgressMode = book.progressMode ?? PROGRESS_MODES.PAGES;
+
+    setProgressMode(nextProgressMode);
+
+    const savedProgress =
+      nextProgressMode === PROGRESS_MODES.PERCENT
+        ? book.currentPercent
+        : book.currentPage;
+
+    setStartProgress(getProgressInputValue(savedProgress));
+  }, [book]);
+
   const [stats, setStats] = useState(null);
 
   const [message, setMessage] = useState("");
@@ -90,49 +105,6 @@ const useReadingSession = (book) => {
     currentBook.progressMode,
     progressMode,
   ]);
-
-  const fetchUserBook = async () => {
-    try {
-      const data = await apiFetch(`/api/user-books/${book.id}`);
-
-      const nextProgressMode = data.progressMode ?? PROGRESS_MODES.PAGES;
-
-      setProgressMode(nextProgressMode);
-
-      setCurrentBook({
-        ...data.book,
-
-        progressMode: nextProgressMode,
-
-        currentPage: data.currentPage ?? 0,
-
-        currentPercent: data.currentPercent ?? 0,
-
-        status: data.status ?? "NOT_STARTED",
-
-        rating: data.rating ?? null,
-      });
-
-      const savedProgress =
-        nextProgressMode === PROGRESS_MODES.PERCENT
-          ? data.currentPercent
-          : data.currentPage;
-
-      setStartProgress(getProgressInputValue(savedProgress));
-    } catch (error) {
-      if (error?.status === 401) {
-        return;
-      }
-
-      console.error("Помилка отримання даних книги:", error);
-
-      setMessage(
-        error instanceof Error
-          ? error.message
-          : "Не вдалося отримати дані читання",
-      );
-    }
-  };
 
   const fetchReadingStats = async () => {
     try {
@@ -591,9 +563,6 @@ const useReadingSession = (book) => {
     fetchActiveSession();
   }, [book.id]);
 
-  useEffect(() => {
-    fetchUserBook();
-  }, [book.id]);
 
   useEffect(() => {
     fetchReadingStats();
@@ -642,7 +611,6 @@ const useReadingSession = (book) => {
     changeRating,
     changeBookStatus,
 
-    fetchUserBook,
     fetchReadingStats,
   };
 };

@@ -1,0 +1,320 @@
+.library-management-page {
+  width: 100%;
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 18px 16px 96px;
+  box-sizing: border-box;
+  color: var(--text);
+}
+
+.library-management-page__header {
+  display: grid;
+  gap: 18px;
+  margin-bottom: 18px;
+}
+
+.library-management-page__back {
+  width: fit-content;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.library-management-page__eyebrow {
+  margin: 0 0 6px;
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.12em;
+}
+
+.library-management-page h1 {
+  margin: 0;
+  font-size: clamp(28px, 8vw, 42px);
+  line-height: 1.05;
+}
+
+.library-management-page__subtitle {
+  margin: 8px 0 0;
+  color: var(--text-muted, #9ca3af);
+  font-size: 15px;
+}
+
+.library-management-card {
+  margin-top: 14px;
+  padding: 18px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  box-sizing: border-box;
+}
+
+.library-management-card--empty {
+  margin-top: 0;
+}
+
+.library-management-card__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.library-management-card h2 {
+  margin: 0;
+  font-size: 19px;
+  line-height: 1.2;
+}
+
+.library-management-card__header p,
+.library-management-card--empty p {
+  margin: 6px 0 0;
+  color: var(--text-muted, #9ca3af);
+  font-size: 14px;
+  line-height: 1.45;
+}
+
+.library-management-add {
+  display: grid;
+  gap: 10px;
+}
+
+.library-management-add input,
+.library-member__actions select {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  outline: none;
+  background: var(--surface-secondary);
+  color: var(--text);
+  font: inherit;
+  box-sizing: border-box;
+}
+
+.library-management-add input:focus,
+.library-member__actions select:focus {
+  border-color: var(--accent);
+}
+
+.library-management-add button {
+  min-height: 46px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--accent);
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.library-management-add button:disabled,
+.library-member button:disabled,
+.library-member select:disabled,
+.library-management-danger__button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+.library-members-list {
+  display: grid;
+  gap: 10px;
+}
+
+.library-member {
+  display: grid;
+  gap: 14px;
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface-secondary);
+}
+
+.library-member__identity {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 12px;
+}
+
+.library-member__avatar {
+  width: 44px;
+  height: 44px;
+  flex: 0 0 44px;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--accent-bg);
+  color: var(--accent);
+  font-size: 14px;
+  font-weight: 900;
+}
+
+.library-member__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.library-member__info {
+  min-width: 0;
+  display: grid;
+  gap: 3px;
+}
+
+.library-member__name-row {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  gap: 8px;
+}
+
+.library-member__name-row strong {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.library-member__you {
+  flex: 0 0 auto;
+  padding: 3px 7px;
+  border-radius: 999px;
+  background: var(--accent-bg);
+  color: var(--accent);
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.library-member__email,
+.library-member__role-mobile {
+  overflow: hidden;
+  color: var(--text-muted, #9ca3af);
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.library-member__role-mobile {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.library-member__actions {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+}
+
+.library-member__role {
+  display: none;
+  color: var(--text-muted, #9ca3af);
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.library-member__remove {
+  min-height: 42px;
+  padding: 0 12px;
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  border-radius: 12px;
+  background: transparent;
+  color: #ef4444;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.library-management-danger {
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.library-management-danger h2 {
+  color: #ef4444;
+}
+
+.library-management-danger__button {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 18px;
+  border: 1px solid rgba(239, 68, 68, 0.55);
+  border-radius: 14px;
+  background: rgba(239, 68, 68, 0.08);
+  color: #ef4444;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.library-management-status,
+.library-management-note {
+  margin: 0;
+  color: var(--text-muted, #9ca3af);
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.library-management-note {
+  margin: 14px 4px 0;
+}
+
+@media (min-width: 600px) {
+  .library-management-page {
+    padding: 24px 24px 100px;
+  }
+
+  .library-management-add {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .library-management-add button {
+    min-width: 170px;
+  }
+
+  .library-member {
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+  }
+
+  .library-member__actions {
+    display: flex;
+    justify-content: flex-end;
+  }
+
+  .library-member__actions select {
+    width: 180px;
+  }
+
+  .library-member__role-mobile {
+    display: none;
+  }
+
+  .library-member__role {
+    display: inline-block;
+    min-width: 130px;
+    text-align: right;
+  }
+
+  .library-management-danger__button {
+    width: auto;
+  }
+}
+
+@media (min-width: 1100px) {
+  .library-management-page {
+    padding: 28px 28px 48px;
+  }
+
+  .library-management-card {
+    padding: 20px;
+  }
+}

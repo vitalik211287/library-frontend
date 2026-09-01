@@ -7,18 +7,17 @@ import "./index.css";
 import App from "./App.jsx";
 
 import { AuthProvider } from "./context/AuthContext.jsx";
+import { LibraryProvider } from "./context/LibraryContext.jsx";
 import { ThemeProvider } from "./context/ThemeContext.jsx";
 
-createRoot(
-  document.getElementById(
-    "root",
-  ),
-).render(
+createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <ThemeProvider>
         <AuthProvider>
-          <App />
+          <LibraryProvider>
+            <App />
+          </LibraryProvider>
         </AuthProvider>
       </ThemeProvider>
     </BrowserRouter>

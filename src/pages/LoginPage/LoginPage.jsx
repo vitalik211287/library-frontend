@@ -54,7 +54,7 @@ const LoginPage = () => {
 
       toast.success("Вхід виконано");
 
-      const destination = location.state?.from || "/";
+      const destination = location.state?.from || "/home";
 
       navigate(destination, {
         replace: true,

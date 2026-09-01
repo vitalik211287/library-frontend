@@ -40,8 +40,8 @@ const WishlistSection = ({ onCountChange }) => {
         <div className="profile-empty">Список поки порожній</div>
       ) : (
         <div className="profile-books">
-          {books.map(({ book, userBook }) => (
-            <article className="profile-book" key={userBook.id}>
+          {books.map((book) => (
+            <article className="profile-book" key={book.id}>
               <div className="profile-book__cover">
                 {book.coverUrl ? (
                   <img src={book.coverUrl} alt={book.title} />

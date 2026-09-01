@@ -7,6 +7,7 @@ const BookCard = ({
   isAuthenticated,
   isAuthLoading,
   wishlistLoadingId,
+  canEdit,
   onWishlistToggle,
   onEdit,
   onRead,
@@ -78,13 +79,15 @@ const BookCard = ({
       </div>
 
       <div className="book-card__actions">
-        <button
-          type="button"
-          className="book-card__button book-card__button--edit"
-          onClick={() => onEdit(book)}
-        >
-          Редагувати
-        </button>
+        {canEdit && (
+          <button
+            type="button"
+            className="book-card__button book-card__button--edit"
+            onClick={() => onEdit(book)}
+          >
+            Редагувати
+          </button>
+        )}
 
         <button
           type="button"
