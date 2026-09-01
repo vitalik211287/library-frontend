@@ -234,8 +234,19 @@ const HomePage = () => {
 
   const currentMonth = now.getMonth() + 1;
 
+  /* =========================
+     HOME DATA
+  ========================= */
+
   useEffect(() => {
     const loadHomeData = async () => {
+      if (!activeLibraryId) {
+        setCurrentBooks([]);
+        setIsLoading(false);
+
+        return;
+      }
+
       try {
         setIsLoading(true);
         setError("");
@@ -243,12 +254,12 @@ const HomePage = () => {
         const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
         const [
-          currentBooksResponse,
+          libraryBooksResponse,
           statsResponse,
           goalResponse,
           achievementsResponse,
         ] = await Promise.all([
-          apiFetch("/api/user-books/current"),
+          apiFetch(`/api/libraries/${activeLibraryId}/books`),
 
           apiFetch(
             `/api/user-books/stats?year=${currentYear}&timeZone=${encodeURIComponent(
@@ -261,10 +272,12 @@ const HomePage = () => {
           apiFetch("/api/user-books/achievements"),
         ]);
 
+        const libraryBooks = Array.isArray(libraryBooksResponse)
+          ? libraryBooksResponse
+          : [];
+
         setCurrentBooks(
-          Array.isArray(currentBooksResponse?.books)
-            ? currentBooksResponse.books
-            : [],
+          libraryBooks.filter((book) => book.status === "READING"),
         );
 
         setStats(statsResponse ?? null);
@@ -286,7 +299,11 @@ const HomePage = () => {
     };
 
     loadHomeData();
-  }, [currentYear]);
+  }, [currentYear, activeLibraryId]);
+
+  /* =========================
+     ACTIVITY
+  ========================= */
 
   useEffect(() => {
     const loadActivity = async () => {
@@ -349,6 +366,10 @@ const HomePage = () => {
     loadActivity();
   }, [now]);
 
+  /* =========================
+     LIBRARY
+  ========================= */
+
   const handleSelectLibrary = (libraryId) => {
     setActiveLibraryId(libraryId);
 
@@ -407,17 +428,20 @@ const HomePage = () => {
     }
   };
 
-  const currentBook = currentBooks[0] ?? null;
+  /* =========================
+     CURRENT BOOK
+  ========================= */
 
-  const book = currentBook?.book ?? null;
+  const book = currentBooks[0] ?? null;
 
-  const userBook = currentBook?.userBook ?? null;
-
-  const currentPage = userBook?.currentPage ?? 0;
+  const currentPage = book?.currentPage ?? 0;
 
   const totalPages = book?.pages ?? 0;
 
-  const progress = getProgress(currentPage, totalPages);
+  const progress =
+    book?.progressMode === "PERCENT"
+      ? (book?.currentPercent ?? 0)
+      : getProgress(currentPage, totalPages);
 
   const handleContinueReading = () => {
     if (!book?.id) {
@@ -433,6 +457,10 @@ const HomePage = () => {
     });
   };
 
+  /* =========================
+     WEEK
+  ========================= */
+
   const weeklyActivity = useMemo(() => {
     const monday = getMonday(now);
 
@@ -447,8 +475,11 @@ const HomePage = () => {
       return {
         day,
         date: date.getDate(),
+
         active: (activity?.sessions ?? 0) > 0,
+
         today: getDateKey(date) === getDateKey(now),
+
         activity: activity ?? {
           seconds: 0,
           pages: 0,
@@ -471,6 +502,10 @@ const HomePage = () => {
   const todayPages = todayActivity?.pages ?? 0;
 
   const todaySessions = todayActivity?.sessions ?? 0;
+
+  /* =========================
+     STATS
+  ========================= */
 
   const streak = stats?.streak?.current ?? 0;
 
@@ -499,6 +534,10 @@ const HomePage = () => {
 
   const firstName = getFirstName(user?.name);
 
+  /* =========================
+     SHARE
+  ========================= */
+
   const handleShare = async () => {
     const text =
       streak > 0
@@ -521,6 +560,10 @@ const HomePage = () => {
     }
   };
 
+  /* =========================
+     STATES
+  ========================= */
+
   if (isLoading) {
     return (
       <main className="home-page">
@@ -539,6 +582,10 @@ const HomePage = () => {
 
   return (
     <main className="home-page">
+      {/* =========================
+          LIBRARY SWITCHER
+      ========================= */}
+
       <div className="library-switcher">
         <button
           type="button"
@@ -577,6 +624,7 @@ const HomePage = () => {
               className="library-switcher__item"
               onClick={() => {
                 setIsLibraryMenuOpen(false);
+
                 setModalType("create");
               }}
             >
@@ -589,6 +637,7 @@ const HomePage = () => {
               disabled={!activeLibrary}
               onClick={() => {
                 setIsLibraryMenuOpen(false);
+
                 setModalType("member");
               }}
             >
@@ -601,6 +650,7 @@ const HomePage = () => {
               disabled={!activeLibrary}
               onClick={() => {
                 setIsLibraryMenuOpen(false);
+
                 navigate("/library/manage");
               }}
             >
@@ -610,22 +660,32 @@ const HomePage = () => {
         )}
       </div>
 
+      {/* =========================
+          WELCOME
+      ========================= */}
+
       <section className="home-welcome">
         <span className="home-welcome__eyebrow">Твій читацький простір</span>
 
         <h1>
           {getGreeting()}
           {firstName ? `, ${firstName}` : ""}
+
           <span aria-hidden="true"> 👋</span>
         </h1>
 
         <p>Продовжуємо читати?</p>
       </section>
 
+      {/* =========================
+          STREAK
+      ========================= */}
+
       <section className="streak-card">
         <div className="streak-card__top">
           <div>
             <span className="home-section__kicker">Активність</span>
+
             <h2>Твоя серія читання</h2>
           </div>
 
@@ -635,6 +695,7 @@ const HomePage = () => {
             onClick={handleShare}
           >
             <ShareIcon />
+
             <span>Поділитися</span>
           </button>
         </div>
@@ -686,10 +747,15 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* =========================
+          CURRENT READING
+      ========================= */}
+
       <section className="home-panel current-reading-section">
         <div className="home-panel__header">
           <div>
             <span className="home-section__kicker">У процесі</span>
+
             <h2>Зараз читаю</h2>
           </div>
 
@@ -704,6 +770,7 @@ const HomePage = () => {
 
             <div>
               <strong>Немає активної книги</strong>
+
               <span>Обери книгу в каталозі, щоб почати читання.</span>
             </div>
           </div>
@@ -734,6 +801,7 @@ const HomePage = () => {
                 <div className="current-reading-card__progress-info">
                   <span>
                     {currentPage}
+
                     {totalPages ? ` / ${totalPages} стор.` : " стор."}
                   </span>
 
@@ -763,10 +831,15 @@ const HomePage = () => {
         )}
       </section>
 
+      {/* =========================
+          TODAY
+      ========================= */}
+
       <section className="home-panel">
         <div className="home-panel__header">
           <div>
             <span className="home-section__kicker">Статистика</span>
+
             <h2>Сьогодні</h2>
           </div>
         </div>
@@ -776,7 +849,9 @@ const HomePage = () => {
             <div className="today-stat__icon">
               <ClockIcon />
             </div>
+
             <strong>{todayMinutes}</strong>
+
             <span>хв читання</span>
           </div>
 
@@ -784,7 +859,9 @@ const HomePage = () => {
             <div className="today-stat__icon">
               <PagesIcon />
             </div>
+
             <strong>{todayPages}</strong>
+
             <span>сторінок</span>
           </div>
 
@@ -792,16 +869,23 @@ const HomePage = () => {
             <div className="today-stat__icon">
               <SessionsIcon />
             </div>
+
             <strong>{todaySessions}</strong>
+
             <span>сесій</span>
           </div>
         </div>
       </section>
 
+      {/* =========================
+          GOAL
+      ========================= */}
+
       <section className="home-panel">
         <div className="home-panel__header">
           <div>
             <span className="home-section__kicker">Прогрес</span>
+
             <h2>Ціль читання</h2>
           </div>
 
@@ -820,6 +904,7 @@ const HomePage = () => {
 
                 <div className="reading-goal__numbers">
                   <strong>{totalReadingMinutes}</strong>
+
                   <span>/ {goalMinutes} хв</span>
                 </div>
               </div>
@@ -842,11 +927,16 @@ const HomePage = () => {
 
             <div>
               <strong>Мету ще не встановлено</strong>
+
               <span>Встанови річну ціль, щоб бачити прогрес.</span>
             </div>
           </div>
         )}
       </section>
+
+      {/* =========================
+          ACHIEVEMENT
+      ========================= */}
 
       <section className="home-panel achievement-card">
         <div className="achievement-card__icon">
@@ -870,10 +960,15 @@ const HomePage = () => {
         </div>
       </section>
 
+      {/* =========================
+          MONTH
+      ========================= */}
+
       <section className="home-panel month-panel">
         <div className="home-panel__header">
           <div>
             <span className="home-section__kicker">Підсумок місяця</span>
+
             <h2>{MONTHS[currentMonth - 1]}</h2>
           </div>
 
@@ -885,22 +980,29 @@ const HomePage = () => {
         <div className="monthly-summary">
           <div className="monthly-summary__primary">
             <span>Час читання</span>
+
             <strong>{formatReadingTime(monthSeconds)}</strong>
           </div>
 
           <div className="monthly-summary__grid">
             <div>
               <span>Сторінки</span>
+
               <strong>{monthPages}</strong>
             </div>
 
             <div>
               <span>Завершено книг</span>
+
               <strong>{monthBooks}</strong>
             </div>
           </div>
         </div>
       </section>
+
+      {/* =========================
+          CREATE LIBRARY MODAL
+      ========================= */}
 
       {modalType === "create" && (
         <div
@@ -956,6 +1058,10 @@ const HomePage = () => {
           </form>
         </div>
       )}
+
+      {/* =========================
+          ADD MEMBER MODAL
+      ========================= */}
 
       {modalType === "member" && (
         <div

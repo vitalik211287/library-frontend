@@ -2,8 +2,6 @@ import { useCallback, useEffect, useState } from "react";
 
 import { apiFetch } from "../../../utils/apiClient.js";
 
-import { getDefaultUserBookData } from "../utils/catalogHelpers.js";
-
 const useCatalogBooks = ({
   isAuthenticated,
   isAuthLoading,
@@ -32,35 +30,7 @@ const useCatalogBooks = ({
 
       const data = await apiFetch(`/api/libraries/${activeLibraryId}/books`);
 
-      const catalogBooks = Array.isArray(data) ? data : [];
-
-      const booksWithReadingData = await Promise.all(
-        catalogBooks.map(async (book) => {
-          try {
-            const userBook = await apiFetch(`/api/user-books/${book.id}`);
-
-            return {
-              ...book,
-              currentPage: userBook?.currentPage ?? 0,
-              status: userBook?.status ?? "NOT_STARTED",
-              rating: userBook?.rating ?? null,
-              isWishlist: userBook?.isWishlist ?? false,
-            };
-          } catch (loadError) {
-            console.error(
-              `Помилка отримання даних читання для ${book.id}:`,
-              loadError,
-            );
-
-            return {
-              ...book,
-              ...getDefaultUserBookData(),
-            };
-          }
-        }),
-      );
-
-      setBooks(booksWithReadingData);
+      setBooks(Array.isArray(data) ? data : []);
     } catch (loadError) {
       console.error("Помилка завантаження книг:", loadError);
 

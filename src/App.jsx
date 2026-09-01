@@ -27,6 +27,10 @@ import HomePage from "./pages/HomePage/HomePage.jsx";
 import LandingPage from "./pages/LandingPage/LandingPage.jsx";
 import LibraryManagementPage from "./pages/LibraryManagementPage/LibraryManagementPage.jsx";
 
+import UserSearchPage from "./pages/UserPage/components/Users/UserSearchPage/UserSearchPage.jsx";
+import FollowingPage from "./pages/UserPage/components/Users/FollowingPage/FollowingPage.jsx";
+import FollowersPage from "./pages/UserPage/components/Users/FollowersPage/FollowersPage.jsx";
+
 import RightSidebar from "./components/RightSidebar/RightSidebar.jsx";
 import ReadingModal from "./components/ReadingModal/ReadingModal.jsx";
 
@@ -34,9 +38,7 @@ import { API_URL, apiFetch, hasToken } from "./utils/apiClient.js";
 
 import { useAuth } from "./context/AuthContext.jsx";
 import { useTheme } from "./context/ThemeContext.jsx";
-import UserSearchPage from "./pages/UserPage/components/Users/UserSearchPage/UserSearchPage.jsx";
-import FollowingPage from "./pages/UserPage/components/Users/FollowingPage/FollowingPage.jsx";
-import FollowersPage from "./pages/UserPage/components/Users/FollowersPage/FollowersPage.jsx";
+import { useLibrary } from "./context/LibraryContext.jsx";
 
 /* =========================
    ICONS
@@ -101,6 +103,7 @@ const ProfileIcon = () => (
 const SettingsIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <circle cx="12" cy="12" r="3" />
+
     <path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-2.83 2.83-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V21h-4v-.08a1.7 1.7 0 0 0-1.03-1.56 1.7 1.7 0 0 0-1.88.34l-.06.06-2.83-2.83.06-.06A1.7 1.7 0 0 0 4.6 15a1.7 1.7 0 0 0-1.56-1.03H3v-4h.08A1.7 1.7 0 0 0 4.64 8.9a1.7 1.7 0 0 0-.34-1.88l-.06-.06 2.83-2.83.06.06A1.7 1.7 0 0 0 9 4.53a1.7 1.7 0 0 0 1.03-1.56V3h4v.08a1.7 1.7 0 0 0 1.07 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 2.83 2.83-.06.06a1.7 1.7 0 0 0-.34 1.88 1.7 1.7 0 0 0 1.56 1.03H21v4h-.08A1.7 1.7 0 0 0 19.4 15Z" />
   </svg>
 );
@@ -123,7 +126,7 @@ const SunIcon = () => (
     <path d="M2 12h2" />
     <path d="M20 12h2" />
     <path d="M6.34 17.66l-1.41 1.41" />
-    <path d="M19.07 4.93l-1.41 1.41" />
+    <path d="M19.07 4.93l1.41 1.41" />
   </svg>
 );
 
@@ -166,23 +169,37 @@ const ProtectedRoute = ({ children }) => {
 
 const App = () => {
   const { user, isAuthenticated, isAuthLoading } = useAuth();
+
   const { themeMode, setThemeMode } = useTheme();
+
+  const { activeLibraryId } = useLibrary();
+
   const location = useLocation();
+
   const navigate = useNavigate();
+
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [readingBook, setReadingBook] = useState(null);
+
   const [isReadingBookLoading, setIsReadingBookLoading] = useState(false);
+
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
   const readingBookId = searchParams.get("reading");
+
   const accountPath = isAuthenticated ? "/account" : "/login";
+
   const showRightSidebar = isAuthenticated && location.pathname === "/account";
 
   const isPublicPage =
     location.pathname === "/" ||
     location.pathname === "/login" ||
     location.pathname === "/register";
+
+  /* =========================
+     MOBILE MENU
+  ========================= */
 
   useEffect(() => {
     setIsMobileMenuOpen(false);
@@ -194,6 +211,7 @@ const App = () => {
     }
 
     const previousOverflow = document.body.style.overflow;
+
     document.body.style.overflow = "hidden";
 
     return () => {
@@ -219,10 +237,15 @@ const App = () => {
     };
   }, [isMobileMenuOpen]);
 
+  /* =========================
+     LOAD READING BOOK
+  ========================= */
+
   useEffect(() => {
     const loadReadingBook = async () => {
       if (!readingBookId) {
         setReadingBook(null);
+
         return;
       }
 
@@ -246,12 +269,16 @@ const App = () => {
         return;
       }
 
+      if (!activeLibraryId) {
+        setReadingBook(null);
+
+        return;
+      }
+
       try {
         setIsReadingBookLoading(true);
 
-        const data = await apiFetch("/api/books", {
-          auth: false,
-        });
+        const data = await apiFetch(`/api/libraries/${activeLibraryId}/books`);
 
         const books = Array.isArray(data)
           ? data
@@ -273,12 +300,14 @@ const App = () => {
           });
 
           setReadingBook(null);
+
           return;
         }
 
         setReadingBook(foundBook);
       } catch (error) {
         console.error("Load reading book error:", error);
+
         setReadingBook(null);
       } finally {
         setIsReadingBookLoading(false);
@@ -286,7 +315,11 @@ const App = () => {
     };
 
     loadReadingBook();
-  }, [readingBookId, isAuthenticated, isAuthLoading]);
+  }, [readingBookId, activeLibraryId, isAuthenticated, isAuthLoading]);
+
+  /* =========================
+     CLOSE READER
+  ========================= */
 
   const handleCloseReading = () => {
     const params = new URLSearchParams(searchParams);
@@ -300,6 +333,10 @@ const App = () => {
     setReadingBook(null);
   };
 
+  /* =========================
+     OPEN CURRENT READER
+  ========================= */
+
   const handleOpenReader = async () => {
     setIsMobileMenuOpen(false);
 
@@ -309,23 +346,30 @@ const App = () => {
 
     if (!isAuthenticated) {
       toast.error("Спочатку увійдіть в акаунт");
+
       navigate("/login");
+
       return;
     }
 
     if (!hasToken()) {
       navigate("/login");
+
       return;
     }
 
     try {
       const data = await apiFetch("/api/user-books/current");
+
       const books = Array.isArray(data?.books) ? data.books : [];
+
       const currentBook = books[0];
+
       const bookId = currentBook?.book?.id;
 
       if (!bookId) {
         toast("Немає активного читання");
+
         return;
       }
 
@@ -338,13 +382,22 @@ const App = () => {
       });
     } catch (error) {
       console.error("Open reader error:", error);
+
       toast.error("Не вдалося відкрити читалку");
     }
   };
 
+  /* =========================
+     THEME
+  ========================= */
+
   const handleThemeChange = (mode) => {
     setThemeMode(mode);
   };
+
+  /* =========================
+     PUBLIC ROUTES
+  ========================= */
 
   if (isPublicPage) {
     return (
@@ -385,11 +438,20 @@ const App = () => {
     );
   }
 
+  /* =========================
+     APP
+  ========================= */
+
   return (
     <div className="app-shell">
+      {/* =========================
+          MOBILE HEADER
+      ========================= */}
+
       <header className="mobile-header">
         <NavLink to="/home" className="mobile-header__brand">
           <CatalogIcon />
+
           <span>Бібліотека</span>
         </NavLink>
 
@@ -424,18 +486,28 @@ const App = () => {
         </div>
       </header>
 
+      {/* =========================
+          MOBILE OVERLAY
+      ========================= */}
+
       <div
         className={`mobile-menu-overlay ${
           isMobileMenuOpen ? "mobile-menu-overlay--open" : ""
         }`}
         onClick={() => setIsMobileMenuOpen(false)}
-        aria-hidden={!isMobileMenuOpen}
+        aria-hidden="true"
       />
+
+      {/* =========================
+          MOBILE DRAWER
+      ========================= */}
+
       {isMobileMenuOpen && (
         <aside className="mobile-drawer mobile-drawer--open">
           <div className="mobile-drawer__header">
             <div className="mobile-drawer__brand">
               <CatalogIcon />
+
               <span>Бібліотека</span>
             </div>
 
@@ -452,16 +524,19 @@ const App = () => {
           <nav className="mobile-drawer__nav">
             <NavLink to="/catalog" className="mobile-drawer__link">
               <CatalogIcon />
+
               <span>Каталог</span>
             </NavLink>
 
             <NavLink to="/add" className="mobile-drawer__link">
               <AddIcon />
+
               <span>Додати книгу</span>
             </NavLink>
 
             <NavLink to="/calendar" className="mobile-drawer__link">
               <CalendarIcon />
+
               <span>Календар</span>
             </NavLink>
 
@@ -471,16 +546,19 @@ const App = () => {
               onClick={handleOpenReader}
             >
               <ReaderIcon />
+
               <span>Читалка</span>
             </button>
 
             <NavLink to="/stats" className="mobile-drawer__link">
               <StatsIcon />
+
               <span>Статистика</span>
             </NavLink>
 
             <NavLink to="/achievements" className="mobile-drawer__link">
               <AchievementsIcon />
+
               <span>Досягнення</span>
             </NavLink>
 
@@ -491,6 +569,7 @@ const App = () => {
               }`}
             >
               <ProfileIcon />
+
               <span>{isAuthenticated ? "Профіль" : "Увійти"}</span>
             </NavLink>
           </nav>
@@ -501,6 +580,7 @@ const App = () => {
               className="mobile-drawer__link mobile-drawer__settings-link"
             >
               <SettingsIcon />
+
               <span>Налаштування</span>
             </NavLink>
           </div>
@@ -517,6 +597,7 @@ const App = () => {
                 onClick={() => handleThemeChange("system")}
               >
                 <SystemIcon />
+
                 <span>Системна</span>
               </button>
 
@@ -528,6 +609,7 @@ const App = () => {
                 onClick={() => handleThemeChange("light")}
               >
                 <SunIcon />
+
                 <span>Світла</span>
               </button>
 
@@ -539,6 +621,7 @@ const App = () => {
                 onClick={() => handleThemeChange("dark")}
               >
                 <MoonIcon />
+
                 <span>Темна</span>
               </button>
             </div>
@@ -546,25 +629,33 @@ const App = () => {
         </aside>
       )}
 
+      {/* =========================
+          DESKTOP SIDEBAR
+      ========================= */}
+
       <aside className="app-sidebar">
         <NavLink to="/home" className="app-brand">
           <CatalogIcon />
+
           <span>Бібліотека</span>
         </NavLink>
 
         <nav className="desktop-nav">
           <NavLink to="/catalog" className="desktop-nav__link">
             <CatalogIcon />
+
             <span>Каталог</span>
           </NavLink>
 
           <NavLink to="/add" className="desktop-nav__link">
             <AddIcon />
+
             <span>Додати книгу</span>
           </NavLink>
 
           <NavLink to="/calendar" className="desktop-nav__link">
             <CalendarIcon />
+
             <span>Календар</span>
           </NavLink>
 
@@ -574,16 +665,19 @@ const App = () => {
             onClick={handleOpenReader}
           >
             <ReaderIcon />
+
             <span>Читалка</span>
           </button>
 
           <NavLink to="/stats" className="desktop-nav__link">
             <StatsIcon />
+
             <span>Статистика</span>
           </NavLink>
 
           <NavLink to="/achievements" className="desktop-nav__link">
             <AchievementsIcon />
+
             <span>Досягнення</span>
           </NavLink>
 
@@ -594,14 +688,20 @@ const App = () => {
             }`}
           >
             <ProfileIcon />
+
             <span>{isAuthenticated ? "Мій профіль" : "Увійти"}</span>
           </NavLink>
 
           <NavLink to="/settings" className="desktop-nav__link">
             <SettingsIcon />
+
             <span>Налаштування</span>
           </NavLink>
         </nav>
+
+        {/* =========================
+            DESKTOP THEME
+        ========================= */}
 
         <div className="desktop-theme">
           <span className="desktop-theme__title">Тема</span>
@@ -636,6 +736,10 @@ const App = () => {
           </div>
         </div>
       </aside>
+
+      {/* =========================
+          MAIN CONTENT
+      ========================= */}
 
       <div className="app-content">
         <div
@@ -760,6 +864,10 @@ const App = () => {
           {showRightSidebar && <RightSidebar />}
         </div>
       </div>
+
+      {/* =========================
+          READING MODAL
+      ========================= */}
 
       {readingBook &&
         isAuthenticated &&

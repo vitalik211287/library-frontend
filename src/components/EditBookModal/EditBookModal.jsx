@@ -6,7 +6,7 @@ import { API_URL, apiFetch } from "../../utils/apiClient.js";
 
 import "./EditBookModal.css";
 
-const EditBookModal = ({ book, onClose, onUpdated }) => {
+const EditBookModal = ({ book, activeLibraryId, onClose, onUpdated }) => {
   const [formData, setFormData] = useState({
     title: book.title || "",
     author: book.author || "",
@@ -62,6 +62,12 @@ const EditBookModal = ({ book, onClose, onUpdated }) => {
   const handleSubmit = async (event) => {
     event.preventDefault();
 
+    if (!activeLibraryId) {
+      toast.error("Бібліотеку не вибрано");
+
+      return;
+    }
+
     if (!formData.title.trim()) {
       toast.error("Вкажіть назву книги");
 
@@ -77,40 +83,42 @@ const EditBookModal = ({ book, onClose, onUpdated }) => {
     setIsSaving(true);
 
     try {
-      const updatedBook = await apiFetch(`/api/books/${book.id}`, {
-        method: "PATCH",
-        auth: false,
+      const updatedBook = await apiFetch(
+        `/api/libraries/${activeLibraryId}/books/${book.id}`,
+        {
+          method: "PATCH",
 
-        body: {
-          title: formData.title.trim(),
+          body: {
+            title: formData.title.trim(),
 
-          author: formData.author.trim(),
+            author: formData.author.trim(),
 
-          ...(formData.publisher.trim() && {
-            publisher: formData.publisher.trim(),
-          }),
+            ...(formData.publisher.trim() && {
+              publisher: formData.publisher.trim(),
+            }),
 
-          ...(formData.year && {
-            year: Number(formData.year),
-          }),
+            ...(formData.year && {
+              year: Number(formData.year),
+            }),
 
-          ...(formData.pages && {
-            pages: Number(formData.pages),
-          }),
+            ...(formData.pages && {
+              pages: Number(formData.pages),
+            }),
 
-          ...(formData.language.trim() && {
-            language: formData.language.trim(),
-          }),
+            ...(formData.language.trim() && {
+              language: formData.language.trim(),
+            }),
 
-          ...(formData.genre.trim() && {
-            genre: formData.genre.trim(),
-          }),
+            ...(formData.genre.trim() && {
+              genre: formData.genre.trim(),
+            }),
 
-          ...(formData.description.trim() && {
-            description: formData.description.trim(),
-          }),
+            ...(formData.description.trim() && {
+              description: formData.description.trim(),
+            }),
+          },
         },
-      });
+      );
 
       let finalBook = updatedBook;
 
@@ -120,11 +128,13 @@ const EditBookModal = ({ book, onClose, onUpdated }) => {
         coverData.append("cover", cover);
 
         try {
-          finalBook = await apiFetch(`/api/books/${book.id}/cover`, {
-            method: "POST",
-            auth: false,
-            body: coverData,
-          });
+          finalBook = await apiFetch(
+            `/api/libraries/${activeLibraryId}/books/${book.id}/cover`,
+            {
+              method: "POST",
+              body: coverData,
+            },
+          );
         } catch (coverError) {
           console.error("Помилка оновлення обкладинки:", coverError);
 

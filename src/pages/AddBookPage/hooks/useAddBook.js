@@ -53,6 +53,7 @@ const useAddBook = ({
 
     if (!book.author?.trim()) {
       toast.error("Вкажіть автора");
+
       return;
     }
 
@@ -90,72 +91,52 @@ const useAddBook = ({
     }
 
     const form = event.currentTarget;
+
     const formData = new FormData(form);
+
+    const requestData = new FormData();
+
+    requestData.append("isbn", normalizeIsbn(formData.get("isbn")));
+
+    requestData.append("title", String(formData.get("title") || ""));
+
+    requestData.append("author", String(formData.get("author") || ""));
+
+    const optionalFields = ["publisher", "language", "genre", "description"];
+
+    optionalFields.forEach((field) => {
+      const value = formData.get(field);
+
+      if (typeof value === "string" && value.trim()) {
+        requestData.append(field, value.trim());
+      }
+    });
+
+    const year = formData.get("year");
+
+    if (typeof year === "string" && year.trim()) {
+      requestData.append("year", year.trim());
+    }
+
+    const pages = formData.get("pages");
+
+    if (typeof pages === "string" && pages.trim()) {
+      requestData.append("pages", pages.trim());
+    }
+
     const cover = formData.get("cover");
 
-    const bookData = {
-      isbn: normalizeIsbn(formData.get("isbn")),
-      title: formData.get("title"),
-      author: formData.get("author"),
-
-      ...(formData.get("publisher") && {
-        publisher: formData.get("publisher"),
-      }),
-
-      ...(formData.get("year") && {
-        year: Number(formData.get("year")),
-      }),
-
-      ...(formData.get("pages") && {
-        pages: Number(formData.get("pages")),
-      }),
-
-      ...(formData.get("language") && {
-        language: formData.get("language"),
-      }),
-
-      ...(formData.get("genre") && {
-        genre: formData.get("genre"),
-      }),
-
-      ...(formData.get("description") && {
-        description: formData.get("description"),
-      }),
-    };
+    if (cover instanceof File && cover.size > 0) {
+      requestData.append("cover", cover);
+    }
 
     setIsAdding(true);
 
     try {
-      const createdBook = await apiFetch(
-        `/api/libraries/${activeLibraryId}/books`,
-        {
-          method: "POST",
-          body: bookData,
-        },
-      );
-
-      if (cover instanceof File && cover.size > 0) {
-        const coverData = new FormData();
-
-        coverData.append("cover", cover);
-
-        try {
-          await apiFetch(`/api/books/${createdBook.id}/cover`, {
-            method: "POST",
-            body: coverData,
-          });
-        } catch (error) {
-          console.error("Помилка завантаження обкладинки:", error);
-
-          toast.error(
-            `Книгу додано, але обкладинку не завантажено: ${
-              error.message || "невідома помилка"
-            }`,
-          );
-
-          return;
-        }
-      }
+      await apiFetch(`/api/libraries/${activeLibraryId}/books`, {
+        method: "POST",
+        body: requestData,
+      });
 
       toast.success(getSuccessMessage());
 

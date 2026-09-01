@@ -18,6 +18,10 @@ const useReadingSession = (book) => {
 
   const [currentBook, setCurrentBook] = useState(book);
 
+  useEffect(() => {
+    setCurrentBook(book);
+  }, [book]);
+
   const [stats, setStats] = useState(null);
 
   const [message, setMessage] = useState("");
@@ -99,8 +103,9 @@ const useReadingSession = (book) => {
 
       setProgressMode(nextProgressMode);
 
-      setCurrentBook({
+      setCurrentBook((current) => ({
         ...data.book,
+        ...current,
 
         progressMode: nextProgressMode,
 
@@ -111,7 +116,9 @@ const useReadingSession = (book) => {
         status: data.status ?? "NOT_STARTED",
 
         rating: data.rating ?? null,
-      });
+
+        isWishlist: data.isWishlist ?? current.isWishlist ?? false,
+      }));
 
       const savedProgress =
         nextProgressMode === PROGRESS_MODES.PERCENT
