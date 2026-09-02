@@ -151,3 +151,58 @@
   stroke-linecap: round;
   stroke-linejoin: round;
 }
+
+/* =========================
+   SOURCE LIBRARY BADGE
+========================= */
+
+.profile-book__library-badge {
+  position: absolute;
+  left: 5px;
+  bottom: 5px;
+
+  max-width: calc(100% - 10px);
+
+  padding: 4px 6px;
+
+  box-sizing: border-box;
+
+  overflow: hidden;
+
+  border: 1px solid
+    color-mix(
+      in srgb,
+      var(--accent) 55%,
+      transparent
+    );
+
+  border-radius: 7px;
+
+  background: rgba(18, 18, 22, 0.88);
+  color: var(--accent);
+
+  font-size: 7px;
+  font-weight: 700;
+  line-height: 1.1;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+
+  backdrop-filter: blur(4px);
+
+  pointer-events: none;
+}
+
+@media (min-width: 600px) {
+  .profile-book__library-badge {
+    padding: 5px 7px;
+
+    font-size: 8px;
+  }
+}
+
+@media (min-width: 1100px) {
+  .profile-book__library-badge {
+    font-size: 9px;
+  }
+}

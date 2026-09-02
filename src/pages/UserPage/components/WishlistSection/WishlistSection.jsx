@@ -53,6 +53,12 @@ const WishlistSection = ({ onCountChange }) => {
                   </div>
                 )}
 
+                {book.sourceLibrary && (
+                  <span className="profile-book__library-badge">
+                    {book.sourceLibrary.name}
+                  </span>
+                )}
+
                 <button
                   type="button"
                   className="profile-book__bookmark"
@@ -65,6 +71,7 @@ const WishlistSection = ({ onCountChange }) => {
               </div>
 
               <h3>{book.title}</h3>
+
               <p>{book.author}</p>
             </article>
           ))}
