@@ -320,6 +320,20 @@ const App = () => {
   };
 
   /* =========================
+     UPDATE READING BOOK
+  ========================= */
+
+  const handleReadingBookUpdated = (updatedBook) => {
+    setReadingBook(updatedBook);
+
+    window.dispatchEvent(
+      new CustomEvent("library-book-updated", {
+        detail: updatedBook,
+      }),
+    );
+  };
+
+  /* =========================
      OPEN CURRENT READER
   ========================= */
 
@@ -867,6 +881,7 @@ const App = () => {
             book={readingBook}
             apiUrl={API_URL}
             onClose={handleCloseReading}
+            onBookUpdated={handleReadingBookUpdated}
           />
         )}
 

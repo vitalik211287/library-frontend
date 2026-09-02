@@ -42,6 +42,27 @@ const CatalogPage = () => {
     searchInputRef.current?.focus();
   }, []);
 
+  useEffect(() => {
+    const handleLibraryBookUpdated = (event) => {
+      const updatedBook = event.detail;
+
+      if (!updatedBook?.id) {
+        return;
+      }
+
+      updateBook(updatedBook);
+    };
+
+    window.addEventListener("library-book-updated", handleLibraryBookUpdated);
+
+    return () => {
+      window.removeEventListener(
+        "library-book-updated",
+        handleLibraryBookUpdated,
+      );
+    };
+  }, [updateBook]);
+
   const filteredBooks = useMemo(
     () =>
       filterCatalogBooks({

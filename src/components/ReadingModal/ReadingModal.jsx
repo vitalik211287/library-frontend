@@ -14,7 +14,7 @@ import { getReadingStatusLabel } from "./utils/readingModalHelpers.js";
 
 import "./ReadingModal.css";
 
-const ReadingModal = ({ book, apiUrl, onClose }) => {
+const ReadingModal = ({ book, apiUrl, onClose, onBookUpdated }) => {
   const [statusModalOpen, setStatusModalOpen] = useState(false);
 
   const [sessionsModalOpen, setSessionsModalOpen] = useState(false);
@@ -58,7 +58,7 @@ const ReadingModal = ({ book, apiUrl, onClose }) => {
     changeBookStatus,
 
     fetchReadingStats,
-  } = useReadingSession(book);
+  } = useReadingSession(book, onBookUpdated);
 
   const statusLabel = getReadingStatusLabel(currentBook.status, activeSession);
 

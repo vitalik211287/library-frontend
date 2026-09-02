@@ -236,7 +236,7 @@ const SettingsPage = () => {
     }
 
     if (file.size > 15 * 1024 * 1024) {
-      toast.error("Максимальний розмір фото — 5 МБ");
+      toast.error("Максимальний розмір фото — 15 МБ");
 
       return;
     }

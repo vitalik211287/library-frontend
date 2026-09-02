@@ -13,7 +13,7 @@ const getProgressInputValue = (value) => {
   return progress > 0 ? String(progress) : "";
 };
 
-const useReadingSession = (book) => {
+const useReadingSession = (book, onBookUpdated) => {
   const [activeSession, setActiveSession] = useState(null);
 
   const [currentBook, setCurrentBook] = useState(book);
@@ -367,11 +367,18 @@ const useReadingSession = (book) => {
         },
       });
 
-      setCurrentBook((current) => ({
-        ...current,
+      const updatedRating = data.rating ?? rating;
 
-        rating: data.rating,
-      }));
+      setCurrentBook((current) => {
+        const updatedBook = {
+          ...current,
+          rating: updatedRating,
+        };
+
+        onBookUpdated?.(updatedBook);
+
+        return updatedBook;
+      });
     } catch (error) {
       console.error("Помилка збереження оцінки:", error);
 
@@ -562,7 +569,6 @@ const useReadingSession = (book) => {
 
     fetchActiveSession();
   }, [book.id]);
-
 
   useEffect(() => {
     fetchReadingStats();

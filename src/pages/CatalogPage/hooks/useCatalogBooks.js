@@ -81,7 +81,7 @@ const useCatalogBooks = ({
     }
   };
 
-  const updateBook = (updatedBook) => {
+  const updateBook = useCallback((updatedBook) => {
     setBooks((currentBooks) =>
       currentBooks.map((book) =>
         book.id === updatedBook.id
@@ -92,7 +92,7 @@ const useCatalogBooks = ({
           : book,
       ),
     );
-  };
+  }, []);
 
   return {
     books,
