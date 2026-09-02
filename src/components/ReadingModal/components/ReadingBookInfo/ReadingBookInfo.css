@@ -5,8 +5,8 @@
 .reading-modal__book-card {
   width: 100%;
 
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
 
   gap: 14px;
 
@@ -21,50 +21,47 @@
 }
 
 /* =========================
-   MAIN
-========================= */
-
-.reading-modal__book-main {
-  min-width: 0;
-
-  display: grid;
-
-  grid-template-columns:
-    72px
-    minmax(0, 1fr)
-    78px;
-
-  align-items: center;
-
-  gap: 12px;
-}
-
-/* =========================
    COVER
 ========================= */
 
 .reading-modal__cover {
-  width: 72px;
+  position: relative;
+
+  width: 84px;
+  min-width: 0;
+  aspect-ratio: 2 / 3;
+
+  align-self: start;
+
+  overflow: hidden;
+
+  border: 1px solid var(--border);
+  border-radius: 10px;
+
+  background: var(--surface);
 }
 
 .reading-modal__cover img,
 .reading-modal__no-cover {
   display: block;
 
-  width: 72px;
-  height: 108px;
+  width: 100%;
+  height: 100%;
 
   box-sizing: border-box;
 
-  border-radius: 9px;
+  border-radius: inherit;
 }
 
 .reading-modal__cover img {
-  object-fit: cover;
+  object-fit: contain;
+  object-position: center;
+
+  background: var(--surface);
 
   box-shadow:
-    0 7px 18px rgba(0, 0, 0, 0.32),
-    0 0 14px rgba(181, 107, 255, 0.08);
+    0 8px 20px rgba(0, 0, 0, 0.34),
+    0 0 16px rgba(181, 107, 255, 0.08);
 }
 
 .reading-modal__no-cover {
@@ -72,7 +69,7 @@
   align-items: center;
   justify-content: center;
 
-  padding: 7px;
+  padding: 8px;
 
   border: 1px solid var(--border);
 
@@ -86,39 +83,173 @@
 }
 
 /* =========================
-   DETAILS
+   STATUS ON COVER
 ========================= */
 
-.reading-modal__book-details {
-  min-width: 0;
+.reading-modal__cover-status {
+  position: absolute;
 
-  display: flex;
-  flex-direction: column;
+  top: 7px;
+  left: 7px;
 
-  gap: 13px;
-}
+  max-width: calc(100% - 14px);
 
-.reading-modal__book-meta {
-  display: grid;
-
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-
-  gap: 8px;
-}
-
-.reading-modal__book-meta-item {
-  min-width: 0;
-
-  display: flex;
-  flex-direction: column;
+  display: inline-flex;
+  align-items: center;
 
   gap: 4px;
+
+  min-height: 24px;
+
+  padding: 4px 6px;
+
+  box-sizing: border-box;
+
+  border: 1px solid currentColor;
+  border-radius: 999px;
+
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+
+  font-family: inherit;
+
+  cursor: pointer;
+
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+
+  transition:
+    transform 0.15s ease,
+    filter 0.15s ease;
+}
+
+.reading-modal__cover-status:hover {
+  filter: brightness(1.08);
+}
+
+.reading-modal__cover-status:active {
+  transform: scale(0.96);
+}
+
+.reading-modal__cover-status:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.reading-modal__cover-status strong {
+  min-width: 0;
+
+  font-size: 8px;
+  font-weight: 800;
+  line-height: 1;
+
+  white-space: nowrap;
+}
+
+.reading-modal__cover-status-dot {
+  flex: 0 0 auto;
+
+  width: 6px;
+  height: 6px;
+
+  border-radius: 50%;
+
+  background: currentColor;
+
+  box-shadow: 0 0 6px currentColor;
+}
+
+.reading-modal__cover-status-edit {
+  flex: 0 0 auto;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 13px;
+  height: 13px;
+
+  border-radius: 50%;
+
+  background: rgba(255, 255, 255, 0.1);
+
+  font-size: 8px;
+  line-height: 1;
+}
+
+/* =========================
+   STATUS COLORS
+========================= */
+
+.reading-modal__cover-status--reading {
+  color: #69ed7c;
+
+  background: rgba(15, 76, 31, 0.88);
+}
+
+.reading-modal__cover-status--paused {
+  color: #ffad42;
+
+  background: rgba(90, 50, 5, 0.9);
+}
+
+.reading-modal__cover-status--finished {
+  color: #69e899;
+
+  background: rgba(11, 72, 39, 0.9);
+}
+
+.reading-modal__cover-status--not-started {
+  color: var(--accent);
+
+  background: rgba(48, 31, 67, 0.9);
+}
+
+/* =========================
+   CONTENT
+========================= */
+
+.reading-modal__book-content {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  gap: 11px;
+}
+
+/* =========================
+   PROGRESS AREA
+========================= */
+
+.reading-modal__book-progress {
+  min-width: 0;
+
+  display: grid;
+
+  grid-template-columns:
+    minmax(0, 1fr)
+    66px;
+
+  align-items: center;
+
+  gap: 9px;
+}
+
+.reading-modal__book-progress-info {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+
+  justify-content: center;
+
+  gap: 5px;
 }
 
 .reading-modal__book-meta-label {
   color: var(--text);
 
-  font-size: 9px;
+  font-size: 8px;
   line-height: 1.2;
 }
 
@@ -127,109 +258,118 @@
 
   color: var(--text-h);
 
-  font-size: 13px;
+  font-size: 14px;
   font-weight: 700;
-  line-height: 1.2;
+  line-height: 1.15;
 
-  overflow-wrap: anywhere;
+  white-space: nowrap;
 }
 
 .reading-modal__book-meta-value span {
   color: var(--text);
 
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 500;
 }
 
 /* =========================
-   STATUS BUTTON
+   PROGRESS LINE
 ========================= */
 
-.reading-modal__book-status-button {
-  min-width: 0;
+.reading-modal__progress-line {
+  width: 100%;
+  height: 4px;
 
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-
-  gap: 4px;
-
-  padding: 0;
-
-  border: none;
-
-  background: transparent;
-  color: inherit;
-
-  font: inherit;
-  text-align: left;
-
-  cursor: pointer;
-}
-
-.reading-modal__book-status-row {
-  min-width: 0;
-
-  display: inline-flex;
-  align-items: center;
-
-  gap: 5px;
-
-  max-width: 100%;
-}
-
-.reading-modal__book-status-row strong {
-  min-width: 0;
-
-  color: var(--accent);
-
-  font-size: 13px;
-  font-weight: 700;
-  line-height: 1.2;
-
-  white-space: nowrap;
+  margin-top: 2px;
 
   overflow: hidden;
-  text-overflow: ellipsis;
+
+  border-radius: 999px;
+
+  background: var(--border);
 }
 
-.reading-modal__book-status-edit {
-  flex: 0 0 auto;
+.reading-modal__progress-line-value {
+  height: 100%;
 
-  width: 17px;
-  height: 17px;
+  border-radius: inherit;
 
-  display: inline-flex;
+  background: var(--accent);
+
+  transition: width 0.25s ease;
+}
+
+/* =========================
+   PROGRESS RING
+========================= */
+
+.reading-modal__progress-ring {
+  --reading-progress-angle: 0deg;
+
+  position: relative;
+
+  width: 66px;
+  height: 66px;
+
+  display: flex;
   align-items: center;
   justify-content: center;
 
-  border-radius: 5px;
+  justify-self: end;
 
-  background: var(--accent-bg);
+  border-radius: 50%;
+
+  background: conic-gradient(
+    var(--accent) 0deg var(--reading-progress-angle),
+    var(--border) var(--reading-progress-angle) 360deg
+  );
+
+  box-shadow: 0 0 16px rgba(181, 107, 255, 0.1);
+}
+
+.reading-modal__progress-ring::before {
+  content: "";
+
+  position: absolute;
+
+  inset: 5px;
+
+  border-radius: 50%;
+
+  background: var(--surface-secondary);
+}
+
+.reading-modal__progress-ring-inner {
+  position: relative;
+
+  z-index: 1;
+
+  width: 52px;
+  height: 52px;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+}
+
+.reading-modal__progress-ring-inner strong {
   color: var(--accent);
 
-  font-size: 11px;
+  font-size: 15px;
+  font-weight: 800;
   line-height: 1;
-
-  transition:
-    background-color 0.2s ease,
-    transform 0.15s ease;
 }
 
-.reading-modal__book-status-button:hover .reading-modal__book-status-edit {
-  background: var(--accent);
-  color: #ffffff;
-}
+.reading-modal__progress-ring-inner span {
+  margin-top: 3px;
 
-.reading-modal__book-status-button:active .reading-modal__book-status-edit {
-  transform: scale(0.92);
-}
+  color: var(--text);
 
-.reading-modal__book-status-button:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: 4px;
-
-  border-radius: 5px;
+  font-size: 5px;
+  line-height: 1.1;
 }
 
 /* =========================
@@ -239,10 +379,14 @@
 .reading-modal__book-rating {
   min-width: 0;
 
+  padding-top: 9px;
+
+  border-top: 1px solid var(--border);
+
   display: flex;
   flex-direction: column;
 
-  gap: 5px;
+  gap: 4px;
 }
 
 .reading-modal__rating {
@@ -251,12 +395,12 @@
   display: flex;
   align-items: center;
 
-  gap: 3px;
+  gap: 4px;
 }
 
 .reading-modal__star {
-  width: 20px;
-  height: 22px;
+  width: 22px;
+  height: 23px;
 
   display: flex;
   align-items: center;
@@ -292,99 +436,25 @@
 }
 
 /* =========================
-   PROGRESS RING
-========================= */
-
-.reading-modal__progress-ring {
-  --reading-progress-angle: 0deg;
-
-  position: relative;
-
-  width: 78px;
-  height: 78px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  border-radius: 50%;
-
-  background: conic-gradient(
-    var(--accent) 0deg var(--reading-progress-angle),
-    var(--border) var(--reading-progress-angle) 360deg
-  );
-
-  box-shadow: 0 0 18px rgba(181, 107, 255, 0.1);
-}
-
-.reading-modal__progress-ring::before {
-  content: "";
-
-  position: absolute;
-
-  inset: 6px;
-
-  border-radius: 50%;
-
-  background: var(--surface-secondary);
-}
-
-.reading-modal__progress-ring-inner {
-  position: relative;
-
-  z-index: 1;
-
-  width: 58px;
-  height: 58px;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-
-  text-align: center;
-}
-
-.reading-modal__progress-ring-inner strong {
-  color: var(--accent);
-
-  font-size: 17px;
-  font-weight: 800;
-  line-height: 1;
-}
-
-.reading-modal__progress-ring-inner span {
-  display: block;
-
-  max-width: 54px;
-
-  margin-top: 4px;
-
-  color: var(--text);
-
-  font-size: 7px;
-  line-height: 1.15;
-
-  overflow-wrap: anywhere;
-}
-
-/* =========================
    FOOTER
 ========================= */
 
 .reading-modal__book-footer {
+  min-width: 0;
+
   display: grid;
+  grid-template-columns:
+    minmax(0, 1fr)
+    minmax(70px, auto);
 
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 6px;
 
-  gap: 8px;
-
-  padding-top: 11px;
+  padding-top: 9px;
 
   border-top: 1px solid var(--border);
 }
 
-.reading-modal__book-footer > div {
+.reading-modal__book-footer-item {
   min-width: 0;
 
   display: flex;
@@ -393,24 +463,32 @@
 
   gap: 6px;
 
-  padding: 8px 9px;
+  padding: 6px 7px;
 
-  border-radius: 9px;
+  box-sizing: border-box;
+
+  border-radius: 8px;
 
   background: var(--surface);
 }
 
-.reading-modal__book-footer span {
+.reading-modal__book-footer-item span {
+  min-width: 0;
+
   color: var(--text);
 
-  font-size: 9px;
+  font-size: 7px;
+  line-height: 1.2;
 }
 
-.reading-modal__book-footer strong {
+.reading-modal__book-footer-item strong {
+  flex: 0 0 auto;
+
   color: var(--text-h);
 
-  font-size: 10px;
+  font-size: 8px;
   font-weight: 700;
+  line-height: 1.2;
 
   white-space: nowrap;
 }
@@ -421,100 +499,121 @@
 
 @media (max-width: 370px) {
   .reading-modal__book-card {
-    padding: 11px;
+    grid-template-columns: 76px minmax(0, 1fr);
 
-    gap: 11px;
-  }
-
-  .reading-modal__book-main {
-    grid-template-columns:
-      60px
-      minmax(0, 1fr)
-      66px;
-
-    gap: 8px;
-  }
-
-  .reading-modal__cover,
-  .reading-modal__cover img,
-  .reading-modal__no-cover {
-    width: 60px;
-  }
-
-  .reading-modal__cover img,
-  .reading-modal__no-cover {
-    height: 90px;
-  }
-
-  .reading-modal__book-details {
     gap: 10px;
+
+    padding: 11px;
   }
 
-  .reading-modal__book-meta {
-    gap: 5px;
+  .reading-modal__cover {
+    width: 76px;
+  }
+
+  .reading-modal__cover-status {
+    top: 6px;
+    left: 6px;
+
+    max-width: calc(100% - 12px);
+
+    gap: 3px;
+
+    min-height: 21px;
+
+    padding: 3px 5px;
+  }
+
+  .reading-modal__cover-status strong {
+    font-size: 7px;
+  }
+
+  .reading-modal__cover-status-dot {
+    width: 5px;
+    height: 5px;
+  }
+
+  .reading-modal__cover-status-edit {
+    width: 11px;
+    height: 11px;
+
+    font-size: 7px;
+  }
+
+  .reading-modal__book-progress {
+    grid-template-columns:
+      minmax(0, 1fr)
+      58px;
+
+    gap: 6px;
   }
 
   .reading-modal__book-meta-label {
+    font-size: 7px;
+  }
+
+  .reading-modal__book-meta-value {
+    font-size: 12px;
+  }
+
+  .reading-modal__book-meta-value span {
     font-size: 8px;
   }
 
-  .reading-modal__book-meta-value,
-  .reading-modal__book-status-row strong {
-    font-size: 11px;
+  .reading-modal__progress-ring {
+    width: 58px;
+    height: 58px;
   }
 
-  .reading-modal__book-status-edit {
-    width: 15px;
-    height: 15px;
+  .reading-modal__progress-ring::before {
+    inset: 4px;
+  }
 
-    font-size: 9px;
+  .reading-modal__progress-ring-inner {
+    width: 46px;
+    height: 46px;
+  }
+
+  .reading-modal__progress-ring-inner strong {
+    font-size: 13px;
+  }
+
+  .reading-modal__book-content {
+    gap: 9px;
+  }
+
+  .reading-modal__book-rating {
+    padding-top: 7px;
+  }
+
+  .reading-modal__rating {
+    gap: 2px;
   }
 
   .reading-modal__star {
-    width: 16px;
-    height: 19px;
+    width: 18px;
+    height: 20px;
 
     font-size: 15px;
   }
 
-  .reading-modal__progress-ring {
-    width: 66px;
-    height: 66px;
+  .reading-modal__book-footer {
+    gap: 4px;
+
+    padding-top: 7px;
   }
 
-  .reading-modal__progress-ring::before {
-    inset: 5px;
+  .reading-modal__book-footer-item {
+    gap: 4px;
+
+    padding: 5px;
   }
 
-  .reading-modal__progress-ring-inner {
-    width: 52px;
-    height: 52px;
-  }
-
-  .reading-modal__progress-ring-inner strong {
-    font-size: 14px;
-  }
-
-  .reading-modal__progress-ring-inner span {
-    max-width: 46px;
-
+  .reading-modal__book-footer-item span {
     font-size: 6px;
   }
 
-  .reading-modal__book-footer {
-    gap: 5px;
-  }
-
-  .reading-modal__book-footer > div {
-    padding: 7px;
-  }
-
-  .reading-modal__book-footer span {
-    font-size: 8px;
-  }
-
-  .reading-modal__book-footer strong {
-    font-size: 9px;
+  .reading-modal__book-footer-item strong {
+    font-size: 7px;
   }
 }
 
@@ -524,84 +623,113 @@
 
 @media (min-width: 600px) {
   .reading-modal__book-card {
+    grid-template-columns: 118px minmax(0, 1fr);
+
+    gap: 20px;
+
     padding: 18px;
   }
 
-  .reading-modal__book-main {
+  .reading-modal__cover {
+    width: 118px;
+  }
+
+  .reading-modal__cover {
+    border-radius: 12px;
+  }
+
+  .reading-modal__cover-status {
+    top: 10px;
+    left: 10px;
+
+    max-width: calc(100% - 20px);
+
+    min-height: 30px;
+
+    gap: 6px;
+
+    padding: 5px 9px;
+  }
+
+  .reading-modal__cover-status strong {
+    font-size: 10px;
+  }
+
+  .reading-modal__cover-status-dot {
+    width: 8px;
+    height: 8px;
+  }
+
+  .reading-modal__cover-status-edit {
+    width: 15px;
+    height: 15px;
+
+    font-size: 9px;
+  }
+
+  .reading-modal__book-progress {
     grid-template-columns:
-      100px
       minmax(0, 1fr)
-      110px;
+      96px;
 
     gap: 20px;
-  }
-
-  .reading-modal__cover,
-  .reading-modal__cover img,
-  .reading-modal__no-cover {
-    width: 100px;
-  }
-
-  .reading-modal__cover img,
-  .reading-modal__no-cover {
-    height: 150px;
-
-    border-radius: 11px;
   }
 
   .reading-modal__book-meta-label {
     font-size: 11px;
   }
 
-  .reading-modal__book-meta-value,
-  .reading-modal__book-status-row strong {
-    font-size: 16px;
+  .reading-modal__book-meta-value {
+    font-size: 20px;
   }
 
-  .reading-modal__book-status-edit {
-    width: 20px;
-    height: 20px;
-
-    font-size: 12px;
+  .reading-modal__book-meta-value span {
+    font-size: 13px;
   }
 
-  .reading-modal__star {
-    width: 24px;
-    height: 26px;
-
-    font-size: 21px;
+  .reading-modal__progress-line {
+    height: 5px;
   }
 
   .reading-modal__progress-ring {
-    width: 110px;
-    height: 110px;
+    width: 96px;
+    height: 96px;
   }
 
   .reading-modal__progress-ring::before {
-    inset: 8px;
+    inset: 7px;
   }
 
   .reading-modal__progress-ring-inner {
-    width: 86px;
-    height: 86px;
+    width: 76px;
+    height: 76px;
   }
 
   .reading-modal__progress-ring-inner strong {
-    font-size: 23px;
+    font-size: 22px;
   }
 
   .reading-modal__progress-ring-inner span {
-    max-width: 76px;
+    font-size: 8px;
+  }
 
+  .reading-modal__star {
+    width: 28px;
+    height: 30px;
+
+    font-size: 23px;
+  }
+
+  .reading-modal__book-footer-item {
+    padding: 8px 10px;
+  }
+
+  .reading-modal__book-footer-item span {
     font-size: 9px;
   }
 
-  .reading-modal__book-footer span {
-    font-size: 11px;
-  }
-
-  .reading-modal__book-footer strong {
-    font-size: 12px;
+  .reading-modal__book-footer-item strong {
+    font-size: 10px;
   }
 }
 
@@ -611,55 +739,44 @@
 
 @media (min-width: 900px) {
   .reading-modal__book-card {
+    grid-template-columns: 138px minmax(0, 1fr);
+
+    gap: 24px;
+
     padding: 20px;
   }
 
-  .reading-modal__book-main {
+  .reading-modal__cover {
+    width: 138px;
+  }
+
+  .reading-modal__book-progress {
     grid-template-columns:
-      120px
       minmax(0, 1fr)
-      130px;
+      112px;
 
-    gap: 24px;
-  }
-
-  .reading-modal__cover,
-  .reading-modal__cover img,
-  .reading-modal__no-cover {
-    width: 120px;
-  }
-
-  .reading-modal__cover img,
-  .reading-modal__no-cover {
-    height: 180px;
-  }
-
-  .reading-modal__book-meta-value,
-  .reading-modal__book-status-row strong {
-    font-size: 17px;
+    gap: 26px;
   }
 
   .reading-modal__progress-ring {
-    width: 130px;
-    height: 130px;
+    width: 112px;
+    height: 112px;
   }
 
   .reading-modal__progress-ring::before {
-    inset: 9px;
+    inset: 8px;
   }
 
   .reading-modal__progress-ring-inner {
-    width: 100px;
-    height: 100px;
+    width: 88px;
+    height: 88px;
   }
 
   .reading-modal__progress-ring-inner strong {
-    font-size: 27px;
+    font-size: 25px;
   }
 
   .reading-modal__progress-ring-inner span {
-    max-width: 88px;
-
-    font-size: 10px;
+    font-size: 9px;
   }
 }

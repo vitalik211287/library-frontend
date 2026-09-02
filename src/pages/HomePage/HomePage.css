@@ -964,3 +964,51 @@
     height: 150px;
   }
 }
+
+/* =========================
+   SMALL MOBILE — STREAK
+========================= */
+
+@media (max-width: 370px) {
+  .streak-card {
+    padding: 16px 10px 13px;
+  }
+
+  .streak-card__content {
+    grid-template-columns: 52px minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .streak-card__counter {
+    padding-right: 8px;
+  }
+
+  .streak-week {
+    gap: 1px;
+  }
+
+  .streak-day__label {
+    margin-bottom: 7px;
+    font-size: 8px;
+  }
+
+  .streak-day__marker {
+    width: 25px;
+    height: 25px;
+
+    font-size: 9px;
+  }
+
+  .streak-day__marker svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .streak-day__today-dot {
+    top: -5px;
+    right: -1px;
+
+    width: 5px;
+    height: 5px;
+  }
+}
