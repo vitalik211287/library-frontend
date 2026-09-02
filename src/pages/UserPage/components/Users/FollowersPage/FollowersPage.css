@@ -211,22 +211,37 @@
    BUTTONS
 ========================= */
 
-.follower-card__follow {
-  flex-shrink: 0;
-
+.follower-card__follow,
+.follower-card__following {
+  width: 92px;
+  min-width: 92px;
   min-height: 34px;
 
-  padding: 7px 10px;
+  flex-shrink: 0;
 
-  border: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 7px 8px;
+
+  box-sizing: border-box;
+
   border-radius: 9px;
-
-  background: var(--accent);
-  color: #ffffff;
 
   font-family: inherit;
   font-size: 10px;
   font-weight: 700;
+  line-height: 1;
+
+  white-space: nowrap;
+}
+
+.follower-card__follow {
+  border: 1px solid transparent;
+
+  background: var(--accent);
+  color: #ffffff;
 
   cursor: pointer;
 }
@@ -241,18 +256,10 @@
 }
 
 .follower-card__following {
-  flex-shrink: 0;
-
-  padding: 7px 9px;
-
   border: 1px solid var(--accent-border);
-  border-radius: 9px;
 
   background: var(--accent-bg);
   color: var(--accent);
-
-  font-size: 10px;
-  font-weight: 600;
 }
 
 /* =========================
@@ -351,7 +358,11 @@
 
   .follower-card__follow,
   .follower-card__following {
-    padding: 6px 8px;
+    width: 86px;
+    min-width: 86px;
+    min-height: 32px;
+
+    padding: 6px;
 
     font-size: 9px;
   }
@@ -395,7 +406,11 @@
 
   .follower-card__follow,
   .follower-card__following {
-    padding: 8px 13px;
+    width: 104px;
+    min-width: 104px;
+    min-height: 38px;
+
+    padding: 8px 10px;
 
     font-size: 11px;
   }
