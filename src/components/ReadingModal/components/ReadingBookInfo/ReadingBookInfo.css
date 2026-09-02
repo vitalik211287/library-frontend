@@ -399,8 +399,8 @@
 }
 
 .reading-modal__star {
-  width: 22px;
-  height: 23px;
+  width: 26px;
+  height: 28px;
 
   display: flex;
   align-items: center;
@@ -415,7 +415,7 @@
   color: var(--accent);
 
   font-family: inherit;
-  font-size: 18px;
+  font-size: 23px;
   line-height: 1;
 
   cursor: pointer;
@@ -590,10 +590,10 @@
   }
 
   .reading-modal__star {
-    width: 18px;
-    height: 20px;
+    width: 23px;
+    height: 25px;
 
-    font-size: 15px;
+    font-size: 20px;
   }
 
   .reading-modal__book-footer {
