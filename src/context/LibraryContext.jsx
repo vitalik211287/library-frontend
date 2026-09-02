@@ -1,4 +1,11 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from "react";
 
 import { apiFetch } from "../utils/apiClient.js";
 
@@ -19,6 +26,42 @@ const LibraryProvider = ({ children }) => {
 
   const [librariesError, setLibrariesError] = useState("");
 
+  /* =========================
+     APPLY LIBRARIES
+  ========================= */
+
+  const applyLibraries = useCallback((loadedLibraries) => {
+    setLibraries(loadedLibraries);
+
+    setActiveLibraryIdState((currentLibraryId) => {
+      const existingLibrary = loadedLibraries.find(
+        (library) => library.id === currentLibraryId,
+      );
+
+      if (existingLibrary) {
+        localStorage.setItem("activeLibraryId", existingLibrary.id);
+
+        return existingLibrary.id;
+      }
+
+      const firstLibrary = loadedLibraries[0];
+
+      if (!firstLibrary) {
+        localStorage.removeItem("activeLibraryId");
+
+        return "";
+      }
+
+      localStorage.setItem("activeLibraryId", firstLibrary.id);
+
+      return firstLibrary.id;
+    });
+  }, []);
+
+  /* =========================
+     INITIAL LOAD
+  ========================= */
+
   useEffect(() => {
     const loadLibraries = async () => {
       if (isAuthLoading) {
@@ -27,7 +70,9 @@ const LibraryProvider = ({ children }) => {
 
       if (!isAuthenticated) {
         setLibraries([]);
+
         setActiveLibraryIdState("");
+
         setLibrariesError("");
 
         localStorage.removeItem("activeLibraryId");
@@ -37,35 +82,14 @@ const LibraryProvider = ({ children }) => {
 
       try {
         setIsLibrariesLoading(true);
+
         setLibrariesError("");
 
         const data = await apiFetch("/api/libraries");
 
         const loadedLibraries = Array.isArray(data) ? data : [];
 
-        setLibraries(loadedLibraries);
-
-        setActiveLibraryIdState((currentLibraryId) => {
-          const existingLibrary = loadedLibraries.find(
-            (library) => library.id === currentLibraryId,
-          );
-
-          if (existingLibrary) {
-            return existingLibrary.id;
-          }
-
-          const firstLibrary = loadedLibraries[0];
-
-          if (!firstLibrary) {
-            localStorage.removeItem("activeLibraryId");
-
-            return "";
-          }
-
-          localStorage.setItem("activeLibraryId", firstLibrary.id);
-
-          return firstLibrary.id;
-        });
+        applyLibraries(loadedLibraries);
       } catch (error) {
         console.error("Load libraries error:", error);
 
@@ -82,7 +106,11 @@ const LibraryProvider = ({ children }) => {
     };
 
     loadLibraries();
-  }, [isAuthenticated, isAuthLoading]);
+  }, [isAuthenticated, isAuthLoading, applyLibraries]);
+
+  /* =========================
+     ACTIVE LIBRARY
+  ========================= */
 
   const activeLibrary = useMemo(
     () =>
@@ -92,19 +120,26 @@ const LibraryProvider = ({ children }) => {
     [libraries, activeLibraryId],
   );
 
-  const setActiveLibraryId = (libraryId) => {
-    const library = libraries.find((item) => item.id === libraryId);
+  const setActiveLibraryId = useCallback(
+    (libraryId) => {
+      const library = libraries.find((item) => item.id === libraryId);
 
-    if (!library) {
-      return;
-    }
+      if (!library) {
+        return;
+      }
 
-    setActiveLibraryIdState(libraryId);
+      setActiveLibraryIdState(libraryId);
 
-    localStorage.setItem("activeLibraryId", libraryId);
-  };
+      localStorage.setItem("activeLibraryId", libraryId);
+    },
+    [libraries],
+  );
 
-  const refreshLibraries = async () => {
+  /* =========================
+     REFRESH
+  ========================= */
+
+  const refreshLibraries = useCallback(async () => {
     if (!isAuthenticated) {
       return [];
     }
@@ -113,60 +148,50 @@ const LibraryProvider = ({ children }) => {
 
     const loadedLibraries = Array.isArray(data) ? data : [];
 
-    setLibraries(loadedLibraries);
-
-    setActiveLibraryIdState((currentLibraryId) => {
-      const existingLibrary = loadedLibraries.find(
-        (library) => library.id === currentLibraryId,
-      );
-
-      if (existingLibrary) {
-        return existingLibrary.id;
-      }
-
-      const firstLibrary = loadedLibraries[0];
-
-      if (!firstLibrary) {
-        localStorage.removeItem("activeLibraryId");
-
-        return "";
-      }
-
-      localStorage.setItem("activeLibraryId", firstLibrary.id);
-
-      return firstLibrary.id;
-    });
+    applyLibraries(loadedLibraries);
 
     return loadedLibraries;
-  };
+  }, [isAuthenticated, applyLibraries]);
 
-  const createLibrary = async (name) => {
-    const trimmedName = name.trim();
+  /* =========================
+     CREATE
+  ========================= */
 
-    if (!trimmedName) {
-      throw new Error("Введіть назву бібліотеки");
-    }
+  const createLibrary = useCallback(
+    async (name) => {
+      const trimmedName = name.trim();
 
-    const library = await apiFetch("/api/libraries", {
-      method: "POST",
-      body: {
-        name: trimmedName,
-      },
-    });
+      if (!trimmedName) {
+        throw new Error("Введіть назву бібліотеки");
+      }
 
-    const loadedLibraries = await refreshLibraries();
+      const library = await apiFetch("/api/libraries", {
+        method: "POST",
 
-    const createdLibrary =
-      loadedLibraries.find((item) => item.id === library.id) ?? library;
+        body: {
+          name: trimmedName,
+        },
+      });
 
-    setActiveLibraryIdState(createdLibrary.id);
+      const loadedLibraries = await refreshLibraries();
 
-    localStorage.setItem("activeLibraryId", createdLibrary.id);
+      const createdLibrary =
+        loadedLibraries.find((item) => item.id === library.id) ?? library;
 
-    return createdLibrary;
-  };
+      setActiveLibraryIdState(createdLibrary.id);
 
-  const renameLibrary = async (libraryId, name) => {
+      localStorage.setItem("activeLibraryId", createdLibrary.id);
+
+      return createdLibrary;
+    },
+    [refreshLibraries],
+  );
+
+  /* =========================
+     RENAME
+  ========================= */
+
+  const renameLibrary = useCallback(async (libraryId, name) => {
     const trimmedName = name.trim();
 
     if (!trimmedName) {
@@ -179,6 +204,7 @@ const LibraryProvider = ({ children }) => {
 
     const library = await apiFetch(`/api/libraries/${libraryId}`, {
       method: "PATCH",
+
       body: {
         name: trimmedName,
       },
@@ -196,50 +222,89 @@ const LibraryProvider = ({ children }) => {
     );
 
     return library;
-  };
+  }, []);
 
-  const deleteLibrary = async (libraryId) => {
-    if (!libraryId) {
-      throw new Error("Бібліотеку не вибрано");
-    }
+  /* =========================
+     DELETE
+  ========================= */
 
-    await apiFetch(`/api/libraries/${libraryId}`, {
-      method: "DELETE",
-    });
+  const deleteLibrary = useCallback(
+    async (libraryId) => {
+      if (!libraryId) {
+        throw new Error("Бібліотеку не вибрано");
+      }
 
-    const loadedLibraries = await refreshLibraries();
+      await apiFetch(`/api/libraries/${libraryId}`, {
+        method: "DELETE",
+      });
 
-    return loadedLibraries;
-  };
+      return refreshLibraries();
+    },
+    [refreshLibraries],
+  );
 
-  const addLibraryMember = async (libraryId, email) => {
-    const normalizedEmail = email.trim().toLowerCase();
+  /* =========================
+     ADD MEMBER
+  ========================= */
 
-    if (!normalizedEmail) {
-      throw new Error("Введіть email");
-    }
+  const addLibraryMember = useCallback(
+    async (libraryId, email) => {
+      const normalizedEmail = email.trim().toLowerCase();
 
-    if (!libraryId) {
-      throw new Error("Бібліотеку не вибрано");
-    }
+      if (!normalizedEmail) {
+        throw new Error("Введіть email");
+      }
 
-    const member = await apiFetch(`/api/libraries/${libraryId}/members`, {
-      method: "POST",
-      body: {
-        email: normalizedEmail,
-      },
-    });
+      if (!libraryId) {
+        throw new Error("Бібліотеку не вибрано");
+      }
 
-    await refreshLibraries();
+      const member = await apiFetch(`/api/libraries/${libraryId}/members`, {
+        method: "POST",
 
-    return member;
-  };
+        body: {
+          email: normalizedEmail,
+        },
+      });
+
+      await refreshLibraries();
+
+      return member;
+    },
+    [refreshLibraries],
+  );
+
+  /* =========================
+     CONTEXT VALUE
+  ========================= */
 
   const value = useMemo(
     () => ({
       libraries,
+
       activeLibrary,
+
       activeLibraryId: activeLibrary?.id ?? "",
+
+      setActiveLibraryId,
+
+      isLibrariesLoading,
+
+      librariesError,
+
+      refreshLibraries,
+
+      createLibrary,
+
+      renameLibrary,
+
+      deleteLibrary,
+
+      addLibraryMember,
+    }),
+    [
+      libraries,
+      activeLibrary,
       setActiveLibraryId,
       isLibrariesLoading,
       librariesError,
@@ -248,8 +313,7 @@ const LibraryProvider = ({ children }) => {
       renameLibrary,
       deleteLibrary,
       addLibraryMember,
-    }),
-    [libraries, activeLibrary, isLibrariesLoading, librariesError],
+    ],
   );
 
   return (
