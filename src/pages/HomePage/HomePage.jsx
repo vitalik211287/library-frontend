@@ -11,6 +11,7 @@ import { useLibrary } from "../../context/LibraryContext.jsx";
 
 import { apiFetch } from "../../utils/apiClient.js";
 
+import ReadingGoalModal from "../UserPage/components/ReadingGoal/ReadingGoalModal.jsx";
 /* =========================
    ICONS
 ========================= */
@@ -227,6 +228,8 @@ const HomePage = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   const [error, setError] = useState("");
+
+  const [isReadingGoalModalOpen, setIsReadingGoalModalOpen] = useState(false);
 
   const now = useMemo(() => new Date(), []);
 
@@ -881,7 +884,19 @@ const HomePage = () => {
           GOAL
       ========================= */}
 
-      <section className="home-panel">
+      <section
+        className="home-panel home-panel--clickable"
+        role="button"
+        tabIndex={0}
+        onClick={() => setIsReadingGoalModalOpen(true)}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+
+            setIsReadingGoalModalOpen(true);
+          }
+        }}
+      >
         <div className="home-panel__header">
           <div>
             <span className="home-section__kicker">Прогрес</span>
@@ -938,7 +953,18 @@ const HomePage = () => {
           ACHIEVEMENT
       ========================= */}
 
-      <section className="home-panel achievement-card">
+      <section
+        className="home-panel achievement-card home-panel--clickable"
+        role="button"
+        tabIndex={0}
+        onClick={() => navigate("/achievements")}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            navigate("/achievements");
+          }
+        }}
+      >
         <div className="achievement-card__icon">
           <TrophyIcon />
         </div>
@@ -964,7 +990,18 @@ const HomePage = () => {
           MONTH
       ========================= */}
 
-      <section className="home-panel month-panel">
+      <section
+        className="home-panel month-panel home-panel--clickable"
+        role="button"
+        tabIndex={0}
+        onClick={() => navigate("/stats")}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+            navigate("/stats");
+          }
+        }}
+      >
         <div className="home-panel__header">
           <div>
             <span className="home-section__kicker">Підсумок місяця</span>
@@ -999,6 +1036,20 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+
+      {/* =========================
+          READING GOAL MODAL
+      ========================= */}
+
+      {isReadingGoalModalOpen && (
+        <ReadingGoalModal
+          initialGoal={readingGoal}
+          onSaved={(newGoal) => {
+            setReadingGoal(newGoal);
+          }}
+          onClose={() => setIsReadingGoalModalOpen(false)}
+        />
+      )}
 
       {/* =========================
           CREATE LIBRARY MODAL

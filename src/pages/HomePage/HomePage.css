@@ -1012,3 +1012,29 @@
     height: 5px;
   }
 }
+
+/* =========================
+   CLICKABLE HOME PANELS
+========================= */
+
+.home-panel--clickable {
+  cursor: pointer;
+
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.home-panel--clickable:hover {
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+}
+
+.home-panel--clickable:active {
+  transform: scale(0.99);
+}
+
+.home-panel--clickable:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
