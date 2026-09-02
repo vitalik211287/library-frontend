@@ -1,106 +1,23 @@
-.edit-modal-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
-
-  padding: 8px;
-
-  overflow-y: auto;
-
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(3px);
-
-  box-sizing: border-box;
-}
-
 .edit-modal {
-  position: relative;
-
-  width: 100%;
   max-width: 100%;
-  max-height: calc(100dvh - 16px);
-
-  margin: auto 0;
-  padding: 18px 14px;
-
-  overflow-y: auto;
 
   background: var(--surface);
-  color: var(--text);
-
-  border: 1px solid var(--border);
-  border-radius: 14px;
-
-  box-shadow: var(--shadow);
-
-  box-sizing: border-box;
 }
 
-/* HEADER */
-
-.edit-modal__header {
-  padding-right: 42px;
+.edit-modal .modal__content {
+  padding: 0 14px 18px;
 }
 
-.edit-modal h2 {
-  margin: 0;
-
-  font-size: 22px;
-  line-height: 1.2;
-
-  color: var(--text-h);
-}
-
-.edit-modal__subtitle {
-  margin: 6px 0 0;
-
-  font-size: 14px;
-
+.edit-modal .modal__subtitle {
   color: var(--text);
 }
 
-/* CLOSE */
-
-.edit-modal__close {
-  position: absolute;
-
-  top: 10px;
-  right: 10px;
-
-  width: 36px;
-  height: 36px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 0;
-
-  border: none;
-  border-radius: 8px;
-
-  background: transparent;
-  color: var(--text);
-
-  font-size: 28px;
-  line-height: 1;
-
-  cursor: pointer;
-}
-
-.edit-modal__close:hover {
-  background: var(--surface-secondary);
-  color: var(--text-h);
-}
-
-/* FORM */
+/* =========================
+   FORM
+========================= */
 
 .edit-modal__form {
-  margin-top: 24px;
+  margin-top: 4px;
 }
 
 .edit-modal__layout {
@@ -110,7 +27,9 @@
   gap: 18px;
 }
 
-/* TOP BLOCK */
+/* =========================
+   TOP BLOCK
+========================= */
 
 .edit-modal__top {
   display: grid;
@@ -121,30 +40,33 @@
   align-items: end;
 }
 
-/* COVER */
+/* =========================
+   COVER
+========================= */
 
 .edit-modal__cover {
+  width: 92px;
+  min-width: 92px;
+
   display: flex;
   align-items: center;
   justify-content: center;
-
-  width: 92px;
-  min-width: 92px;
 }
 
 .edit-modal__cover-wrapper {
   position: relative;
 
   width: 92px;
+
   aspect-ratio: 2 / 3;
 }
 
 .edit-modal__cover img,
 .edit-modal__no-cover {
-  display: block;
-
   width: 100%;
   height: 100%;
+
+  display: block;
 
   box-sizing: border-box;
 
@@ -175,7 +97,9 @@
   text-align: center;
 }
 
-/* PLUS */
+/* =========================
+   COVER PLUS
+========================= */
 
 .edit-modal__cover-plus {
   position: absolute;
@@ -227,15 +151,11 @@
 .edit-modal__cover-plus:hover {
   background: rgba(0, 0, 0, 0.9);
 
-  transform:
-    translate(-50%, -50%)
-    scale(1.06);
+  transform: translate(-50%, -50%) scale(1.06);
 }
 
 .edit-modal__cover-plus:active {
-  transform:
-    translate(-50%, -50%)
-    scale(0.96);
+  transform: translate(-50%, -50%) scale(0.96);
 }
 
 .edit-modal__cover-plus input {
@@ -258,7 +178,9 @@
   opacity: 0;
 }
 
-/* MAIN FIELDS */
+/* =========================
+   MAIN FIELDS
+========================= */
 
 .edit-modal__main-fields {
   min-width: 0;
@@ -279,14 +201,16 @@
 
   gap: 7px;
 
+  color: var(--text);
+
   font-size: 13px;
   font-weight: 600;
   line-height: 1.2;
-
-  color: var(--text);
 }
 
-/* OTHER FIELDS */
+/* =========================
+   OTHER FIELDS
+========================= */
 
 .edit-modal__fields {
   min-width: 0;
@@ -306,14 +230,16 @@
 
   gap: 7px;
 
+  color: var(--text);
+
   font-size: 13px;
   font-weight: 600;
   line-height: 1.2;
-
-  color: var(--text);
 }
 
-/* INPUTS */
+/* =========================
+   INPUTS
+========================= */
 
 .edit-modal__main-fields input,
 .edit-modal__fields input,
@@ -364,7 +290,9 @@
   box-shadow: 0 0 0 2px var(--accent-bg);
 }
 
-/* TWO COLUMNS */
+/* =========================
+   TWO COLUMNS
+========================= */
 
 .edit-modal__row {
   display: grid;
@@ -373,7 +301,9 @@
   gap: 8px;
 }
 
-/* ACTIONS */
+/* =========================
+   ACTIONS
+========================= */
 
 .edit-modal__actions {
   display: flex;
@@ -390,6 +320,8 @@
 .edit-modal__actions button {
   width: 100%;
 
+  min-height: 44px;
+
   padding: 12px 14px;
 
   box-sizing: border-box;
@@ -401,6 +333,15 @@
   font-weight: 600;
 
   cursor: pointer;
+
+  transition:
+    opacity 0.16s ease,
+    background 0.16s ease,
+    transform 0.16s ease;
+}
+
+.edit-modal__actions button:active:not(:disabled) {
+  transform: scale(0.98);
 }
 
 .edit-modal__save {
@@ -412,14 +353,8 @@
   color: var(--bg);
 }
 
-.edit-modal__save:hover {
+.edit-modal__save:hover:not(:disabled) {
   opacity: 0.88;
-}
-
-.edit-modal__save:disabled {
-  opacity: 0.6;
-
-  cursor: not-allowed;
 }
 
 .edit-modal__cancel {
@@ -431,15 +366,27 @@
   color: var(--text-h);
 }
 
-.edit-modal__cancel:hover {
+.edit-modal__cancel:hover:not(:disabled) {
   background: var(--surface-secondary);
 }
 
-/* VERY SMALL PHONE */
+.edit-modal__actions button:disabled {
+  opacity: 0.6;
+
+  cursor: not-allowed;
+}
+
+/* =========================
+   VERY SMALL PHONE
+========================= */
 
 @media (max-width: 370px) {
-  .edit-modal {
-    padding: 14px 10px;
+  .edit-modal .modal__header {
+    padding: 16px 10px 12px;
+  }
+
+  .edit-modal .modal__content {
+    padding: 0 10px 14px;
   }
 
   .edit-modal__top {
@@ -492,34 +439,21 @@
   }
 }
 
-/* TABLET */
+/* =========================
+   TABLET
+========================= */
 
 @media (min-width: 600px) {
-  .edit-modal-overlay {
-    align-items: center;
-
-    padding: 18px;
-  }
-
   .edit-modal {
     max-width: 760px;
-    max-height: calc(100dvh - 36px);
-
-    padding: 24px;
-
-    border-radius: 16px;
   }
 
-  .edit-modal h2 {
-    font-size: 24px;
+  .edit-modal .modal__header {
+    padding: 24px 24px 16px;
   }
 
-  .edit-modal__subtitle {
-    font-size: 15px;
-  }
-
-  .edit-modal__form {
-    margin-top: 26px;
+  .edit-modal .modal__content {
+    padding: 0 24px 24px;
   }
 
   .edit-modal__layout {
@@ -599,30 +533,21 @@
   }
 }
 
-/* DESKTOP */
+/* =========================
+   DESKTOP
+========================= */
 
 @media (min-width: 900px) {
-  .edit-modal-overlay {
-    padding: 24px;
-  }
-
   .edit-modal {
     max-width: 900px;
-    max-height: calc(100dvh - 48px);
-
-    padding: 28px;
   }
 
-  .edit-modal h2 {
-    font-size: 26px;
+  .edit-modal .modal__header {
+    padding: 28px 28px 18px;
   }
 
-  .edit-modal__subtitle {
-    font-size: 16px;
-  }
-
-  .edit-modal__form {
-    margin-top: 28px;
+  .edit-modal .modal__content {
+    padding: 0 28px 28px;
   }
 
   .edit-modal__layout {

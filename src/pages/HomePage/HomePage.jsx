@@ -10,6 +10,7 @@ import { useAuth } from "../../context/AuthContext.jsx";
 import { useLibrary } from "../../context/LibraryContext.jsx";
 
 import { apiFetch } from "../../utils/apiClient.js";
+import Modal from "../../components/Modal/Modal.jsx";
 
 import ReadingGoalModal from "../UserPage/components/ReadingGoal/ReadingGoalModal.jsx";
 /* =========================
@@ -537,6 +538,18 @@ const HomePage = () => {
 
   const firstName = getFirstName(user?.name);
 
+  const handleOpenStats = () => {
+    navigate("/stats");
+
+    requestAnimationFrame(() => {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "instant",
+      });
+    });
+  };
+
   /* =========================
      SHARE
   ========================= */
@@ -835,10 +848,22 @@ const HomePage = () => {
       </section>
 
       {/* =========================
-          TODAY
-      ========================= */}
+    TODAY
+========================= */}
 
-      <section className="home-panel">
+      <section
+        className="home-panel home-panel--clickable"
+        role="button"
+        tabIndex={0}
+        onClick={handleOpenStats}
+        onKeyDown={(event) => {
+          if (event.key === "Enter" || event.key === " ") {
+            event.preventDefault();
+
+            handleOpenStats();
+          }
+        }}
+      >
         <div className="home-panel__header">
           <div>
             <span className="home-section__kicker">Статистика</span>
@@ -879,7 +904,6 @@ const HomePage = () => {
           </div>
         </div>
       </section>
-
       {/* =========================
           GOAL
       ========================= */}
@@ -957,11 +981,26 @@ const HomePage = () => {
         className="home-panel achievement-card home-panel--clickable"
         role="button"
         tabIndex={0}
-        onClick={() => navigate("/achievements")}
+        onClick={() => {
+          navigate("/achievements");
+
+          window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "instant",
+          });
+        }}
         onKeyDown={(event) => {
           if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
+
             navigate("/achievements");
+
+            window.scrollTo({
+              top: 0,
+              left: 0,
+              behavior: "instant",
+            });
           }
         }}
       >
@@ -994,11 +1033,11 @@ const HomePage = () => {
         className="home-panel month-panel home-panel--clickable"
         role="button"
         tabIndex={0}
-        onClick={() => navigate("/stats")}
+        onClick={handleOpenStats}
         onKeyDown={(event) => {
           if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
-            navigate("/stats");
+            handleOpenStats();
           }
         }}
       >
@@ -1056,58 +1095,66 @@ const HomePage = () => {
       ========================= */}
 
       {modalType === "create" && (
-        <div
-          className="library-modal-overlay"
-          onMouseDown={() => setModalType(null)}
+        <Modal
+          isOpen
+          onClose={() => {
+            if (isSubmitting) {
+              return;
+            }
+
+            setLibraryName("");
+            setModalType(null);
+          }}
+          title="Створити бібліотеку"
+          subtitle="Створіть нову поличку для книг"
+          className="library-action-modal"
+          closeOnEscape={!isSubmitting}
+          closeOnBackdrop={!isSubmitting}
         >
           <form
-            className="library-modal"
+            className="library-action-modal__form"
             onSubmit={handleCreateLibrary}
-            onMouseDown={(event) => event.stopPropagation()}
           >
-            <button
-              type="button"
-              className="library-modal__close"
-              onClick={() => setModalType(null)}
-              aria-label="Закрити"
-            >
-              ×
-            </button>
+            <label className="library-action-modal__field">
+              <span>Назва бібліотеки</span>
 
-            <h2>Створити бібліотеку</h2>
-
-            <p>Наприклад: Домашня бібліотека або Бібліотека на дачі.</p>
-
-            <label>
-              Назва бібліотеки
               <input
                 type="text"
                 value={libraryName}
                 onChange={(event) => setLibraryName(event.target.value)}
-                placeholder="Назва бібліотеки"
+                placeholder="Наприклад: Домашня бібліотека"
                 autoFocus
+                required
               />
             </label>
 
-            <div className="library-modal__actions">
+            <div className="library-action-modal__actions">
               <button
                 type="button"
-                className="library-modal__cancel"
-                onClick={() => setModalType(null)}
+                className="library-action-modal__cancel"
+                onClick={() => {
+                  if (isSubmitting) {
+                    return;
+                  }
+
+                  setLibraryName("");
+                  setModalType(null);
+                }}
+                disabled={isSubmitting}
               >
                 Скасувати
               </button>
 
               <button
                 type="submit"
-                className="library-modal__submit"
-                disabled={isSubmitting}
+                className="library-action-modal__submit"
+                disabled={isSubmitting || !libraryName.trim()}
               >
                 {isSubmitting ? "Створення..." : "Створити"}
               </button>
             </div>
           </form>
-        </div>
+        </Modal>
       )}
 
       {/* =========================
@@ -1115,60 +1162,71 @@ const HomePage = () => {
       ========================= */}
 
       {modalType === "member" && (
-        <div
-          className="library-modal-overlay"
-          onMouseDown={() => setModalType(null)}
+        <Modal
+          isOpen
+          onClose={() => {
+            if (isSubmitting) {
+              return;
+            }
+
+            setMemberEmail("");
+            setModalType(null);
+          }}
+          title="Додати учасника"
+          subtitle={
+            activeLibrary?.name
+              ? `Бібліотека «${activeLibrary.name}»`
+              : "Додайте користувача до бібліотеки"
+          }
+          className="library-action-modal"
+          closeOnEscape={!isSubmitting}
+          closeOnBackdrop={!isSubmitting}
         >
           <form
-            className="library-modal"
+            className="library-action-modal__form"
             onSubmit={handleAddMember}
-            onMouseDown={(event) => event.stopPropagation()}
           >
-            <button
-              type="button"
-              className="library-modal__close"
-              onClick={() => setModalType(null)}
-              aria-label="Закрити"
-            >
-              ×
-            </button>
+            <label className="library-action-modal__field">
+              <span>Email користувача</span>
 
-            <h2>Додати учасника</h2>
-
-            <p>
-              До бібліотеки <strong>{activeLibrary?.name}</strong>
-            </p>
-
-            <label>
-              Email
               <input
                 type="email"
                 value={memberEmail}
                 onChange={(event) => setMemberEmail(event.target.value)}
-                placeholder="email@example.com"
+                placeholder="user@example.com"
+                autoComplete="email"
                 autoFocus
+                required
               />
             </label>
 
-            <div className="library-modal__actions">
+            <div className="library-action-modal__actions">
               <button
                 type="button"
-                className="library-modal__cancel"
-                onClick={() => setModalType(null)}
+                className="library-action-modal__cancel"
+                onClick={() => {
+                  if (isSubmitting) {
+                    return;
+                  }
+
+                  setMemberEmail("");
+                  setModalType(null);
+                }}
+                disabled={isSubmitting}
               >
                 Скасувати
               </button>
 
               <button
                 type="submit"
-                className="library-modal__submit"
-                disabled={isSubmitting}
+                className="library-action-modal__submit"
+                disabled={isSubmitting || !memberEmail.trim()}
               >
                 {isSubmitting ? "Додавання..." : "Додати"}
               </button>
             </div>
           </form>
-        </div>
+        </Modal>
       )}
     </main>
   );

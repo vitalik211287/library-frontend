@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
-import { createPortal } from "react-dom";
+import Modal from "../Modal/Modal.jsx";
 
 import useReadingSession from "./hooks/useReadingSession.js";
 
@@ -64,59 +64,6 @@ const ReadingModal = ({ book, apiUrl, onClose, onBookUpdated }) => {
 
   const modalTitle = activeSession ? "Сесія читання" : "Нова сесія читання";
 
-  useEffect(() => {
-    const previousOverflow = document.body.style.overflow;
-
-    const previousPaddingRight = document.body.style.paddingRight;
-
-    const scrollbarWidth =
-      window.innerWidth - document.documentElement.clientWidth;
-
-    document.body.style.overflow = "hidden";
-
-    if (scrollbarWidth > 0) {
-      document.body.style.paddingRight = `${scrollbarWidth}px`;
-    }
-
-    return () => {
-      document.body.style.overflow = previousOverflow;
-
-      document.body.style.paddingRight = previousPaddingRight;
-    };
-  }, []);
-
-  useEffect(() => {
-    const handleKeyDown = (event) => {
-      if (event.key !== "Escape") {
-        return;
-      }
-
-      if (sessionsModalOpen) {
-        return;
-      }
-
-      if (statusModalOpen) {
-        setStatusModalOpen(false);
-
-        return;
-      }
-
-      onClose();
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [onClose, statusModalOpen, sessionsModalOpen]);
-
-  const handleOverlayClick = (event) => {
-    if (event.target === event.currentTarget) {
-      onClose();
-    }
-  };
-
   const handleStatusOpen = () => {
     setStatusModalOpen(true);
   };
@@ -141,80 +88,63 @@ const ReadingModal = ({ book, apiUrl, onClose, onBookUpdated }) => {
     await fetchReadingStats();
   };
 
-  return createPortal(
+  const childModalOpen = statusModalOpen || sessionsModalOpen;
+
+  return (
     <>
-      <div
-        className="reading-modal-overlay"
-        onMouseDown={handleOverlayClick}
-        role="presentation"
+      <Modal
+        isOpen
+        onClose={onClose}
+        title={modalTitle}
+        subtitle={currentBook.title}
+        className="reading-modal"
+        closeOnEscape={!childModalOpen}
+        closeOnBackdrop={!childModalOpen}
       >
-        <div
-          className="reading-modal"
-          role="dialog"
-          aria-modal="true"
-          aria-labelledby="reading-modal-title"
-          onMouseDown={(event) => event.stopPropagation()}
-        >
-          <button
-            type="button"
-            className="reading-modal__close"
-            onClick={onClose}
-            aria-label="Закрити"
-          >
-            ×
-          </button>
+        {message && <p className="reading-modal__message">{message}</p>}
 
-          <div className="reading-modal__header">
-            <h2 id="reading-modal-title">{modalTitle}</h2>
+        <div className="reading-modal__layout">
+          <ReadingBookInfo
+            currentBook={currentBook}
+            apiUrl={apiUrl}
+            statusLabel={statusLabel}
+            progress={progressPercent}
+            ratingLoading={ratingLoading}
+            onRatingChange={changeRating}
+            onStatusClick={handleStatusOpen}
+          />
 
-            <p className="reading-modal__author">{currentBook.title}</p>
-          </div>
+          <ReadingSessionCard
+            activeSession={activeSession}
+            currentBook={currentBook}
+            loading={loading}
+            finishing={finishing}
+            pauseLoading={pauseLoading}
+            elapsedSeconds={elapsedSeconds}
+            progressMode={progressMode}
+            onProgressModeChange={changeProgressMode}
+            startProgress={startProgress}
+            setStartProgress={setStartProgress}
+            endProgress={endProgress}
+            setEndProgress={setEndProgress}
+            isPaused={isPaused}
+            finishValidationMessage={finishValidationMessage}
+            canFinish={canFinish}
+            onStart={startReading}
+            onPause={pauseReading}
+            onResume={resumeReading}
+            onFinish={finishReading}
+          />
 
-          {message && <p className="reading-modal__message">{message}</p>}
-
-          <div className="reading-modal__layout">
-            <ReadingBookInfo
-              currentBook={currentBook}
-              apiUrl={apiUrl}
-              statusLabel={statusLabel}
-              progress={progressPercent}
-              ratingLoading={ratingLoading}
-              onRatingChange={changeRating}
-              onStatusClick={handleStatusOpen}
-            />
-
-            <ReadingSessionCard
-              activeSession={activeSession}
-              currentBook={currentBook}
-              loading={loading}
-              finishing={finishing}
-              pauseLoading={pauseLoading}
-              elapsedSeconds={elapsedSeconds}
-              progressMode={progressMode}
-              onProgressModeChange={changeProgressMode}
-              startProgress={startProgress}
-              setStartProgress={setStartProgress}
-              endProgress={endProgress}
-              setEndProgress={setEndProgress}
-              isPaused={isPaused}
-              finishValidationMessage={finishValidationMessage}
-              canFinish={canFinish}
-              onStart={startReading}
-              onPause={pauseReading}
-              onResume={resumeReading}
-              onFinish={finishReading}
-            />
-
-            <ReadingStats
-              stats={stats}
-              activeSession={activeSession}
-              elapsedSeconds={elapsedSeconds}
-              bookId={currentBook.id}
-              onOpenSessions={handleSessionsOpen}
-            />
-          </div>
+          <ReadingStats
+            stats={stats}
+            activeSession={activeSession}
+            elapsedSeconds={elapsedSeconds}
+            bookId={currentBook.id}
+            onOpenSessions={handleSessionsOpen}
+          />
         </div>
-      </div>
+      </Modal>
 
       {statusModalOpen && (
         <ReadingStatusModal
@@ -234,8 +164,7 @@ const ReadingModal = ({ book, apiUrl, onClose, onBookUpdated }) => {
           onChanged={handleSessionsChanged}
         />
       )}
-    </>,
-    document.body,
+    </>
   );
 };
 

@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import Modal from "../../../../components/Modal/Modal.jsx";
 import useReadingGoal from "../../hooks/useReadingGoal.js";
 
 import "./ReadingGoal.css";
@@ -133,109 +134,82 @@ const ReadingGoalModal = ({ onClose, onSaved, initialGoal }) => {
   };
 
   return (
-    <div
-      className="goal-modal-overlay"
-      onMouseDown={(event) => {
-        if (event.target === event.currentTarget) {
-          handleClose();
-        }
-      }}
+    <Modal
+      isOpen
+      onClose={handleClose}
+      title={`Мета на ${currentYear}`}
+      subtitle="Встанови річну мету читання"
+      className="goal-modal"
     >
-      <div
-        className="goal-modal"
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="goal-modal-title"
-        onMouseDown={(event) => event.stopPropagation()}
-      >
-        <div className="goal-modal__header">
-          <div>
-            <h2 id="goal-modal-title">Мета на {currentYear}</h2>
+      <form className="goal-modal__form" onSubmit={handleSaveGoal}>
+        <label>
+          <span>Книги</span>
 
-            <p>Встанови річну мету читання</p>
+          <input
+            type="number"
+            name="books"
+            min="0"
+            step="1"
+            value={goalForm.books}
+            onChange={handleGoalChange}
+            placeholder="20"
+          />
+        </label>
+
+        <label>
+          <span>Сторінки</span>
+
+          <input
+            type="number"
+            name="pages"
+            min="0"
+            step="1"
+            value={goalForm.pages}
+            onChange={handleGoalChange}
+            placeholder="5000"
+          />
+        </label>
+
+        <label>
+          <span>Час читання, годин</span>
+
+          <input
+            type="number"
+            name="hours"
+            min="0"
+            step="0.5"
+            value={goalForm.hours}
+            onChange={handleGoalChange}
+            placeholder="100"
+          />
+        </label>
+
+        {(localGoalError || goalSaveError) && (
+          <div className="goal-modal__error">
+            {localGoalError || goalSaveError}
           </div>
+        )}
 
+        <div className="goal-modal__actions">
           <button
             type="button"
-            className="goal-modal__close"
+            className="goal-modal__cancel"
             onClick={handleClose}
             disabled={isGoalSaving}
-            aria-label="Закрити"
           >
-            ×
+            Скасувати
+          </button>
+
+          <button
+            type="submit"
+            className="goal-modal__save"
+            disabled={isGoalSaving}
+          >
+            {isGoalSaving ? "Збереження..." : "Зберегти"}
           </button>
         </div>
-
-        <form className="goal-modal__form" onSubmit={handleSaveGoal}>
-          <label>
-            <span>Книги</span>
-
-            <input
-              type="number"
-              name="books"
-              min="0"
-              step="1"
-              value={goalForm.books}
-              onChange={handleGoalChange}
-              placeholder="20"
-            />
-          </label>
-
-          <label>
-            <span>Сторінки</span>
-
-            <input
-              type="number"
-              name="pages"
-              min="0"
-              step="1"
-              value={goalForm.pages}
-              onChange={handleGoalChange}
-              placeholder="5000"
-            />
-          </label>
-
-          <label>
-            <span>Час читання, годин</span>
-
-            <input
-              type="number"
-              name="hours"
-              min="0"
-              step="0.5"
-              value={goalForm.hours}
-              onChange={handleGoalChange}
-              placeholder="100"
-            />
-          </label>
-
-          {(localGoalError || goalSaveError) && (
-            <div className="goal-modal__error">
-              {localGoalError || goalSaveError}
-            </div>
-          )}
-
-          <div className="goal-modal__actions">
-            <button
-              type="button"
-              className="goal-modal__cancel"
-              onClick={handleClose}
-              disabled={isGoalSaving}
-            >
-              Скасувати
-            </button>
-
-            <button
-              type="submit"
-              className="goal-modal__save"
-              disabled={isGoalSaving}
-            >
-              {isGoalSaving ? "Збереження..." : "Зберегти"}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
+      </form>
+    </Modal>
   );
 };
 

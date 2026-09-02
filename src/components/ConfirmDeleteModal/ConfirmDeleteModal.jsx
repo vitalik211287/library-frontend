@@ -1,5 +1,4 @@
-import { useEffect } from "react";
-import { createPortal } from "react-dom";
+import Modal from "../Modal/Modal.jsx";
 
 import "./ConfirmDeleteModal.css";
 
@@ -13,48 +12,24 @@ const ConfirmDeleteModal = ({
   onConfirm,
   onCancel,
 }) => {
-  useEffect(() => {
-    if (!isOpen) {
-      return undefined;
+  const handleClose = () => {
+    if (isLoading) {
+      return;
     }
 
-    const handleKeyDown = (event) => {
-      if (event.key === "Escape" && !isLoading) {
-        onCancel();
-      }
-    };
-
-    window.addEventListener("keydown", handleKeyDown);
-
-    return () => {
-      window.removeEventListener("keydown", handleKeyDown);
-    };
-  }, [isOpen, isLoading, onCancel]);
-
-  if (!isOpen) {
-    return null;
-  }
-
-  const handleOverlayMouseDown = (event) => {
-    if (event.target === event.currentTarget && !isLoading) {
-      onCancel();
-    }
+    onCancel();
   };
 
-  return createPortal(
-    <div
-      className="confirm-delete-overlay"
-      role="presentation"
-      onMouseDown={handleOverlayMouseDown}
+  return (
+    <Modal
+      isOpen={isOpen}
+      onClose={handleClose}
+      className="confirm-delete-modal"
+      closeOnEscape={!isLoading}
+      closeOnBackdrop={!isLoading}
+      showHeader={false}
     >
-      <div
-        className="confirm-delete-modal"
-        role="alertdialog"
-        aria-modal="true"
-        aria-labelledby="confirm-delete-title"
-        aria-describedby="confirm-delete-description"
-        onMouseDown={(event) => event.stopPropagation()}
-      >
+      <div className="confirm-delete-modal__content">
         <div className="confirm-delete-modal__icon">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M3 6h18" />
@@ -65,12 +40,12 @@ const ConfirmDeleteModal = ({
           </svg>
         </div>
 
-        <h3 id="confirm-delete-title">{title}</h3>
+        <h3>{title}</h3>
 
-        <p id="confirm-delete-description">{description}</p>
+        <p>{description}</p>
 
         <div className="confirm-delete-modal__actions">
-          <button type="button" onClick={onCancel} disabled={isLoading}>
+          <button type="button" onClick={handleClose} disabled={isLoading}>
             {cancelText}
           </button>
 
@@ -84,8 +59,7 @@ const ConfirmDeleteModal = ({
           </button>
         </div>
       </div>
-    </div>,
-    document.body,
+    </Modal>
   );
 };
 

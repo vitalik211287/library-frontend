@@ -4,7 +4,6 @@
 
 .profile-section--goal .profile-section__header button:disabled {
   opacity: 0.5;
-
   cursor: default;
 }
 
@@ -90,107 +89,12 @@
    GOAL MODAL
 ========================= */
 
-.goal-modal-overlay {
-  position: fixed;
-  inset: 0;
-
-  z-index: 2000;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 18px;
-
-  box-sizing: border-box;
-
-  background: rgba(0, 0, 0, 0.55);
-
-  backdrop-filter: blur(4px);
-}
-
 .goal-modal {
-  width: 100%;
   max-width: 420px;
-  max-height: calc(100dvh - 36px);
-
-  padding: 20px;
-
-  box-sizing: border-box;
-
-  overflow-y: auto;
-
-  border: 1px solid var(--border);
-  border-radius: 16px;
-
-  background: var(--surface);
-  color: var(--text-h);
-
-  box-shadow: 0 24px 70px rgba(0, 0, 0, 0.32);
 }
 
-.goal-modal__header {
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-
-  gap: 12px;
-
-  margin-bottom: 20px;
-}
-
-.goal-modal__header h2 {
-  margin: 0;
-
-  color: var(--text-h);
-
-  font-size: 20px;
-  line-height: 1.2;
-}
-
-.goal-modal__header p {
-  margin: 5px 0 0;
-
-  color: var(--text);
-
-  font-size: 12px;
-  line-height: 1.35;
-}
-
-.goal-modal__close {
-  width: 34px;
-  height: 34px;
-
-  flex: 0 0 34px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 0;
-  padding-top: 2px;
-  border: 1px solid var(--border);
-  border-radius: 50%;
-
-  background: transparent;
-  color: var(--text);
-
-  font-family: Arial, sans-serif;
-  font-size: 24px;
-  font-weight: 300;
-  line-height: 1;
-
-  cursor: pointer;
-}
-
-.goal-modal__close:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
-
-.goal-modal__close:disabled {
-  opacity: 0.5;
-  cursor: default;
+.goal-modal .modal__content {
+  padding: 0 20px 20px;
 }
 
 .goal-modal__form {
@@ -277,6 +181,16 @@
   font-weight: 700;
 
   cursor: pointer;
+
+  transition:
+    opacity 0.16s ease,
+    border-color 0.16s ease,
+    background 0.16s ease,
+    transform 0.16s ease;
+}
+
+.goal-modal__actions button:active:not(:disabled) {
+  transform: scale(0.98);
 }
 
 .goal-modal__cancel {
@@ -286,11 +200,19 @@
   color: var(--text-h);
 }
 
+.goal-modal__cancel:hover:not(:disabled) {
+  border-color: var(--accent);
+}
+
 .goal-modal__save {
-  border: none;
+  border: 1px solid transparent;
 
   background: var(--accent);
   color: #ffffff;
+}
+
+.goal-modal__save:hover:not(:disabled) {
+  opacity: 0.9;
 }
 
 .goal-modal__actions button:disabled {
@@ -331,11 +253,10 @@
     font-size: 9px;
   }
 
-  .goal-modal {
-    padding: 17px;
+  .goal-modal .modal__content {
+    padding: 0 16px 16px;
   }
 
-  .goal-modal__header p,
   .goal-modal__form label span,
   .goal-modal__error {
     font-size: 11px;

@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 
 import toast from "react-hot-toast";
 
+import Modal from "../Modal/Modal.jsx";
+
 import { API_URL, apiFetch } from "../../utils/apiClient.js";
 
 import "./EditBookModal.css";
@@ -31,6 +33,14 @@ const EditBookModal = ({ book, activeLibraryId, onClose, onUpdated }) => {
       }
     };
   }, [coverPreview]);
+
+  const handleClose = () => {
+    if (isSaving) {
+      return;
+    }
+
+    onClose();
+  };
 
   const handleChange = (event) => {
     const { name, value } = event.target;
@@ -161,12 +171,6 @@ const EditBookModal = ({ book, activeLibraryId, onClose, onUpdated }) => {
     }
   };
 
-  const handleOverlayClick = (event) => {
-    if (event.target === event.currentTarget) {
-      onClose();
-    }
-  };
-
   const coverSrc =
     coverPreview ||
     (book.coverUrl
@@ -176,163 +180,151 @@ const EditBookModal = ({ book, activeLibraryId, onClose, onUpdated }) => {
       : null);
 
   return (
-    <div className="edit-modal-overlay" onMouseDown={handleOverlayClick}>
-      <div
-        className="edit-modal"
-        onMouseDown={(event) => event.stopPropagation()}
-      >
-        <button
-          type="button"
-          className="edit-modal__close"
-          onClick={onClose}
-          aria-label="Закрити"
-        >
-          ×
-        </button>
+    <Modal
+      isOpen
+      onClose={handleClose}
+      title="Редагувати книгу"
+      subtitle={book.title}
+      className="edit-modal"
+      closeOnEscape={!isSaving}
+      closeOnBackdrop={!isSaving}
+    >
+      <form className="edit-modal__form" onSubmit={handleSubmit}>
+        <div className="edit-modal__layout">
+          <div className="edit-modal__top">
+            <div className="edit-modal__cover">
+              <div className="edit-modal__cover-wrapper">
+                {coverSrc ? (
+                  <img src={coverSrc} alt={book.title} />
+                ) : (
+                  <div className="edit-modal__no-cover">Немає обкладинки</div>
+                )}
 
-        <div className="edit-modal__header">
-          <h2>Редагувати книгу</h2>
+                <label
+                  className="edit-modal__cover-plus"
+                  aria-label="Змінити обкладинку"
+                  title="Змінити обкладинку"
+                >
+                  <span>+</span>
 
-          <p className="edit-modal__subtitle">{book.title}</p>
-        </div>
-
-        <form className="edit-modal__form" onSubmit={handleSubmit}>
-          <div className="edit-modal__layout">
-            <div className="edit-modal__top">
-              <div className="edit-modal__cover">
-                <div className="edit-modal__cover-wrapper">
-                  {coverSrc ? (
-                    <img src={coverSrc} alt={book.title} />
-                  ) : (
-                    <div className="edit-modal__no-cover">Немає обкладинки</div>
-                  )}
-
-                  <label
-                    className="edit-modal__cover-plus"
-                    aria-label="Змінити обкладинку"
-                    title="Змінити обкладинку"
-                  >
-                    <span>+</span>
-
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleCoverChange}
-                    />
-                  </label>
-                </div>
-              </div>
-
-              <div className="edit-modal__main-fields">
-                <label>
-                  Назва
                   <input
-                    type="text"
-                    name="title"
-                    value={formData.title}
-                    onChange={handleChange}
-                  />
-                </label>
-
-                <label>
-                  Автор
-                  <input
-                    type="text"
-                    name="author"
-                    value={formData.author}
-                    onChange={handleChange}
+                    type="file"
+                    accept="image/*"
+                    onChange={handleCoverChange}
                   />
                 </label>
               </div>
             </div>
 
-            <div className="edit-modal__fields">
-              <div className="edit-modal__row">
-                <label>
-                  Видавництво
-                  <input
-                    type="text"
-                    name="publisher"
-                    value={formData.publisher}
-                    onChange={handleChange}
-                  />
-                </label>
-
-                <label>
-                  Рік
-                  <input
-                    type="number"
-                    name="year"
-                    value={formData.year}
-                    onChange={handleChange}
-                  />
-                </label>
-              </div>
-
-              <div className="edit-modal__row">
-                <label>
-                  Сторінок
-                  <input
-                    type="number"
-                    name="pages"
-                    value={formData.pages}
-                    onChange={handleChange}
-                  />
-                </label>
-
-                <label>
-                  Мова
-                  <input
-                    type="text"
-                    name="language"
-                    value={formData.language}
-                    onChange={handleChange}
-                  />
-                </label>
-              </div>
-
+            <div className="edit-modal__main-fields">
               <label>
-                Жанр
+                Назва
                 <input
                   type="text"
-                  name="genre"
-                  value={formData.genre}
+                  name="title"
+                  value={formData.title}
                   onChange={handleChange}
                 />
               </label>
 
               <label>
-                Опис
-                <textarea
-                  name="description"
-                  value={formData.description}
+                Автор
+                <input
+                  type="text"
+                  name="author"
+                  value={formData.author}
                   onChange={handleChange}
                 />
               </label>
             </div>
           </div>
 
-          <div className="edit-modal__actions">
-            <button
-              type="submit"
-              className="edit-modal__save"
-              disabled={isSaving}
-            >
-              {isSaving ? "Збереження..." : "Зберегти"}
-            </button>
+          <div className="edit-modal__fields">
+            <div className="edit-modal__row">
+              <label>
+                Видавництво
+                <input
+                  type="text"
+                  name="publisher"
+                  value={formData.publisher}
+                  onChange={handleChange}
+                />
+              </label>
 
-            <button
-              type="button"
-              className="edit-modal__cancel"
-              onClick={onClose}
-              disabled={isSaving}
-            >
-              Скасувати
-            </button>
+              <label>
+                Рік
+                <input
+                  type="number"
+                  name="year"
+                  value={formData.year}
+                  onChange={handleChange}
+                />
+              </label>
+            </div>
+
+            <div className="edit-modal__row">
+              <label>
+                Сторінок
+                <input
+                  type="number"
+                  name="pages"
+                  value={formData.pages}
+                  onChange={handleChange}
+                />
+              </label>
+
+              <label>
+                Мова
+                <input
+                  type="text"
+                  name="language"
+                  value={formData.language}
+                  onChange={handleChange}
+                />
+              </label>
+            </div>
+
+            <label>
+              Жанр
+              <input
+                type="text"
+                name="genre"
+                value={formData.genre}
+                onChange={handleChange}
+              />
+            </label>
+
+            <label>
+              Опис
+              <textarea
+                name="description"
+                value={formData.description}
+                onChange={handleChange}
+              />
+            </label>
           </div>
-        </form>
-      </div>
-    </div>
+        </div>
+
+        <div className="edit-modal__actions">
+          <button
+            type="submit"
+            className="edit-modal__save"
+            disabled={isSaving}
+          >
+            {isSaving ? "Збереження..." : "Зберегти"}
+          </button>
+
+          <button
+            type="button"
+            className="edit-modal__cancel"
+            onClick={handleClose}
+            disabled={isSaving}
+          >
+            Скасувати
+          </button>
+        </div>
+      </form>
+    </Modal>
   );
 };
 
