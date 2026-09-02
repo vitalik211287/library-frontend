@@ -38,17 +38,13 @@ const ReadingCalendarPage = () => {
   const readingByDay = useMemo(() => getReadingByDay(calendar), [calendar]);
 
   const handleClose = () => {
-    const bookId = location.state?.bookId;
-
-    if (location.state?.fromReadingModal && bookId) {
-      navigate(`/?reading=${bookId}`, {
-        replace: true,
-      });
+    if (location.state?.fromReadingModal) {
+      navigate(-1);
 
       return;
     }
 
-    navigate("/");
+    navigate("/home");
   };
 
   const handlePreviousMonth = () => {

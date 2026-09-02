@@ -35,6 +35,7 @@ import ReadingModal from "./components/ReadingModal/ReadingModal.jsx";
 
 import MobileNavigation from "./components/AppNavigation/MobileNavigation.jsx";
 import DesktopNavigation from "./components/AppNavigation/DesktopNavigation.jsx";
+import ReadingBookPicker from "./components/ReadingBookPicker/ReadingBookPicker.jsx";
 
 import { API_URL, apiFetch, hasToken } from "./utils/apiClient.js";
 
@@ -90,6 +91,13 @@ const App = () => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [readingBook, setReadingBook] = useState(null);
+
+  const isReadingBookPickerOpen = searchParams.get("readerPicker") === "1";
+
+  const [readingBookPickerBooks, setReadingBookPickerBooks] = useState([]);
+
+  const [isReadingBookPickerLoading, setIsReadingBookPickerLoading] =
+    useState(false);
 
   const [isReadingBookLoading, setIsReadingBookLoading] = useState(false);
 
@@ -163,7 +171,7 @@ const App = () => {
       if (!isAuthenticated) {
         const params = new URLSearchParams(searchParams);
 
-        params.set("reading", bookId);
+        params.delete("reading");
 
         setSearchParams(params, {
           replace: true,
@@ -202,6 +210,8 @@ const App = () => {
         });
 
         setReadingBook(null);
+
+        toast.error("Не вдалося відкрити книгу");
       } finally {
         setIsReadingBookLoading(false);
       }
@@ -241,8 +251,9 @@ const App = () => {
   };
 
   /* =========================
-     OPEN CURRENT READER
-  ========================= */
+  /* =========================
+   OPEN CURRENT READER
+========================= */
 
   const handleOpenReader = async () => {
     setIsMobileMenuOpen(false);
@@ -251,7 +262,7 @@ const App = () => {
       return;
     }
 
-    if (!isAuthenticated) {
+    if (!isAuthenticated || !hasToken()) {
       toast.error("Спочатку увійдіть в акаунт");
 
       navigate("/login", {
@@ -261,47 +272,87 @@ const App = () => {
       return;
     }
 
-    if (!hasToken()) {
-      navigate("/login", {
-        replace: true,
-      });
+    if (!activeLibraryId) {
+      toast.error("Спочатку оберіть бібліотеку");
 
       return;
     }
 
+    const params = new URLSearchParams(searchParams);
+
+    params.delete("reading");
+    params.set("readerPicker", "1");
+
+    setSearchParams(params);
+
+    setIsReadingBookPickerLoading(true);
+
     try {
-      const query = activeLibraryId
-        ? `?libraryId=${encodeURIComponent(activeLibraryId)}`
-        : "";
+      const query = `?libraryId=${encodeURIComponent(activeLibraryId)}`;
 
-      const data = await apiFetch(`/api/user-books/current${query}`);
+      const [libraryResponse, currentResponse] = await Promise.all([
+        apiFetch(`/api/libraries/${activeLibraryId}/books`),
+        apiFetch(`/api/user-books/current${query}`),
+      ]);
 
-      const books = Array.isArray(data?.books) ? data.books : [];
+      const libraryBooks = Array.isArray(libraryResponse)
+        ? libraryResponse
+        : Array.isArray(libraryResponse?.books)
+          ? libraryResponse.books
+          : [];
 
-      const currentBook = books[0];
+      const currentBooks = Array.isArray(currentResponse?.books)
+        ? currentResponse.books
+        : [];
 
-      const bookId = currentBook?.id;
+      const currentBookOrder = new Map(
+        currentBooks.map((book, index) => [book.id, index]),
+      );
 
-      if (!bookId) {
-        toast("Немає активного читання");
+      const booksWithReadingOrder = libraryBooks.map((book) => ({
+        ...book,
 
-        return;
-      }
+        readingOrder: currentBookOrder.has(book.id)
+          ? currentBookOrder.get(book.id)
+          : null,
+      }));
 
-      const params = new URLSearchParams(searchParams);
+      setReadingBookPickerBooks(booksWithReadingOrder);
+    } catch (error) {
+      console.error("Load reader books error:", error);
 
-      params.set("reading", bookId);
+      toast.error("Не вдалося завантажити книги");
 
-      setSearchParams(params, {
+      const nextParams = new URLSearchParams(searchParams);
+
+      nextParams.delete("readerPicker");
+
+      setSearchParams(nextParams, {
         replace: true,
       });
-    } catch (error) {
-      console.error("Open reader error:", error);
-
-      toast.error("Не вдалося відкрити читалку");
+    } finally {
+      setIsReadingBookPickerLoading(false);
     }
   };
 
+  const handleSelectReadingBook = (book) => {
+    if (!book?.id) {
+      return;
+    }
+
+    const params = new URLSearchParams(searchParams);
+
+    params.delete("readerPicker");
+    params.set("reading", book.id);
+
+    setSearchParams(params, {
+      replace: true,
+    });
+  };
+
+  const handleCloseReadingBookPicker = () => {
+    navigate(-1);
+  };
   /* =========================
      THEME
   ========================= */
@@ -506,6 +557,15 @@ const App = () => {
           {showRightSidebar && <RightSidebar />}
         </div>
       </div>
+
+      {isReadingBookPickerOpen && (
+        <ReadingBookPicker
+          books={readingBookPickerBooks}
+          isLoading={isReadingBookPickerLoading}
+          onSelect={handleSelectReadingBook}
+          onClose={handleCloseReadingBookPicker}
+        />
+      )}
 
       {/* =========================
           READING MODAL
