@@ -42,7 +42,7 @@ const MobileNavigation = ({
       ========================= */}
 
       <header className="mobile-header">
-        <NavLink to="/home" replace className="mobile-header__brand">
+        <NavLink to="/home" className="mobile-header__brand">
           <CatalogIcon />
 
           <span>Бібліотека</span>
@@ -52,7 +52,6 @@ const MobileNavigation = ({
           {isAuthenticated && (
             <NavLink
               to="/account"
-              replace
               className="mobile-header__avatar"
               aria-label="Відкрити профіль"
             >
@@ -138,7 +137,6 @@ const MobileNavigation = ({
                 <NavLink
                   key={item.key}
                   to={item.to}
-                  replace
                   className="mobile-drawer__link"
                   onClick={onClose}
                 >
@@ -151,7 +149,6 @@ const MobileNavigation = ({
 
             <NavLink
               to={accountPath}
-              replace
               className={`mobile-drawer__link ${
                 isAuthLoading ? "mobile-drawer__link--loading" : ""
               }`}
@@ -166,7 +163,6 @@ const MobileNavigation = ({
           <div className="mobile-drawer__settings">
             <NavLink
               to="/settings"
-              replace
               className="mobile-drawer__link mobile-drawer__settings-link"
               onClick={onClose}
             >

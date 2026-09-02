@@ -163,7 +163,7 @@ const App = () => {
       if (!isAuthenticated) {
         const params = new URLSearchParams(searchParams);
 
-        params.delete("reading");
+        params.set("reading", bookId);
 
         setSearchParams(params, {
           replace: true,
