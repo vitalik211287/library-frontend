@@ -258,12 +258,6 @@ const App = () => {
 
   const handleReadingBookUpdated = (updatedBook) => {
     setReadingBook(updatedBook);
-
-    window.dispatchEvent(
-      new CustomEvent("library-book-updated", {
-        detail: updatedBook,
-      }),
-    );
   };
 
   const handleReadingDataChanged = async () => {

@@ -21,14 +21,9 @@ const INITIAL_ACTIVITY = {
   },
 };
 
-const useReadingActivity = ({ readingBookId } = {}) => {
-  const {
-    activityByMonth,
-    loadingByMonth,
-    errorByMonth,
-    ensureActivity,
-    refreshActivity,
-  } = useReadingActivityContext();
+const useReadingActivity = () => {
+  const { activityByMonth, loadingByMonth, errorByMonth, ensureActivity } =
+    useReadingActivityContext();
 
   const now = useMemo(() => new Date(), []);
 
@@ -49,24 +44,9 @@ const useReadingActivity = ({ readingBookId } = {}) => {
 
   useEffect(() => {
     ensureActivity(previousYear, previousMonth);
+
     ensureActivity(currentYear, currentMonth);
   }, [previousYear, previousMonth, currentYear, currentMonth, ensureActivity]);
-
-  useEffect(() => {
-    if (!readingBookId) {
-      return;
-    }
-
-    refreshActivity(previousYear, previousMonth);
-    refreshActivity(currentYear, currentMonth);
-  }, [
-    readingBookId,
-    previousYear,
-    previousMonth,
-    currentYear,
-    currentMonth,
-    refreshActivity,
-  ]);
 
   const readingActivity = useMemo(() => {
     const previousData = activityByMonth[previousKey] ?? null;
