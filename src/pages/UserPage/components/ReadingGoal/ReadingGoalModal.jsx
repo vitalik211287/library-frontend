@@ -42,7 +42,7 @@ const ReadingGoalModal = ({ onClose, onSaved, initialGoal }) => {
     clearGoalSaveError,
   } = useReadingGoal();
 
-  const goal = initialGoal ?? readingGoal?.goal ?? null;
+  const goal = initialGoal ?? readingGoal ?? null;
 
   const [goalForm, setGoalForm] = useState(() => getInitialForm(goal));
 
@@ -140,6 +140,8 @@ const ReadingGoalModal = ({ onClose, onSaved, initialGoal }) => {
       title={`Мета на ${currentYear}`}
       subtitle="Встанови річну мету читання"
       className="goal-modal"
+      closeOnEscape={!isGoalSaving}
+      closeOnBackdrop={!isGoalSaving}
     >
       <form className="goal-modal__form" onSubmit={handleSaveGoal}>
         <label>

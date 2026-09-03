@@ -1,3 +1,5 @@
+import { useSearchParams } from "react-router-dom";
+
 import useWishlist from "../../hooks/useWishlist.js";
 
 import "./WishlistSection.css";
@@ -15,9 +17,35 @@ const BookmarkIcon = () => (
 );
 
 const WishlistSection = ({ onCountChange }) => {
+  const [searchParams, setSearchParams] = useSearchParams();
+
   const { books, isLoading, error, removeFromWishlist } = useWishlist({
     onCountChange,
   });
+
+  const handleOpenBook = (book) => {
+    if (!book?.id) {
+      return;
+    }
+
+    const params = new URLSearchParams(searchParams);
+
+    params.set("reading", book.id);
+
+    if (book.sourceLibrary?.id) {
+      params.set("readingLibrary", book.sourceLibrary.id);
+    } else {
+      params.delete("readingLibrary");
+    }
+
+    setSearchParams(params);
+  };
+
+  const handleRemoveFromWishlist = async (event, bookId) => {
+    event.stopPropagation();
+
+    await removeFromWishlist(bookId);
+  };
 
   return (
     <section className="profile-section">
@@ -43,15 +71,23 @@ const WishlistSection = ({ onCountChange }) => {
           {books.map((book) => (
             <article className="profile-book" key={book.id}>
               <div className="profile-book__cover">
-                {book.coverUrl ? (
-                  <img src={book.coverUrl} alt={book.title} />
-                ) : (
-                  <div className="book-no-cover">
-                    Немає
-                    <br />
-                    обкладинки
-                  </div>
-                )}
+                <button
+                  type="button"
+                  className="profile-book__open"
+                  onClick={() => handleOpenBook(book)}
+                  aria-label={`Відкрити книгу «${book.title}»`}
+                  title="Відкрити книгу"
+                >
+                  {book.coverUrl ? (
+                    <img src={book.coverUrl} alt={book.title} />
+                  ) : (
+                    <div className="book-no-cover">
+                      Немає
+                      <br />
+                      обкладинки
+                    </div>
+                  )}
+                </button>
 
                 {book.sourceLibrary && (
                   <span className="profile-book__library-badge">
@@ -62,7 +98,7 @@ const WishlistSection = ({ onCountChange }) => {
                 <button
                   type="button"
                   className="profile-book__bookmark"
-                  onClick={() => removeFromWishlist(book.id)}
+                  onClick={(event) => handleRemoveFromWishlist(event, book.id)}
                   aria-label="Прибрати зі списку бажань"
                   title="Прибрати зі списку бажань"
                 >
@@ -70,7 +106,15 @@ const WishlistSection = ({ onCountChange }) => {
                 </button>
               </div>
 
-              <h3>{book.title}</h3>
+              <h3>
+                <button
+                  type="button"
+                  className="profile-book__title-button"
+                  onClick={() => handleOpenBook(book)}
+                >
+                  {book.title}
+                </button>
+              </h3>
 
               <p>{book.author}</p>
             </article>

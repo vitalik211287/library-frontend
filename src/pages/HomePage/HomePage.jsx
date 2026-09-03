@@ -11,7 +11,7 @@ import { useLibrary } from "../../context/LibraryContext.jsx";
 
 import { apiFetch } from "../../utils/apiClient.js";
 import Modal from "../../components/Modal/Modal.jsx";
-
+import { useReadingGoalContext } from "../../context/ReadingGoalContext.jsx";
 import ReadingGoalModal from "../UserPage/components/ReadingGoal/ReadingGoalModal.jsx";
 /* =========================
    ICONS
@@ -206,6 +206,8 @@ const HomePage = () => {
     addLibraryMember,
   } = useLibrary();
 
+  const { readingGoal, isGoalLoading } = useReadingGoalContext();
+
   const [isLibraryMenuOpen, setIsLibraryMenuOpen] = useState(false);
 
   const [modalType, setModalType] = useState(null);
@@ -221,8 +223,6 @@ const HomePage = () => {
   const [activityData, setActivityData] = useState([]);
 
   const [stats, setStats] = useState(null);
-
-  const [readingGoal, setReadingGoal] = useState(null);
 
   const [achievements, setAchievements] = useState([]);
 
@@ -257,24 +257,18 @@ const HomePage = () => {
 
         const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
 
-        const [
-          libraryBooksResponse,
-          statsResponse,
-          goalResponse,
-          achievementsResponse,
-        ] = await Promise.all([
-          apiFetch(`/api/libraries/${activeLibraryId}/books`),
+        const [libraryBooksResponse, statsResponse, achievementsResponse] =
+          await Promise.all([
+            apiFetch(`/api/libraries/${activeLibraryId}/books`),
 
-          apiFetch(
-            `/api/user-books/stats?year=${currentYear}&timeZone=${encodeURIComponent(
-              timeZone,
-            )}`,
-          ),
+            apiFetch(
+              `/api/user-books/stats?year=${currentYear}&timeZone=${encodeURIComponent(
+                timeZone,
+              )}`,
+            ),
 
-          apiFetch(`/api/user-books/goals?year=${currentYear}`),
-
-          apiFetch("/api/user-books/achievements"),
-        ]);
+            apiFetch("/api/user-books/achievements"),
+          ]);
 
         const libraryBooks = Array.isArray(libraryBooksResponse)
           ? libraryBooksResponse
@@ -285,8 +279,6 @@ const HomePage = () => {
         );
 
         setStats(statsResponse?.stats ?? null);
-
-        setReadingGoal(goalResponse?.goal ?? null);
 
         setAchievements(
           Array.isArray(achievementsResponse?.achievements)
@@ -513,20 +505,73 @@ const HomePage = () => {
 
   const streak = stats?.streak?.current ?? 0;
 
+  const goalBooks = readingGoal?.books ?? 0;
+  const goalPages = readingGoal?.pages ?? 0;
   const goalMinutes = readingGoal?.minutes ?? 0;
 
+  const hasReadingGoal = goalBooks > 0 || goalPages > 0 || goalMinutes > 0;
+
+  const finishedBooks = stats?.summary?.finishedBooks ?? 0;
+  const pagesRead = stats?.summary?.pagesRead ?? 0;
   const totalReadingMinutes = Math.round(
     (stats?.summary?.readingSeconds ?? 0) / 60,
   );
 
-  const goalPercent =
-    goalMinutes > 0
-      ? Math.min(100, Math.round((totalReadingMinutes / goalMinutes) * 100))
-      : 0;
+  const goalProgress = useMemo(() => {
+    if (goalBooks > 0) {
+      return {
+        current: finishedBooks,
+        goal: goalBooks,
+        unit: "книг",
+        label: "Прочитано цього року",
+      };
+    }
+
+    if (goalPages > 0) {
+      return {
+        current: pagesRead,
+        goal: goalPages,
+        unit: "стор.",
+        label: "Прочитано цього року",
+      };
+    }
+
+    if (goalMinutes > 0) {
+      return {
+        current: totalReadingMinutes,
+        goal: goalMinutes,
+        unit: "хв",
+        label: "Час читання цього року",
+      };
+    }
+
+    return null;
+  }, [
+    finishedBooks,
+    goalBooks,
+    goalMinutes,
+    goalPages,
+    pagesRead,
+    totalReadingMinutes,
+  ]);
+
+  const goalPercent = goalProgress
+    ? Math.min(
+        100,
+        Math.round((goalProgress.current / goalProgress.goal) * 100),
+      )
+    : 0;
 
   const latestAchievement =
     [...achievements].reverse().find((achievement) => achievement.unlocked) ??
     null;
+
+  const closestAchievement =
+    achievements
+      .filter((achievement) => !achievement.unlocked)
+      .sort((a, b) => b.percent - a.percent)[0] ?? null;
+
+  const featuredAchievement = latestAchievement ?? closestAchievement ?? null;
 
   const monthStats = stats?.months?.[currentMonth - 1] ?? null;
 
@@ -580,7 +625,7 @@ const HomePage = () => {
      STATES
   ========================= */
 
-  if (isLoading) {
+  if (isLoading || isGoalLoading) {
     return (
       <main className="home-page">
         <div className="home-section">Завантаження...</div>
@@ -931,7 +976,7 @@ const HomePage = () => {
           <span className="reading-goal__percent">{goalPercent}%</span>
         </div>
 
-        {goalMinutes > 0 ? (
+        {hasReadingGoal && goalProgress ? (
           <div className="reading-goal">
             <div className="reading-goal__hero">
               <div className="reading-goal__icon">
@@ -939,12 +984,14 @@ const HomePage = () => {
               </div>
 
               <div>
-                <span>Прочитано цього року</span>
+                <span>{goalProgress.label}</span>
 
                 <div className="reading-goal__numbers">
-                  <strong>{totalReadingMinutes}</strong>
+                  <strong>{goalProgress.current}</strong>
 
-                  <span>/ {goalMinutes} хв</span>
+                  <span>
+                    / {goalProgress.goal} {goalProgress.unit}
+                  </span>
                 </div>
               </div>
             </div>
@@ -1009,19 +1056,42 @@ const HomePage = () => {
         </div>
 
         <div className="achievement-card__content">
-          <span className="home-section__kicker">Досягнення</span>
+          <span className="home-section__kicker">
+            {latestAchievement ? "Досягнення" : "Найближче досягнення"}
+          </span>
 
           <h2>
-            {latestAchievement
-              ? latestAchievement.title
-              : "Поки немає відкритих досягнень"}
+            {featuredAchievement
+              ? featuredAchievement.title
+              : "Поки немає досягнень"}
           </h2>
 
           <p>
-            {latestAchievement
-              ? "Ще один крок у твоїй читацькій серії."
+            {featuredAchievement
+              ? featuredAchievement.description
               : "Продовжуй читати — перше досягнення вже близько."}
           </p>
+
+          {featuredAchievement && !featuredAchievement.unlocked && (
+            <div className="achievement-card__progress">
+              <div className="achievement-card__progress-info">
+                <span>
+                  {featuredAchievement.current} / {featuredAchievement.target}
+                </span>
+
+                <strong>{featuredAchievement.percent}%</strong>
+              </div>
+
+              <div className="home-progress">
+                <div
+                  className="home-progress__bar"
+                  style={{
+                    width: `${featuredAchievement.percent}%`,
+                  }}
+                />
+              </div>
+            </div>
+          )}
         </div>
       </section>
 
@@ -1083,9 +1153,6 @@ const HomePage = () => {
       {isReadingGoalModalOpen && (
         <ReadingGoalModal
           initialGoal={readingGoal}
-          onSaved={(newGoal) => {
-            setReadingGoal(newGoal);
-          }}
           onClose={() => setIsReadingGoalModalOpen(false)}
         />
       )}

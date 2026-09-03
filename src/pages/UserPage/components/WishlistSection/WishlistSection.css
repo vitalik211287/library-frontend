@@ -35,6 +35,21 @@
   background: var(--surface-secondary);
 }
 
+.profile-book__open {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  padding: 0;
+
+  border: none;
+
+  background: transparent;
+
+  cursor: pointer;
+}
+
 .profile-book__cover img {
   width: 100%;
   height: 100%;
@@ -55,6 +70,33 @@
   display: -webkit-box;
 
   overflow: hidden;
+
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
+.profile-book__title-button {
+  display: block;
+
+  width: 100%;
+
+  padding: 0;
+
+  border: none;
+
+  overflow: hidden;
+
+  background: transparent;
+  color: inherit;
+
+  font: inherit;
+  font-weight: inherit;
+  line-height: inherit;
+  text-align: left;
+
+  cursor: pointer;
+
+  display: -webkit-box;
 
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -89,6 +131,10 @@
 
   font-size: 7px;
   text-align: center;
+}
+
+.profile-book__open:active {
+  opacity: 0.88;
 }
 
 @media (min-width: 600px) {
@@ -169,12 +215,7 @@
 
   overflow: hidden;
 
-  border: 1px solid
-    color-mix(
-      in srgb,
-      var(--accent) 55%,
-      transparent
-    );
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, transparent);
 
   border-radius: 7px;
 

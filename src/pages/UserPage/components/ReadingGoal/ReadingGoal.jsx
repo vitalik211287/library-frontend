@@ -42,7 +42,7 @@ const ReadingGoal = () => {
 
   const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
 
-  const goal = readingGoal?.goal;
+  const goal = readingGoal;
 
   const goalHours =
     goal?.minutes !== null && goal?.minutes !== undefined

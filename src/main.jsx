@@ -9,15 +9,18 @@ import App from "./App.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { LibraryProvider } from "./context/LibraryContext.jsx";
 import { ThemeProvider } from "./context/ThemeContext.jsx";
+import { ReadingGoalProvider } from "./context/ReadingGoalContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
       <ThemeProvider>
         <AuthProvider>
-          <LibraryProvider>
-            <App />
-          </LibraryProvider>
+          <ReadingGoalProvider>
+            <LibraryProvider>
+              <App />
+            </LibraryProvider>
+          </ReadingGoalProvider>
         </AuthProvider>
       </ThemeProvider>
     </BrowserRouter>

@@ -105,6 +105,8 @@ const App = () => {
 
   const readingBookId = searchParams.get("reading");
 
+  const readingLibraryId = searchParams.get("readingLibrary");
+
   const showRightSidebar = isAuthenticated && location.pathname === "/account";
 
   const isPublicPage =
@@ -172,6 +174,7 @@ const App = () => {
         const params = new URLSearchParams(searchParams);
 
         params.delete("reading");
+        params.delete("readingLibrary");
 
         setSearchParams(params, {
           replace: true,
@@ -184,7 +187,9 @@ const App = () => {
         return;
       }
 
-      if (!activeLibraryId) {
+      const libraryId = readingLibraryId || activeLibraryId;
+
+      if (!libraryId) {
         setReadingBook(null);
 
         return;
@@ -194,7 +199,7 @@ const App = () => {
         setIsReadingBookLoading(true);
 
         const book = await apiFetch(
-          `/api/libraries/${activeLibraryId}/books/${readingBookId}`,
+          `/api/libraries/${libraryId}/books/${readingBookId}`,
         );
 
         setReadingBook(book);
@@ -204,6 +209,7 @@ const App = () => {
         const params = new URLSearchParams(searchParams);
 
         params.delete("reading");
+        params.delete("readingLibrary");
 
         setSearchParams(params, {
           replace: true,
@@ -218,7 +224,13 @@ const App = () => {
     };
 
     loadReadingBook();
-  }, [readingBookId, activeLibraryId, isAuthenticated, isAuthLoading]);
+  }, [
+    readingBookId,
+    readingLibraryId,
+    activeLibraryId,
+    isAuthenticated,
+    isAuthLoading,
+  ]);
 
   /* =========================
      CLOSE READER
@@ -228,6 +240,7 @@ const App = () => {
     const params = new URLSearchParams(searchParams);
 
     params.delete("reading");
+    params.delete("readingLibrary");
 
     setSearchParams(params, {
       replace: true,
@@ -281,6 +294,7 @@ const App = () => {
     const params = new URLSearchParams(searchParams);
 
     params.delete("reading");
+    params.delete("readingLibrary");
     params.set("readerPicker", "1");
 
     setSearchParams(params);
@@ -343,6 +357,7 @@ const App = () => {
     const params = new URLSearchParams(searchParams);
 
     params.delete("readerPicker");
+    params.delete("readingLibrary");
     params.set("reading", book.id);
 
     setSearchParams(params, {
@@ -353,6 +368,7 @@ const App = () => {
   const handleCloseReadingBookPicker = () => {
     navigate(-1);
   };
+
   /* =========================
      THEME
   ========================= */
