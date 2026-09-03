@@ -3,22 +3,56 @@
 ========================= */
 
 .profile-books {
+  width: 100%;
+
   display: grid;
-  grid-auto-flow: column;
-  grid-auto-columns: 96px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+
   gap: 10px;
 
-  overflow-x: auto;
-  overflow-y: hidden;
+  overflow: visible;
 
-  padding-bottom: 5px;
+  padding: 0;
 
-  scrollbar-width: thin;
+  box-sizing: border-box;
 }
 
 .profile-book {
+  width: 100%;
   min-width: 0;
+
+  display: flex;
+  flex-direction: column;
 }
+
+/* Mobile / tablet — only 3 books */
+
+.profile-book:nth-child(n + 4) {
+  display: none;
+}
+
+/* =========================
+   OPEN BUTTON
+========================= */
+
+.profile-book__open {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  padding: 0;
+
+  border: none;
+
+  background: transparent;
+
+  cursor: pointer;
+}
+
+/* =========================
+   COVER
+========================= */
 
 .profile-book__cover {
   position: relative;
@@ -44,21 +78,53 @@
   object-fit: cover;
 }
 
+.profile-book__open:active {
+  opacity: 0.88;
+}
+
+/* =========================
+   TITLE
+========================= */
+
 .profile-book h3 {
   margin: 0 0 3px;
+
+  overflow: hidden;
 
   color: var(--text-h);
 
   font-size: 11px;
   line-height: 1.25;
+}
+
+.profile-book__title-button {
+  width: 100%;
 
   display: -webkit-box;
 
+  padding: 0;
+
   overflow: hidden;
+
+  border: none;
+
+  background: transparent;
+  color: var(--text-h);
+
+  font: inherit;
+  font-weight: 700;
+  line-height: inherit;
+  text-align: left;
+
+  cursor: pointer;
 
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
 }
+
+/* =========================
+   AUTHOR
+========================= */
 
 .profile-book p {
   margin: 0;
@@ -68,10 +134,28 @@
   color: var(--text);
 
   font-size: 9px;
+  line-height: 1.3;
 
   text-overflow: ellipsis;
   white-space: nowrap;
 }
+
+/* =========================
+   RATING
+========================= */
+
+.profile-book__rating {
+  margin-top: 4px;
+
+  color: var(--accent);
+
+  font-size: 9px;
+  line-height: 1.2;
+}
+
+/* =========================
+   NO COVER
+========================= */
 
 .book-no-cover {
   width: 100%;
@@ -91,17 +175,45 @@
   text-align: center;
 }
 
+/* =========================
+   TABLET
+========================= */
+
 @media (min-width: 600px) {
   .profile-books {
-    grid-auto-columns: 122px;
-    gap: 12px;
+    gap: 16px;
+  }
+
+  .profile-book h3 {
+    font-size: 12px;
+  }
+
+  .profile-book p {
+    font-size: 10px;
+  }
+
+  .profile-book__rating {
+    font-size: 10px;
   }
 }
 
+/* =========================
+   DESKTOP — 5 BOOKS
+========================= */
+
 @media (min-width: 1100px) {
   .profile-books {
-    grid-auto-columns: 145px;
-    gap: 14px;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+
+    gap: 18px;
+  }
+
+  .profile-book:nth-child(n + 4) {
+    display: flex;
+  }
+
+  .profile-book:nth-child(n + 6) {
+    display: none;
   }
 
   .profile-book h3 {
@@ -111,16 +223,8 @@
   .profile-book p {
     font-size: 11px;
   }
-}
 
-/* =========================
-   FINISHED
-========================= */
-
-.profile-book__rating {
-  margin-top: 4px;
-
-  color: var(--accent);
-
-  font-size: 9px;
+  .profile-book__rating {
+    font-size: 11px;
+  }
 }

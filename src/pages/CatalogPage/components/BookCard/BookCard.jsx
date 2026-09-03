@@ -8,13 +8,14 @@ const BookCard = ({
   isAuthLoading,
   wishlistLoadingId,
   canEdit,
+  showWishlist = true,
   onWishlistToggle,
   onEdit,
   onRead,
 }) => {
   return (
     <article className="book-card">
-      {isAuthenticated && (
+      {isAuthenticated && showWishlist && (
         <button
           type="button"
           className={`book-card__wishlist ${

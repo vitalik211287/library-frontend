@@ -18,21 +18,6 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
 
   const [currentBook, setCurrentBook] = useState(book);
 
-  useEffect(() => {
-    setCurrentBook(book);
-
-    const nextProgressMode = book.progressMode ?? PROGRESS_MODES.PAGES;
-
-    setProgressMode(nextProgressMode);
-
-    const savedProgress =
-      nextProgressMode === PROGRESS_MODES.PERCENT
-        ? book.currentPercent
-        : book.currentPage;
-
-    setStartProgress(getProgressInputValue(savedProgress));
-  }, [book]);
-
   const [stats, setStats] = useState(null);
 
   const [message, setMessage] = useState("");
@@ -68,6 +53,21 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
   const isPagesMode = sessionProgressMode === PROGRESS_MODES.PAGES;
 
   const isPercentMode = sessionProgressMode === PROGRESS_MODES.PERCENT;
+
+  useEffect(() => {
+    setCurrentBook(book);
+
+    const nextProgressMode = book.progressMode ?? PROGRESS_MODES.PAGES;
+
+    setProgressMode(nextProgressMode);
+
+    const savedProgress =
+      nextProgressMode === PROGRESS_MODES.PERCENT
+        ? book.currentPercent
+        : book.currentPage;
+
+    setStartProgress(getProgressInputValue(savedProgress));
+  }, [book]);
 
   const currentProgress = useMemo(() => {
     if ((currentBook.progressMode ?? progressMode) === PROGRESS_MODES.PERCENT) {
@@ -113,6 +113,38 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
       setStats(data.stats);
     } catch (error) {
       console.error("Помилка отримання статистики:", error);
+    }
+  };
+
+  const fetchActiveSession = async () => {
+    try {
+      const data = await apiFetch(`/api/user-books/${book.id}/reading/active`);
+
+      if (!data.session) {
+        setActiveSession(null);
+        setElapsedSeconds(0);
+
+        return;
+      }
+
+      setElapsedSeconds(data.elapsedSeconds ?? 0);
+
+      setActiveSession(data.session);
+
+      setProgressMode(data.session.progressMode ?? PROGRESS_MODES.PAGES);
+
+      setCurrentBook((current) => ({
+        ...current,
+
+        progressMode:
+          data.session.progressMode ??
+          current.progressMode ??
+          PROGRESS_MODES.PAGES,
+
+        status: data.session.pausedAt ? "PAUSED" : "READING",
+      }));
+    } catch (error) {
+      console.error("Помилка отримання активної сесії:", error);
     }
   };
 
@@ -268,7 +300,7 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
         body,
       });
 
-      setElapsedSeconds(0);
+      setElapsedSeconds(data.elapsedSeconds ?? 0);
 
       setActiveSession(data.session);
 
@@ -311,6 +343,10 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
 
       setActiveSession(data.session);
 
+      if (data.elapsedSeconds != null) {
+        setElapsedSeconds(data.elapsedSeconds);
+      }
+
       setCurrentBook((current) => ({
         ...current,
         status: "PAUSED",
@@ -338,6 +374,10 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
       });
 
       setActiveSession(data.session);
+
+      if (data.elapsedSeconds != null) {
+        setElapsedSeconds(data.elapsedSeconds);
+      }
 
       setCurrentBook((current) => ({
         ...current,
@@ -523,6 +563,8 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
     }
   };
 
+  // Локальний таймер потрібен лише для плавного
+  // оновлення інтерфейсу, поки сторінка активна.
   useEffect(() => {
     if (!activeSession || activeSession.pausedAt) {
       return undefined;
@@ -537,41 +579,41 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
     };
   }, [activeSession]);
 
+  // При відкритті книги отримуємо канонічний
+  // час активної сесії з бекенда.
   useEffect(() => {
-    const fetchActiveSession = async () => {
-      try {
-        const data = await apiFetch(
-          `/api/user-books/${book.id}/reading/active`,
-        );
+    fetchActiveSession();
+  }, [book.id]);
 
-        if (!data.session) {
-          setActiveSession(null);
-
-          return;
-        }
-
-        setElapsedSeconds(data.elapsedSeconds ?? 0);
-
-        setActiveSession(data.session);
-
-        setProgressMode(data.session.progressMode ?? PROGRESS_MODES.PAGES);
-
-        setCurrentBook((current) => ({
-          ...current,
-
-          progressMode:
-            data.session.progressMode ??
-            current.progressMode ??
-            PROGRESS_MODES.PAGES,
-
-          status: data.session.pausedAt ? "PAUSED" : "READING",
-        }));
-      } catch (error) {
-        console.error("Помилка отримання активної сесії:", error);
+  // Телефон/PWA може призупинити JavaScript,
+  // коли екран заблокований. Після повернення
+  // на сторінку синхронізуємо таймер з бекендом.
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === "visible") {
+        fetchActiveSession();
       }
     };
 
-    fetchActiveSession();
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, [book.id]);
+
+  // Додаткова синхронізація для PWA/мобільних
+  // браузерів, коли window знову отримує фокус.
+  useEffect(() => {
+    const handleFocus = () => {
+      fetchActiveSession();
+    };
+
+    window.addEventListener("focus", handleFocus);
+
+    return () => {
+      window.removeEventListener("focus", handleFocus);
+    };
   }, [book.id]);
 
   useEffect(() => {

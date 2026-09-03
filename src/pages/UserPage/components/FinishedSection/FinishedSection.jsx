@@ -15,6 +15,14 @@ const FinishedSection = ({ books = [], isLoading = false, error = "" }) => {
 
   const handleOpenAll = () => {
     navigate("/finished");
+
+    requestAnimationFrame(() => {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "auto",
+      });
+    });
   };
 
   const handleOpenBook = (book) => {
@@ -36,7 +44,7 @@ const FinishedSection = ({ books = [], isLoading = false, error = "" }) => {
   };
 
   return (
-    <section className="profile-section">
+    <section className="profile-section profile-section--books">
       <div className="profile-section__header">
         <h2>Прочитано</h2>
 

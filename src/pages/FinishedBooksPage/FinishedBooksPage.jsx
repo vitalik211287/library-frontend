@@ -78,6 +78,7 @@ const FinishedBooksPage = () => {
               isAuthLoading={isAuthLoading}
               wishlistLoadingId={null}
               canEdit={false}
+              showWishlist={false}
               onWishlistToggle={() => {}}
               onEdit={() => {}}
               onRead={handleRead}

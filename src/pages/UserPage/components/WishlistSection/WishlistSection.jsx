@@ -24,10 +24,17 @@ const WishlistSection = ({
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const visibleBooks = books.slice(0, 3);
 
   const handleOpenAll = () => {
     navigate("/wishlist");
+
+    requestAnimationFrame(() => {
+      window.scrollTo({
+        top: 0,
+        left: 0,
+        behavior: "auto",
+      });
+    });
   };
 
   const handleOpenBook = (book) => {
@@ -55,7 +62,7 @@ const WishlistSection = ({
   };
 
   return (
-    <section className="profile-section">
+    <section className="profile-section profile-section--books">
       <div className="profile-section__header">
         <h2>Хочу прочитати</h2>
 
@@ -75,7 +82,7 @@ const WishlistSection = ({
         <div className="profile-empty">Список поки порожній</div>
       ) : (
         <div className="profile-books">
-          {visibleBooks.map((book) => (
+          {books.map((book) => (
             <article className="profile-book" key={book.id}>
               <div className="profile-book__cover">
                 <button
