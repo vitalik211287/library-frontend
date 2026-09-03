@@ -675,20 +675,34 @@
 ========================= */
 
 .achievement-card {
+  display: block;
+
+  min-height: 0;
+  height: auto;
+
+  padding: 14px;
+
+  background: var(--surface);
+}
+
+.achievement-card__inner {
   display: grid;
   grid-template-columns: 52px minmax(0, 1fr);
   align-items: center;
-  gap: 13px;
+  gap: 14px;
 
+  width: 100%;
+  height: auto;
   min-height: 0;
 
-  padding: 16px 17px;
+  padding: 16px;
 
-  background: linear-gradient(
-    135deg,
-    color-mix(in srgb, var(--accent) 6%, var(--surface)),
-    var(--surface) 68%
-  );
+  box-sizing: border-box;
+
+  border: 1px solid var(--border);
+  border-radius: 15px;
+
+  background: var(--bg);
 }
 
 .achievement-card__icon {
@@ -698,17 +712,11 @@
   display: grid;
   place-items: center;
 
-  align-self: start;
-
   border: 1px solid color-mix(in srgb, var(--accent) 56%, var(--border));
   border-radius: 15px;
 
-  background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
   color: var(--accent);
-
-  box-shadow:
-    inset 0 0 0 1px color-mix(in srgb, white 2%, transparent),
-    0 8px 20px color-mix(in srgb, var(--accent) 10%, transparent);
 }
 
 .achievement-card__icon svg {
@@ -768,11 +776,11 @@
   color: var(--text-secondary, #a7a7b5);
 
   font-size: 10px;
-  line-height: 1.2;
 }
 
 .achievement-card__progress-info strong {
   color: var(--accent);
+
   font-size: 11px;
   font-weight: 850;
 }
@@ -781,6 +789,26 @@
   height: 6px;
 }
 
+@media (max-width: 430px) {
+  .achievement-card__inner {
+    grid-template-columns: 46px minmax(0, 1fr);
+    gap: 11px;
+
+    padding: 14px;
+  }
+
+  .achievement-card__icon {
+    width: 46px;
+    height: 46px;
+
+    border-radius: 13px;
+  }
+
+  .achievement-card__icon svg {
+    width: 24px;
+    height: 24px;
+  }
+}
 /* =========================
    MONTH
 ========================= */
@@ -1116,9 +1144,14 @@
   }
 
   .achievement-card {
+    padding: 14px;
+  }
+
+  .achievement-card__inner {
     grid-template-columns: 46px minmax(0, 1fr);
     gap: 11px;
-    padding: 15px;
+
+    padding: 14px;
   }
 
   .achievement-card__icon {

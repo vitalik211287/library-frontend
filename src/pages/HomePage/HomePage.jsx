@@ -891,61 +891,79 @@ const HomePage = () => {
           </article>
         )}
       </section>
-
       {/* =========================
-    TODAY
+    ACHIEVEMENT
 ========================= */}
 
       <section
-        className="home-panel home-panel--clickable"
+        className="home-panel achievement-card home-panel--clickable"
         role="button"
         tabIndex={0}
-        onClick={handleOpenStats}
+        onClick={() => {
+          navigate("/achievements");
+
+          window.scrollTo({
+            top: 0,
+            left: 0,
+            behavior: "instant",
+          });
+        }}
         onKeyDown={(event) => {
           if (event.key === "Enter" || event.key === " ") {
             event.preventDefault();
 
-            handleOpenStats();
+            navigate("/achievements");
+
+            window.scrollTo({
+              top: 0,
+              left: 0,
+              behavior: "instant",
+            });
           }
         }}
       >
-        <div className="home-panel__header">
-          <div>
-            <span className="home-section__kicker">Статистика</span>
-
-            <h2>Сьогодні</h2>
-          </div>
-        </div>
-
-        <div className="today-stats">
-          <div className="today-stat">
-            <div className="today-stat__icon">
-              <ClockIcon />
-            </div>
-
-            <strong>{todayMinutes}</strong>
-
-            <span>хв читання</span>
+        <div className="achievement-card__inner">
+          <div className="achievement-card__icon">
+            <TrophyIcon />
           </div>
 
-          <div className="today-stat">
-            <div className="today-stat__icon">
-              <PagesIcon />
-            </div>
+          <div className="achievement-card__content">
+            <span className="home-section__kicker">
+              {latestAchievement ? "Досягнення" : "Найближче досягнення"}
+            </span>
 
-            <strong>{todayPages}</strong>
+            <h2>
+              {featuredAchievement
+                ? featuredAchievement.title
+                : "Поки немає досягнень"}
+            </h2>
 
-            <span>сторінок</span>
-          </div>
+            <p>
+              {featuredAchievement
+                ? featuredAchievement.description
+                : "Продовжуй читати — перше досягнення вже близько."}
+            </p>
 
-          <div className="today-stat">
-            <div className="today-stat__icon">
-              <SessionsIcon />
-            </div>
+            {featuredAchievement && !featuredAchievement.unlocked && (
+              <div className="achievement-card__progress">
+                <div className="achievement-card__progress-info">
+                  <span>
+                    {featuredAchievement.current} / {featuredAchievement.target}
+                  </span>
 
-            <strong>{todaySessions}</strong>
+                  <strong>{featuredAchievement.percent}%</strong>
+                </div>
 
-            <span>сесій</span>
+                <div className="home-progress">
+                  <div
+                    className="home-progress__bar"
+                    style={{
+                      width: `${featuredAchievement.percent}%`,
+                    }}
+                  />
+                </div>
+              </div>
+            )}
           </div>
         </div>
       </section>
@@ -1018,81 +1036,6 @@ const HomePage = () => {
             </div>
           </div>
         )}
-      </section>
-
-      {/* =========================
-          ACHIEVEMENT
-      ========================= */}
-
-      <section
-        className="home-panel achievement-card home-panel--clickable"
-        role="button"
-        tabIndex={0}
-        onClick={() => {
-          navigate("/achievements");
-
-          window.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: "instant",
-          });
-        }}
-        onKeyDown={(event) => {
-          if (event.key === "Enter" || event.key === " ") {
-            event.preventDefault();
-
-            navigate("/achievements");
-
-            window.scrollTo({
-              top: 0,
-              left: 0,
-              behavior: "instant",
-            });
-          }
-        }}
-      >
-        <div className="achievement-card__icon">
-          <TrophyIcon />
-        </div>
-
-        <div className="achievement-card__content">
-          <span className="home-section__kicker">
-            {latestAchievement ? "Досягнення" : "Найближче досягнення"}
-          </span>
-
-          <h2>
-            {featuredAchievement
-              ? featuredAchievement.title
-              : "Поки немає досягнень"}
-          </h2>
-
-          <p>
-            {featuredAchievement
-              ? featuredAchievement.description
-              : "Продовжуй читати — перше досягнення вже близько."}
-          </p>
-
-          {featuredAchievement && !featuredAchievement.unlocked && (
-            <div className="achievement-card__progress">
-              <div className="achievement-card__progress-info">
-                <span>
-                  {featuredAchievement.current} / {featuredAchievement.target}
-                </span>
-
-                <strong>{featuredAchievement.percent}%</strong>
-              </div>
-
-              <div className="home-progress">
-                <div
-                  className="home-progress__bar"
-                  style={{
-                    width: `${featuredAchievement.percent}%`,
-                  }}
-                />
-              </div>
-            </div>
-          )}
-        </div>
       </section>
 
       {/* =========================
