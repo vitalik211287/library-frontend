@@ -1,56 +1,27 @@
-import { useCallback, useEffect, useState } from "react";
+import { useState } from "react";
 
 import { apiFetch } from "../../../utils/apiClient.js";
+import { useLibraryBooks } from "../../../context/LibraryBooksContext.jsx";
 
-const useCatalogBooks = ({
-  isAuthenticated,
-  isAuthLoading,
-  activeLibraryId,
-  isLibrariesLoading,
-}) => {
-  const [books, setBooks] = useState([]);
-  const [message, setMessage] = useState("");
+const useCatalogBooks = () => {
+  const {
+    books,
+    isBooksLoading,
+    booksError,
+    refreshBooks,
+    updateBook,
+    updateBookFields,
+  } = useLibraryBooks();
+
   const [wishlistLoadingId, setWishlistLoadingId] = useState(null);
 
-  const fetchBooks = useCallback(async () => {
-    if (!isAuthenticated) {
-      setBooks([]);
-      setMessage("");
-      return;
-    }
-
-    if (!activeLibraryId) {
-      setBooks([]);
-      setMessage("Створіть або виберіть бібліотеку");
-      return;
-    }
-
-    try {
-      setMessage("");
-
-      const data = await apiFetch(`/api/libraries/${activeLibraryId}/books`);
-
-      setBooks(Array.isArray(data) ? data : []);
-    } catch (loadError) {
-      console.error("Помилка завантаження книг:", loadError);
-
-      setBooks([]);
-      setMessage("Помилка завантаження бібліотеки");
-    }
-  }, [isAuthenticated, activeLibraryId]);
-
-  useEffect(() => {
-    if (isAuthLoading || isLibrariesLoading) {
-      return;
-    }
-
-    fetchBooks();
-  }, [isAuthLoading, isLibrariesLoading, fetchBooks]);
-
   const toggleWishlist = async (book) => {
+    if (!book?.id) {
+      return false;
+    }
+
     try {
       setWishlistLoadingId(book.id);
-      setMessage("");
 
       const isWishlist = Boolean(book.isWishlist);
 
@@ -58,22 +29,13 @@ const useCatalogBooks = ({
         method: isWishlist ? "DELETE" : "POST",
       });
 
-      setBooks((currentBooks) =>
-        currentBooks.map((currentBook) =>
-          currentBook.id === book.id
-            ? {
-                ...currentBook,
-                isWishlist: !isWishlist,
-              }
-            : currentBook,
-        ),
-      );
+      updateBookFields(book.id, {
+        isWishlist: !isWishlist,
+      });
 
       return true;
-    } catch (wishlistError) {
-      console.error("Wishlist toggle error:", wishlistError);
-
-      setMessage("Не вдалося оновити «Хочу прочитати»");
+    } catch (error) {
+      console.error("Wishlist toggle error:", error);
 
       return false;
     } finally {
@@ -81,26 +43,15 @@ const useCatalogBooks = ({
     }
   };
 
-  const updateBook = useCallback((updatedBook) => {
-    setBooks((currentBooks) =>
-      currentBooks.map((book) =>
-        book.id === updatedBook.id
-          ? {
-              ...book,
-              ...updatedBook,
-            }
-          : book,
-      ),
-    );
-  }, []);
-
   return {
     books,
-    message,
+    message: booksError,
+    isLoading: isBooksLoading,
     wishlistLoadingId,
+
     toggleWishlist,
     updateBook,
-    fetchBooks,
+    fetchBooks: refreshBooks,
   };
 };
 

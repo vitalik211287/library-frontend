@@ -7,7 +7,7 @@ import {
   useSearchParams,
 } from "react-router-dom";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { Toaster, toast } from "react-hot-toast";
 
@@ -25,6 +25,8 @@ import AchievementsPage from "./pages/AchievementsPage/AchievementsPage.jsx";
 import HomePage from "./pages/HomePage/HomePage.jsx";
 import LandingPage from "./pages/LandingPage/LandingPage.jsx";
 import LibraryManagementPage from "./pages/LibraryManagementPage/LibraryManagementPage.jsx";
+import WishlistPage from "./pages/WishlistPage/WishlistPage.jsx";
+import FinishedBooksPage from "./pages/FinishedBooksPage/FinishedBooksPage.jsx";
 
 import UserSearchPage from "./pages/UserPage/components/Users/UserSearchPage/UserSearchPage.jsx";
 import FollowingPage from "./pages/UserPage/components/Users/FollowingPage/FollowingPage.jsx";
@@ -32,19 +34,19 @@ import FollowersPage from "./pages/UserPage/components/Users/FollowersPage/Follo
 
 import RightSidebar from "./components/RightSidebar/RightSidebar.jsx";
 import ReadingModal from "./components/ReadingModal/ReadingModal.jsx";
-import useRefreshReadingData from "./hooks/useRefreshReadingData.js";
+import ReadingBookPicker from "./components/ReadingBookPicker/ReadingBookPicker.jsx";
 
 import MobileNavigation from "./components/AppNavigation/MobileNavigation.jsx";
 import DesktopNavigation from "./components/AppNavigation/DesktopNavigation.jsx";
-import ReadingBookPicker from "./components/ReadingBookPicker/ReadingBookPicker.jsx";
+
+import useRefreshReadingData from "./hooks/useRefreshReadingData.js";
 
 import { API_URL, apiFetch, hasToken } from "./utils/apiClient.js";
 
 import { useAuth } from "./context/AuthContext.jsx";
-
 import { useTheme } from "./context/ThemeContext.jsx";
-
 import { useLibrary } from "./context/LibraryContext.jsx";
+import { useLibraryBooks } from "./context/LibraryBooksContext.jsx";
 
 /* =========================
    PROTECTED ROUTE
@@ -85,6 +87,13 @@ const App = () => {
 
   const { activeLibraryId } = useLibrary();
 
+  const {
+    books: libraryBooks,
+    isBooksLoading,
+    refreshBooks,
+    updateBook,
+  } = useLibraryBooks();
+
   const refreshReadingData = useRefreshReadingData();
 
   const location = useLocation();
@@ -95,16 +104,13 @@ const App = () => {
 
   const [readingBook, setReadingBook] = useState(null);
 
-  const isReadingBookPickerOpen = searchParams.get("readerPicker") === "1";
-
-  const [readingBookPickerBooks, setReadingBookPickerBooks] = useState([]);
-
-  const [isReadingBookPickerLoading, setIsReadingBookPickerLoading] =
-    useState(false);
-
   const [isReadingBookLoading, setIsReadingBookLoading] = useState(false);
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
+  const [readingBookOrder, setReadingBookOrder] = useState(new Map());
+
+  const isReadingBookPickerOpen = searchParams.get("readerPicker") === "1";
 
   const readingBookId = searchParams.get("reading");
 
@@ -116,6 +122,18 @@ const App = () => {
     location.pathname === "/" ||
     location.pathname === "/login" ||
     location.pathname === "/register";
+
+  const readingBookPickerBooks = useMemo(
+    () =>
+      libraryBooks.map((book) => ({
+        ...book,
+
+        readingOrder: readingBookOrder.has(book.id)
+          ? readingBookOrder.get(book.id)
+          : null,
+      })),
+    [libraryBooks, readingBookOrder],
+  );
 
   /* =========================
      MOBILE MENU
@@ -177,6 +195,7 @@ const App = () => {
         const params = new URLSearchParams(searchParams);
 
         params.delete("reading");
+
         params.delete("readingLibrary");
 
         setSearchParams(params, {
@@ -212,6 +231,7 @@ const App = () => {
         const params = new URLSearchParams(searchParams);
 
         params.delete("reading");
+
         params.delete("readingLibrary");
 
         setSearchParams(params, {
@@ -243,6 +263,7 @@ const App = () => {
     const params = new URLSearchParams(searchParams);
 
     params.delete("reading");
+
     params.delete("readingLibrary");
 
     setSearchParams(params, {
@@ -257,21 +278,28 @@ const App = () => {
   ========================= */
 
   const handleReadingBookUpdated = (updatedBook) => {
+    if (!updatedBook?.id) {
+      return;
+    }
+
     setReadingBook(updatedBook);
+
+    if (!readingLibraryId || readingLibraryId === activeLibraryId) {
+      updateBook(updatedBook);
+    }
   };
 
   const handleReadingDataChanged = async () => {
     try {
-      await refreshReadingData();
+      await Promise.all([refreshReadingData(), refreshBooks()]);
     } catch (error) {
       console.error("Refresh reading data error:", error);
     }
   };
 
   /* =========================
-  /* =========================
-   OPEN CURRENT READER
-========================= */
+     OPEN CURRENT READER
+  ========================= */
 
   const handleOpenReader = async () => {
     setIsMobileMenuOpen(false);
@@ -299,26 +327,17 @@ const App = () => {
     const params = new URLSearchParams(searchParams);
 
     params.delete("reading");
+
     params.delete("readingLibrary");
+
     params.set("readerPicker", "1");
 
     setSearchParams(params);
 
-    setIsReadingBookPickerLoading(true);
-
     try {
       const query = `?libraryId=${encodeURIComponent(activeLibraryId)}`;
 
-      const [libraryResponse, currentResponse] = await Promise.all([
-        apiFetch(`/api/libraries/${activeLibraryId}/books`),
-        apiFetch(`/api/user-books/current${query}`),
-      ]);
-
-      const libraryBooks = Array.isArray(libraryResponse)
-        ? libraryResponse
-        : Array.isArray(libraryResponse?.books)
-          ? libraryResponse.books
-          : [];
+      const currentResponse = await apiFetch(`/api/user-books/current${query}`);
 
       const currentBooks = Array.isArray(currentResponse?.books)
         ? currentResponse.books
@@ -328,15 +347,11 @@ const App = () => {
         currentBooks.map((book, index) => [book.id, index]),
       );
 
-      const booksWithReadingOrder = libraryBooks.map((book) => ({
-        ...book,
+      setReadingBookOrder(currentBookOrder);
 
-        readingOrder: currentBookOrder.has(book.id)
-          ? currentBookOrder.get(book.id)
-          : null,
-      }));
-
-      setReadingBookPickerBooks(booksWithReadingOrder);
+      if (libraryBooks.length === 0) {
+        await refreshBooks();
+      }
     } catch (error) {
       console.error("Load reader books error:", error);
 
@@ -349,8 +364,6 @@ const App = () => {
       setSearchParams(nextParams, {
         replace: true,
       });
-    } finally {
-      setIsReadingBookPickerLoading(false);
     }
   };
 
@@ -362,7 +375,9 @@ const App = () => {
     const params = new URLSearchParams(searchParams);
 
     params.delete("readerPicker");
+
     params.delete("readingLibrary");
+
     params.set("reading", book.id);
 
     setSearchParams(params, {
@@ -451,10 +466,6 @@ const App = () => {
         onThemeChange={handleThemeChange}
       />
 
-      {/* =========================
-          MAIN CONTENT
-      ========================= */}
-
       <div className="app-content">
         <div
           className={`app-main-layout ${
@@ -527,6 +538,24 @@ const App = () => {
               />
 
               <Route
+                path="/wishlist"
+                element={
+                  <ProtectedRoute>
+                    <WishlistPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
+                path="/finished"
+                element={
+                  <ProtectedRoute>
+                    <FinishedBooksPage />
+                  </ProtectedRoute>
+                }
+              />
+
+              <Route
                 path="/settings"
                 element={
                   <ProtectedRoute>
@@ -582,15 +611,11 @@ const App = () => {
       {isReadingBookPickerOpen && (
         <ReadingBookPicker
           books={readingBookPickerBooks}
-          isLoading={isReadingBookPickerLoading}
+          isLoading={isBooksLoading}
           onSelect={handleSelectReadingBook}
           onClose={handleCloseReadingBookPicker}
         />
       )}
-
-      {/* =========================
-          READING MODAL
-      ========================= */}
 
       {readingBook &&
         isAuthenticated &&

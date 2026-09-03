@@ -26,17 +26,12 @@ const CatalogPage = () => {
   const searchInputRef = useRef(null);
 
   const { isAuthenticated, isAuthLoading } = useAuth();
-  const { activeLibrary, activeLibraryId, isLibrariesLoading } = useLibrary();
+  const { activeLibrary, activeLibraryId } = useLibrary();
 
   const canEditLibrary =
     activeLibrary?.role === "OWNER" || activeLibrary?.role === "ADMIN";
   const { books, message, wishlistLoadingId, toggleWishlist, updateBook } =
-    useCatalogBooks({
-      isAuthenticated,
-      isAuthLoading,
-      activeLibraryId,
-      isLibrariesLoading,
-    });
+    useCatalogBooks();
 
   useEffect(() => {
     searchInputRef.current?.focus();

@@ -1,4 +1,4 @@
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import "./WishlistSection.css";
 
@@ -14,8 +14,21 @@ const BookmarkIcon = () => (
   </svg>
 );
 
-const WishlistSection = ({ books, isLoading, error, removeFromWishlist }) => {
+const WishlistSection = ({
+  books = [],
+  isLoading = false,
+  error = "",
+  removeFromWishlist,
+}) => {
+  const navigate = useNavigate();
+
   const [searchParams, setSearchParams] = useSearchParams();
+
+  const visibleBooks = books.slice(0, 3);
+
+  const handleOpenAll = () => {
+    navigate("/wishlist");
+  };
 
   const handleOpenBook = (book) => {
     if (!book?.id) {
@@ -47,7 +60,7 @@ const WishlistSection = ({ books, isLoading, error, removeFromWishlist }) => {
         <h2>Хочу прочитати</h2>
 
         {books.length > 0 && (
-          <button type="button">
+          <button type="button" onClick={handleOpenAll}>
             Переглянути всі
             <ArrowIcon />
           </button>
@@ -62,7 +75,7 @@ const WishlistSection = ({ books, isLoading, error, removeFromWishlist }) => {
         <div className="profile-empty">Список поки порожній</div>
       ) : (
         <div className="profile-books">
-          {books.map((book) => (
+          {visibleBooks.map((book) => (
             <article className="profile-book" key={book.id}>
               <div className="profile-book__cover">
                 <button
