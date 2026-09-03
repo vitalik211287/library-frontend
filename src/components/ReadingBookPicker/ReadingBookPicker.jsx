@@ -43,15 +43,27 @@ const ReadingBookPicker = ({
         );
       })
       .sort((firstBook, secondBook) => {
-        const firstStatus = STATUS_PRIORITY[firstBook.status] ?? 4;
+        const firstStatus =
+          STATUS_PRIORITY[firstBook.status ?? "NOT_STARTED"] ?? 4;
 
-        const secondStatus = STATUS_PRIORITY[secondBook.status] ?? 4;
+        const secondStatus =
+          STATUS_PRIORITY[secondBook.status ?? "NOT_STARTED"] ?? 4;
 
         if (firstStatus !== secondStatus) {
           return firstStatus - secondStatus;
         }
 
-        if (firstBook.status === "READING" || firstBook.status === "PAUSED") {
+        const firstBookStatus = firstBook.status ?? "NOT_STARTED";
+
+        const secondBookStatus = secondBook.status ?? "NOT_STARTED";
+
+        const firstIsActive =
+          firstBookStatus === "READING" || firstBookStatus === "PAUSED";
+
+        const secondIsActive =
+          secondBookStatus === "READING" || secondBookStatus === "PAUSED";
+
+        if (firstIsActive && secondIsActive) {
           const firstOrder = firstBook.readingOrder;
           const secondOrder = secondBook.readingOrder;
 
@@ -151,11 +163,20 @@ const ReadingBookPicker = ({
         ) : (
           <div className="reading-book-picker__list">
             {visibleBooks.map((book) => {
+              const status = book.status ?? "NOT_STARTED";
+
+              const statusLabel =
+                STATUS_LABELS[status] ?? STATUS_LABELS.NOT_STARTED;
+
               const progressLabel = getProgressLabel(book);
 
               const progressPercent = getProgressPercent(book);
 
-              const isReading = book.status === "READING";
+              const isReading = status === "READING";
+
+              const isPaused = status === "PAUSED";
+
+              const showProgress = isReading || isPaused;
 
               return (
                 <button
@@ -163,7 +184,7 @@ const ReadingBookPicker = ({
                   type="button"
                   className={`reading-book-picker__book ${
                     isReading ? "reading-book-picker__book--reading" : ""
-                  }`}
+                  } ${isPaused ? "reading-book-picker__book--paused" : ""}`}
                   onClick={() => onSelect(book)}
                 >
                   <div className="reading-book-picker__cover">
@@ -175,11 +196,11 @@ const ReadingBookPicker = ({
                       </div>
                     )}
 
-                    {isReading && (
-                      <span className="reading-book-picker__reading-badge">
-                        Читаю
-                      </span>
-                    )}
+                    <span
+                      className={`reading-book-picker__status-badge reading-book-picker__status-badge--${status.toLowerCase()}`}
+                    >
+                      {statusLabel}
+                    </span>
                   </div>
 
                   <div className="reading-book-picker__book-info">
@@ -194,14 +215,12 @@ const ReadingBookPicker = ({
                     )}
 
                     <div className="reading-book-picker__meta">
-                      <span>
-                        {STATUS_LABELS[book.status] ?? "Не розпочато"}
-                      </span>
+                      <span>{statusLabel}</span>
 
                       <span>{progressLabel}</span>
                     </div>
 
-                    {isReading && (
+                    {showProgress && (
                       <div className="reading-book-picker__progress">
                         <span
                           style={{

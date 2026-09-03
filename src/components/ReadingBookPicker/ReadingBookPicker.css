@@ -210,6 +210,10 @@
   background: var(--accent-bg);
 }
 
+.reading-book-picker__book--paused {
+  border-color: rgba(202, 138, 4, 0.55);
+}
+
 /* =========================
    COVER
 ========================= */
@@ -249,7 +253,11 @@
   font-size: 24px;
 }
 
-.reading-book-picker__reading-badge {
+/* =========================
+   STATUS BADGE
+========================= */
+
+.reading-book-picker__status-badge {
   position: absolute;
   left: 4px;
   right: 4px;
@@ -259,13 +267,33 @@
 
   border-radius: 5px;
 
-  background: rgba(22, 163, 74, 0.92);
   color: #ffffff;
 
   font-size: 8px;
   font-weight: 800;
   line-height: 1;
   text-align: center;
+
+  white-space: nowrap;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.reading-book-picker__status-badge--reading {
+  background: rgba(22, 163, 74, 0.92);
+}
+
+.reading-book-picker__status-badge--paused {
+  background: rgba(202, 138, 4, 0.94);
+}
+
+.reading-book-picker__status-badge--not_started {
+  background: rgba(82, 82, 91, 0.92);
+}
+
+.reading-book-picker__status-badge--finished {
+  background: rgba(124, 58, 237, 0.94);
 }
 
 /* =========================
@@ -313,6 +341,20 @@
   color: var(--text-secondary);
 
   font-size: 10px;
+}
+
+.reading-book-picker__meta span {
+  min-width: 0;
+}
+
+.reading-book-picker__meta span:first-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.reading-book-picker__meta span:last-child {
+  flex-shrink: 0;
 }
 
 .reading-book-picker__progress {
@@ -416,5 +458,26 @@
 
   .reading-book-picker__content {
     padding: 0 8px 10px;
+  }
+
+  .reading-book-picker__book {
+    grid-template-columns: 54px minmax(0, 1fr) 16px;
+    gap: 10px;
+
+    padding: 8px;
+  }
+
+  .reading-book-picker__cover {
+    width: 54px;
+  }
+
+  .reading-book-picker__status-badge {
+    left: 3px;
+    right: 3px;
+    bottom: 3px;
+
+    padding: 3px;
+
+    font-size: 7px;
   }
 }
