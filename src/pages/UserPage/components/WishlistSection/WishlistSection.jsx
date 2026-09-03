@@ -1,7 +1,5 @@
 import { useSearchParams } from "react-router-dom";
 
-import useWishlist from "../../hooks/useWishlist.js";
-
 import "./WishlistSection.css";
 
 const ArrowIcon = () => (
@@ -16,12 +14,8 @@ const BookmarkIcon = () => (
   </svg>
 );
 
-const WishlistSection = ({ onCountChange }) => {
+const WishlistSection = ({ books, isLoading, error, removeFromWishlist }) => {
   const [searchParams, setSearchParams] = useSearchParams();
-
-  const { books, isLoading, error, removeFromWishlist } = useWishlist({
-    onCountChange,
-  });
 
   const handleOpenBook = (book) => {
     if (!book?.id) {

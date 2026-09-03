@@ -1,53 +1,13 @@
-// src/pages/UserPage/hooks/useReadingStreak.js
+import { useReadingStatsContext } from "../../../context/ReadingStatsContext.jsx";
 
-import { useEffect, useState } from "react";
+const useReadingStreak = () => {
+  const { stats, isStatsLoading } = useReadingStatsContext();
 
-import { apiFetch, hasToken } from "../../../utils/apiClient.js";
-
-const useReadingStreak = ({ readingBookId }) => {
-  const [currentStreak, setCurrentStreak] = useState(0);
-
-  const [isStreakLoading, setIsStreakLoading] = useState(true);
-
-  useEffect(() => {
-    const loadStreak = async () => {
-      if (!hasToken()) {
-        setCurrentStreak(0);
-
-        setIsStreakLoading(false);
-
-        return;
-      }
-
-      try {
-        setIsStreakLoading(true);
-
-        const currentYear = new Date().getFullYear();
-
-        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-        const data = await apiFetch(
-          `/api/user-books/stats?year=${currentYear}&timeZone=${encodeURIComponent(
-            timeZone,
-          )}`,
-        );
-
-        setCurrentStreak(Number(data?.stats?.streak?.current) || 0);
-      } catch (error) {
-        console.error("Load reading streak error:", error);
-
-        setCurrentStreak(0);
-      } finally {
-        setIsStreakLoading(false);
-      }
-    };
-
-    loadStreak();
-  }, [readingBookId]);
+  const currentStreak = Number(stats?.streak?.current) || 0;
 
   return {
     currentStreak,
-    isStreakLoading,
+    isStreakLoading: isStatsLoading,
   };
 };
 

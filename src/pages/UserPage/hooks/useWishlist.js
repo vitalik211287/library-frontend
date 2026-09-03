@@ -1,10 +1,10 @@
 import { useEffect, useState } from "react";
 
-import { apiFetch, hasToken } from "../../../utils/apiClient.js";
-
 import { useLibrary } from "../../../context/LibraryContext.jsx";
 
-const useWishlist = ({ onCountChange }) => {
+import { apiFetch, hasToken } from "../../../utils/apiClient.js";
+
+const useWishlist = () => {
   const { activeLibraryId } = useLibrary();
 
   const [books, setBooks] = useState([]);
@@ -19,8 +19,6 @@ const useWishlist = ({ onCountChange }) => {
         setBooks([]);
         setIsLoading(false);
         setError("");
-
-        onCountChange?.(0);
 
         return;
       }
@@ -38,23 +36,19 @@ const useWishlist = ({ onCountChange }) => {
         const items = Array.isArray(data?.books) ? data.books : [];
 
         setBooks(items);
-
-        onCountChange?.(Number(data?.count) || items.length);
       } catch (loadError) {
         console.error("Load wishlist error:", loadError);
 
         setBooks([]);
 
         setError("Не вдалося завантажити список");
-
-        onCountChange?.(0);
       } finally {
         setIsLoading(false);
       }
     };
 
     loadWishlist();
-  }, [activeLibraryId, onCountChange]);
+  }, [activeLibraryId]);
 
   const removeFromWishlist = async (bookId) => {
     if (!bookId) {
@@ -66,13 +60,9 @@ const useWishlist = ({ onCountChange }) => {
         method: "DELETE",
       });
 
-      setBooks((currentBooks) => {
-        const nextBooks = currentBooks.filter((book) => book.id !== bookId);
-
-        onCountChange?.(nextBooks.length);
-
-        return nextBooks;
-      });
+      setBooks((currentBooks) =>
+        currentBooks.filter((book) => book.id !== bookId),
+      );
     } catch (removeError) {
       console.error("Remove wishlist error:", removeError);
     }

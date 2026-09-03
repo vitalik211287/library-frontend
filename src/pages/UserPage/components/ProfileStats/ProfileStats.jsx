@@ -37,11 +37,8 @@ const ProfileStats = ({
   finishedCount,
   wishlistCount,
   currentBooksCount,
-  readingBookId,
 }) => {
-  const { currentStreak, isStreakLoading } = useReadingStreak({
-    readingBookId,
-  });
+  const { currentStreak, isStreakLoading } = useReadingStreak();
 
   return (
     <section className="profile-stats">

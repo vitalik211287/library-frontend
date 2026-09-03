@@ -30,11 +30,8 @@ const ArrowIcon = () => (
    COMPONENT
 ========================= */
 
-const ReadingActivity = ({ readingBookId, onDetails }) => {
-  const { readingActivity, isLoading, error } = useReadingActivity({
-    readingBookId,
-  });
-
+const ReadingActivity = ({ onDetails }) => {
+  const { readingActivity, isLoading, error } = useReadingActivity();
   const chartData =
     readingActivity.weeks.length > 0
       ? readingActivity.weeks

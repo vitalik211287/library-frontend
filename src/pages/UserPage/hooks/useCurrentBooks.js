@@ -4,7 +4,7 @@ import { useLibrary } from "../../../context/LibraryContext.jsx";
 
 import { apiFetch, hasToken } from "../../../utils/apiClient.js";
 
-const useCurrentBooks = ({ readingBookId, onBooksChange }) => {
+const useCurrentBooks = ({ readingBookId } = {}) => {
   const { activeLibraryId } = useLibrary();
 
   const [currentBooks, setCurrentBooks] = useState([]);
@@ -19,8 +19,6 @@ const useCurrentBooks = ({ readingBookId, onBooksChange }) => {
         setCurrentBooks([]);
         setIsLoading(false);
         setError("");
-
-        onBooksChange?.(0);
 
         return;
       }
@@ -38,23 +36,19 @@ const useCurrentBooks = ({ readingBookId, onBooksChange }) => {
         const books = Array.isArray(data?.books) ? data.books : [];
 
         setCurrentBooks(books);
-
-        onBooksChange?.(Number(data?.count) || books.length);
       } catch (loadError) {
         console.error("Load current reading error:", loadError);
 
         setCurrentBooks([]);
 
         setError("Не вдалося завантажити поточне читання");
-
-        onBooksChange?.(0);
       } finally {
         setIsLoading(false);
       }
     };
 
     loadCurrentBooks();
-  }, [readingBookId, activeLibraryId, onBooksChange]);
+  }, [readingBookId, activeLibraryId]);
 
   return {
     currentBooks,

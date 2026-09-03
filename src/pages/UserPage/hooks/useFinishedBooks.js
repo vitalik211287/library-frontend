@@ -4,10 +4,12 @@ import { useLibrary } from "../../../context/LibraryContext.jsx";
 
 import { apiFetch, hasToken } from "../../../utils/apiClient.js";
 
-const useFinishedBooks = ({ readingBookId, onCountChange }) => {
+const useFinishedBooks = ({ readingBookId } = {}) => {
   const { activeLibraryId } = useLibrary();
 
   const [books, setBooks] = useState([]);
+
+  const [total, setTotal] = useState(0);
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -17,10 +19,9 @@ const useFinishedBooks = ({ readingBookId, onCountChange }) => {
     const loadFinishedBooks = async () => {
       if (!hasToken()) {
         setBooks([]);
+        setTotal(0);
         setIsLoading(false);
         setError("");
-
-        onCountChange?.(0);
 
         return;
       }
@@ -32,7 +33,6 @@ const useFinishedBooks = ({ readingBookId, onCountChange }) => {
         const params = new URLSearchParams();
 
         params.set("page", "1");
-
         params.set("limit", "12");
 
         if (activeLibraryId) {
@@ -45,29 +45,29 @@ const useFinishedBooks = ({ readingBookId, onCountChange }) => {
 
         const items = Array.isArray(data?.books) ? data.books : [];
 
-        setBooks(items);
+        const nextTotal =
+          Number(data?.total) || Number(data?.count) || items.length;
 
-        onCountChange?.(
-          Number(data?.total) || Number(data?.count) || items.length,
-        );
+        setBooks(items);
+        setTotal(nextTotal);
       } catch (loadError) {
         console.error("Load finished books error:", loadError);
 
         setBooks([]);
+        setTotal(0);
 
         setError("Не вдалося завантажити прочитані книги");
-
-        onCountChange?.(0);
       } finally {
         setIsLoading(false);
       }
     };
 
     loadFinishedBooks();
-  }, [readingBookId, activeLibraryId, onCountChange]);
+  }, [readingBookId, activeLibraryId]);
 
   return {
     books,
+    total,
     isLoading,
     error,
   };

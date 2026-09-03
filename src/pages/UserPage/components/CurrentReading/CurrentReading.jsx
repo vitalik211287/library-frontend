@@ -2,8 +2,6 @@ import { useState } from "react";
 
 import { useSearchParams } from "react-router-dom";
 
-import useCurrentBooks from "../../hooks/useCurrentBooks.js";
-
 import { getProgress } from "../../utils/readingHelpers.js";
 
 import "./CurrentReading.css";
@@ -20,15 +18,10 @@ const ChevronIcon = ({ isOpen }) => (
   </svg>
 );
 
-const CurrentReading = ({ readingBookId, onBooksChange }) => {
+const CurrentReading = ({ currentBooks, isLoading, error }) => {
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [isCurrentBooksOpen, setIsCurrentBooksOpen] = useState(false);
-
-  const { currentBooks, isLoading, error } = useCurrentBooks({
-    readingBookId,
-    onBooksChange,
-  });
 
   const handleOpenReading = (bookId) => {
     if (!bookId) {

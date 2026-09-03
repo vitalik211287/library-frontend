@@ -1,5 +1,3 @@
-import { useState } from "react";
-
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import "./UserPage.css";
@@ -13,17 +11,40 @@ import WishlistSection from "./components/WishlistSection/WishlistSection.jsx";
 import FinishedSection from "./components/FinishedSection/FinishedSection.jsx";
 import ReadingActivity from "./components/ReadingActivity/ReadingActivity.jsx";
 
+import useCurrentBooks from "./hooks/useCurrentBooks.js";
+import useWishlist from "./hooks/useWishlist.js";
+import useFinishedBooks from "./hooks/useFinishedBooks.js";
+
 const UserPage = () => {
   const navigate = useNavigate();
+
   const [searchParams] = useSearchParams();
 
   const readingBookId = searchParams.get("reading");
 
-  const [currentBooksCount, setCurrentBooksCount] = useState(0);
+  const {
+    currentBooks,
+    isLoading: isCurrentBooksLoading,
+    error: currentBooksError,
+  } = useCurrentBooks({
+    readingBookId,
+  });
 
-  const [wishlistCount, setWishlistCount] = useState(0);
+  const {
+    books: wishlistBooks,
+    isLoading: isWishlistLoading,
+    error: wishlistError,
+    removeFromWishlist,
+  } = useWishlist();
 
-  const [finishedCount, setFinishedCount] = useState(0);
+  const {
+    books: finishedBooks,
+    total: finishedCount,
+    isLoading: isFinishedLoading,
+    error: finishedError,
+  } = useFinishedBooks({
+    readingBookId,
+  });
 
   return (
     <main className="user-page">
@@ -32,32 +53,35 @@ const UserPage = () => {
 
         <ProfileStats
           finishedCount={finishedCount}
-          wishlistCount={wishlistCount}
-          currentBooksCount={currentBooksCount}
-          readingBookId={readingBookId}
+          wishlistCount={wishlistBooks.length}
+          currentBooksCount={currentBooks.length}
         />
 
         <ReadingGoal />
 
-        <AchievementsPreview readingBookId={readingBookId} />
+        <AchievementsPreview />
 
         <CurrentReading
-          readingBookId={readingBookId}
-          onBooksChange={setCurrentBooksCount}
+          currentBooks={currentBooks}
+          isLoading={isCurrentBooksLoading}
+          error={currentBooksError}
         />
 
-        <WishlistSection onCountChange={setWishlistCount} />
+        <WishlistSection
+          books={wishlistBooks}
+          isLoading={isWishlistLoading}
+          error={wishlistError}
+          removeFromWishlist={removeFromWishlist}
+        />
 
         <FinishedSection
-          readingBookId={readingBookId}
-          onCountChange={setFinishedCount}
+          books={finishedBooks}
+          isLoading={isFinishedLoading}
+          error={finishedError}
         />
 
         <section className="profile-section profile-section--activity">
-          <ReadingActivity
-            readingBookId={readingBookId}
-            onDetails={() => navigate("/stats")}
-          />
+          <ReadingActivity onDetails={() => navigate("/stats")} />
         </section>
       </div>
     </main>

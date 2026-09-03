@@ -1,5 +1,3 @@
-import useFinishedBooks from "../../hooks/useFinishedBooks.js";
-
 import "./FinishedSection.css";
 
 const ArrowIcon = () => (
@@ -8,12 +6,7 @@ const ArrowIcon = () => (
   </svg>
 );
 
-const FinishedSection = ({ readingBookId, onCountChange }) => {
-  const { books, isLoading, error } = useFinishedBooks({
-    readingBookId,
-    onCountChange,
-  });
-
+const FinishedSection = ({ books, isLoading, error }) => {
   return (
     <section className="profile-section">
       <div className="profile-section__header">
