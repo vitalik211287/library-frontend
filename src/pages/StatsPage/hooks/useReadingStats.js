@@ -1,66 +1,37 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
-import { apiFetch, hasToken } from "../../../utils/apiClient.js";
+import { useReadingStatsContext } from "../../../context/ReadingStatsContext.jsx";
+
+import { useReadingGoalContext } from "../../../context/ReadingGoalContext.jsx";
 
 const useReadingStats = ({ year }) => {
-  const [stats, setStats] = useState(null);
+  const {
+    statsByYear,
+    loadingByYear: statsLoadingByYear,
+    errorByYear: statsErrorByYear,
+    ensureReadingStats,
+  } = useReadingStatsContext();
 
-  const [goal, setGoal] = useState(null);
-
-  const [isLoading, setIsLoading] = useState(true);
-
-  const [error, setError] = useState("");
+  const {
+    goalDataByYear,
+    loadingByYear: goalLoadingByYear,
+    errorByYear: goalErrorByYear,
+    ensureReadingGoal,
+  } = useReadingGoalContext();
 
   useEffect(() => {
-    const loadReadingStats = async () => {
-      if (!hasToken()) {
-        setStats(null);
-        setGoal(null);
+    ensureReadingStats(year);
+    ensureReadingGoal(year);
+  }, [year, ensureReadingStats, ensureReadingGoal]);
 
-        setError("Потрібно увійти в акаунт");
+  const stats = statsByYear[year] ?? null;
 
-        setIsLoading(false);
+  const goal = goalDataByYear[year] ?? null;
 
-        return;
-      }
+  const isLoading =
+    (statsLoadingByYear[year] ?? false) || (goalLoadingByYear[year] ?? false);
 
-      try {
-        setIsLoading(true);
-        setError("");
-
-        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-        const [statsData, goalData] = await Promise.all([
-          apiFetch(
-            `/api/user-books/stats?year=${year}&timeZone=${encodeURIComponent(
-              timeZone,
-            )}`,
-          ),
-
-          apiFetch(`/api/user-books/goals?year=${year}`),
-        ]);
-
-        setStats(statsData?.stats ?? null);
-
-        setGoal(goalData?.goal ?? null);
-      } catch (loadError) {
-        console.error("Get stats error:", loadError);
-
-        setStats(null);
-        setGoal(null);
-
-        setError(
-          loadError instanceof Error
-            ? loadError.message
-            : "Не вдалося завантажити статистику",
-        );
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadReadingStats();
-  }, [year]);
+  const error = statsErrorByYear[year] || goalErrorByYear[year] || "";
 
   return {
     stats,

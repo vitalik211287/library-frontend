@@ -5,10 +5,11 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import "./HomePage.css";
-
+import { useReadingStatsContext } from "../../context/ReadingStatsContext.jsx";
+import { useReadingActivityContext } from "../../context/ReadingActivityContext.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useLibrary } from "../../context/LibraryContext.jsx";
-
+import { useAchievementsContext } from "../../context/AchievementsContext.jsx";
 import { apiFetch } from "../../utils/apiClient.js";
 import Modal from "../../components/Modal/Modal.jsx";
 import { useReadingGoalContext } from "../../context/ReadingGoalContext.jsx";
@@ -197,6 +198,13 @@ const HomePage = () => {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
+  const { latestAchievement, featuredAchievement, isAchievementsLoading } =
+    useAchievementsContext();
+
+  const { stats, isStatsLoading } = useReadingStatsContext();
+
+  const { activityByMonth, ensureActivity } = useReadingActivityContext();
+
   const {
     libraries,
     activeLibrary,
@@ -220,12 +228,6 @@ const HomePage = () => {
 
   const [currentBooks, setCurrentBooks] = useState([]);
 
-  const [activityData, setActivityData] = useState([]);
-
-  const [stats, setStats] = useState(null);
-
-  const [achievements, setAchievements] = useState([]);
-
   const [isLoading, setIsLoading] = useState(true);
 
   const [error, setError] = useState("");
@@ -233,8 +235,6 @@ const HomePage = () => {
   const [isReadingGoalModalOpen, setIsReadingGoalModalOpen] = useState(false);
 
   const now = useMemo(() => new Date(), []);
-
-  const currentYear = now.getFullYear();
 
   const currentMonth = now.getMonth() + 1;
 
@@ -255,20 +255,9 @@ const HomePage = () => {
         setIsLoading(true);
         setError("");
 
-        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-        const [libraryBooksResponse, statsResponse, achievementsResponse] =
-          await Promise.all([
-            apiFetch(`/api/libraries/${activeLibraryId}/books`),
-
-            apiFetch(
-              `/api/user-books/stats?year=${currentYear}&timeZone=${encodeURIComponent(
-                timeZone,
-              )}`,
-            ),
-
-            apiFetch("/api/user-books/achievements"),
-          ]);
+        const libraryBooksResponse = await apiFetch(
+          `/api/libraries/${activeLibraryId}/books`,
+        );
 
         const libraryBooks = Array.isArray(libraryBooksResponse)
           ? libraryBooksResponse
@@ -276,14 +265,6 @@ const HomePage = () => {
 
         setCurrentBooks(
           libraryBooks.filter((book) => book.status === "READING"),
-        );
-
-        setStats(statsResponse?.stats ?? null);
-
-        setAchievements(
-          Array.isArray(achievementsResponse?.achievements)
-            ? achievementsResponse.achievements
-            : [],
         );
       } catch (loadError) {
         console.error("Load home page error:", loadError);
@@ -295,72 +276,66 @@ const HomePage = () => {
     };
 
     loadHomeData();
-  }, [currentYear, activeLibraryId]);
+  }, [activeLibraryId]);
 
   /* =========================
      ACTIVITY
   ========================= */
 
-  useEffect(() => {
-    const loadActivity = async () => {
-      try {
-        const monday = getMonday(now);
+  const activityMonths = useMemo(() => {
+    const monday = getMonday(now);
 
-        const sunday = new Date(monday);
+    const sunday = new Date(monday);
 
-        sunday.setDate(monday.getDate() + 6);
+    sunday.setDate(monday.getDate() + 6);
 
-        const monthRequests = new Map();
+    const monthRequests = new Map();
 
-        const addMonth = (date) => {
-          const year = date.getFullYear();
+    const addMonth = (date) => {
+      const year = date.getFullYear();
 
-          const month = date.getMonth() + 1;
+      const month = date.getMonth() + 1;
 
-          const key = `${year}-${month}`;
+      const key = `${year}-${month}`;
 
-          monthRequests.set(key, {
-            year,
-            month,
-          });
-        };
-
-        addMonth(monday);
-        addMonth(sunday);
-        addMonth(now);
-
-        const responses = await Promise.all(
-          [...monthRequests.values()].map(({ year, month }) =>
-            apiFetch(`/api/user-books/activity?year=${year}&month=${month}`),
-          ),
-        );
-
-        const activityMap = new Map();
-
-        responses.forEach((response) => {
-          const activity = response?.activity;
-
-          const year = activity?.year;
-          const month = activity?.month;
-          const days = Array.isArray(activity?.days) ? activity.days : [];
-
-          days.forEach((day) => {
-            const date = new Date(year, month - 1, day.day);
-
-            activityMap.set(getDateKey(date), day);
-          });
-        });
-
-        setActivityData(activityMap);
-      } catch (activityError) {
-        console.error("Load home activity error:", activityError);
-
-        setActivityData(new Map());
-      }
+      monthRequests.set(key, {
+        year,
+        month,
+      });
     };
 
-    loadActivity();
+    addMonth(monday);
+    addMonth(sunday);
+    addMonth(now);
+
+    return [...monthRequests.values()];
   }, [now]);
+
+  useEffect(() => {
+    activityMonths.forEach(({ year, month }) => {
+      ensureActivity(year, month);
+    });
+  }, [activityMonths, ensureActivity]);
+
+  const activityData = useMemo(() => {
+    const activityMap = new Map();
+
+    activityMonths.forEach(({ year, month }) => {
+      const key = `${year}-${month}`;
+
+      const activity = activityByMonth[key];
+
+      const days = Array.isArray(activity?.days) ? activity.days : [];
+
+      days.forEach((day) => {
+        const date = new Date(year, month - 1, day.day);
+
+        activityMap.set(getDateKey(date), day);
+      });
+    });
+
+    return activityMap;
+  }, [activityByMonth, activityMonths]);
 
   /* =========================
      LIBRARY
@@ -562,17 +537,6 @@ const HomePage = () => {
       )
     : 0;
 
-  const latestAchievement =
-    [...achievements].reverse().find((achievement) => achievement.unlocked) ??
-    null;
-
-  const closestAchievement =
-    achievements
-      .filter((achievement) => !achievement.unlocked)
-      .sort((a, b) => b.percent - a.percent)[0] ?? null;
-
-  const featuredAchievement = latestAchievement ?? closestAchievement ?? null;
-
   const monthStats = stats?.months?.[currentMonth - 1] ?? null;
 
   const monthSeconds = monthStats?.seconds ?? 0;
@@ -625,7 +589,7 @@ const HomePage = () => {
      STATES
   ========================= */
 
-  if (isLoading || isGoalLoading) {
+  if (isLoading || isGoalLoading || isStatsLoading || isAchievementsLoading) {
     return (
       <main className="home-page">
         <div className="home-section">Завантаження...</div>
@@ -967,6 +931,7 @@ const HomePage = () => {
           </div>
         </div>
       </section>
+
       {/* =========================
           GOAL
       ========================= */}

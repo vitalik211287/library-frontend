@@ -14,7 +14,13 @@ import { getReadingStatusLabel } from "./utils/readingModalHelpers.js";
 
 import "./ReadingModal.css";
 
-const ReadingModal = ({ book, apiUrl, onClose, onBookUpdated }) => {
+const ReadingModal = ({
+  book,
+  apiUrl,
+  onClose,
+  onBookUpdated,
+  onReadingDataChanged,
+}) => {
   const [statusModalOpen, setStatusModalOpen] = useState(false);
 
   const [sessionsModalOpen, setSessionsModalOpen] = useState(false);
@@ -58,7 +64,7 @@ const ReadingModal = ({ book, apiUrl, onClose, onBookUpdated }) => {
     changeBookStatus,
 
     fetchReadingStats,
-  } = useReadingSession(book, onBookUpdated);
+  } = useReadingSession(book, onBookUpdated, onReadingDataChanged);
 
   const statusLabel = getReadingStatusLabel(currentBook.status, activeSession);
 
@@ -86,6 +92,8 @@ const ReadingModal = ({ book, apiUrl, onClose, onBookUpdated }) => {
 
   const handleSessionsChanged = async () => {
     await fetchReadingStats();
+
+    await onReadingDataChanged?.();
   };
 
   const childModalOpen = statusModalOpen || sessionsModalOpen;

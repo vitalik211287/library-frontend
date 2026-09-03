@@ -32,6 +32,7 @@ import FollowersPage from "./pages/UserPage/components/Users/FollowersPage/Follo
 
 import RightSidebar from "./components/RightSidebar/RightSidebar.jsx";
 import ReadingModal from "./components/ReadingModal/ReadingModal.jsx";
+import useRefreshReadingData from "./hooks/useRefreshReadingData.js";
 
 import MobileNavigation from "./components/AppNavigation/MobileNavigation.jsx";
 import DesktopNavigation from "./components/AppNavigation/DesktopNavigation.jsx";
@@ -83,6 +84,8 @@ const App = () => {
   const { themeMode, setThemeMode } = useTheme();
 
   const { activeLibraryId } = useLibrary();
+
+  const refreshReadingData = useRefreshReadingData();
 
   const location = useLocation();
 
@@ -261,6 +264,14 @@ const App = () => {
         detail: updatedBook,
       }),
     );
+  };
+
+  const handleReadingDataChanged = async () => {
+    try {
+      await refreshReadingData();
+    } catch (error) {
+      console.error("Refresh reading data error:", error);
+    }
   };
 
   /* =========================
@@ -596,6 +607,7 @@ const App = () => {
             apiUrl={API_URL}
             onClose={handleCloseReading}
             onBookUpdated={handleReadingBookUpdated}
+            onReadingDataChanged={handleReadingDataChanged}
           />
         )}
 

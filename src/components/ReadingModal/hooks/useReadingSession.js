@@ -13,7 +13,7 @@ const getProgressInputValue = (value) => {
   return progress > 0 ? String(progress) : "";
 };
 
-const useReadingSession = (book, onBookUpdated) => {
+const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
   const [activeSession, setActiveSession] = useState(null);
 
   const [currentBook, setCurrentBook] = useState(book);
@@ -184,6 +184,8 @@ const useReadingSession = (book, onBookUpdated) => {
       }
 
       await fetchReadingStats();
+
+      await onReadingDataChanged?.();
 
       return true;
     } catch (error) {
@@ -508,6 +510,8 @@ const useReadingSession = (book, onBookUpdated) => {
       setStartProgress(getProgressInputValue(value));
 
       await fetchReadingStats();
+
+      await onReadingDataChanged?.();
     } catch (error) {
       console.error("Помилка завершення читання:", error);
 

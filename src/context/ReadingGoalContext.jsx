@@ -18,52 +18,103 @@ const ReadingGoalProvider = ({ children }) => {
 
   const currentYear = new Date().getFullYear();
 
-  const [readingGoal, setReadingGoal] = useState(null);
+  const [goalDataByYear, setGoalDataByYear] = useState({});
 
-  const [isGoalLoading, setIsGoalLoading] = useState(true);
+  const [loadingByYear, setLoadingByYear] = useState({});
 
-  const [goalError, setGoalError] = useState("");
+  const [errorByYear, setErrorByYear] = useState({});
 
   const [isGoalSaving, setIsGoalSaving] = useState(false);
 
   const [goalSaveError, setGoalSaveError] = useState("");
 
   /* =========================
+     HELPERS
+  ========================= */
+
+  const getReadingGoalData = useCallback(
+    (year = currentYear) => {
+      return goalDataByYear[year] ?? null;
+    },
+    [currentYear, goalDataByYear],
+  );
+
+  const getReadingGoal = useCallback(
+    (year = currentYear) => {
+      return goalDataByYear[year]?.goal ?? null;
+    },
+    [currentYear, goalDataByYear],
+  );
+
+  /* =========================
      LOAD GOAL
   ========================= */
 
-  const refreshReadingGoal = useCallback(async () => {
-    if (!isAuthenticated || !hasToken()) {
-      setReadingGoal(null);
-      setGoalError("");
-      setIsGoalLoading(false);
+  const refreshReadingGoal = useCallback(
+    async (year = currentYear) => {
+      if (!isAuthenticated || !hasToken()) {
+        setGoalDataByYear((current) => ({
+          ...current,
+          [year]: null,
+        }));
 
-      return null;
-    }
+        setErrorByYear((current) => ({
+          ...current,
+          [year]: "",
+        }));
 
-    try {
-      setIsGoalLoading(true);
-      setGoalError("");
+        setLoadingByYear((current) => ({
+          ...current,
+          [year]: false,
+        }));
 
-      const data = await apiFetch(`/api/user-books/goals?year=${currentYear}`);
+        return null;
+      }
 
-      const goal = data?.goal?.goal ?? null;
+      try {
+        setLoadingByYear((current) => ({
+          ...current,
+          [year]: true,
+        }));
 
-      setReadingGoal(goal);
+        setErrorByYear((current) => ({
+          ...current,
+          [year]: "",
+        }));
 
-      return goal;
-    } catch (error) {
-      console.error("Load reading goal error:", error);
+        const data = await apiFetch(`/api/user-books/goals?year=${year}`);
 
-      setReadingGoal(null);
+        const goalData = data?.goal ?? null;
 
-      setGoalError("Не вдалося завантажити мету");
+        setGoalDataByYear((current) => ({
+          ...current,
+          [year]: goalData,
+        }));
 
-      return null;
-    } finally {
-      setIsGoalLoading(false);
-    }
-  }, [currentYear, isAuthenticated]);
+        return goalData;
+      } catch (error) {
+        console.error("Load reading goal error:", error);
+
+        setGoalDataByYear((current) => ({
+          ...current,
+          [year]: null,
+        }));
+
+        setErrorByYear((current) => ({
+          ...current,
+          [year]: "Не вдалося завантажити мету",
+        }));
+
+        return null;
+      } finally {
+        setLoadingByYear((current) => ({
+          ...current,
+          [year]: false,
+        }));
+      }
+    },
+    [currentYear, isAuthenticated],
+  );
 
   /* =========================
      AUTH / INITIAL LOAD
@@ -75,26 +126,38 @@ const ReadingGoalProvider = ({ children }) => {
     }
 
     if (!isAuthenticated) {
-      setReadingGoal(null);
-
-      setGoalError("");
-
+      setGoalDataByYear({});
+      setLoadingByYear({});
+      setErrorByYear({});
       setGoalSaveError("");
-
-      setIsGoalLoading(false);
 
       return;
     }
 
-    refreshReadingGoal();
-  }, [isAuthenticated, isAuthLoading, refreshReadingGoal]);
+    refreshReadingGoal(currentYear);
+  }, [currentYear, isAuthenticated, isAuthLoading, refreshReadingGoal]);
+
+  /* =========================
+     ENSURE GOAL
+  ========================= */
+
+  const ensureReadingGoal = useCallback(
+    async (year = currentYear) => {
+      if (Object.prototype.hasOwnProperty.call(goalDataByYear, year)) {
+        return goalDataByYear[year];
+      }
+
+      return refreshReadingGoal(year);
+    },
+    [currentYear, goalDataByYear, refreshReadingGoal],
+  );
 
   /* =========================
      SAVE GOAL
   ========================= */
 
   const saveReadingGoal = useCallback(
-    async ({ books, pages, minutes }) => {
+    async ({ books, pages, minutes, year = currentYear }) => {
       if (!isAuthenticated || !hasToken()) {
         setGoalSaveError("Потрібно увійти в акаунт");
 
@@ -103,25 +166,24 @@ const ReadingGoalProvider = ({ children }) => {
 
       try {
         setIsGoalSaving(true);
-
         setGoalSaveError("");
 
-        const data = await apiFetch(
-          `/api/user-books/goals?year=${currentYear}`,
-          {
-            method: "PUT",
+        const data = await apiFetch(`/api/user-books/goals?year=${year}`, {
+          method: "PUT",
 
-            body: {
-              booksGoal: books,
-              pagesGoal: pages,
-              minutesGoal: minutes,
-            },
+          body: {
+            booksGoal: books,
+            pagesGoal: pages,
+            minutesGoal: minutes,
           },
-        );
+        });
 
-        const goal = data?.goal?.goal ?? null;
+        const goalData = data?.goal ?? null;
 
-        setReadingGoal(goal);
+        setGoalDataByYear((current) => ({
+          ...current,
+          [year]: goalData,
+        }));
 
         return true;
       } catch (error) {
@@ -148,6 +210,22 @@ const ReadingGoalProvider = ({ children }) => {
   }, []);
 
   /* =========================
+     CURRENT YEAR COMPATIBILITY
+  ========================= */
+
+  const currentGoalData = goalDataByYear[currentYear] ?? null;
+
+  const readingGoal = currentGoalData?.goal ?? null;
+
+  const readingGoalProgress = currentGoalData?.progress ?? null;
+
+  const readingGoalPercent = currentGoalData?.percent ?? null;
+
+  const isGoalLoading = loadingByYear[currentYear] ?? false;
+
+  const goalError = errorByYear[currentYear] ?? "";
+
+  /* =========================
      VALUE
   ========================= */
 
@@ -156,28 +234,43 @@ const ReadingGoalProvider = ({ children }) => {
       currentYear,
 
       readingGoal,
+      readingGoalProgress,
+      readingGoalPercent,
+      currentGoalData,
 
       isGoalLoading,
-
       goalError,
 
       isGoalSaving,
-
       goalSaveError,
 
+      goalDataByYear,
+      loadingByYear,
+      errorByYear,
+
+      getReadingGoal,
+      getReadingGoalData,
+      ensureReadingGoal,
       refreshReadingGoal,
-
       saveReadingGoal,
-
       clearGoalSaveError,
     }),
     [
       currentYear,
       readingGoal,
+      readingGoalProgress,
+      readingGoalPercent,
+      currentGoalData,
       isGoalLoading,
       goalError,
       isGoalSaving,
       goalSaveError,
+      goalDataByYear,
+      loadingByYear,
+      errorByYear,
+      getReadingGoal,
+      getReadingGoalData,
+      ensureReadingGoal,
       refreshReadingGoal,
       saveReadingGoal,
       clearGoalSaveError,

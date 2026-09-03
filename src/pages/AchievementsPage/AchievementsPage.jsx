@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -15,15 +15,7 @@ const AchievementsPage = () => {
 
   const [activeCategory, setActiveCategory] = useState("all");
 
-  const handleUnauthorized = useCallback(() => {
-    navigate("/login", {
-      replace: true,
-    });
-  }, [navigate]);
-
-  const { achievements, summary, isLoading, error } = useAchievements({
-    onUnauthorized: handleUnauthorized,
-  });
+  const { achievements, summary, isLoading, error } = useAchievements();
 
   const filteredAchievements = useMemo(() => {
     if (activeCategory === "all") {

@@ -13,9 +13,7 @@ const ArrowIcon = () => (
 const AchievementsPreview = ({ readingBookId }) => {
   const navigate = useNavigate();
 
-  const { previewAchievements, summary, isLoading, error } = useAchievements({
-    readingBookId,
-  });
+  const { previewAchievements, summary, isLoading, error } = useAchievements();
 
   const handleOpenAchievements = () => {
     navigate("/achievements");

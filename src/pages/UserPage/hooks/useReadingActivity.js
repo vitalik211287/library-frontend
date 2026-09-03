@@ -1,8 +1,6 @@
-// src/pages/UserPage/hooks/useReadingActivity.js
+import { useEffect, useMemo } from "react";
 
-import { useEffect, useState } from "react";
-
-import { apiFetch, hasToken } from "../../../utils/apiClient.js";
+import { useReadingActivityContext } from "../../../context/ReadingActivityContext.jsx";
 
 import {
   buildCurrentMonthWeeks,
@@ -23,96 +21,107 @@ const INITIAL_ACTIVITY = {
   },
 };
 
-const useReadingActivity = ({ readingBookId }) => {
-  const [readingActivity, setReadingActivity] = useState(INITIAL_ACTIVITY);
+const useReadingActivity = ({ readingBookId } = {}) => {
+  const {
+    activityByMonth,
+    loadingByMonth,
+    errorByMonth,
+    ensureActivity,
+    refreshActivity,
+  } = useReadingActivityContext();
 
-  const [isLoading, setIsLoading] = useState(true);
+  const now = useMemo(() => new Date(), []);
 
-  const [error, setError] = useState("");
+  const currentYear = now.getFullYear();
+  const currentMonth = now.getMonth() + 1;
+
+  const previousDate = useMemo(
+    () => new Date(currentYear, currentMonth - 2, 1),
+    [currentYear, currentMonth],
+  );
+
+  const previousYear = previousDate.getFullYear();
+  const previousMonth = previousDate.getMonth() + 1;
+
+  const currentKey = `${currentYear}-${currentMonth}`;
+
+  const previousKey = `${previousYear}-${previousMonth}`;
 
   useEffect(() => {
-    const loadReadingActivity = async () => {
-      if (!hasToken()) {
-        setReadingActivity(INITIAL_ACTIVITY);
+    ensureActivity(previousYear, previousMonth);
+    ensureActivity(currentYear, currentMonth);
+  }, [previousYear, previousMonth, currentYear, currentMonth, ensureActivity]);
 
-        setError("");
-        setIsLoading(false);
+  useEffect(() => {
+    if (!readingBookId) {
+      return;
+    }
 
-        return;
-      }
+    refreshActivity(previousYear, previousMonth);
+    refreshActivity(currentYear, currentMonth);
+  }, [
+    readingBookId,
+    previousYear,
+    previousMonth,
+    currentYear,
+    currentMonth,
+    refreshActivity,
+  ]);
 
-      try {
-        setIsLoading(true);
-        setError("");
+  const readingActivity = useMemo(() => {
+    const previousData = activityByMonth[previousKey] ?? null;
 
-        const now = new Date();
+    const currentData = activityByMonth[currentKey] ?? null;
 
-        const currentYear = now.getFullYear();
+    const previousDays = Array.isArray(previousData?.days)
+      ? previousData.days
+      : [];
 
-        const currentMonth = now.getMonth() + 1;
+    const currentDays = Array.isArray(currentData?.days)
+      ? currentData.days
+      : [];
 
-        const previousDate = new Date(currentYear, currentMonth - 2, 1);
+    const previousWeeks = buildPreviousMonthWeeks(previousDays);
 
-        const previousYear = previousDate.getFullYear();
+    const currentWeeks = buildCurrentMonthWeeks(currentDays);
 
-        const previousMonth = previousDate.getMonth() + 1;
+    const currentMonthSeconds = getCurrentMonthSeconds(currentDays);
 
-        const [previousData, currentData] = await Promise.all([
-          apiFetch(
-            `/api/user-books/activity?year=${previousYear}&month=${previousMonth}`,
-          ),
+    const currentWeek = getCurrentWeekStats({
+      previousDays,
+      currentDays,
+      previousYear,
+      previousMonth,
+      currentYear,
+      currentMonth,
+    });
 
-          apiFetch(
-            `/api/user-books/activity?year=${currentYear}&month=${currentMonth}`,
-          ),
-        ]);
+    return {
+      weeks: [...previousWeeks, ...currentWeeks],
 
-        const previousDays = Array.isArray(previousData?.activity?.days)
-          ? previousData.activity.days
-          : [];
+      currentMonthSeconds,
 
-        const currentDays = Array.isArray(currentData?.activity?.days)
-          ? currentData.activity.days
-          : [];
-
-        const previousWeeks = buildPreviousMonthWeeks(previousDays);
-
-        const currentWeeks = buildCurrentMonthWeeks(currentDays);
-
-        const currentMonthSeconds = getCurrentMonthSeconds(currentDays);
-
-        const currentWeek = getCurrentWeekStats({
-          previousDays,
-          currentDays,
-          previousYear,
-          previousMonth,
-          currentYear,
-          currentMonth,
-        });
-
-        setReadingActivity({
-          weeks: [...previousWeeks, ...currentWeeks],
-
-          currentMonthSeconds,
-
-          currentWeek,
-        });
-      } catch (loadError) {
-        console.error("Load reading activity error:", loadError);
-
-        setReadingActivity(INITIAL_ACTIVITY);
-
-        setError("Не вдалося завантажити активність читання");
-      } finally {
-        setIsLoading(false);
-      }
+      currentWeek,
     };
+  }, [
+    activityByMonth,
+    previousKey,
+    currentKey,
+    previousYear,
+    previousMonth,
+    currentYear,
+    currentMonth,
+  ]);
 
-    loadReadingActivity();
-  }, [readingBookId]);
+  const isLoading =
+    (loadingByMonth[previousKey] ?? false) ||
+    (loadingByMonth[currentKey] ?? false);
+
+  const error = errorByMonth[previousKey] || errorByMonth[currentKey] || "";
 
   return {
-    readingActivity,
+    readingActivity: readingActivity ?? INITIAL_ACTIVITY,
+
     isLoading,
     error,
   };

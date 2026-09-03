@@ -3,6 +3,42 @@ import { createPortal } from "react-dom";
 
 import "./Modal.css";
 
+let openModalCount = 0;
+
+let originalBodyOverflow = "";
+let originalBodyPaddingRight = "";
+
+const lockBodyScroll = () => {
+  if (openModalCount === 0) {
+    originalBodyOverflow = document.body.style.overflow;
+
+    originalBodyPaddingRight = document.body.style.paddingRight;
+
+    const scrollbarWidth =
+      window.innerWidth - document.documentElement.clientWidth;
+
+    document.body.style.overflow = "hidden";
+
+    if (scrollbarWidth > 0) {
+      document.body.style.paddingRight = `${scrollbarWidth}px`;
+    }
+  }
+
+  openModalCount += 1;
+};
+
+const unlockBodyScroll = () => {
+  openModalCount = Math.max(openModalCount - 1, 0);
+
+  if (openModalCount > 0) {
+    return;
+  }
+
+  document.body.style.overflow = originalBodyOverflow;
+
+  document.body.style.paddingRight = originalBodyPaddingRight;
+};
+
 const Modal = ({
   isOpen,
   onClose,
@@ -20,18 +56,7 @@ const Modal = ({
       return undefined;
     }
 
-    const previousOverflow = document.body.style.overflow;
-
-    const previousPaddingRight = document.body.style.paddingRight;
-
-    const scrollbarWidth =
-      window.innerWidth - document.documentElement.clientWidth;
-
-    document.body.style.overflow = "hidden";
-
-    if (scrollbarWidth > 0) {
-      document.body.style.paddingRight = `${scrollbarWidth}px`;
-    }
+    lockBodyScroll();
 
     const handleKeyDown = (event) => {
       if (event.key === "Escape" && closeOnEscape) {
@@ -42,9 +67,7 @@ const Modal = ({
     window.addEventListener("keydown", handleKeyDown);
 
     return () => {
-      document.body.style.overflow = previousOverflow;
-
-      document.body.style.paddingRight = previousPaddingRight;
+      unlockBodyScroll();
 
       window.removeEventListener("keydown", handleKeyDown);
     };
