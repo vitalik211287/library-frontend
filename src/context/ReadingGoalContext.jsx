@@ -4,6 +4,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
@@ -28,35 +29,41 @@ const ReadingGoalProvider = ({ children }) => {
 
   const [goalSaveError, setGoalSaveError] = useState("");
 
+  const goalCacheRef = useRef({});
+
+  const requestsInFlightRef = useRef(new Map());
+
+  const saveGoalData = useCallback((year, goalData) => {
+    goalCacheRef.current[year] = goalData;
+
+    setGoalDataByYear((current) => ({
+      ...current,
+      [year]: goalData,
+    }));
+  }, []);
+
   /* =========================
      HELPERS
   ========================= */
 
   const getReadingGoalData = useCallback(
-    (year = currentYear) => {
-      return goalDataByYear[year] ?? null;
-    },
-    [currentYear, goalDataByYear],
+    (year = currentYear) => goalCacheRef.current[year] ?? null,
+    [currentYear],
   );
 
   const getReadingGoal = useCallback(
-    (year = currentYear) => {
-      return goalDataByYear[year]?.goal ?? null;
-    },
-    [currentYear, goalDataByYear],
+    (year = currentYear) => goalCacheRef.current[year]?.goal ?? null,
+    [currentYear],
   );
 
   /* =========================
      LOAD GOAL
   ========================= */
 
-  const refreshReadingGoal = useCallback(
-    async (year = currentYear) => {
+  const loadReadingGoal = useCallback(
+    async (year = currentYear, force = false) => {
       if (!isAuthenticated || !hasToken()) {
-        setGoalDataByYear((current) => ({
-          ...current,
-          [year]: null,
-        }));
+        saveGoalData(year, null);
 
         setErrorByYear((current) => ({
           ...current,
@@ -71,49 +78,74 @@ const ReadingGoalProvider = ({ children }) => {
         return null;
       }
 
-      try {
-        setLoadingByYear((current) => ({
-          ...current,
-          [year]: true,
-        }));
-
-        setErrorByYear((current) => ({
-          ...current,
-          [year]: "",
-        }));
-
-        const data = await apiFetch(`/api/user-books/goals?year=${year}`);
-
-        const goalData = data?.goal ?? null;
-
-        setGoalDataByYear((current) => ({
-          ...current,
-          [year]: goalData,
-        }));
-
-        return goalData;
-      } catch (error) {
-        console.error("Load reading goal error:", error);
-
-        setGoalDataByYear((current) => ({
-          ...current,
-          [year]: null,
-        }));
-
-        setErrorByYear((current) => ({
-          ...current,
-          [year]: "Не вдалося завантажити мету",
-        }));
-
-        return null;
-      } finally {
-        setLoadingByYear((current) => ({
-          ...current,
-          [year]: false,
-        }));
+      if (
+        !force &&
+        Object.prototype.hasOwnProperty.call(goalCacheRef.current, year)
+      ) {
+        return goalCacheRef.current[year];
       }
+
+      const existingRequest = requestsInFlightRef.current.get(year);
+
+      if (existingRequest) {
+        return existingRequest;
+      }
+
+      const request = (async () => {
+        try {
+          setLoadingByYear((current) => ({
+            ...current,
+            [year]: true,
+          }));
+
+          setErrorByYear((current) => ({
+            ...current,
+            [year]: "",
+          }));
+
+          const data = await apiFetch(`/api/user-books/goals?year=${year}`);
+
+          const goalData = data?.goal ?? null;
+
+          saveGoalData(year, goalData);
+
+          return goalData;
+        } catch (error) {
+          console.error("Load reading goal error:", error);
+
+          saveGoalData(year, null);
+
+          setErrorByYear((current) => ({
+            ...current,
+            [year]: "Не вдалося завантажити мету",
+          }));
+
+          return null;
+        } finally {
+          setLoadingByYear((current) => ({
+            ...current,
+            [year]: false,
+          }));
+
+          requestsInFlightRef.current.delete(year);
+        }
+      })();
+
+      requestsInFlightRef.current.set(year, request);
+
+      return request;
     },
-    [currentYear, isAuthenticated],
+    [currentYear, isAuthenticated, saveGoalData],
+  );
+
+  const refreshReadingGoal = useCallback(
+    (year = currentYear) => loadReadingGoal(year, true),
+    [currentYear, loadReadingGoal],
+  );
+
+  const ensureReadingGoal = useCallback(
+    (year = currentYear) => loadReadingGoal(year, false),
+    [currentYear, loadReadingGoal],
   );
 
   /* =========================
@@ -126,6 +158,10 @@ const ReadingGoalProvider = ({ children }) => {
     }
 
     if (!isAuthenticated) {
+      goalCacheRef.current = {};
+
+      requestsInFlightRef.current.clear();
+
       setGoalDataByYear({});
       setLoadingByYear({});
       setErrorByYear({});
@@ -134,23 +170,8 @@ const ReadingGoalProvider = ({ children }) => {
       return;
     }
 
-    refreshReadingGoal(currentYear);
-  }, [currentYear, isAuthenticated, isAuthLoading, refreshReadingGoal]);
-
-  /* =========================
-     ENSURE GOAL
-  ========================= */
-
-  const ensureReadingGoal = useCallback(
-    async (year = currentYear) => {
-      if (Object.prototype.hasOwnProperty.call(goalDataByYear, year)) {
-        return goalDataByYear[year];
-      }
-
-      return refreshReadingGoal(year);
-    },
-    [currentYear, goalDataByYear, refreshReadingGoal],
-  );
+    ensureReadingGoal(currentYear);
+  }, [currentYear, isAuthenticated, isAuthLoading, ensureReadingGoal]);
 
   /* =========================
      SAVE GOAL
@@ -180,10 +201,7 @@ const ReadingGoalProvider = ({ children }) => {
 
         const goalData = data?.goal ?? null;
 
-        setGoalDataByYear((current) => ({
-          ...current,
-          [year]: goalData,
-        }));
+        saveGoalData(year, goalData);
 
         return true;
       } catch (error) {
@@ -198,7 +216,7 @@ const ReadingGoalProvider = ({ children }) => {
         setIsGoalSaving(false);
       }
     },
-    [currentYear, isAuthenticated],
+    [currentYear, isAuthenticated, saveGoalData],
   );
 
   /* =========================
@@ -210,7 +228,7 @@ const ReadingGoalProvider = ({ children }) => {
   }, []);
 
   /* =========================
-     CURRENT YEAR COMPATIBILITY
+     CURRENT YEAR
   ========================= */
 
   const currentGoalData = goalDataByYear[currentYear] ?? null;
@@ -250,29 +268,38 @@ const ReadingGoalProvider = ({ children }) => {
 
       getReadingGoal,
       getReadingGoalData,
+
       ensureReadingGoal,
       refreshReadingGoal,
       saveReadingGoal,
+
       clearGoalSaveError,
     }),
     [
       currentYear,
+
       readingGoal,
       readingGoalProgress,
       readingGoalPercent,
       currentGoalData,
+
       isGoalLoading,
       goalError,
+
       isGoalSaving,
       goalSaveError,
+
       goalDataByYear,
       loadingByYear,
       errorByYear,
+
       getReadingGoal,
       getReadingGoalData,
+
       ensureReadingGoal,
       refreshReadingGoal,
       saveReadingGoal,
+
       clearGoalSaveError,
     ],
   );

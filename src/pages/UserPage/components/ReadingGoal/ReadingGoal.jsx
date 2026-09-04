@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import useReadingGoal from "../../hooks/useReadingGoal.js";
+import { useReadingGoalContext } from "../../../../context/ReadingGoalContext.jsx";
 
 import ReadingGoalModal from "./ReadingGoalModal.jsx";
 
@@ -38,12 +38,12 @@ const EditIcon = () => (
 
 const ReadingGoal = () => {
   const { currentYear, readingGoal, isGoalLoading, goalError } =
-    useReadingGoal();
+      useReadingGoalContext();
 
   const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
 
   const goal = readingGoal;
-
+  
   const goalHours =
     goal?.minutes !== null && goal?.minutes !== undefined
       ? Math.round((goal.minutes / 60) * 10) / 10

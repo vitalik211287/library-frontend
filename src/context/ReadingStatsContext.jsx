@@ -4,6 +4,7 @@ import {
   useContext,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 
@@ -24,17 +25,27 @@ const ReadingStatsProvider = ({ children }) => {
 
   const [errorByYear, setErrorByYear] = useState({});
 
+  const statsCacheRef = useRef({});
+
+  const requestsInFlightRef = useRef(new Map());
+
+  const saveStats = useCallback((year, stats) => {
+    statsCacheRef.current[year] = stats;
+
+    setStatsByYear((current) => ({
+      ...current,
+      [year]: stats,
+    }));
+  }, []);
+
   /* =========================
      LOAD STATS
   ========================= */
 
-  const refreshReadingStats = useCallback(
-    async (year = currentYear) => {
+  const loadReadingStats = useCallback(
+    async (year = currentYear, force = false) => {
       if (!isAuthenticated || !hasToken()) {
-        setStatsByYear((current) => ({
-          ...current,
-          [year]: null,
-        }));
+        saveStats(year, null);
 
         setLoadingByYear((current) => ({
           ...current,
@@ -49,73 +60,84 @@ const ReadingStatsProvider = ({ children }) => {
         return null;
       }
 
-      try {
-        setLoadingByYear((current) => ({
-          ...current,
-          [year]: true,
-        }));
-
-        setErrorByYear((current) => ({
-          ...current,
-          [year]: "",
-        }));
-
-        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
-        const data = await apiFetch(
-          `/api/user-books/stats?year=${year}&timeZone=${encodeURIComponent(
-            timeZone,
-          )}`,
-        );
-
-        const stats = data?.stats ?? null;
-
-        setStatsByYear((current) => ({
-          ...current,
-          [year]: stats,
-        }));
-
-        return stats;
-      } catch (error) {
-        console.error("Load reading stats error:", error);
-
-        setStatsByYear((current) => ({
-          ...current,
-          [year]: null,
-        }));
-
-        setErrorByYear((current) => ({
-          ...current,
-          [year]:
-            error instanceof Error
-              ? error.message
-              : "Не вдалося завантажити статистику",
-        }));
-
-        return null;
-      } finally {
-        setLoadingByYear((current) => ({
-          ...current,
-          [year]: false,
-        }));
+      if (
+        !force &&
+        Object.prototype.hasOwnProperty.call(statsCacheRef.current, year)
+      ) {
+        return statsCacheRef.current[year];
       }
+
+      const existingRequest = requestsInFlightRef.current.get(year);
+
+      if (existingRequest) {
+        return existingRequest;
+      }
+
+      const request = (async () => {
+        try {
+          setLoadingByYear((current) => ({
+            ...current,
+            [year]: true,
+          }));
+
+          setErrorByYear((current) => ({
+            ...current,
+            [year]: "",
+          }));
+
+          const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+          const data = await apiFetch(
+            `/api/user-books/stats?year=${year}&timeZone=${encodeURIComponent(
+              timeZone,
+            )}`,
+          );
+
+          const stats = data?.stats ?? null;
+
+          saveStats(year, stats);
+
+          return stats;
+        } catch (error) {
+          console.error("Load reading stats error:", error);
+
+          saveStats(year, null);
+
+          setErrorByYear((current) => ({
+            ...current,
+
+            [year]:
+              error instanceof Error
+                ? error.message
+                : "Не вдалося завантажити статистику",
+          }));
+
+          return null;
+        } finally {
+          setLoadingByYear((current) => ({
+            ...current,
+            [year]: false,
+          }));
+
+          requestsInFlightRef.current.delete(year);
+        }
+      })();
+
+      requestsInFlightRef.current.set(year, request);
+
+      return request;
     },
-    [currentYear, isAuthenticated],
+    [currentYear, isAuthenticated, saveStats],
   );
 
-  /* =========================
-     ENSURE STATS
-  ========================= */
+  const refreshReadingStats = useCallback(
+    (year = currentYear) => loadReadingStats(year, true),
+    [currentYear, loadReadingStats],
+  );
 
   const ensureReadingStats = useCallback(
-    async (year = currentYear) => {
-      if (Object.prototype.hasOwnProperty.call(statsByYear, year)) {
-        return statsByYear[year];
-      }
-
-      return refreshReadingStats(year);
-    },
-    [currentYear, statsByYear, refreshReadingStats],
+    (year = currentYear) => loadReadingStats(year, false),
+    [currentYear, loadReadingStats],
   );
 
   /* =========================
@@ -128,6 +150,10 @@ const ReadingStatsProvider = ({ children }) => {
     }
 
     if (!isAuthenticated) {
+      statsCacheRef.current = {};
+
+      requestsInFlightRef.current.clear();
+
       setStatsByYear({});
       setLoadingByYear({});
       setErrorByYear({});
@@ -135,8 +161,8 @@ const ReadingStatsProvider = ({ children }) => {
       return;
     }
 
-    refreshReadingStats(currentYear);
-  }, [currentYear, isAuthenticated, isAuthLoading, refreshReadingStats]);
+    ensureReadingStats(currentYear);
+  }, [currentYear, isAuthenticated, isAuthLoading, ensureReadingStats]);
 
   /* =========================
      HELPERS
@@ -144,9 +170,9 @@ const ReadingStatsProvider = ({ children }) => {
 
   const getReadingStats = useCallback(
     (year = currentYear) => {
-      return statsByYear[year] ?? null;
+      return statsCacheRef.current[year] ?? null;
     },
-    [currentYear, statsByYear],
+    [currentYear],
   );
 
   const stats = statsByYear[currentYear] ?? null;
@@ -177,12 +203,15 @@ const ReadingStatsProvider = ({ children }) => {
     }),
     [
       currentYear,
+
       stats,
       isStatsLoading,
       statsError,
+
       statsByYear,
       loadingByYear,
       errorByYear,
+
       getReadingStats,
       ensureReadingStats,
       refreshReadingStats,

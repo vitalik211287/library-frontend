@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 import Modal from "../../../../components/Modal/Modal.jsx";
-import useReadingGoal from "../../hooks/useReadingGoal.js";
+import { useReadingGoalContext } from "../../../../context/ReadingGoalContext.jsx";
 
 import "./ReadingGoal.css";
 
@@ -40,7 +40,7 @@ const ReadingGoalModal = ({ onClose, onSaved, initialGoal }) => {
     goalSaveError,
     saveReadingGoal,
     clearGoalSaveError,
-  } = useReadingGoal();
+  } = useReadingGoalContext();
 
   const goal = initialGoal ?? readingGoal ?? null;
 

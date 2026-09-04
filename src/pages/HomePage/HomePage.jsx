@@ -9,8 +9,8 @@ import { useReadingStatsContext } from "../../context/ReadingStatsContext.jsx";
 import { useReadingActivityContext } from "../../context/ReadingActivityContext.jsx";
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useLibrary } from "../../context/LibraryContext.jsx";
+import { useUserBooks } from "../../context/UserBooksContext.jsx";
 import { useAchievementsContext } from "../../context/AchievementsContext.jsx";
-import { apiFetch } from "../../utils/apiClient.js";
 import Modal from "../../components/Modal/Modal.jsx";
 import { useReadingGoalContext } from "../../context/ReadingGoalContext.jsx";
 import ReadingGoalModal from "../UserPage/components/ReadingGoal/ReadingGoalModal.jsx";
@@ -216,6 +216,9 @@ const HomePage = () => {
 
   const { readingGoal, isGoalLoading } = useReadingGoalContext();
 
+  const { currentBooks, isCurrentBooksLoading, currentBooksError } =
+    useUserBooks();
+
   const [isLibraryMenuOpen, setIsLibraryMenuOpen] = useState(false);
 
   const [modalType, setModalType] = useState(null);
@@ -226,57 +229,11 @@ const HomePage = () => {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const [currentBooks, setCurrentBooks] = useState([]);
-
-  const [isLoading, setIsLoading] = useState(true);
-
-  const [error, setError] = useState("");
-
   const [isReadingGoalModalOpen, setIsReadingGoalModalOpen] = useState(false);
 
   const now = useMemo(() => new Date(), []);
 
   const currentMonth = now.getMonth() + 1;
-
-  /* =========================
-     HOME DATA
-  ========================= */
-
-  useEffect(() => {
-    const loadHomeData = async () => {
-      if (!activeLibraryId) {
-        setCurrentBooks([]);
-        setIsLoading(false);
-
-        return;
-      }
-
-      try {
-        setIsLoading(true);
-        setError("");
-
-        const libraryBooksResponse = await apiFetch(
-          `/api/libraries/${activeLibraryId}/books`,
-        );
-
-        const libraryBooks = Array.isArray(libraryBooksResponse)
-          ? libraryBooksResponse
-          : [];
-
-        setCurrentBooks(
-          libraryBooks.filter((book) => book.status === "READING"),
-        );
-      } catch (loadError) {
-        console.error("Load home page error:", loadError);
-
-        setError("Не вдалося завантажити дані головної сторінки");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    loadHomeData();
-  }, [activeLibraryId]);
 
   /* =========================
      ACTIVITY
@@ -589,7 +546,12 @@ const HomePage = () => {
      STATES
   ========================= */
 
-  if (isLoading || isGoalLoading || isStatsLoading || isAchievementsLoading) {
+  if (
+    isCurrentBooksLoading ||
+    isGoalLoading ||
+    isStatsLoading ||
+    isAchievementsLoading
+  ) {
     return (
       <main className="home-page">
         <div className="home-section">Завантаження...</div>
@@ -597,10 +559,10 @@ const HomePage = () => {
     );
   }
 
-  if (error) {
+  if (currentBooksError) {
     return (
       <main className="home-page">
-        <div className="home-section">{error}</div>
+        <div className="home-section">{currentBooksError}</div>
       </main>
     );
   }
