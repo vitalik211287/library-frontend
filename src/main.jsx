@@ -9,6 +9,8 @@ import App from "./App.jsx";
 import { AuthProvider } from "./context/AuthContext.jsx";
 import { LibraryProvider } from "./context/LibraryContext.jsx";
 import { LibraryBooksProvider } from "./context/LibraryBooksContext.jsx";
+import { UserBooksProvider } from "./context/UserBooksContext.jsx";
+
 import { ThemeProvider } from "./context/ThemeContext.jsx";
 import { ReadingGoalProvider } from "./context/ReadingGoalContext.jsx";
 import { ReadingStatsProvider } from "./context/ReadingStatsContext.jsx";
@@ -26,7 +28,9 @@ createRoot(document.getElementById("root")).render(
                 <AchievementsProvider>
                   <LibraryProvider>
                     <LibraryBooksProvider>
-                      <App />
+                      <UserBooksProvider>
+                        <App />
+                      </UserBooksProvider>
                     </LibraryBooksProvider>
                   </LibraryProvider>
                 </AchievementsProvider>

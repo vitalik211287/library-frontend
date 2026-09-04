@@ -1,4 +1,4 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import "./UserPage.css";
 
@@ -11,40 +11,27 @@ import WishlistSection from "./components/WishlistSection/WishlistSection.jsx";
 import FinishedSection from "./components/FinishedSection/FinishedSection.jsx";
 import ReadingActivity from "./components/ReadingActivity/ReadingActivity.jsx";
 
-import useCurrentBooks from "./hooks/useCurrentBooks.js";
-import useWishlist from "./hooks/useWishlist.js";
-import useFinishedBooks from "./hooks/useFinishedBooks.js";
+import { useUserBooks } from "../../context/UserBooksContext.jsx";
 
 const UserPage = () => {
   const navigate = useNavigate();
 
-  const [searchParams] = useSearchParams();
-
-  const readingBookId = searchParams.get("reading");
-
   const {
     currentBooks,
-    isLoading: isCurrentBooksLoading,
-    error: currentBooksError,
-  } = useCurrentBooks({
-    readingBookId,
-  });
+    wishlistBooks,
+    finishedBooks,
+    finishedTotal,
 
-  const {
-    books: wishlistBooks,
-    isLoading: isWishlistLoading,
-    error: wishlistError,
+    isCurrentBooksLoading,
+    isWishlistLoading,
+    isFinishedBooksLoading,
+
+    currentBooksError,
+    wishlistError,
+    finishedBooksError,
+
     removeFromWishlist,
-  } = useWishlist();
-
-  const {
-    books: finishedBooks,
-    total: finishedCount,
-    isLoading: isFinishedLoading,
-    error: finishedError,
-  } = useFinishedBooks({
-    readingBookId,
-  });
+  } = useUserBooks();
 
   return (
     <main className="user-page">
@@ -52,7 +39,7 @@ const UserPage = () => {
         <ProfileHero />
 
         <ProfileStats
-          finishedCount={finishedCount}
+          finishedCount={finishedTotal}
           wishlistCount={wishlistBooks.length}
           currentBooksCount={currentBooks.length}
         />
@@ -76,8 +63,8 @@ const UserPage = () => {
 
         <FinishedSection
           books={finishedBooks}
-          isLoading={isFinishedLoading}
-          error={finishedError}
+          isLoading={isFinishedBooksLoading}
+          error={finishedBooksError}
         />
 
         <section className="profile-section profile-section--activity">

@@ -1,10 +1,10 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import BookCard from "../CatalogPage/components/BookCard/BookCard.jsx";
+
 import { useAuth } from "../../context/AuthContext.jsx";
 import { useLibrary } from "../../context/LibraryContext.jsx";
-
-import useWishlist from "../UserPage/hooks/useWishlist.js";
+import { useUserBooks } from "../../context/UserBooksContext.jsx";
 
 import "./WishlistPage.css";
 
@@ -13,16 +13,19 @@ const WishlistPage = () => {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const { user, isLoading: isAuthLoading } = useAuth();
+  const { user, isAuthLoading } = useAuth();
 
   const { activeLibrary } = useLibrary();
 
-  const { books, isLoading, error, removeFromWishlist } = useWishlist();
+  const {
+    wishlistBooks,
+    isWishlistLoading,
+    wishlistError,
+    wishlistLoadingId,
+    removeFromWishlist,
+  } = useUserBooks();
 
   const isAuthenticated = Boolean(user);
-
-  const canEdit =
-    activeLibrary?.role === "OWNER" || activeLibrary?.role === "ADMIN";
 
   const handleBack = () => {
     navigate("/account");
@@ -75,27 +78,27 @@ const WishlistPage = () => {
         <div>
           <h1>Хочу прочитати</h1>
 
-          <p className="books-count">{books.length} книг</p>
+          <p className="books-count">{wishlistBooks.length} книг</p>
         </div>
       </div>
 
-      {isLoading ? (
+      {isWishlistLoading ? (
         <div className="catalog-message">Завантаження...</div>
-      ) : error ? (
-        <div className="catalog-message">{error}</div>
-      ) : books.length === 0 ? (
+      ) : wishlistError ? (
+        <div className="catalog-message">{wishlistError}</div>
+      ) : wishlistBooks.length === 0 ? (
         <div className="catalog-message">
           Список «Хочу прочитати» поки порожній
         </div>
       ) : (
         <div className="books-grid">
-          {books.map((book) => (
+          {wishlistBooks.map((book) => (
             <BookCard
               key={book.id}
               book={book}
               isAuthenticated={isAuthenticated}
               isAuthLoading={isAuthLoading}
-              wishlistLoadingId={null}
+              wishlistLoadingId={wishlistLoadingId}
               canEdit={false}
               onWishlistToggle={handleWishlistToggle}
               onEdit={handleEdit}

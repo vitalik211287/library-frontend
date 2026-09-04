@@ -3,8 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import BookCard from "../CatalogPage/components/BookCard/BookCard.jsx";
 
 import { useAuth } from "../../context/AuthContext.jsx";
-
-import useFinishedBooks from "../UserPage/hooks/useFinishedBooks.js";
+import { useUserBooks } from "../../context/UserBooksContext.jsx";
 
 import "./FinishedBooksPage.css";
 
@@ -13,9 +12,14 @@ const FinishedBooksPage = () => {
 
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const { user, isLoading: isAuthLoading } = useAuth();
+  const { user, isAuthLoading } = useAuth();
 
-  const { books, isLoading, error } = useFinishedBooks();
+  const {
+    finishedBooks,
+    finishedTotal,
+    isFinishedBooksLoading,
+    finishedBooksError,
+  } = useUserBooks();
 
   const isAuthenticated = Boolean(user);
 
@@ -58,19 +62,19 @@ const FinishedBooksPage = () => {
 
           <h1>Прочитано</h1>
 
-          <p className="books-count">{books.length} книг</p>
+          <p className="books-count">{finishedTotal} книг</p>
         </div>
       </div>
 
-      {isLoading ? (
+      {isFinishedBooksLoading ? (
         <div className="catalog-message">Завантаження...</div>
-      ) : error ? (
-        <div className="catalog-message">{error}</div>
-      ) : books.length === 0 ? (
+      ) : finishedBooksError ? (
+        <div className="catalog-message">{finishedBooksError}</div>
+      ) : finishedBooks.length === 0 ? (
         <div className="catalog-message">Прочитаних книг поки немає</div>
       ) : (
         <div className="books-grid">
-          {books.map((book) => (
+          {finishedBooks.map((book) => (
             <BookCard
               key={book.id}
               book={book}
@@ -79,8 +83,6 @@ const FinishedBooksPage = () => {
               wishlistLoadingId={null}
               canEdit={false}
               showWishlist={false}
-              onWishlistToggle={() => {}}
-              onEdit={() => {}}
               onRead={handleRead}
             />
           ))}

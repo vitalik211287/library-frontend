@@ -44,9 +44,14 @@ import useRefreshReadingData from "./hooks/useRefreshReadingData.js";
 import { API_URL, apiFetch, hasToken } from "./utils/apiClient.js";
 
 import { useAuth } from "./context/AuthContext.jsx";
+
 import { useTheme } from "./context/ThemeContext.jsx";
+
 import { useLibrary } from "./context/LibraryContext.jsx";
+
 import { useLibraryBooks } from "./context/LibraryBooksContext.jsx";
+
+import { useUserBooks } from "./context/UserBooksContext.jsx";
 
 /* =========================
    PROTECTED ROUTE
@@ -94,6 +99,8 @@ const App = () => {
     updateBook,
   } = useLibraryBooks();
 
+  const { currentBooks, refreshCurrentBooks } = useUserBooks();
+
   const refreshReadingData = useRefreshReadingData();
 
   const location = useLocation();
@@ -108,8 +115,6 @@ const App = () => {
 
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  const [readingBookOrder, setReadingBookOrder] = useState(new Map());
-
   const isReadingBookPickerOpen = searchParams.get("readerPicker") === "1";
 
   const readingBookId = searchParams.get("reading");
@@ -123,17 +128,26 @@ const App = () => {
     location.pathname === "/login" ||
     location.pathname === "/register";
 
-  const readingBookPickerBooks = useMemo(
-    () =>
-      libraryBooks.map((book) => ({
-        ...book,
+  /*
+   * Порядок поточних книг
+   * більше не зберігається окремим state.
+   *
+   * Єдине джерело —
+   * UserBooksContext.currentBooks.
+   */
+  const readingBookPickerBooks = useMemo(() => {
+    const currentBookOrder = new Map(
+      currentBooks.map((book, index) => [book.id, index]),
+    );
 
-        readingOrder: readingBookOrder.has(book.id)
-          ? readingBookOrder.get(book.id)
-          : null,
-      })),
-    [libraryBooks, readingBookOrder],
-  );
+    return libraryBooks.map((book) => ({
+      ...book,
+
+      readingOrder: currentBookOrder.has(book.id)
+        ? currentBookOrder.get(book.id)
+        : null,
+    }));
+  }, [libraryBooks, currentBooks]);
 
   /* =========================
      MOBILE MENU
@@ -289,9 +303,13 @@ const App = () => {
     }
   };
 
+  /*
+   * Єдина точка синхронізації
+   * після reading mutation.
+   */
   const handleReadingDataChanged = async () => {
     try {
-      await Promise.all([refreshReadingData(), refreshBooks()]);
+      await refreshReadingData();
     } catch (error) {
       console.error("Refresh reading data error:", error);
     }
@@ -335,23 +353,22 @@ const App = () => {
     setSearchParams(params);
 
     try {
-      const query = `?libraryId=${encodeURIComponent(activeLibraryId)}`;
-
-      const currentResponse = await apiFetch(`/api/user-books/current${query}`);
-
-      const currentBooks = Array.isArray(currentResponse?.books)
-        ? currentResponse.books
-        : [];
-
-      const currentBookOrder = new Map(
-        currentBooks.map((book, index) => [book.id, index]),
-      );
-
-      setReadingBookOrder(currentBookOrder);
+      /*
+       * App більше НЕ робить
+       * власний GET:
+       *
+       * /api/user-books/current
+       *
+       * Поточні книги належать
+       * UserBooksContext.
+       */
+      const requests = [refreshCurrentBooks()];
 
       if (libraryBooks.length === 0) {
-        await refreshBooks();
+        requests.push(refreshBooks());
       }
+
+      await Promise.all(requests);
     } catch (error) {
       console.error("Load reader books error:", error);
 
