@@ -1,3 +1,5 @@
+import "../LibraryManagementForm.css";
+
 const LibraryRenameForm = ({
   libraryName,
   activeLibraryName,

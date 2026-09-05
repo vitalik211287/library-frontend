@@ -1,0 +1,31 @@
+.library-management-danger {
+  border-color: rgba(239, 68, 68, 0.4);
+}
+
+.library-management-danger h2 {
+  color: #ef4444;
+}
+
+.library-management-danger__button {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 18px;
+  border: 1px solid rgba(239, 68, 68, 0.55);
+  border-radius: 14px;
+  background: rgba(239, 68, 68, 0.08);
+  color: #ef4444;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.library-management-danger__button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+@media (min-width: 600px) {
+  .library-management-danger__button {
+    width: auto;
+  }
+}

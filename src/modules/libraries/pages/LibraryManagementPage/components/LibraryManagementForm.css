@@ -1,0 +1,48 @@
+.library-management-add {
+  display: grid;
+  gap: 10px;
+}
+
+.library-management-add input {
+  width: 100%;
+  min-height: 46px;
+  padding: 0 14px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  outline: none;
+  background: var(--surface-secondary);
+  color: var(--text);
+  font: inherit;
+  box-sizing: border-box;
+}
+
+.library-management-add input:focus {
+  border-color: var(--accent);
+}
+
+.library-management-add button {
+  min-height: 46px;
+  padding: 0 18px;
+  border: 0;
+  border-radius: 14px;
+  background: var(--accent);
+  color: #fff;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.library-management-add button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+@media (min-width: 600px) {
+  .library-management-add {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .library-management-add button {
+    min-width: 170px;
+  }
+}
