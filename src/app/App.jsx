@@ -1,4 +1,4 @@
-import {
+﻿import {
   Navigate,
   Route,
   Routes,
@@ -22,15 +22,15 @@ import UserPage from "../modules/users/pages/UserPage/UserPage.jsx";
 import SettingsPage from "../modules/users/pages/SettingsPage/SettingsPage.jsx";
 import StatsPage from "../modules/stats/pages/StatsPage/StatsPage.jsx";
 import AchievementsPage from "../modules/stats/pages/AchievementsPage/AchievementsPage.jsx";
-import HomePage from "../pages/HomePage/HomePage.jsx";
-import LandingPage from "../pages/LandingPage/LandingPage.jsx";
+import HomePage from "../modules/home/pages/HomePage/HomePage.jsx";
+import LandingPage from "../modules/landing/pages/LandingPage/LandingPage.jsx";
 import LibraryManagementPage from "../modules/libraries/pages/LibraryManagementPage/LibraryManagementPage.jsx";
 import WishlistPage from "../modules/user-books/pages/WishlistPage/WishlistPage.jsx";
 import FinishedBooksPage from "../modules/user-books/pages/FinishedBooksPage/FinishedBooksPage.jsx";
 
-import UserSearchPage from "../modules/users/pages/UserPage/components/Users/UserSearchPage/UserSearchPage.jsx";
-import FollowingPage from "../modules/users/pages/UserPage/components/Users/FollowingPage/FollowingPage.jsx";
-import FollowersPage from "../modules/users/pages/UserPage/components/Users/FollowersPage/FollowersPage.jsx";
+import UserSearchPage from "../modules/users/pages/UserSearchPage/UserSearchPage.jsx";
+import FollowingPage from "../modules/users/pages/FollowingPage/FollowingPage.jsx";
+import FollowersPage from "../modules/users/pages/FollowersPage/FollowersPage.jsx";
 
 import RightSidebar from "../shared/components/RightSidebar/RightSidebar.jsx";
 import ReadingModal from "../modules/reading/components/ReadingModal/ReadingModal.jsx";
@@ -653,12 +653,4 @@ const App = () => {
 };
 
 export default App;
-
-
-
-
-
-
-
-
 
