@@ -52,3 +52,10 @@ export const CalendarIcon = () => (
     <path d="M8 3v4M16 3v4M4 9h16" />
   </svg>
 );
+
+export const ClockIcon = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="12" cy="12" r="8" />
+    <path d="M12 7v5l3 2" />
+  </svg>
+);

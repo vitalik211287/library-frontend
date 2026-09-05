@@ -1,33 +1,19 @@
-import {
-  BookIcon,
-  FlameIcon,
-  ShareIcon,
-} from "../HomeIcons.jsx";
+import { BookIcon, FlameIcon, ShareIcon } from "../HomeIcons.jsx";
 
-const ReadingStreak = ({
-  streak,
-  weeklyActivity,
-  onShare,
-}) => {
+const ReadingStreak = ({ streak, weeklyActivity, onShare }) => {
   return (
     <section className="streak-card">
       <div className="streak-card__top">
         <div>
-          <span className="home-section__kicker">
-            Активність
-          </span>
+          <span className="home-section__kicker">РђРєС‚РёРІРЅС–СЃС‚СЊ</span>
 
-          <h2>Твоя серія читання</h2>
+          <h2>РўРІРѕСЏ СЃРµСЂС–СЏ С‡РёС‚Р°РЅРЅСЏ</h2>
         </div>
 
-        <button
-          type="button"
-          className="streak-card__share"
-          onClick={onShare}
-        >
+        <button type="button" className="streak-card__share" onClick={onShare}>
           <ShareIcon />
 
-          <span>Поділитися</span>
+          <span>РџРѕРґС–Р»РёС‚РёСЃСЏ</span>
         </button>
       </div>
 
@@ -39,9 +25,7 @@ const ReadingStreak = ({
 
           <strong>{streak}</strong>
 
-          <span>
-            {streak === 1 ? "день" : "днів"}
-          </span>
+          <span>{streak === 1 ? "РґРµРЅСЊ" : "РґРЅС–РІ"}</span>
         </div>
 
         <div className="streak-week">
@@ -51,33 +35,21 @@ const ReadingStreak = ({
               key={`${item.day}-${item.date}`}
               title={
                 item.active
-                  ? `${Math.round(
-                      item.activity.seconds / 60,
-                    )} хв читання`
-                  : "Без читання"
+                  ? `${Math.round(item.activity.seconds / 60)} С…РІ С‡РёС‚Р°РЅРЅСЏ`
+                  : "Р‘РµР· С‡РёС‚Р°РЅРЅСЏ"
               }
             >
-              <span className="streak-day__label">
-                {item.day}
-              </span>
+              <span className="streak-day__label">{item.day}</span>
 
               <div className="streak-day__marker-wrap">
-                {item.today && (
-                  <span className="streak-day__today-dot" />
-                )}
+                {item.today && <span className="streak-day__today-dot" />}
 
                 <div
                   className={`streak-day__marker ${
-                    item.active
-                      ? "streak-day__marker--active"
-                      : ""
+                    item.active ? "streak-day__marker--active" : ""
                   }`}
                 >
-                  {item.active ? (
-                    <BookIcon />
-                  ) : (
-                    <span>{item.date}</span>
-                  )}
+                  {item.active ? <BookIcon /> : <span>{item.date}</span>}
                 </div>
               </div>
             </div>

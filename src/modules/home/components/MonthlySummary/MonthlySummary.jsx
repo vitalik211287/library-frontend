@@ -27,9 +27,7 @@ const MonthlySummary = ({
     >
       <div className="home-panel__header">
         <div>
-          <span className="home-section__kicker">
-            Підсумок місяця
-          </span>
+          <span className="home-section__kicker">РџС–РґСЃСѓРјРѕРє РјС–СЃСЏС†СЏ</span>
 
           <h2>{monthName}</h2>
         </div>
@@ -41,22 +39,20 @@ const MonthlySummary = ({
 
       <div className="monthly-summary">
         <div className="monthly-summary__primary">
-          <span>Час читання</span>
+          <span>Р§Р°СЃ С‡РёС‚Р°РЅРЅСЏ</span>
 
-          <strong>
-            {formatReadingTime(monthSeconds)}
-          </strong>
+          <strong>{formatReadingTime(monthSeconds)}</strong>
         </div>
 
         <div className="monthly-summary__grid">
           <div>
-            <span>Сторінки</span>
+            <span>РЎС‚РѕСЂС–РЅРєРё</span>
 
             <strong>{monthPages}</strong>
           </div>
 
           <div>
-            <span>Завершено книг</span>
+            <span>Р—Р°РІРµСЂС€РµРЅРѕ РєРЅРёРі</span>
 
             <strong>{monthBooks}</strong>
           </div>

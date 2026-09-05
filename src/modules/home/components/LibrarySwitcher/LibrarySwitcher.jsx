@@ -20,7 +20,7 @@ const LibrarySwitcher = ({
       >
         <BookIcon />
 
-        <span>{activeLibrary?.name ?? "Бібліотека"}</span>
+        <span>{activeLibrary?.name ?? "Р‘С–Р±Р»С–РѕС‚РµРєР°"}</span>
 
         <ChevronIcon />
       </button>
@@ -49,7 +49,7 @@ const LibrarySwitcher = ({
             className="library-switcher__item"
             onClick={onCreate}
           >
-            + Створити бібліотеку
+            + РЎС‚РІРѕСЂРёС‚Рё Р±С–Р±Р»С–РѕС‚РµРєСѓ
           </button>
 
           <button
@@ -58,7 +58,7 @@ const LibrarySwitcher = ({
             disabled={!activeLibrary}
             onClick={onAddMember}
           >
-            ?? Додати учасника
+            Р”РѕРґР°С‚Рё СѓС‡Р°СЃРЅРёРєР°
           </button>
 
           <button
@@ -67,7 +67,7 @@ const LibrarySwitcher = ({
             disabled={!activeLibrary}
             onClick={onManage}
           >
-            ? Керування бібліотекою
+            РљРµСЂСѓРІР°РЅРЅСЏ Р±С–Р±Р»С–РѕС‚РµРєРѕСЋ
           </button>
         </div>
       )}

@@ -11,18 +11,12 @@ const CurrentReading = ({
     <section className="home-panel current-reading-section">
       <div className="home-panel__header">
         <div>
-          <span className="home-section__kicker">
-            У процесі
-          </span>
+          <span className="home-section__kicker">Р—Р°СЂР°Р· С‡РёС‚Р°СЋ</span>
 
-          <h2>Зараз читаю</h2>
+          <h2>РџРѕС‚РѕС‡РЅР° РєРЅРёРіР°</h2>
         </div>
 
-        {book && (
-          <span className="home-panel__badge">
-            {progress}%
-          </span>
-        )}
+        {book && <span className="home-panel__badge">{progress}%</span>}
       </div>
 
       {!book ? (
@@ -32,11 +26,9 @@ const CurrentReading = ({
           </div>
 
           <div>
-            <strong>Немає активної книги</strong>
+            <strong>РќРµРјР°С” Р°РєС‚РёРІРЅРѕС— РєРЅРёРіРё</strong>
 
-            <span>
-              Обери книгу в каталозі, щоб почати читання.
-            </span>
+            <span>РћР±РµСЂРё РєРЅРёРіСѓ Р· Р±С–Р±Р»С–РѕС‚РµРєРё, С‰РѕР± РїСЂРѕРґРѕРІР¶РёС‚Рё С‡РёС‚Р°РЅРЅСЏ.</span>
           </div>
         </div>
       ) : (
@@ -60,18 +52,14 @@ const CurrentReading = ({
               <div>
                 <h3>{book.title}</h3>
 
-                <p className="current-reading-card__author">
-                  {book.author}
-                </p>
+                <p className="current-reading-card__author">{book.author}</p>
               </div>
 
               <div className="current-reading-card__progress-info">
                 <span>
                   {currentPage}
 
-                  {totalPages
-                    ? ` / ${totalPages} стор.`
-                    : " стор."}
+                  {totalPages ? ` / ${totalPages} СЃС‚РѕСЂ.` : " СЃС‚РѕСЂ."}
                 </span>
 
                 <strong>{progress}%</strong>
@@ -93,8 +81,8 @@ const CurrentReading = ({
             className="home-primary-button"
             onClick={onContinue}
           >
-            <span aria-hidden="true">?</span>
-            Продовжити читання
+            <span aria-hidden="true">в–¶</span>
+            РџСЂРѕРґРѕРІР¶РёС‚Рё С‡РёС‚Р°РЅРЅСЏ
           </button>
         </article>
       )}

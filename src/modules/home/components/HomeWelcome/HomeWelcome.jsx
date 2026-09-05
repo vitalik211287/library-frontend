@@ -1,12 +1,7 @@
-﻿const HomeWelcome = ({
-  greeting,
-  firstName,
-}) => {
+﻿const HomeWelcome = ({ greeting, firstName }) => {
   return (
     <section className="home-welcome">
-      <span className="home-welcome__eyebrow">
-        Твій читацький простір
-      </span>
+      <span className="home-welcome__eyebrow">Твій читацький простір</span>
 
       <h1>
         {greeting}

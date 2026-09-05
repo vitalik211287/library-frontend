@@ -29,47 +29,41 @@ const AchievementCard = ({
 
         <div className="achievement-card__content">
           <span className="home-section__kicker">
-            {latestAchievement
-              ? "Досягнення"
-              : "Найближче досягнення"}
+            {latestAchievement ? "РћСЃС‚Р°РЅРЅС” РґРѕСЃСЏРіРЅРµРЅРЅСЏ" : "РќР°Р№Р±Р»РёР¶С‡Рµ РґРѕСЃСЏРіРЅРµРЅРЅСЏ"}
           </span>
 
           <h2>
             {featuredAchievement
               ? featuredAchievement.title
-              : "Поки немає досягнень"}
+              : "Р©Рµ РѕРґРёРЅ РєСЂРѕРє РїРѕРїРµСЂРµРґСѓ"}
           </h2>
 
           <p>
             {featuredAchievement
               ? featuredAchievement.description
-              : "Продовжуй читати — перше досягнення вже близько."}
+              : "РџСЂРѕРґРѕРІР¶СѓР№ С‡РёС‚Р°С‚Рё, С‰РѕР± РѕС‚СЂРёРјСѓРІР°С‚Рё РЅРѕРІС– РґРѕСЃСЏРіРЅРµРЅРЅСЏ."}
           </p>
 
-          {featuredAchievement &&
-            !featuredAchievement.unlocked && (
-              <div className="achievement-card__progress">
-                <div className="achievement-card__progress-info">
-                  <span>
-                    {featuredAchievement.current} /{" "}
-                    {featuredAchievement.target}
-                  </span>
+          {featuredAchievement && !featuredAchievement.unlocked && (
+            <div className="achievement-card__progress">
+              <div className="achievement-card__progress-info">
+                <span>
+                  {featuredAchievement.current} / {featuredAchievement.target}
+                </span>
 
-                  <strong>
-                    {featuredAchievement.percent}%
-                  </strong>
-                </div>
-
-                <div className="home-progress">
-                  <div
-                    className="home-progress__bar"
-                    style={{
-                      width: `${featuredAchievement.percent}%`,
-                    }}
-                  />
-                </div>
+                <strong>{featuredAchievement.percent}%</strong>
               </div>
-            )}
+
+              <div className="home-progress">
+                <div
+                  className="home-progress__bar"
+                  style={{
+                    width: `${featuredAchievement.percent}%`,
+                  }}
+                />
+              </div>
+            </div>
+          )}
         </div>
       </div>
     </section>

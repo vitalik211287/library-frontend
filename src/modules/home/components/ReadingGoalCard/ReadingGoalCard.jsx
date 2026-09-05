@@ -25,16 +25,12 @@ const ReadingGoalCard = ({
     >
       <div className="home-panel__header">
         <div>
-          <span className="home-section__kicker">
-            Прогрес
-          </span>
+          <span className="home-section__kicker">РџСЂРѕРіСЂРµСЃ</span>
 
-          <h2>Ціль читання</h2>
+          <h2>Р¦С–Р»СЊ С‡РёС‚Р°РЅРЅСЏ</h2>
         </div>
 
-        <span className="reading-goal__percent">
-          {goalPercent}%
-        </span>
+        <span className="reading-goal__percent">{goalPercent}%</span>
       </div>
 
       {hasReadingGoal && goalProgress ? (
@@ -51,8 +47,7 @@ const ReadingGoalCard = ({
                 <strong>{goalProgress.current}</strong>
 
                 <span>
-                  / {goalProgress.goal}{" "}
-                  {goalProgress.unit}
+                  / {goalProgress.goal} {goalProgress.unit}
                 </span>
               </div>
             </div>
@@ -74,11 +69,9 @@ const ReadingGoalCard = ({
           </div>
 
           <div>
-            <strong>Мету ще не встановлено</strong>
+            <strong>РњРµС‚Сѓ С‰Рµ РЅРµ РІСЃС‚Р°РЅРѕРІР»РµРЅРѕ</strong>
 
-            <span>
-              Встанови річну ціль, щоб бачити прогрес.
-            </span>
+            <span>Р’СЃС‚Р°РЅРѕРІРё СЂС–С‡РЅСѓ С†С–Р»СЊ, С‰РѕР± Р±Р°С‡РёС‚Рё РїСЂРѕРіСЂРµСЃ.</span>
           </div>
         </div>
       )}
