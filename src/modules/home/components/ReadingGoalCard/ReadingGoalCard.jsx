@@ -1,3 +1,4 @@
+import "./ReadingGoalCard.css";
 import { TargetIcon } from "../HomeIcons.jsx";
 
 const ReadingGoalCard = ({

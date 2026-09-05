@@ -1,3 +1,4 @@
+import "./ReadingStreak.css";
 import { BookIcon, FlameIcon, ShareIcon } from "../HomeIcons.jsx";
 
 const ReadingStreak = ({ streak, weeklyActivity, onShare }) => {

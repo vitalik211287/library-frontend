@@ -1,0 +1,148 @@
+.achievement-card {
+  display: block;
+
+  min-height: 0;
+  height: auto;
+
+  padding: 14px;
+
+  background: var(--surface);
+}
+
+.achievement-card__inner {
+  display: grid;
+  grid-template-columns: 52px minmax(0, 1fr);
+  align-items: center;
+  gap: 14px;
+
+  width: 100%;
+  height: auto;
+  min-height: 0;
+
+  padding: 16px;
+
+  box-sizing: border-box;
+
+  border: 1px solid var(--border);
+  border-radius: 15px;
+
+  background: var(--bg);
+}
+
+.achievement-card__icon {
+  width: 52px;
+  height: 52px;
+
+  display: grid;
+  place-items: center;
+
+  border: 1px solid color-mix(in srgb, var(--accent) 56%, var(--border));
+  border-radius: 15px;
+
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+  color: var(--accent);
+}
+
+.achievement-card__icon svg {
+  width: 27px;
+  height: 27px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.achievement-card__content {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.achievement-card__content .home-section__kicker {
+  margin-bottom: 2px;
+}
+
+.achievement-card h2 {
+  margin: 0;
+
+  color: var(--text);
+
+  font-size: 16px;
+  line-height: 1.25;
+  font-weight: 850;
+}
+
+.achievement-card p {
+  margin: 0;
+
+  color: var(--text-secondary, #a7a7b5);
+
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.achievement-card__progress {
+  margin-top: 8px;
+}
+
+.achievement-card__progress-info {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+
+  margin-bottom: 7px;
+
+  color: var(--text-secondary, #a7a7b5);
+
+  font-size: 10px;
+}
+
+.achievement-card__progress-info strong {
+  color: var(--accent);
+
+  font-size: 11px;
+  font-weight: 850;
+}
+
+.achievement-card .home-progress {
+  height: 6px;
+}
+
+@media (max-width: 430px) {
+  .achievement-card__inner {
+    grid-template-columns: 46px minmax(0, 1fr);
+    gap: 11px;
+
+    padding: 14px;
+  }
+
+  .achievement-card__icon {
+    width: 46px;
+    height: 46px;
+
+    border-radius: 13px;
+  }
+
+  .achievement-card__icon svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+@media (max-width: 430px) {
+  .achievement-card {
+    padding: 14px;
+  }
+
+  .achievement-card h2 {
+    font-size: 15px;
+  }
+
+  .achievement-card p {
+    font-size: 10.5px;
+  }
+}

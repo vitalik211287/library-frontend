@@ -1,4 +1,5 @@
 import { BookIcon } from "../HomeIcons.jsx";
+import "./CurrentReading.css";
 
 const CurrentReading = ({
   book,

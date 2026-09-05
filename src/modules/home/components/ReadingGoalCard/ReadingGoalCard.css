@@ -1,0 +1,120 @@
+.reading-goal {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.reading-goal__hero {
+  min-height: 92px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: 14px;
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: var(--bg);
+}
+
+.reading-goal__icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 44px;
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, var(--border));
+  border-radius: 13px;
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+  color: var(--accent);
+}
+
+.reading-goal__icon svg {
+  width: 25px;
+  height: 25px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.reading-goal__hero > div:last-child > span {
+  color: var(--text-secondary, #a7a7b5);
+  font-size: 11px;
+}
+
+.reading-goal__numbers {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  margin-top: 5px;
+}
+
+.reading-goal__numbers strong {
+  color: var(--accent);
+  font-size: 23px;
+  font-weight: 900;
+}
+
+.reading-goal__numbers span {
+  color: var(--text-secondary, #a7a7b5);
+  font-size: 11px;
+}
+
+@media (max-width: 430px) {
+  .reading-goal__percent {
+    min-width: 40px;
+    min-height: 30px;
+    padding: 0 8px;
+    font-size: 12px;
+  }
+}
+@media (max-width: 430px) {
+  .reading-goal__badges {
+    max-width: 132px;
+    gap: 6px;
+  }
+
+  .reading-goal__type {
+    min-height: 30px;
+    padding: 0 8px;
+    font-size: 10px;
+  }
+}
+.reading-goal__percent,
+.reading-goal__type {
+  min-width: 44px;
+  min-height: 34px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 10px;
+
+  border: 1px solid color-mix(in srgb, var(--accent) 50%, var(--border));
+  border-radius: 10px;
+
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface));
+  color: var(--accent);
+
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.reading-goal__badges {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.reading-goal__type {
+  min-width: auto;
+  padding: 0 9px;
+
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}

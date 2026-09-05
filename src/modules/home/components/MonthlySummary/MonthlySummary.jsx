@@ -1,3 +1,4 @@
+import "./MonthlySummary.css";
 import { CalendarIcon } from "../HomeIcons.jsx";
 
 const MonthlySummary = ({

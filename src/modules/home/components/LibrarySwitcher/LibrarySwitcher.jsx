@@ -1,3 +1,4 @@
+import "./LibrarySwitcher.css";
 import { BookIcon, ChevronIcon } from "../HomeIcons.jsx";
 
 const LibrarySwitcher = ({

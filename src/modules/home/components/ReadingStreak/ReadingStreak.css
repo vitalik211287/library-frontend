@@ -1,0 +1,257 @@
+.streak-card {
+  padding: 18px 14px 14px;
+  background: linear-gradient(
+    180deg,
+    color-mix(in srgb, var(--accent) 5%, var(--surface)),
+    var(--surface) 35%
+  );
+}
+
+.streak-card__share {
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 11px;
+  border: 1px solid color-mix(in srgb, var(--accent) 38%, var(--border));
+  border-radius: 11px;
+  background: color-mix(in srgb, var(--accent) 7%, transparent);
+  color: var(--text);
+  font: inherit;
+  font-size: 11px;
+  font-weight: 750;
+  cursor: pointer;
+}
+
+.streak-card__share svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.9;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.streak-card__content {
+  display: grid;
+  grid-template-columns: 64px minmax(0, 1fr);
+  gap: 12px;
+}
+
+.streak-card__counter {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-right: 12px;
+  border-right: 1px solid var(--border);
+}
+
+.streak-card__flame {
+  width: 38px;
+  height: 38px;
+  display: grid;
+  place-items: center;
+  margin-bottom: 3px;
+  color: var(--accent);
+  filter: drop-shadow(
+    0 0 7px color-mix(in srgb, var(--accent) 38%, transparent)
+  );
+}
+
+.streak-card__flame svg {
+  width: 36px;
+  height: 36px;
+}
+
+.streak-card__counter strong {
+  font-size: 31px;
+  line-height: 1;
+  font-weight: 900;
+}
+
+.streak-card__counter span {
+  margin-top: 6px;
+  color: var(--accent);
+  font-size: 9px;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.streak-week {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 3px;
+}
+
+.streak-day {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.streak-day__label {
+  margin-bottom: 9px;
+  color: var(--text-secondary, #a7a7b5);
+  font-size: 9px;
+  font-weight: 650;
+}
+
+.streak-day__marker-wrap {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.streak-day__today-dot {
+  position: absolute;
+  top: -6px;
+  right: -1px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 2px var(--surface);
+}
+
+.streak-day__marker {
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text);
+  font-size: 10px;
+  font-weight: 700;
+}
+
+.streak-day__marker--active {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 16%, var(--surface));
+  color: var(--accent);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--accent) 22%, transparent);
+}
+
+.streak-day__marker svg {
+  width: 17px;
+  height: 17px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.9;
+}
+
+.streak-card__pagination {
+  display: flex;
+  justify-content: center;
+  gap: 7px;
+  margin-top: 18px;
+}
+
+.streak-card__page-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--border);
+}
+
+.streak-card__page-dot--active {
+  background: var(--accent);
+}
+
+@media (max-width: 370px) {
+  .streak-card {
+    padding: 16px 10px 13px;
+  }
+
+  .streak-card__content {
+    grid-template-columns: 52px minmax(0, 1fr);
+    gap: 8px;
+  }
+
+  .streak-card__counter {
+    padding-right: 8px;
+  }
+
+  .streak-week {
+    gap: 1px;
+  }
+
+  .streak-day__label {
+    margin-bottom: 7px;
+    font-size: 8px;
+  }
+
+  .streak-day__marker {
+    width: 25px;
+    height: 25px;
+    font-size: 9px;
+  }
+
+  .streak-day__marker svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .streak-day__today-dot {
+    top: -5px;
+    right: -1px;
+    width: 5px;
+    height: 5px;
+  }
+}
+/* Shared panel styles previously inherited from HomePage.css */
+
+.streak-card {
+  margin-bottom: 16px;
+  border: 1px solid var(--border);
+  border-radius: 22px;
+  background: var(--surface);
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.018),
+    0 10px 28px rgba(0, 0, 0, 0.13);
+}
+
+.streak-card__top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+
+  margin-bottom: 18px;
+}
+
+.streak-card__top h2 {
+  margin: 0;
+
+  font-size: 18px;
+  line-height: 1.2;
+  font-weight: 850;
+}
+
+@media (min-width: 600px) {
+  .streak-card {
+    padding: 22px;
+  }
+
+  .streak-card__content {
+    grid-template-columns: 92px minmax(0, 1fr);
+    gap: 18px;
+  }
+
+  .streak-card__counter strong {
+    font-size: 39px;
+  }
+
+  .streak-day__marker {
+    width: 39px;
+    height: 39px;
+
+    font-size: 12px;
+  }
+}

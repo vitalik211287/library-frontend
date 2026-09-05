@@ -1,0 +1,79 @@
+.monthly-summary {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.monthly-summary__primary {
+  min-height: 94px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 15px;
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: var(--bg);
+}
+
+.monthly-summary__primary span,
+.monthly-summary__grid span {
+  color: var(--text-secondary, #a7a7b5);
+  font-size: 10px;
+}
+
+.monthly-summary__primary strong {
+  margin-top: 6px;
+  color: var(--accent);
+  font-size: 25px;
+  font-weight: 900;
+}
+
+.monthly-summary__grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.monthly-summary__grid > div {
+  min-height: 86px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 14px;
+  box-sizing: border-box;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: var(--bg);
+}
+
+.monthly-summary__grid strong {
+  margin-top: 7px;
+  color: var(--text);
+  font-size: 22px;
+  font-weight: 900;
+}
+.month-panel__icon {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 44px;
+
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, var(--border));
+  border-radius: 13px;
+
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+  color: var(--accent);
+}
+
+.month-panel__icon svg {
+  width: 25px;
+  height: 25px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

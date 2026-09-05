@@ -1,0 +1,33 @@
+.home-welcome {
+  margin: 2px 0 24px;
+}
+
+.home-welcome__eyebrow {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--accent);
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.home-welcome h1 {
+  margin: 0;
+  font-size: 27px;
+  line-height: 1.15;
+  font-weight: 850;
+  letter-spacing: -0.025em;
+}
+
+.home-welcome p {
+  margin: 7px 0 0;
+  color: var(--text-secondary, #a7a7b5);
+  font-size: 14px;
+}
+
+@media (min-width: 600px) {
+  .home-welcome h1 {
+    font-size: 32px;
+  }
+}

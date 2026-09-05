@@ -1,3 +1,4 @@
+import "./AchievementCard.css";
 import { TrophyIcon } from "../HomeIcons.jsx";
 
 const AchievementCard = ({

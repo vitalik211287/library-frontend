@@ -1,4 +1,6 @@
-﻿const HomeWelcome = ({ greeting, firstName }) => {
+﻿import "./HomeWelcome.css";
+
+const HomeWelcome = ({ greeting, firstName }) => {
   return (
     <section className="home-welcome">
       <span className="home-welcome__eyebrow">Твій читацький простір</span>
