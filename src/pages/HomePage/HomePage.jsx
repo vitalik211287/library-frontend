@@ -5,15 +5,15 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import "./HomePage.css";
-import { useReadingStatsContext } from "../../context/ReadingStatsContext.jsx";
-import { useReadingActivityContext } from "../../context/ReadingActivityContext.jsx";
-import { useAuth } from "../../context/AuthContext.jsx";
-import { useLibrary } from "../../context/LibraryContext.jsx";
-import { useUserBooks } from "../../context/UserBooksContext.jsx";
-import { useAchievementsContext } from "../../context/AchievementsContext.jsx";
-import Modal from "../../components/Modal/Modal.jsx";
-import { useReadingGoalContext } from "../../context/ReadingGoalContext.jsx";
-import ReadingGoalModal from "../UserPage/components/ReadingGoal/ReadingGoalModal.jsx";
+import { useReadingStatsContext } from "../../modules/stats/context/ReadingStatsContext.jsx";
+import { useReadingActivityContext } from "../../modules/reading/context/ReadingActivityContext.jsx";
+import { useAuth } from "../../modules/auth/context/AuthContext.jsx";
+import { useLibrary } from "../../modules/libraries/context/LibraryContext.jsx";
+import { useUserBooks } from "../../modules/user-books/context/UserBooksContext.jsx";
+import { useAchievementsContext } from "../../modules/stats/context/AchievementsContext.jsx";
+import Modal from "../../shared/components/Modal/Modal.jsx";
+import { useReadingGoalContext } from "../../modules/stats/context/ReadingGoalContext.jsx";
+import ReadingGoalModal from "../../modules/users/pages/UserPage/components/ReadingGoal/ReadingGoalModal.jsx";
 /* =========================
    ICONS
 ========================= */
@@ -1170,3 +1170,10 @@ const HomePage = () => {
 };
 
 export default HomePage;
+
+
+
+
+
+
+

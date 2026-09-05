@@ -4,18 +4,18 @@ import { BrowserRouter } from "react-router-dom";
 
 import "./index.css";
 
-import App from "./App.jsx";
+import App from "./app/App.jsx";
 
-import { AuthProvider } from "./context/AuthContext.jsx";
-import { LibraryProvider } from "./context/LibraryContext.jsx";
-import { LibraryBooksProvider } from "./context/LibraryBooksContext.jsx";
-import { UserBooksProvider } from "./context/UserBooksContext.jsx";
+import { AuthProvider } from "./modules/auth/context/AuthContext.jsx";
+import { LibraryProvider } from "./modules/libraries/context/LibraryContext.jsx";
+import { LibraryBooksProvider } from "./modules/libraries/context/LibraryBooksContext.jsx";
+import { UserBooksProvider } from "./modules/user-books/context/UserBooksContext.jsx";
 
-import { ThemeProvider } from "./context/ThemeContext.jsx";
-import { ReadingGoalProvider } from "./context/ReadingGoalContext.jsx";
-import { ReadingStatsProvider } from "./context/ReadingStatsContext.jsx";
-import { ReadingActivityProvider } from "./context/ReadingActivityContext.jsx";
-import { AchievementsProvider } from "./context/AchievementsContext.jsx";
+import { ThemeProvider } from "./shared/context/ThemeContext.jsx";
+import { ReadingGoalProvider } from "./modules/stats/context/ReadingGoalContext.jsx";
+import { ReadingStatsProvider } from "./modules/stats/context/ReadingStatsContext.jsx";
+import { ReadingActivityProvider } from "./modules/reading/context/ReadingActivityContext.jsx";
+import { AchievementsProvider } from "./modules/stats/context/AchievementsContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -42,3 +42,11 @@ createRoot(document.getElementById("root")).render(
     </BrowserRouter>
   </StrictMode>,
 );
+
+
+
+
+
+
+
+
