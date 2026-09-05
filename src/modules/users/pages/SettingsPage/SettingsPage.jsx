@@ -485,15 +485,13 @@ const SettingsPage = () => {
       </section>
 
       {isNameOpen && (
-        <div
-          className="settings-page__modal-overlay"
-          onMouseDown={handleCloseName}
+        <Modal
+          isOpen={isNameOpen}
+          onClose={handleCloseName}
+          className="settings-page__modal"
+          showHeader={false}
         >
-          <form
-            className="settings-page__modal"
-            onSubmit={handleSaveName}
-            onMouseDown={(event) => event.stopPropagation()}
-          >
+          <form onSubmit={handleSaveName}>
             <h2>Змінити ім&apos;я</h2>
 
             <label className="settings-page__field">
@@ -527,19 +525,17 @@ const SettingsPage = () => {
               </button>
             </div>
           </form>
-        </div>
+        </Modal>
       )}
 
       {isPasswordOpen && (
-        <div
-          className="settings-page__modal-overlay"
-          onMouseDown={handleClosePassword}
+        <Modal
+          isOpen={isPasswordOpen}
+          onClose={handleClosePassword}
+          className="settings-page__modal"
+          showHeader={false}
         >
-          <form
-            className="settings-page__modal"
-            onSubmit={handleSavePassword}
-            onMouseDown={(event) => event.stopPropagation()}
-          >
+          <form onSubmit={handleSavePassword}>
             <h2>Змінити пароль</h2>
 
             <label className="settings-page__field">
@@ -594,7 +590,7 @@ const SettingsPage = () => {
               </button>
             </div>
           </form>
-        </div>
+        </Modal>
       )}
     </main>
   );

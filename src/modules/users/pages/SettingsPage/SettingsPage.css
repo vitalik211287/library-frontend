@@ -407,40 +407,8 @@ button.settings-page__row:disabled {
    MODAL
 ========================= */
 
-.settings-page__modal-overlay {
-  position: fixed;
-  inset: 0;
-
-  z-index: 2000;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 18px;
-
-  box-sizing: border-box;
-
-  background: rgba(0, 0, 0, 0.55);
-
-  backdrop-filter: blur(4px);
-}
-
 .settings-page__modal {
-  width: 100%;
   max-width: 440px;
-
-  padding: 22px;
-
-  box-sizing: border-box;
-
-  border: 1px solid var(--border);
-  border-radius: 18px;
-
-  background: var(--surface);
-  color: var(--text);
-
-  box-shadow: var(--shadow);
 }
 
 .settings-page__modal h2 {
@@ -568,10 +536,6 @@ button.settings-page__row:disabled {
   .settings-page__theme-option svg {
     width: 20px;
     height: 20px;
-  }
-
-  .settings-page__modal {
-    padding: 18px;
   }
 }
 
