@@ -1,4 +1,5 @@
 import "./MonthlySummary.css";
+import HomePanel from "../HomePanel/HomePanel.jsx";
 import { CalendarIcon } from "../HomeIcons.jsx";
 
 const MonthlySummary = ({
@@ -19,8 +20,9 @@ const MonthlySummary = ({
   };
 
   return (
-    <section
-      className="home-panel month-panel home-panel--clickable"
+    <HomePanel
+      className="month-panel"
+      clickable
       role="button"
       tabIndex={0}
       onClick={onOpen}
@@ -59,7 +61,7 @@ const MonthlySummary = ({
           </div>
         </div>
       </div>
-    </section>
+    </HomePanel>
   );
 };
 

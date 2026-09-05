@@ -1,0 +1,98 @@
+.home-panel {
+  margin-bottom: 16px;
+  padding: 18px;
+
+  border: 1px solid var(--border);
+  border-radius: 22px;
+
+  background: var(--surface);
+
+  box-shadow:
+    inset 0 0 0 1px rgba(255, 255, 255, 0.018),
+    0 10px 28px rgba(0, 0, 0, 0.13);
+}
+
+.home-panel__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  gap: 12px;
+
+  margin-bottom: 18px;
+}
+
+.home-panel__header h2 {
+  margin: 0;
+
+  font-size: 18px;
+  line-height: 1.2;
+  font-weight: 850;
+}
+
+.home-panel__badge {
+  min-width: 44px;
+  min-height: 34px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  padding: 0 10px;
+
+  border: 1px solid color-mix(
+    in srgb,
+    var(--accent) 50%,
+    var(--border)
+  );
+  border-radius: 10px;
+
+  background: color-mix(
+    in srgb,
+    var(--accent) 12%,
+    var(--surface)
+  );
+
+  color: var(--accent);
+
+  font-size: 13px;
+  font-weight: 850;
+}
+
+.home-panel--clickable {
+  cursor: pointer;
+
+  transition:
+    transform 160ms ease,
+    border-color 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.home-panel--clickable:hover {
+  border-color: color-mix(
+    in srgb,
+    var(--accent) 55%,
+    var(--border)
+  );
+}
+
+.home-panel--clickable:active {
+  transform: scale(0.99);
+}
+
+.home-panel--clickable:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+@media (min-width: 600px) {
+  .home-panel {
+    padding: 22px;
+  }
+}
+
+@media (max-width: 430px) {
+  .home-panel__header {
+    align-items: flex-start;
+  }
+}

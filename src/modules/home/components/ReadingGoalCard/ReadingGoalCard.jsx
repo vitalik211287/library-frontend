@@ -1,4 +1,5 @@
 import "./ReadingGoalCard.css";
+import HomePanel from "../HomePanel/HomePanel.jsx";
 import { TargetIcon } from "../HomeIcons.jsx";
 
 const ReadingGoalCard = ({
@@ -17,8 +18,8 @@ const ReadingGoalCard = ({
   };
 
   return (
-    <section
-      className="home-panel home-panel--clickable"
+    <HomePanel
+      clickable
       role="button"
       tabIndex={0}
       onClick={onOpen}
@@ -76,7 +77,7 @@ const ReadingGoalCard = ({
           </div>
         </div>
       )}
-    </section>
+    </HomePanel>
   );
 };
 

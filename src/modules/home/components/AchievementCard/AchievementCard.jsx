@@ -1,4 +1,5 @@
 import "./AchievementCard.css";
+import HomePanel from "../HomePanel/HomePanel.jsx";
 import { TrophyIcon } from "../HomeIcons.jsx";
 
 const AchievementCard = ({
@@ -16,19 +17,20 @@ const AchievementCard = ({
   };
 
   return (
-    <section
-      className="home-panel achievement-card home-panel--clickable"
+    <HomePanel
+      className="home-achievement-card"
+      clickable
       role="button"
       tabIndex={0}
       onClick={onOpen}
       onKeyDown={handleKeyDown}
     >
-      <div className="achievement-card__inner">
-        <div className="achievement-card__icon">
+      <div className="home-achievement-card__inner">
+        <div className="home-achievement-card__icon">
           <TrophyIcon />
         </div>
 
-        <div className="achievement-card__content">
+        <div className="home-achievement-card__content">
           <span className="home-section__kicker">
             {latestAchievement ? "Останнє досягнення" : "Найближче досягнення"}
           </span>
@@ -46,8 +48,8 @@ const AchievementCard = ({
           </p>
 
           {featuredAchievement && !featuredAchievement.unlocked && (
-            <div className="achievement-card__progress">
-              <div className="achievement-card__progress-info">
+            <div className="home-achievement-card__progress">
+              <div className="home-achievement-card__progress-info">
                 <span>
                   {featuredAchievement.current} / {featuredAchievement.target}
                 </span>
@@ -67,7 +69,7 @@ const AchievementCard = ({
           )}
         </div>
       </div>
-    </section>
+    </HomePanel>
   );
 };
 

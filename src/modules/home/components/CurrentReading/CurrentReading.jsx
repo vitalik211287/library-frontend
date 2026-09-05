@@ -1,5 +1,6 @@
 import { BookIcon } from "../HomeIcons.jsx";
 import "./CurrentReading.css";
+import HomePanel from "../HomePanel/HomePanel.jsx";
 
 const CurrentReading = ({
   book,
@@ -9,7 +10,7 @@ const CurrentReading = ({
   onContinue,
 }) => {
   return (
-    <section className="home-panel current-reading-section">
+    <HomePanel className="current-reading-section">
       <div className="home-panel__header">
         <div>
           <span className="home-section__kicker">Зараз читаю</span>
@@ -87,7 +88,7 @@ const CurrentReading = ({
           </button>
         </article>
       )}
-    </section>
+    </HomePanel>
   );
 };
 
