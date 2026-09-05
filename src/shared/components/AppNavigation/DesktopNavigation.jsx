@@ -1,3 +1,5 @@
+import "./AppNavigation.css";
+
 import { NavLink } from "react-router-dom";
 
 import { mainNavigationItems } from "./navigationItems.js";
