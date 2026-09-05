@@ -1,4 +1,4 @@
-/* =========================
+﻿/* =========================
    MOBILE HEADER
 ========================= */
 
@@ -817,5 +817,59 @@
 
     padding-right: 18px;
     padding-left: 18px;
+  }
+}
+
+/* =========================
+   MOBILE HEADER ACTIONS FIX
+========================= */
+
+.mobile-header__actions {
+  height: 58px;
+
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+
+  gap: 8px;
+
+  margin-left: auto;
+}
+
+.mobile-header__avatar {
+  width: 34px;
+  height: 34px;
+
+  flex: 0 0 34px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+
+  border-radius: 50%;
+
+  background: var(--accent-bg);
+  color: var(--accent);
+
+  font-size: 14px;
+  font-weight: 700;
+
+  text-decoration: none;
+}
+
+.mobile-header__avatar img {
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  object-fit: cover;
+}
+
+@media (min-width: 600px) and (max-width: 1099px) {
+  .mobile-header__actions {
+    height: 64px;
   }
 }

@@ -1,11 +1,4 @@
-import {
-  Navigate,
-  Route,
-  Routes,
-  useLocation,
-  useNavigate,
-  useSearchParams,
-} from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
 import { Toaster } from "react-hot-toast";
 
@@ -39,11 +32,9 @@ const App = () => {
 
   const location = useLocation();
 
-  const {
-    isMobileMenuOpen,
-    openMobileMenu,
-    closeMobileMenu,
-  } = useMobileMenu(location.pathname);
+  const { isMobileMenuOpen, openMobileMenu, closeMobileMenu } = useMobileMenu(
+    location.pathname,
+  );
   const {
     readingBook,
     isReadingBookLoading,
@@ -157,4 +148,3 @@ const App = () => {
 };
 
 export default App;
-
