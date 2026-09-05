@@ -11,40 +11,15 @@ import { useLibrary } from "../../context/LibraryContext.jsx";
 
 import { apiFetch } from "../../../../shared/api/apiClient.js";
 import ConfirmDeleteModal from "../../../../shared/components/ConfirmDeleteModal/ConfirmDeleteModal.jsx";
-
-const ROLE_OPTIONS = [
-  {
-    value: "OWNER",
-    label: "Власник",
-  },
-  {
-    value: "ADMIN",
-    label: "Адміністратор",
-  },
-  {
-    value: "MEMBER",
-    label: "Учасник",
-  },
-];
-
-const getRoleLabel = (role) =>
-  ROLE_OPTIONS.find((item) => item.value === role)?.label ?? role;
-
-const getInitials = (member) => {
-  const name = member?.user?.name?.trim();
-
-  if (name) {
-    return name
-      .split(/\s+/)
-      .slice(0, 2)
-      .map((part) => part[0]?.toUpperCase())
-      .join("");
-  }
-
-  const email = member?.user?.email?.trim();
-
-  return email?.[0]?.toUpperCase() ?? "?";
-};
+import {
+  ROLE_OPTIONS,
+  getInitials,
+  getRoleLabel,
+} from "./utils/libraryManagementHelpers.js";
+import LibraryMembersList from "./components/LibraryMembersList/LibraryMembersList.jsx";
+import LibraryRenameForm from "./components/LibraryRenameForm/LibraryRenameForm.jsx";
+import AddLibraryMemberForm from "./components/AddLibraryMemberForm/AddLibraryMemberForm.jsx";
+import LibraryDangerZone from "./components/LibraryDangerZone/LibraryDangerZone.jsx";
 
 const LibraryManagementPage = () => {
   const navigate = useNavigate();
@@ -354,177 +329,36 @@ const LibraryManagementPage = () => {
       </header>
 
       {canManage && (
-        <section className="library-management-card">
-          <div className="library-management-card__header">
-            <div>
-              <h2>Назва бібліотеки</h2>
-
-              <p>Змініть назву цього бібліотечного простору.</p>
-            </div>
-          </div>
-
-          <form
-            className="library-management-add"
-            onSubmit={handleRenameLibrary}
-          >
-            <input
-              type="text"
-              value={libraryName}
-              onChange={(event) => setLibraryName(event.target.value)}
-              placeholder="Назва бібліотеки"
-              disabled={isRenamingLibrary}
-              required
-            />
-
-            <button
-              type="submit"
-              disabled={
-                isRenamingLibrary ||
-                libraryName.trim() === activeLibrary?.name?.trim()
-              }
-            >
-              {isRenamingLibrary ? "Збереження..." : "Зберегти"}
-            </button>
-          </form>
-        </section>
+        <LibraryRenameForm
+          libraryName={libraryName}
+          activeLibraryName={activeLibrary?.name}
+          isRenamingLibrary={isRenamingLibrary}
+          onLibraryNameChange={setLibraryName}
+          onSubmit={handleRenameLibrary}
+        />
       )}
 
       {canManage && (
-        <section className="library-management-card">
-          <div className="library-management-card__header">
-            <div>
-              <h2>Додати учасника</h2>
-
-              <p>Користувач повинен уже мати акаунт у бібліотеці.</p>
-            </div>
-          </div>
-
-          <form className="library-management-add" onSubmit={handleAddMember}>
-            <input
-              type="email"
-              value={memberEmail}
-              onChange={(event) => setMemberEmail(event.target.value)}
-              placeholder="email@example.com"
-              autoComplete="email"
-              disabled={isAddingMember}
-              required
-            />
-
-            <button type="submit" disabled={isAddingMember}>
-              {isAddingMember ? "Додаємо..." : "Додати учасника"}
-            </button>
-          </form>
-        </section>
+        <AddLibraryMemberForm
+          memberEmail={memberEmail}
+          isAddingMember={isAddingMember}
+          onMemberEmailChange={setMemberEmail}
+          onSubmit={handleAddMember}
+        />
       )}
 
-      <section className="library-management-card">
-        <div className="library-management-card__header">
-          <div>
-            <h2>Учасники</h2>
-
-            <p>
-              {members.length} {members.length === 1 ? "учасник" : "учасники"}
-            </p>
-          </div>
-        </div>
-
-        {isLoading ? (
-          <p className="library-management-status">Завантаження...</p>
-        ) : members.length === 0 ? (
-          <p className="library-management-status">Учасників не знайдено.</p>
-        ) : (
-          <div className="library-members-list">
-            {members.map((member) => {
-              const isCurrentUser = String(member.userId) === String(user?.id);
-
-              const isUpdating = updatingMemberId === member.userId;
-
-              const isRemoving = removingMemberId === member.userId;
-
-              const adminCannotManageOwner =
-                currentMembership?.role === "ADMIN" && member.role === "OWNER";
-
-              const canEditThisMember = canManage && !adminCannotManageOwner;
-
-              return (
-                <article key={member.id} className="library-member">
-                  <div className="library-member__identity">
-                    <div className="library-member__avatar">
-                      {member.user?.avatarUrl ? (
-                        <img src={member.user.avatarUrl} alt="" />
-                      ) : (
-                        <span>{getInitials(member)}</span>
-                      )}
-                    </div>
-
-                    <div className="library-member__info">
-                      <div className="library-member__name-row">
-                        <strong>
-                          {member.user?.name ||
-                            member.user?.email ||
-                            "Користувач"}
-                        </strong>
-
-                        {isCurrentUser && (
-                          <span className="library-member__you">Ви</span>
-                        )}
-                      </div>
-
-                      {member.user?.name && member.user?.email && (
-                        <span className="library-member__email">
-                          {member.user.email}
-                        </span>
-                      )}
-
-                      <span className="library-member__role-mobile">
-                        {getRoleLabel(member.role)}
-                      </span>
-                    </div>
-                  </div>
-
-                  <div className="library-member__actions">
-                    {canEditThisMember ? (
-                      <select
-                        value={member.role}
-                        onChange={(event) =>
-                          handleRoleChange(member, event.target.value)
-                        }
-                        disabled={isUpdating || isRemoving}
-                      >
-                        {ROLE_OPTIONS.map((roleOption) => (
-                          <option
-                            key={roleOption.value}
-                            value={roleOption.value}
-                          >
-                            {roleOption.label}
-                          </option>
-                        ))}
-                      </select>
-                    ) : (
-                      <span className="library-member__role">
-                        {getRoleLabel(member.role)}
-                      </span>
-                    )}
-
-                    {canManage && !isCurrentUser && !adminCannotManageOwner && (
-                      <button
-                        type="button"
-                        className="library-member__remove"
-                        onClick={() => handleRemoveMemberRequest(member)}
-                        disabled={isUpdating || isRemoving}
-                      >
-                        {isRemoving ? "..." : "Видалити"}
-                      </button>
-                    )}
-                  </div>
-                </article>
-              );
-            })}
-          </div>
-        )}
-      </section>
-
-      {isOwner && (
+      <LibraryMembersList
+        members={members}
+        isLoading={isLoading}
+        userId={user?.id}
+        currentMembershipRole={currentMembership?.role}
+        canManage={canManage}
+        updatingMemberId={updatingMemberId}
+        removingMemberId={removingMemberId}
+        onRoleChange={handleRoleChange}
+        onRemoveMemberRequest={handleRemoveMemberRequest}
+      />
+{isOwner && (
         <section className="library-management-card library-management-danger">
           <div className="library-management-card__header">
             <div>
