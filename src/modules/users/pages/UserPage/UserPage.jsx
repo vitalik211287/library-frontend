@@ -1,4 +1,4 @@
-﻿import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import "./UserPage.css";
 
@@ -13,7 +13,7 @@ import ReadingActivity from "./components/ReadingActivity/ReadingActivity.jsx";
 
 import { useUserBooks } from "../../../user-books/context/UserBooksContext.jsx";
 
-const UserPage = () => {
+const UserPage = ({ onOpenReading }) => {
   const navigate = useNavigate();
 
   const {
@@ -52,6 +52,7 @@ const UserPage = () => {
           currentBooks={currentBooks}
           isLoading={isCurrentBooksLoading}
           error={currentBooksError}
+          onOpenReading={onOpenReading}
         />
 
         <WishlistSection
@@ -59,12 +60,14 @@ const UserPage = () => {
           isLoading={isWishlistLoading}
           error={wishlistError}
           removeFromWishlist={removeFromWishlist}
+          onOpenReading={onOpenReading}
         />
 
         <FinishedSection
           books={finishedBooks}
           isLoading={isFinishedBooksLoading}
           error={finishedBooksError}
+          onOpenReading={onOpenReading}
         />
 
         <section className="profile-section profile-section--activity">

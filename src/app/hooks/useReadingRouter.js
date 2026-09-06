@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
 import useRefreshReadingData from "../../modules/reading/hooks/useRefreshReadingData.js";
@@ -31,6 +31,7 @@ const useReadingRouter = ({ closeMobileMenu }) => {
   const refreshReadingData = useRefreshReadingData();
 
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -147,7 +148,38 @@ const useReadingRouter = ({ closeMobileMenu }) => {
     isAuthLoading,
   ]);
 
+  const handleOpenReadingBook = (bookId, libraryId = null) => {
+    if (!bookId) {
+      return;
+    }
+
+    const params =
+      new URLSearchParams(searchParams);
+
+    params.delete("readerPicker");
+    params.set("reading", bookId);
+
+    if (libraryId) {
+      params.set("readingLibrary", libraryId);
+    } else {
+      params.delete("readingLibrary");
+    }
+
+    setSearchParams(params, {
+      state: {
+        ...location.state,
+        readingOverlay: true,
+      },
+    });
+  };
+
   const handleCloseReading = () => {
+    if (location.state?.readingOverlay) {
+      navigate(-1);
+
+      return;
+    }
+
     const params =
       new URLSearchParams(searchParams);
 
@@ -226,7 +258,12 @@ const useReadingRouter = ({ closeMobileMenu }) => {
     params.delete("readingLibrary");
     params.set("readerPicker", "1");
 
-    setSearchParams(params);
+    setSearchParams(params, {
+      state: {
+        ...location.state,
+        readingOverlay: true,
+      },
+    });
 
     try {
       const requests = [
@@ -275,6 +312,7 @@ const useReadingRouter = ({ closeMobileMenu }) => {
 
     setSearchParams(params, {
       replace: true,
+      state: location.state,
     });
   };
 
@@ -289,6 +327,7 @@ const useReadingRouter = ({ closeMobileMenu }) => {
     readingBookPickerBooks,
     isBooksLoading,
     handleOpenReader,
+    handleOpenReadingBook,
     handleCloseReading,
     handleReadingBookUpdated,
     handleReadingDataChanged,

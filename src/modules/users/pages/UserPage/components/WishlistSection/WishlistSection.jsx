@@ -1,4 +1,4 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import "./WishlistSection.css";
 
@@ -19,10 +19,9 @@ const WishlistSection = ({
   isLoading = false,
   error = "",
   removeFromWishlist,
+  onOpenReading,
 }) => {
   const navigate = useNavigate();
-
-  const [searchParams, setSearchParams] = useSearchParams();
 
 
   const handleOpenAll = () => {
@@ -42,17 +41,10 @@ const WishlistSection = ({
       return;
     }
 
-    const params = new URLSearchParams(searchParams);
-
-    params.set("reading", book.id);
-
-    if (book.sourceLibrary?.id) {
-      params.set("readingLibrary", book.sourceLibrary.id);
-    } else {
-      params.delete("readingLibrary");
-    }
-
-    setSearchParams(params);
+    onOpenReading?.(
+      book.id,
+      book.sourceLibrary?.id ?? null,
+    );
   };
 
   const handleRemoveFromWishlist = async (event, bookId) => {

@@ -60,14 +60,14 @@ export const PublicRoutes = ({ isAuthenticated }) => {
   );
 };
 
-export const PrivateRoutes = () => {
+export const PrivateRoutes = ({ onOpenReading }) => {
   return (
     <Routes>
       <Route
         path="/home"
         element={
           <ProtectedRoute>
-            <HomePage />
+            <HomePage onOpenReading={onOpenReading} />
           </ProtectedRoute>
         }
       />
@@ -76,7 +76,7 @@ export const PrivateRoutes = () => {
         path="/catalog"
         element={
           <ProtectedRoute>
-            <CatalogPage />
+            <CatalogPage onOpenReading={onOpenReading} />
           </ProtectedRoute>
         }
       />
@@ -121,7 +121,7 @@ export const PrivateRoutes = () => {
         path="/account"
         element={
           <ProtectedRoute>
-            <UserPage />
+            <UserPage onOpenReading={onOpenReading} />
           </ProtectedRoute>
         }
       />
@@ -130,7 +130,7 @@ export const PrivateRoutes = () => {
         path="/wishlist"
         element={
           <ProtectedRoute>
-            <WishlistPage />
+            <WishlistPage onOpenReading={onOpenReading} />
           </ProtectedRoute>
         }
       />
@@ -139,7 +139,7 @@ export const PrivateRoutes = () => {
         path="/finished"
         element={
           <ProtectedRoute>
-            <FinishedBooksPage />
+            <FinishedBooksPage onOpenReading={onOpenReading} />
           </ProtectedRoute>
         }
       />

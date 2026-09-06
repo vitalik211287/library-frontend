@@ -42,6 +42,7 @@ const App = () => {
     readingBookPickerBooks,
     isBooksLoading,
     handleOpenReader,
+    handleOpenReadingBook,
     handleCloseReading,
     handleReadingBookUpdated,
     handleReadingDataChanged,
@@ -113,10 +114,12 @@ const App = () => {
           }`}
         >
           <div className="app-main-column">
-            <PrivateRoutes />
+            <PrivateRoutes onOpenReading={handleOpenReadingBook} />
           </div>
 
-          {showRightSidebar && <RightSidebar />}
+          {showRightSidebar && (
+            <RightSidebar onOpenReading={handleOpenReadingBook} />
+          )}
         </div>
       </div>
 

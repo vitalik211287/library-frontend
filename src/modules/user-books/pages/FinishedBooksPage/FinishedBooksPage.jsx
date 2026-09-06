@@ -1,4 +1,4 @@
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import BookCard from "../../../books/pages/CatalogPage/components/BookCard/BookCard.jsx";
 
@@ -7,10 +7,8 @@ import { useUserBooks } from "../../context/UserBooksContext.jsx";
 
 import "./FinishedBooksPage.css";
 
-const FinishedBooksPage = () => {
+const FinishedBooksPage = ({ onOpenReading }) => {
   const navigate = useNavigate();
-
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const { user, isAuthLoading } = useAuth();
 
@@ -32,17 +30,10 @@ const FinishedBooksPage = () => {
       return;
     }
 
-    const params = new URLSearchParams(searchParams);
-
-    params.set("reading", book.id);
-
-    if (book.sourceLibrary?.id) {
-      params.set("readingLibrary", book.sourceLibrary.id);
-    } else {
-      params.delete("readingLibrary");
-    }
-
-    setSearchParams(params);
+    onOpenReading?.(
+      book.id,
+      book.sourceLibrary?.id ?? null,
+    );
   };
 
   return (

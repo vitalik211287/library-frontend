@@ -17,7 +17,7 @@ import GenreShelves from "./components/GenreShelves/GenreShelves.jsx";
 
 import "./CatalogPage.css";
 
-const CatalogPage = () => {
+const CatalogPage = ({ onOpenReading }) => {
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState("all");
   const [editingBook, setEditingBook] = useState(null);
@@ -164,24 +164,19 @@ const CatalogPage = () => {
   };
 
   const handleOpenReading = (book) => {
-    if (isAuthLoading) {
+    if (isAuthLoading || !book?.id) {
       return;
     }
 
     if (!isAuthenticated) {
-      navigate("/login", {
-        state: {
-          from: `/catalog?reading=${book.id}`,
-        },
-      });
+      navigate("/login");
       return;
     }
 
-    const params = new URLSearchParams(searchParams);
-
-    params.set("reading", book.id);
-
-    setSearchParams(params);
+    onOpenReading?.(
+      book.id,
+      activeLibraryId,
+    );
   };
 
   const showShelves =

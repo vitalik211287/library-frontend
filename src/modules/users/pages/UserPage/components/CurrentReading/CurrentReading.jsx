@@ -1,7 +1,5 @@
 import { useState } from "react";
 
-import { useSearchParams } from "react-router-dom";
-
 import { getProgress } from "../../utils/readingHelpers.js";
 
 import "./CurrentReading.css";
@@ -18,9 +16,12 @@ const ChevronIcon = ({ isOpen }) => (
   </svg>
 );
 
-const CurrentReading = ({ currentBooks, isLoading, error }) => {
-  const [searchParams, setSearchParams] = useSearchParams();
-
+const CurrentReading = ({
+  currentBooks,
+  isLoading,
+  error,
+  onOpenReading,
+}) => {
   const [isCurrentBooksOpen, setIsCurrentBooksOpen] = useState(false);
 
   const handleOpenReading = (bookId) => {
@@ -28,11 +29,7 @@ const CurrentReading = ({ currentBooks, isLoading, error }) => {
       return;
     }
 
-    const params = new URLSearchParams(searchParams);
-
-    params.set("reading", bookId);
-
-    setSearchParams(params);
+    onOpenReading?.(bookId);
   };
 
   const mainCurrentBook = currentBooks[0] ?? null;

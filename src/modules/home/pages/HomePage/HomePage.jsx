@@ -1,6 +1,6 @@
 import { useMemo, useState } from "react";
 
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import "./HomePage.css";
 import { useReadingStatsContext } from "../../../stats/context/ReadingStatsContext.jsx";
@@ -35,12 +35,10 @@ import {
    HOME
 ========================= */
 
-const HomePage = () => {
+const HomePage = ({ onOpenReading }) => {
   const { user } = useAuth();
 
   const navigate = useNavigate();
-
-  const [searchParams, setSearchParams] = useSearchParams();
 
   const { latestAchievement, featuredAchievement, isAchievementsLoading } =
     useAchievementsContext();
@@ -116,13 +114,7 @@ const HomePage = () => {
       return;
     }
 
-    const params = new URLSearchParams(searchParams);
-
-    params.set("reading", book.id);
-
-    setSearchParams(params, {
-      replace: true,
-    });
+    onOpenReading?.(book.id);
   };
 
   const firstName = getFirstName(user?.name);
