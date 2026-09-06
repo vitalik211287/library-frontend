@@ -1,283 +1,66 @@
-import { useEffect, useState } from "react";
-
 import Modal from "../../../../../../shared/components/Modal/Modal.jsx";
 import ConfirmDeleteModal from "../../../../../../shared/components/ConfirmDeleteModal/ConfirmDeleteModal.jsx";
 
-import { apiFetch } from "../../../../../../shared/api/apiClient.js";
+import useReadingSessions from "./hooks/useReadingSessions.js";
+
+import {
+  formatClockTime,
+  formatDate,
+  formatDuration,
+} from "./utils/readingSessionHelpers.js";
 
 import "./ReadingSessionsModal.css";
 
-const formatDate = (value) => {
-  if (!value) {
-    return "";
-  }
+const ReadingSessionsModal = ({
+  bookId,
+  totalPages,
+  onClose,
+  onChanged,
+}) => {
+  const {
+    sessions,
+    loading,
+    message,
 
-  return new Intl.DateTimeFormat("uk-UA", {
-    day: "numeric",
-    month: "long",
-    year: "numeric",
-  }).format(new Date(value));
-};
+    editingSession,
+    editValue,
+    setEditValue,
+    saving,
 
-const formatClockTime = (value) => {
-  if (!value) {
-    return "—";
-  }
+    deletingSession,
+    deleting,
 
-  return new Intl.DateTimeFormat("uk-UA", {
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(new Date(value));
-};
+    handleEdit,
+    handleCancelEdit,
+    handleSave,
 
-const formatDuration = (seconds = 0) => {
-  const totalSeconds = Math.max(Math.floor(seconds), 0);
-
-  const hours = Math.floor(totalSeconds / 3600);
-
-  const minutes = Math.floor((totalSeconds % 3600) / 60);
-
-  const remainingSeconds = totalSeconds % 60;
-
-  if (hours > 0) {
-    if (minutes === 0) {
-      return `${hours} год`;
-    }
-
-    return `${hours} год ${minutes} хв`;
-  }
-
-  if (minutes > 0) {
-    if (remainingSeconds === 0) {
-      return `${minutes} хв`;
-    }
-
-    return `${minutes} хв ${remainingSeconds} сек`;
-  }
-
-  return `${remainingSeconds} сек`;
-};
-
-const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
-  const [sessions, setSessions] = useState([]);
-
-  const [loading, setLoading] = useState(true);
-
-  const [message, setMessage] = useState("");
-
-  const [editingSession, setEditingSession] = useState(null);
-
-  const [editValue, setEditValue] = useState("");
-
-  const [saving, setSaving] = useState(false);
-
-  const [deletingSession, setDeletingSession] = useState(null);
-
-  const [deleting, setDeleting] = useState(false);
-
-  const loadSessions = async () => {
-    try {
-      setLoading(true);
-      setMessage("");
-
-      const data = await apiFetch(`/api/user-books/${bookId}/reading/sessions`);
-
-      setSessions(Array.isArray(data.sessions) ? data.sessions : []);
-    } catch (error) {
-      console.error("Помилка завантаження історії сесій:", error);
-
-      setMessage(
-        error instanceof Error
-          ? error.message
-          : "Не вдалося завантажити історію сесій",
-      );
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  useEffect(() => {
-    loadSessions();
-  }, [bookId]);
+    handleDeleteRequest,
+    handleCancelDelete,
+    handleConfirmDelete,
+  } = useReadingSessions({
+    bookId,
+    totalPages,
+    onChanged,
+  });
 
   const handleClose = () => {
-    if (editingSession || deletingSession || saving || deleting) {
+    if (
+      editingSession ||
+      deletingSession ||
+      saving ||
+      deleting
+    ) {
       return;
     }
 
     onClose();
   };
 
-  const handleEdit = (session) => {
-    setMessage("");
-
-    setEditingSession(session);
-
-    setEditValue(
-      session.progressMode === "PERCENT"
-        ? String(session.endPercent ?? 0)
-        : String(session.endPage ?? 0),
-    );
-  };
-
-  const handleCancelEdit = () => {
-    if (saving) {
-      return;
-    }
-
-    setEditingSession(null);
-    setEditValue("");
-    setMessage("");
-  };
-
-  const validateEditValue = () => {
-    if (!editingSession) {
-      return "Сесію не вибрано";
-    }
-
-    if (editValue.trim() === "") {
-      return editingSession.progressMode === "PERCENT"
-        ? "Вкажіть кінцевий відсоток"
-        : "Вкажіть кінцеву сторінку";
-    }
-
-    const value = Number(editValue);
-
-    if (!Number.isFinite(value)) {
-      return "Введіть коректне значення";
-    }
-
-    if (!Number.isInteger(value)) {
-      return editingSession.progressMode === "PERCENT"
-        ? "Відсоток має бути цілим числом"
-        : "Номер сторінки має бути цілим числом";
-    }
-
-    if (editingSession.progressMode === "PERCENT") {
-      const startPercent = editingSession.startPercent ?? 0;
-
-      if (value < startPercent) {
-        return `Відсоток не може бути меншим за ${startPercent}%`;
-      }
-
-      if (value > 100) {
-        return "Відсоток має бути від 0 до 100";
-      }
-
-      return "";
-    }
-
-    const startPage = editingSession.startPage ?? 0;
-
-    if (value < startPage) {
-      return `Сторінка не може бути меншою за ${startPage}`;
-    }
-
-    if (totalPages && value > totalPages) {
-      return `У книзі всього ${totalPages} сторінок`;
-    }
-
-    return "";
-  };
-
-  const handleSave = async () => {
-    if (!editingSession) {
-      return;
-    }
-
-    const validationMessage = validateEditValue();
-
-    if (validationMessage) {
-      setMessage(validationMessage);
-
-      return;
-    }
-
-    const value = Number(editValue);
-
-    try {
-      setSaving(true);
-      setMessage("");
-
-      const body =
-        editingSession.progressMode === "PERCENT"
-          ? {
-              endPercent: value,
-            }
-          : {
-              endPage: value,
-            };
-
-      await apiFetch(
-        `/api/user-books/${bookId}/reading/sessions/${editingSession.id}`,
-        {
-          method: "PATCH",
-          body,
-        },
-      );
-
-      setEditingSession(null);
-      setEditValue("");
-
-      await loadSessions();
-
-      await onChanged?.();
-    } catch (error) {
-      console.error("Помилка редагування сесії:", error);
-
-      setMessage(
-        error instanceof Error ? error.message : "Не вдалося змінити сесію",
-      );
-    } finally {
-      setSaving(false);
-    }
-  };
-
-  const handleDeleteRequest = (session) => {
-    setMessage("");
-
-    setDeletingSession(session);
-  };
-
-  const handleCancelDelete = () => {
-    if (deleting) {
-      return;
-    }
-
-    setDeletingSession(null);
-  };
-
-  const handleConfirmDelete = async () => {
-    if (!deletingSession) {
-      return;
-    }
-
-    try {
-      setDeleting(true);
-      setMessage("");
-
-      await apiFetch(
-        `/api/user-books/${bookId}/reading/sessions/${deletingSession.id}`,
-        {
-          method: "DELETE",
-        },
-      );
-
-      setDeletingSession(null);
-
-      await loadSessions();
-
-      await onChanged?.();
-    } catch (error) {
-      console.error("Помилка видалення сесії:", error);
-
-      setMessage(
-        error instanceof Error ? error.message : "Не вдалося видалити сесію",
-      );
-    } finally {
-      setDeleting(false);
-    }
-  };
+  const isCloseBlocked =
+    Boolean(editingSession) ||
+    Boolean(deletingSession) ||
+    saving ||
+    deleting;
 
   return (
     <>
@@ -286,22 +69,24 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
         onClose={handleClose}
         title="Історія сесій"
         subtitle={`${sessions.length} ${
-          sessions.length === 1 ? "сесія" : "сесій"
+          sessions.length === 1
+            ? "сесія"
+            : "сесій"
         }`}
         className="reading-sessions-modal"
-        closeOnEscape={
-          !editingSession && !deletingSession && !saving && !deleting
-        }
-        closeOnBackdrop={
-          !editingSession && !deletingSession && !saving && !deleting
-        }
+        closeOnEscape={!isCloseBlocked}
+        closeOnBackdrop={!isCloseBlocked}
       >
         {message && (
-          <p className="reading-sessions-modal__message">{message}</p>
+          <p className="reading-sessions-modal__message">
+            {message}
+          </p>
         )}
 
         {loading ? (
-          <div className="reading-sessions-modal__empty">Завантаження...</div>
+          <div className="reading-sessions-modal__empty">
+            Завантаження...
+          </div>
         ) : sessions.length === 0 ? (
           <div className="reading-sessions-modal__empty">
             Завершених сесій поки немає.
@@ -309,7 +94,9 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
         ) : (
           <div className="reading-sessions-modal__list">
             {sessions.map((session) => {
-              const isPercent = session.progressMode === "PERCENT";
+              const isPercent =
+                session.progressMode ===
+                "PERCENT";
 
               const start = isPercent
                 ? (session.startPercent ?? 0)
@@ -319,13 +106,24 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
                 ? (session.endPercent ?? 0)
                 : (session.endPage ?? 0);
 
-              const delta = Math.max(end - start, 0);
+              const delta = Math.max(
+                end - start,
+                0,
+              );
 
-              const durationSeconds = Math.max(session.durationSeconds ?? 0, 0);
+              const durationSeconds =
+                Math.max(
+                  session.durationSeconds ??
+                    0,
+                  0,
+                );
 
               const speed =
-                durationSeconds > 0 && delta > 0
-                  ? delta / (durationSeconds / 3600)
+                durationSeconds > 0 &&
+                delta > 0
+                  ? delta /
+                    (durationSeconds /
+                      3600)
                   : 0;
 
               return (
@@ -335,26 +133,36 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
                 >
                   <div className="reading-sessions-modal__session-top">
                     <span className="reading-sessions-modal__date">
-                      {formatDate(session.startedAt)}
+                      {formatDate(
+                        session.startedAt,
+                      )}
                     </span>
 
                     <span className="reading-sessions-modal__duration">
-                      {formatDuration(durationSeconds)}
+                      {formatDuration(
+                        durationSeconds,
+                      )}
                     </span>
                   </div>
 
                   <div className="reading-sessions-modal__time">
-                    {formatClockTime(session.startedAt)}
+                    {formatClockTime(
+                      session.startedAt,
+                    )}
 
                     <span>→</span>
 
-                    {formatClockTime(session.finishedAt)}
+                    {formatClockTime(
+                      session.finishedAt,
+                    )}
                   </div>
 
                   <div className="reading-sessions-modal__progress">
                     <span>
                       {start}
-                      {isPercent ? "%" : " стор."}
+                      {isPercent
+                        ? "%"
+                        : " стор."}
                     </span>
 
                     <span className="reading-sessions-modal__progress-arrow">
@@ -363,34 +171,55 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
 
                     <strong>
                       {end}
-                      {isPercent ? "%" : " стор."}
+                      {isPercent
+                        ? "%"
+                        : " стор."}
                     </strong>
                   </div>
 
                   <div className="reading-sessions-modal__meta">
                     <span>
                       +{delta}
-                      {isPercent ? "%" : " стор."}
+                      {isPercent
+                        ? "%"
+                        : " стор."}
                     </span>
 
                     <span>
                       {speed > 0
-                        ? `${Math.round(speed * 10) / 10} ${
-                            isPercent ? "%/год" : "стор./год"
+                        ? `${
+                            Math.round(
+                              speed * 10,
+                            ) / 10
+                          } ${
+                            isPercent
+                              ? "%/год"
+                              : "стор./год"
                           }`
                         : "—"}
                     </span>
                   </div>
 
                   <div className="reading-sessions-modal__actions">
-                    <button type="button" onClick={() => handleEdit(session)}>
+                    <button
+                      type="button"
+                      onClick={() =>
+                        handleEdit(
+                          session,
+                        )
+                      }
+                    >
                       Змінити
                     </button>
 
                     <button
                       type="button"
                       className="reading-sessions-modal__delete"
-                      onClick={() => handleDeleteRequest(session)}
+                      onClick={() =>
+                        handleDeleteRequest(
+                          session,
+                        )
+                      }
                     >
                       Видалити
                     </button>
@@ -403,14 +232,23 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
       </Modal>
 
       <Modal
-        isOpen={Boolean(editingSession)}
+        isOpen={Boolean(
+          editingSession,
+        )}
         onClose={handleCancelEdit}
         title="Змінити сесію"
         subtitle={
           editingSession
-            ? editingSession.progressMode === "PERCENT"
-              ? `Початок: ${editingSession.startPercent ?? 0}%`
-              : `Початок: ${editingSession.startPage ?? 0} стор.`
+            ? editingSession.progressMode ===
+              "PERCENT"
+              ? `Початок: ${
+                  editingSession.startPercent ??
+                  0
+                }%`
+              : `Початок: ${
+                  editingSession.startPage ??
+                  0
+                } стор.`
             : ""
         }
         className="reading-sessions-edit-modal"
@@ -421,7 +259,8 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
           <div className="reading-sessions-edit">
             <label className="reading-sessions-edit__label">
               <span>
-                {editingSession.progressMode === "PERCENT"
+                {editingSession.progressMode ===
+                "PERCENT"
                   ? "На якому відсотку зупинились"
                   : "На якій сторінці зупинились"}
               </span>
@@ -430,16 +269,25 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
                 <input
                   type="number"
                   value={editValue}
-                  onChange={(event) => setEditValue(event.target.value)}
+                  onChange={(event) =>
+                    setEditValue(
+                      event.target.value,
+                    )
+                  }
                   min={
-                    editingSession.progressMode === "PERCENT"
-                      ? (editingSession.startPercent ?? 0)
-                      : (editingSession.startPage ?? 0)
+                    editingSession.progressMode ===
+                    "PERCENT"
+                      ? (editingSession.startPercent ??
+                        0)
+                      : (editingSession.startPage ??
+                        0)
                   }
                   max={
-                    editingSession.progressMode === "PERCENT"
+                    editingSession.progressMode ===
+                    "PERCENT"
                       ? 100
-                      : (totalPages ?? undefined)
+                      : (totalPages ??
+                        undefined)
                   }
                   step="1"
                   inputMode="numeric"
@@ -447,7 +295,8 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
                 />
 
                 <span>
-                  {editingSession.progressMode === "PERCENT"
+                  {editingSession.progressMode ===
+                  "PERCENT"
                     ? "%"
                     : totalPages
                       ? `/ ${totalPages}`
@@ -459,7 +308,9 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
             <div className="reading-sessions-edit__actions">
               <button
                 type="button"
-                onClick={handleCancelEdit}
+                onClick={
+                  handleCancelEdit
+                }
                 disabled={saving}
               >
                 Скасувати
@@ -469,9 +320,15 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
                 type="button"
                 className="reading-sessions-edit__save"
                 onClick={handleSave}
-                disabled={saving || editValue.trim() === ""}
+                disabled={
+                  saving ||
+                  editValue.trim() ===
+                    ""
+                }
               >
-                {saving ? "Збереження..." : "Зберегти"}
+                {saving
+                  ? "Збереження..."
+                  : "Зберегти"}
               </button>
             </div>
           </div>
@@ -479,19 +336,22 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
       </Modal>
 
       <ConfirmDeleteModal
-        isOpen={Boolean(deletingSession)}
+        isOpen={Boolean(
+          deletingSession,
+        )}
         title="Видалити сесію?"
         description="Ця сесія буде видалена з історії читання. Статистика книги перераховується автоматично."
         confirmText="Видалити"
         isLoading={deleting}
-        onCancel={handleCancelDelete}
-        onConfirm={handleConfirmDelete}
+        onCancel={
+          handleCancelDelete
+        }
+        onConfirm={
+          handleConfirmDelete
+        }
       />
     </>
   );
 };
 
 export default ReadingSessionsModal;
-
-
-
