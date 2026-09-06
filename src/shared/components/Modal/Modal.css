@@ -13,6 +13,7 @@
 
   background: rgba(5, 5, 10, 0.72);
   backdrop-filter: blur(6px);
+  overscroll-behavior: none;
 }
 
 .modal {
@@ -147,6 +148,8 @@
   overflow-y: auto;
 
   padding: 0 20px 20px;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* =========================
@@ -190,3 +193,4 @@
     font-size: 26px;
   }
 }
+
