@@ -181,12 +181,7 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
       setStatusLoading(true);
       setMessage("");
 
-      const data = await updateUserBook(book.id, {
-
-        body: {
-          status,
-        },
-      });
+      const data = await updateUserBook(book.id, { status });
 
       setCurrentBook((current) => ({
         ...current,
@@ -360,12 +355,7 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
       setRatingLoading(true);
       setMessage("");
 
-      const data = await updateUserBook(book.id, {
-
-        body: {
-          rating,
-        },
-      });
+      const data = await updateUserBook(book.id, { rating });
 
       const updatedRating = data.rating ?? rating;
 
