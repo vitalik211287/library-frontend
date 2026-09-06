@@ -68,6 +68,7 @@ const CatalogSearch = ({
         value={searchBy}
         onChange={(event) => onSearchByChange(event.target.value)}
       >
+        <option value="all">По всьому каталогу</option>
         <option value="title">За назвою</option>
 
         <option value="author">За автором</option>

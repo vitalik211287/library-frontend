@@ -1,4 +1,4 @@
-export const getStatusLabel = (status) => {
+﻿export const getStatusLabel = (status) => {
   switch (status) {
     case "READING":
       return "Читаю";
@@ -22,21 +22,52 @@ export const getDefaultUserBookData = () => ({
   isWishlist: false,
 });
 
-export const filterCatalogBooks = ({ books, search, searchBy }) => {
-  const query = search.trim().toLowerCase();
+export const filterCatalogBooks = ({
+  books,
+  search,
+  searchBy,
+}) => {
+  const words = search
+    .trim()
+    .toLowerCase()
+    .split(/\s+/)
+    .filter(Boolean);
 
-  if (!query) {
+  if (!words.length) {
     return books;
   }
 
   return books.filter((book) => {
-    const value = book[searchBy];
+    let searchableValue;
 
-    if (value === null || value === undefined) {
+    if (searchBy === "all") {
+      searchableValue = [
+        book.title,
+        book.author,
+        book.year,
+        book.genre,
+        book.isbn,
+        book.publisher,
+      ]
+        .filter(Boolean)
+        .join(" ");
+    } else {
+      searchableValue = book[searchBy];
+    }
+
+    if (
+      searchableValue === null ||
+      searchableValue === undefined
+    ) {
       return false;
     }
 
-    return String(value).toLowerCase().includes(query);
+    const normalizedValue = String(searchableValue)
+      .toLowerCase()
+      .replace(/\s+/g, " ");
+
+    return words.every((word) =>
+      normalizedValue.includes(word),
+    );
   });
 };
-

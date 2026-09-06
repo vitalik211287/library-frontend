@@ -9,17 +9,20 @@ import { useLibrary } from "../../../libraries/context/LibraryContext.jsx";
 
 import useCatalogBooks from "./hooks/useCatalogBooks.js";
 import { filterCatalogBooks } from "./utils/catalogHelpers.js";
+import { groupBooksByGenre } from "./utils/genreHelpers.js";
 
 import CatalogSearch from "./components/CatalogSearch/CatalogSearch.jsx";
 import BookCard from "./components/BookCard/BookCard.jsx";
+import GenreShelves from "./components/GenreShelves/GenreShelves.jsx";
 
 import "./CatalogPage.css";
 
 const CatalogPage = () => {
   const [search, setSearch] = useState("");
-  const [searchBy, setSearchBy] = useState("title");
+  const [searchBy, setSearchBy] = useState("all");
   const [editingBook, setEditingBook] = useState(null);
   const [scannerOpen, setScannerOpen] = useState(false);
+  const [selectedShelf, setSelectedShelf] = useState(null);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -28,12 +31,12 @@ const CatalogPage = () => {
   const { isAuthenticated, isAuthLoading } = useAuth();
   const { activeLibrary, activeLibraryId } = useLibrary();
 
+
   const canEditLibrary =
     activeLibrary?.role === "OWNER" || activeLibrary?.role === "ADMIN";
-  const { books, message, wishlistLoadingId, toggleWishlist, updateBook } =
-    useCatalogBooks();
+  const { books, message, wishlistLoadingId, toggleWishlist, updateBook } =    useCatalogBooks();
 
-  useEffect(() => {
+useEffect(() => {
     searchInputRef.current?.focus();
   }, []);
 
@@ -58,14 +61,31 @@ const CatalogPage = () => {
     };
   }, [updateBook]);
 
+  const genreShelves = useMemo(
+    () => groupBooksByGenre(books),
+    [books],
+  );
+
+  const shelfBooks = useMemo(() => {
+    if (!selectedShelf) {
+      return books;
+    }
+
+    const shelf = genreShelves.find(
+      (item) => item.id === selectedShelf,
+    );
+
+    return shelf?.books ?? [];
+  }, [books, genreShelves, selectedShelf]);
+
   const filteredBooks = useMemo(
     () =>
       filterCatalogBooks({
-        books,
+        books: shelfBooks,
         search,
         searchBy,
       }),
-    [books, search, searchBy],
+    [shelfBooks, search, searchBy],
   );
 
   const handleScan = (isbn) => {
@@ -132,21 +152,40 @@ const CatalogPage = () => {
         onOpenScanner={() => setScannerOpen(true)}
       />
 
-      <div className="books-grid">
-        {filteredBooks.map((book) => (
-          <BookCard
-            key={book.id}
-            book={book}
-            isAuthenticated={isAuthenticated}
-            isAuthLoading={isAuthLoading}
-            wishlistLoadingId={wishlistLoadingId}
-            onWishlistToggle={handleWishlistToggle}
-            onEdit={setEditingBook}
-            onRead={handleOpenReading}
-            canEdit={canEditLibrary}
-          />
-        ))}
-      </div>
+      {!selectedShelf && !search.trim() ? (
+        <GenreShelves
+          shelves={genreShelves}
+          onSelect={setSelectedShelf}
+        />
+      ) : (
+        <>
+          {selectedShelf && (
+            <button
+              type="button"
+              className="catalog-shelf-back"
+              onClick={() => setSelectedShelf(null)}
+            >
+              ← Усі полички
+            </button>
+          )}
+
+          <div className="books-grid">
+            {filteredBooks.map((book) => (
+              <BookCard
+                key={book.id}
+                book={book}
+                isAuthenticated={isAuthenticated}
+                isAuthLoading={isAuthLoading}
+                wishlistLoadingId={wishlistLoadingId}
+                onWishlistToggle={handleWishlistToggle}
+                onEdit={setEditingBook}
+                onRead={handleOpenReading}
+                canEdit={canEditLibrary}
+              />
+            ))}
+          </div>
+        </>
+      )}
 
       {editingBook && (
         <EditBookModal
