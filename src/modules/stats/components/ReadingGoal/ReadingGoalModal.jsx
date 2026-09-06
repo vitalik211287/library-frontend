@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 
 import Modal from "../../../../shared/components/Modal/Modal.jsx";
 import { useReadingGoalContext } from "../../context/ReadingGoalContext.jsx";
@@ -32,7 +32,7 @@ const getInitialForm = (goal) => ({
       : "",
 });
 
-const ReadingGoalModal = ({ onClose, onSaved, initialGoal }) => {
+const ReadingGoalModal = ({ onClose, onSaved, initialGoal, year }) => {
   const {
     currentYear,
     readingGoal,
@@ -41,6 +41,8 @@ const ReadingGoalModal = ({ onClose, onSaved, initialGoal }) => {
     saveReadingGoal,
     clearGoalSaveError,
   } = useReadingGoalContext();
+
+  const goalYear = year ?? currentYear;
 
   const goal = initialGoal ?? readingGoal ?? null;
 
@@ -118,6 +120,7 @@ const ReadingGoalModal = ({ onClose, onSaved, initialGoal }) => {
       books,
       pages,
       minutes,
+      year: goalYear,
     });
 
     if (!isSaved) {
@@ -137,7 +140,7 @@ const ReadingGoalModal = ({ onClose, onSaved, initialGoal }) => {
     <Modal
       isOpen
       onClose={handleClose}
-      title={`Мета на ${currentYear}`}
+      title={`Мета на ${goalYear}`}
       subtitle="Встанови річну мету читання"
       className="goal-modal"
       closeOnEscape={!isGoalSaving}
@@ -216,4 +219,3 @@ const ReadingGoalModal = ({ onClose, onSaved, initialGoal }) => {
 };
 
 export default ReadingGoalModal;
-

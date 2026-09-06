@@ -1,17 +1,8 @@
-import {
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 
-import {
-  apiFetch,
-} from "../../../../../../../shared/api/apiClient.js";
+import { apiFetch } from "../../../../../../../shared/api/apiClient.js";
 
-const useReadingSessions = ({
-  bookId,
-  totalPages,
-  onChanged,
-}) => {
+const useReadingSessions = ({ bookId, totalPages, onChanged }) => {
   const [sessions, setSessions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
@@ -28,20 +19,15 @@ const useReadingSessions = ({
       setLoading(true);
       setMessage("");
 
-      const data = await apiFetch(
-        `/api/user-books/${bookId}/reading/sessions`,
-      );
+      const endpoint = bookId
+        ? `/api/user-books/${bookId}/reading/sessions`
+        : "/api/user-books/reading/sessions";
 
-      setSessions(
-        Array.isArray(data.sessions)
-          ? data.sessions
-          : [],
-      );
+      const data = await apiFetch(endpoint);
+
+      setSessions(Array.isArray(data.sessions) ? data.sessions : []);
     } catch (error) {
-      console.error(
-        "Помилка завантаження історії сесій:",
-        error,
-      );
+      console.error("Помилка завантаження історії сесій:", error);
 
       setMessage(
         error instanceof Error
@@ -56,6 +42,11 @@ const useReadingSessions = ({
   useEffect(() => {
     loadSessions();
   }, [bookId]);
+
+  const getSessionBookId = (session) => bookId ?? session?.bookId;
+
+  const getSessionTotalPages = (session) =>
+    totalPages ?? session?.book?.pages ?? null;
 
   const handleEdit = (session) => {
     setMessage("");
@@ -102,8 +93,7 @@ const useReadingSessions = ({
     }
 
     if (editingSession.progressMode === "PERCENT") {
-      const startPercent =
-        editingSession.startPercent ?? 0;
+      const startPercent = editingSession.startPercent ?? 0;
 
       if (value < startPercent) {
         return `Відсоток не може бути меншим за ${startPercent}%`;
@@ -116,15 +106,16 @@ const useReadingSessions = ({
       return "";
     }
 
-    const startPage =
-      editingSession.startPage ?? 0;
+    const startPage = editingSession.startPage ?? 0;
 
     if (value < startPage) {
       return `Сторінка не може бути меншою за ${startPage}`;
     }
 
-    if (totalPages && value > totalPages) {
-      return `У книзі всього ${totalPages} сторінок`;
+    const sessionTotalPages = getSessionTotalPages(editingSession);
+
+    if (sessionTotalPages && value > sessionTotalPages) {
+      return `У книзі всього ${sessionTotalPages} сторінок`;
     }
 
     return "";
@@ -135,12 +126,17 @@ const useReadingSessions = ({
       return;
     }
 
-    const validationMessage =
-      validateEditValue();
+    const validationMessage = validateEditValue();
 
     if (validationMessage) {
       setMessage(validationMessage);
+      return;
+    }
 
+    const targetBookId = getSessionBookId(editingSession);
+
+    if (!targetBookId) {
+      setMessage("Не вдалося визначити книгу сесії");
       return;
     }
 
@@ -160,7 +156,7 @@ const useReadingSessions = ({
             };
 
       await apiFetch(
-        `/api/user-books/${bookId}/reading/sessions/${editingSession.id}`,
+        `/api/user-books/${targetBookId}/reading/sessions/${editingSession.id}`,
         {
           method: "PATCH",
           body,
@@ -173,15 +169,10 @@ const useReadingSessions = ({
       await loadSessions();
       await onChanged?.();
     } catch (error) {
-      console.error(
-        "Помилка редагування сесії:",
-        error,
-      );
+      console.error("Помилка редагування сесії:", error);
 
       setMessage(
-        error instanceof Error
-          ? error.message
-          : "Не вдалося змінити сесію",
+        error instanceof Error ? error.message : "Не вдалося змінити сесію",
       );
     } finally {
       setSaving(false);
@@ -206,12 +197,19 @@ const useReadingSessions = ({
       return;
     }
 
+    const targetBookId = getSessionBookId(deletingSession);
+
+    if (!targetBookId) {
+      setMessage("Не вдалося визначити книгу сесії");
+      return;
+    }
+
     try {
       setDeleting(true);
       setMessage("");
 
       await apiFetch(
-        `/api/user-books/${bookId}/reading/sessions/${deletingSession.id}`,
+        `/api/user-books/${targetBookId}/reading/sessions/${deletingSession.id}`,
         {
           method: "DELETE",
         },
@@ -222,15 +220,10 @@ const useReadingSessions = ({
       await loadSessions();
       await onChanged?.();
     } catch (error) {
-      console.error(
-        "Помилка видалення сесії:",
-        error,
-      );
+      console.error("Помилка видалення сесії:", error);
 
       setMessage(
-        error instanceof Error
-          ? error.message
-          : "Не вдалося видалити сесію",
+        error instanceof Error ? error.message : "Не вдалося видалити сесію",
       );
     } finally {
       setDeleting(false);

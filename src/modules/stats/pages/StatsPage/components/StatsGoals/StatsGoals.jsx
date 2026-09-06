@@ -4,7 +4,7 @@ import { formatGoalMinutes } from "../../utils/statsHelpers.js";
 
 import "./StatsGoals.css";
 
-const StatsGoals = ({ year, goal }) => {
+const StatsGoals = ({ year, goal, onOpen }) => {
   const goals = goal?.goal || {};
 
   const progress = goal?.progress || {};
@@ -14,8 +14,21 @@ const StatsGoals = ({ year, goal }) => {
   const hasGoals =
     goals.books != null || goals.pages != null || goals.minutes != null;
 
+  const handleKeyDown = (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      onOpen?.();
+    }
+  };
+
   return (
-    <section className="stats-goals">
+    <section
+      className="stats-goals stats-goals--clickable"
+      role="button"
+      tabIndex={0}
+      onClick={onOpen}
+      onKeyDown={handleKeyDown}
+    >
       <div className="stats-goals__header">
         <div>
           <h2>Цілі на {year}</h2>
@@ -56,4 +69,3 @@ const StatsGoals = ({ year, goal }) => {
 };
 
 export default StatsGoals;
-

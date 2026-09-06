@@ -2,6 +2,11 @@ import { useState } from "react";
 
 import useReadingStats from "./hooks/useReadingStats.js";
 
+import { useReadingStatsContext } from "../../context/ReadingStatsContext.jsx";
+
+import ReadingSessionsModal from "../../../reading/components/ReadingModal/components/ReadingSessionsModal/ReadingSessionsModal.jsx";
+import ReadingGoalModal from "../../components/ReadingGoal/ReadingGoalModal.jsx";
+
 import StatsHeader from "./components/StatsHeader/StatsHeader.jsx";
 import StatsSummary from "./components/StatsSummary/StatsSummary.jsx";
 import StatsGoals from "./components/StatsGoals/StatsGoals.jsx";
@@ -17,10 +22,18 @@ const StatsPage = () => {
   const currentYear = new Date().getFullYear();
 
   const [year, setYear] = useState(currentYear);
+  const [sessionsModalOpen, setSessionsModalOpen] = useState(false);
+  const [goalModalOpen, setGoalModalOpen] = useState(false);
+
+  const { refreshReadingStats } = useReadingStatsContext();
 
   const { stats, goal, isLoading, error } = useReadingStats({
     year,
   });
+
+  const handleSessionsChanged = async () => {
+    await refreshReadingStats(year);
+  };
 
   if (isLoading) {
     return (
@@ -45,31 +58,54 @@ const StatsPage = () => {
   const { summary, streak, genres = [], authors = [], months = [] } = stats;
 
   return (
-    <main className="stats-page">
-      <StatsHeader
-        year={year}
-        currentYear={currentYear}
-        onYearChange={setYear}
-      />
+    <>
+      <main className="stats-page">
+        <StatsHeader
+          year={year}
+          currentYear={currentYear}
+          onYearChange={setYear}
+        />
 
-      <StatsSummary summary={summary} streak={streak} />
+        <StatsSummary summary={summary} streak={streak} />
 
-      <StatsGoals year={year} goal={goal} />
+        <StatsGoals
+          year={year}
+          goal={goal}
+          onOpen={() => setGoalModalOpen(true)}
+        />
 
-      <section className="stats-grid">
-        <YearActivity months={months} />
+        <section className="stats-grid">
+          <YearActivity months={months} />
 
-        <StreakCard streak={streak} />
+          <StreakCard streak={streak} />
 
-        <GenreStats genres={genres} />
+          <GenreStats genres={genres} />
 
-        <AuthorsStats authors={authors} />
-      </section>
+          <AuthorsStats authors={authors} />
+        </section>
 
-      <StatsExtra summary={summary} />
-    </main>
+        <StatsExtra
+          summary={summary}
+          onOpenSessions={() => setSessionsModalOpen(true)}
+        />
+      </main>
+
+      {sessionsModalOpen && (
+        <ReadingSessionsModal
+          onClose={() => setSessionsModalOpen(false)}
+          onChanged={handleSessionsChanged}
+        />
+      )}
+
+      {goalModalOpen && (
+        <ReadingGoalModal
+          year={year}
+          initialGoal={goal?.goal ?? null}
+          onClose={() => setGoalModalOpen(false)}
+        />
+      )}
+    </>
   );
 };
 
 export default StatsPage;
-

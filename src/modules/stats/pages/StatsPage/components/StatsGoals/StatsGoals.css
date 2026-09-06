@@ -120,3 +120,26 @@
     gap: 24px;
   }
 }
+
+.stats-goals--clickable {
+  cursor: pointer;
+
+  transition:
+    transform 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.stats-goals--clickable:hover {
+  transform: translateY(-1px);
+
+  border-color: var(--accent, currentColor);
+}
+
+.stats-goals--clickable:active {
+  transform: translateY(0);
+}
+
+.stats-goals--clickable:focus-visible {
+  outline: 2px solid var(--accent, currentColor);
+  outline-offset: 2px;
+}

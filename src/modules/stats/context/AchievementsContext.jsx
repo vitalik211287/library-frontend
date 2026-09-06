@@ -42,7 +42,11 @@ const AchievementsProvider = ({ children }) => {
       setIsAchievementsLoading(true);
       setAchievementsError("");
 
-      const data = await apiFetch("/api/user-books/achievements");
+      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
+      const data = await apiFetch(
+        `/api/user-books/achievements?timeZone=${encodeURIComponent(timeZone)}`,
+      );
 
       const loadedAchievements = Array.isArray(data?.achievements)
         ? data.achievements
@@ -175,7 +179,3 @@ const useAchievementsContext = () => {
 };
 
 export { AchievementsProvider, useAchievementsContext };
-
-
-
-
