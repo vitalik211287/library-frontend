@@ -3,6 +3,7 @@ import { useState } from "react";
 import useReadingStats from "./hooks/useReadingStats.js";
 
 import { useReadingStatsContext } from "../../context/ReadingStatsContext.jsx";
+import useRefreshReadingData from "../../../reading/hooks/useRefreshReadingData.js";
 
 import ReadingSessionsModal from "../../../reading/components/ReadingModal/components/ReadingSessionsModal/ReadingSessionsModal.jsx";
 import ReadingGoalModal from "../../components/ReadingGoal/ReadingGoalModal.jsx";
@@ -26,13 +27,19 @@ const StatsPage = () => {
   const [goalModalOpen, setGoalModalOpen] = useState(false);
 
   const { refreshReadingStats } = useReadingStatsContext();
+  const { refreshReadingData } = useRefreshReadingData();
 
   const { stats, goal, isLoading, error } = useReadingStats({
     year,
   });
 
   const handleSessionsChanged = async () => {
-    await refreshReadingStats(year);
+    if (year === currentYear) {
+      await refreshReadingData();
+      return;
+    }
+
+    await Promise.all([refreshReadingStats(year), refreshReadingData()]);
   };
 
   if (isLoading) {
