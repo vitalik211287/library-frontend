@@ -39,10 +39,7 @@ const useAddBook = ({
     return false;
   };
 
-  const getSuccessMessage = () =>
-    activeLibraryName
-      ? `Книгу додано: ${activeLibraryName}`
-      : "Книгу додано в бібліотеку";
+  const getSuccessMessage = () => "Книгу успішно додано до бібліотеки";
 
   const addFoundBook = async () => {
     if (!book || isAdding) {
