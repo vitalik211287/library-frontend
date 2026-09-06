@@ -1,8 +1,9 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 
 import toast from "react-hot-toast";
 
 import { apiFetch } from "../../../../../shared/api/apiClient.js";
+import { useLibraryBooks } from "../../../../libraries/context/LibraryBooksContext.jsx";
 
 import { createBookData, normalizeIsbn } from "../utils/bookHelpers.js";
 
@@ -17,6 +18,7 @@ const useAddBook = ({
   activeLibraryName,
 }) => {
   const [isAdding, setIsAdding] = useState(false);
+  const { refreshBooks } = useLibraryBooks();
 
   const resetAfterAdd = () => {
     resetLastSearch();
@@ -32,15 +34,15 @@ const useAddBook = ({
       return true;
     }
 
-    toast.error("Спочатку створіть або виберіть бібліотеку");
+    toast.error("РЎРїРѕС‡Р°С‚РєСѓ СЃС‚РІРѕСЂС–С‚СЊ Р°Р±Рѕ РІРёР±РµСЂС–С‚СЊ Р±С–Р±Р»С–РѕС‚РµРєСѓ");
 
     return false;
   };
 
   const getSuccessMessage = () =>
     activeLibraryName
-      ? `Книгу додано: ${activeLibraryName}`
-      : "Книгу додано в бібліотеку";
+      ? `РљРЅРёРіСѓ РґРѕРґР°РЅРѕ: ${activeLibraryName}`
+      : "РљРЅРёРіСѓ РґРѕРґР°РЅРѕ РІ Р±С–Р±Р»С–РѕС‚РµРєСѓ";
 
   const addFoundBook = async () => {
     if (!book || isAdding) {
@@ -52,7 +54,7 @@ const useAddBook = ({
     }
 
     if (!book.author?.trim()) {
-      toast.error("Вкажіть автора");
+      toast.error("Р’РєР°Р¶С–С‚СЊ Р°РІС‚РѕСЂР°");
 
       return;
     }
@@ -67,13 +69,15 @@ const useAddBook = ({
         body: bookData,
       });
 
+      await refreshBooks();
+
       toast.success(getSuccessMessage());
 
       resetAfterAdd();
     } catch (error) {
-      console.error("Помилка додавання:", error);
+      console.error("РџРѕРјРёР»РєР° РґРѕРґР°РІР°РЅРЅСЏ:", error);
 
-      toast.error(error.message || "Не вдалося з'єднатися із сервером");
+      toast.error(error.message || "РќРµ РІРґР°Р»РѕСЃСЏ Р·'С”РґРЅР°С‚РёСЃСЏ С–Р· СЃРµСЂРІРµСЂРѕРј");
     } finally {
       setIsAdding(false);
     }
@@ -138,6 +142,8 @@ const useAddBook = ({
         body: requestData,
       });
 
+      await refreshBooks();
+
       toast.success(getSuccessMessage());
 
       setManualMode(false);
@@ -146,9 +152,9 @@ const useAddBook = ({
 
       form.reset();
     } catch (error) {
-      console.error("Помилка ручного додавання:", error);
+      console.error("РџРѕРјРёР»РєР° СЂСѓС‡РЅРѕРіРѕ РґРѕРґР°РІР°РЅРЅСЏ:", error);
 
-      toast.error(error.message || "Не вдалося з'єднатися із сервером");
+      toast.error(error.message || "РќРµ РІРґР°Р»РѕСЃСЏ Р·'С”РґРЅР°С‚РёСЃСЏ С–Р· СЃРµСЂРІРµСЂРѕРј");
     } finally {
       setIsAdding(false);
     }
@@ -162,6 +168,8 @@ const useAddBook = ({
 };
 
 export default useAddBook;
+
+
 
 
 
