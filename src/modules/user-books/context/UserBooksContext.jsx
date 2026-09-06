@@ -7,7 +7,7 @@ import {
   useState,
 } from "react";
 
-import { apiFetch } from "../../../shared/api/apiClient.js";
+import { addBookToWishlist, getCurrentBooks, getFinishedBooks, getWishlistBooks, removeBookFromWishlist } from "../api/userBooksApi.js";
 
 import { useAuth } from "../../auth/context/AuthContext.jsx";
 import { useLibrary } from "../../libraries/context/LibraryContext.jsx";
@@ -70,17 +70,7 @@ export const UserBooksProvider = ({ children }) => {
       setIsCurrentBooksLoading(true);
       setCurrentBooksError("");
 
-      const params = new URLSearchParams();
-
-      if (activeLibraryId) {
-        params.set("libraryId", activeLibraryId);
-      }
-
-      const query = params.toString();
-
-      const data = await apiFetch(
-        `/api/user-books/current${query ? `?${query}` : ""}`,
-      );
+      const data = await getCurrentBooks(activeLibraryId);
 
       const books = Array.isArray(data?.books) ? data.books : [];
 
@@ -116,17 +106,7 @@ export const UserBooksProvider = ({ children }) => {
       setIsWishlistLoading(true);
       setWishlistError("");
 
-      const params = new URLSearchParams();
-
-      if (activeLibraryId) {
-        params.set("libraryId", activeLibraryId);
-      }
-
-      const query = params.toString();
-
-      const data = await apiFetch(
-        `/api/user-books/wishlist${query ? `?${query}` : ""}`,
-      );
+      const data = await getWishlistBooks(activeLibraryId);
 
       const books = Array.isArray(data?.books) ? data.books : [];
 
@@ -163,18 +143,7 @@ export const UserBooksProvider = ({ children }) => {
       setIsFinishedBooksLoading(true);
       setFinishedBooksError("");
 
-      const params = new URLSearchParams();
-
-      params.set("page", "1");
-      params.set("limit", "100");
-
-      if (activeLibraryId) {
-        params.set("libraryId", activeLibraryId);
-      }
-
-      const data = await apiFetch(
-        `/api/user-books/finished?${params.toString()}`,
-      );
+      const data = await getFinishedBooks(activeLibraryId);
 
       const books = Array.isArray(data?.books) ? data.books : [];
 
@@ -246,9 +215,7 @@ export const UserBooksProvider = ({ children }) => {
       try {
         setWishlistLoadingId(bookId);
 
-        await apiFetch(`/api/user-books/${bookId}/wishlist`, {
-          method: "DELETE",
-        });
+        await removeBookFromWishlist(bookId);
 
         setWishlistBooks((books) => books.filter((book) => book.id !== bookId));
 
@@ -275,9 +242,7 @@ export const UserBooksProvider = ({ children }) => {
       try {
         setWishlistLoadingId(book.id);
 
-        await apiFetch(`/api/user-books/${book.id}/wishlist`, {
-          method: "POST",
-        });
+        await addBookToWishlist(book.id);
 
         updateWishlistFlag(book.id, true);
 
