@@ -1,6 +1,4 @@
 import {
-  useEffect,
-  useMemo,
   useRef,
   useState,
 } from "react";
@@ -11,470 +9,49 @@ import {
 
 import "./BarcodeScanner.css";
 
+import useScannerCameras from "./hooks/useScannerCameras.js";
+import useBarcodeScan from "./hooks/useBarcodeScan.js";
+import useBarcodeScannerEngine from "./hooks/useBarcodeScannerEngine.js";
+import useScannerControls from "./hooks/useScannerControls.js";
+
 const BarcodeScanner = ({
   onScan,
   onClose,
 }) => {
-  const [
-    cameras,
-    setCameras,
-  ] = useState([]);
 
-  const [
-    selectedCamera,
-    setSelectedCamera,
-  ] = useState("");
 
   const [
     isScanned,
     setIsScanned,
   ] = useState(false);
 
-  const [
-    cameraError,
-    setCameraError,
-  ] = useState("");
 
   const scanLockRef =
     useRef(false);
+  const {
+    cameras,
+    selectedCamera,
+    cameraError,
+    setCameraError,
+    handleSwitchCamera,
+  } = useScannerCameras({
+    scanLockRef,
+    setIsScanned,
+  });
+  const {
+    handleScanResult,
+  } = useBarcodeScan({
+    onScan,
+    selectedCamera,
+    scanLockRef,
+    setIsScanned,
+  });
 
-  /* =========================
-     LOAD CAMERAS
-  ========================= */
-
-  useEffect(() => {
-    let cancelled =
-      false;
-
-    const loadCameras =
-      async () => {
-        try {
-          setCameraError(
-            "",
-          );
-
-          if (
-            !navigator
-              .mediaDevices
-              ?.getUserMedia
-          ) {
-            setCameraError(
-              "Камера недоступна в цьому браузері",
-            );
-
-            return;
-          }
-
-          /*
-           * Спочатку запитуємо
-           * доступ до камери,
-           * щоб браузер відкрив
-           * назви пристроїв.
-           */
-          const stream =
-            await navigator.mediaDevices.getUserMedia(
-              {
-                video: {
-                  facingMode: {
-                    ideal:
-                      "environment",
-                  },
-                },
-                audio: false,
-              },
-            );
-
-          stream
-            .getTracks()
-            .forEach(
-              (
-                track,
-              ) => {
-                track.stop();
-              },
-            );
-
-          const devices =
-            await navigator.mediaDevices.enumerateDevices();
-
-          if (cancelled) {
-            return;
-          }
-
-          const videoDevices =
-            devices.filter(
-              (
-                device,
-              ) =>
-                device.kind ===
-                "videoinput",
-            );
-
-          if (
-            videoDevices.length ===
-            0
-          ) {
-            setCameraError(
-              "Камеру не знайдено",
-            );
-
-            return;
-          }
-
-          /*
-           * Задні камери.
-           */
-          const rearCameras =
-            videoDevices.filter(
-              (
-                camera,
-              ) => {
-                const label =
-                  camera.label
-                    .toLowerCase();
-
-                return (
-                  label.includes(
-                    "back",
-                  ) ||
-                  label.includes(
-                    "rear",
-                  ) ||
-                  label.includes(
-                    "environment",
-                  ) ||
-                  label.includes(
-                    "зад",
-                  )
-                );
-              },
-            );
-
-          const availableCameras =
-            rearCameras.length >
-            0
-              ? rearCameras
-              : videoDevices;
-
-          setCameras(
-            availableCameras,
-          );
-
-          /*
-           * Якщо користувач уже
-           * вибирав камеру —
-           * використовуємо її.
-           */
-          const savedCameraId =
-            localStorage.getItem(
-              "library-scanner-camera",
-            );
-
-          const savedCamera =
-            availableCameras.find(
-              (
-                camera,
-              ) =>
-                camera.deviceId ===
-                savedCameraId,
-            );
-
-          if (savedCamera) {
-            setSelectedCamera(
-              savedCamera.deviceId,
-            );
-
-            return;
-          }
-
-          /*
-           * Пробуємо вибрати
-           * нормальну основну
-           * задню камеру,
-           * а не macro / ultra wide.
-           */
-          const preferredCamera =
-            availableCameras.find(
-              (
-                camera,
-              ) => {
-                const label =
-                  camera.label
-                    .toLowerCase();
-
-                return (
-                  label.includes(
-                    "camera 0",
-                  ) ||
-                  label.includes(
-                    "back camera",
-                  ) ||
-                  label.includes(
-                    "rear camera",
-                  )
-                );
-              },
-            ) ||
-            availableCameras[0];
-
-          if (
-            preferredCamera
-          ) {
-            setSelectedCamera(
-              preferredCamera.deviceId,
-            );
-          }
-        } catch (error) {
-          console.error(
-            "Помилка отримання камер:",
-            error,
-          );
-
-          if (
-            error?.name ===
-            "NotAllowedError"
-          ) {
-            setCameraError(
-              "Немає дозволу на використання камери",
-            );
-
-            return;
-          }
-
-          if (
-            error?.name ===
-            "NotFoundError"
-          ) {
-            setCameraError(
-              "Камеру не знайдено",
-            );
-
-            return;
-          }
-
-          setCameraError(
-            "Не вдалося відкрити камеру",
-          );
-        }
-      };
-
-    loadCameras();
-
-    return () => {
-      cancelled = true;
-
-      scanLockRef.current =
-        true;
-    };
-  }, []);
-
-  /* =========================
-     CURRENT CAMERA INDEX
-  ========================= */
-
-  const currentCameraIndex =
-    useMemo(() => {
-      return cameras.findIndex(
-        (
-          camera,
-        ) =>
-          camera.deviceId ===
-          selectedCamera,
-      );
-    }, [
-      cameras,
-      selectedCamera,
-    ]);
-
-  /* =========================
-     SWITCH CAMERA
-  ========================= */
-
-  const handleSwitchCamera =
-    () => {
-      if (
-        cameras.length <
-        2
-      ) {
-        return;
-      }
-
-      const nextIndex =
-        currentCameraIndex <
-        0
-          ? 0
-          : (
-              currentCameraIndex +
-              1
-            ) %
-            cameras.length;
-
-      const nextCamera =
-        cameras[
-          nextIndex
-        ];
-
-      if (!nextCamera) {
-        return;
-      }
-
-      scanLockRef.current =
-        false;
-
-      setIsScanned(
-        false,
-      );
-
-      setSelectedCamera(
-        nextCamera.deviceId,
-      );
-
-      localStorage.setItem(
-        "library-scanner-camera",
-        nextCamera.deviceId,
-      );
-    };
-
-  /* =========================
-     VALIDATE ISBN-13
-  ========================= */
-
-  const isValidIsbn13 = (
-    value,
-  ) => {
-    if (
-      !/^\d{13}$/.test(
-        value,
-      )
-    ) {
-      return false;
-    }
-
-    /*
-     * ISBN-13 книги:
-     * 978 або 979.
-     */
-    if (
-      !value.startsWith(
-        "978",
-      ) &&
-      !value.startsWith(
-        "979",
-      )
-    ) {
-      return false;
-    }
-
-    /*
-     * Перевірка контрольної
-     * цифри ISBN-13.
-     */
-    let sum = 0;
-
-    for (
-      let index = 0;
-      index < 12;
-      index += 1
-    ) {
-      const digit =
-        Number(
-          value[index],
-        );
-
-      sum +=
-        index % 2 === 0
-          ? digit
-          : digit * 3;
-    }
-
-    const checkDigit =
-      (
-        10 -
-        (
-          sum % 10
-        )
-      ) %
-      10;
-
-    return (
-      checkDigit ===
-      Number(
-        value[12],
-      )
-    );
-  };
 
   /* =========================
      SCAN RESULT
   ========================= */
 
-  const handleScanResult =
-    (
-      value,
-    ) => {
-      if (
-        scanLockRef.current
-      ) {
-        return;
-      }
-
-      const cleanIsbn =
-        String(
-          value ?? "",
-        ).replace(
-          /\D/g,
-          "",
-        );
-
-      if (
-        !isValidIsbn13(
-          cleanIsbn,
-        )
-      ) {
-        return;
-      }
-
-      /*
-       * ZXing може розпізнати
-       * один штрихкод багато
-       * разів поспіль.
-       *
-       * Тому блокуємо все
-       * після першого результату.
-       */
-      scanLockRef.current =
-        true;
-
-      setIsScanned(
-        true,
-      );
-
-      if (
-        selectedCamera
-      ) {
-        localStorage.setItem(
-          "library-scanner-camera",
-          selectedCamera,
-        );
-      }
-
-      /*
-       * Це одразу передає ISBN
-       * у AddBookPage.
-       *
-       * Там handleScan:
-       * setIsbn()
-       * setScannerOpen(false)
-       * lookupBook()
-       */
-      onScan(
-        cleanIsbn,
-      );
-    };
-
-  /* =========================
-     ZXING
-  ========================= */
 
   const {
     ref,
