@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+﻿import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
 import "./Modal.css";
@@ -11,7 +11,6 @@ let originalBodyPaddingRight = "";
 const lockBodyScroll = () => {
   if (openModalCount === 0) {
     originalBodyOverflow = document.body.style.overflow;
-
     originalBodyPaddingRight = document.body.style.paddingRight;
 
     const scrollbarWidth =
@@ -35,7 +34,6 @@ const unlockBodyScroll = () => {
   }
 
   document.body.style.overflow = originalBodyOverflow;
-
   document.body.style.paddingRight = originalBodyPaddingRight;
 };
 
@@ -51,6 +49,40 @@ const Modal = ({
   closeOnBackdrop = true,
   showHeader = true,
 }) => {
+  const historyEntryRef = useRef(null);
+  const closingFromHistoryRef = useRef(false);
+
+  useEffect(() => {
+    if (!isOpen) {
+      return undefined;
+    }
+
+    const modalHistoryId = crypto.randomUUID();
+
+    historyEntryRef.current = modalHistoryId;
+
+    window.history.pushState(
+      {
+        ...window.history.state,
+        modalHistoryId,
+      },
+      "",
+      window.location.href,
+    );
+
+    const handlePopState = () => {
+      closingFromHistoryRef.current = true;
+      historyEntryRef.current = null;
+      onClose();
+    };
+
+    window.addEventListener("popstate", handlePopState);
+
+    return () => {
+      window.removeEventListener("popstate", handlePopState);
+    };
+  }, [isOpen, onClose]);
+
   useEffect(() => {
     if (!isOpen) {
       return undefined;
@@ -60,7 +92,11 @@ const Modal = ({
 
     const handleKeyDown = (event) => {
       if (event.key === "Escape" && closeOnEscape) {
-        onClose();
+        if (historyEntryRef.current) {
+          window.history.back();
+        } else {
+          onClose();
+        }
       }
     };
 
@@ -68,7 +104,6 @@ const Modal = ({
 
     return () => {
       unlockBodyScroll();
-
       window.removeEventListener("keydown", handleKeyDown);
     };
   }, [isOpen, onClose, closeOnEscape]);
@@ -77,12 +112,21 @@ const Modal = ({
     return null;
   }
 
+  const handleClose = () => {
+    if (historyEntryRef.current && !closingFromHistoryRef.current) {
+      window.history.back();
+      return;
+    }
+
+    onClose();
+  };
+
   const handleBackdropMouseDown = (event) => {
     if (!closeOnBackdrop || event.target !== event.currentTarget) {
       return;
     }
 
-    onClose();
+    handleClose();
   };
 
   return createPortal(
@@ -115,7 +159,7 @@ const Modal = ({
             <button
               type="button"
               className="modal__close"
-              onClick={onClose}
+              onClick={handleClose}
               aria-label="Закрити"
             >
               ×
@@ -131,4 +175,3 @@ const Modal = ({
 };
 
 export default Modal;
-
