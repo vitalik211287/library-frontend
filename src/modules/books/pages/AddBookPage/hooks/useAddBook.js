@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 
 import toast from "react-hot-toast";
 
@@ -34,15 +34,15 @@ const useAddBook = ({
       return true;
     }
 
-    toast.error("РЎРїРѕС‡Р°С‚РєСѓ СЃС‚РІРѕСЂС–С‚СЊ Р°Р±Рѕ РІРёР±РµСЂС–С‚СЊ Р±С–Р±Р»С–РѕС‚РµРєСѓ");
+    toast.error("Спочатку створіть або виберіть бібліотеку");
 
     return false;
   };
 
   const getSuccessMessage = () =>
     activeLibraryName
-      ? `РљРЅРёРіСѓ РґРѕРґР°РЅРѕ: ${activeLibraryName}`
-      : "РљРЅРёРіСѓ РґРѕРґР°РЅРѕ РІ Р±С–Р±Р»С–РѕС‚РµРєСѓ";
+      ? `Книгу додано: ${activeLibraryName}`
+      : "Книгу додано в бібліотеку";
 
   const addFoundBook = async () => {
     if (!book || isAdding) {
@@ -54,7 +54,7 @@ const useAddBook = ({
     }
 
     if (!book.author?.trim()) {
-      toast.error("Р’РєР°Р¶С–С‚СЊ Р°РІС‚РѕСЂР°");
+      toast.error("Вкажіть автора");
 
       return;
     }
@@ -75,9 +75,9 @@ const useAddBook = ({
 
       resetAfterAdd();
     } catch (error) {
-      console.error("РџРѕРјРёР»РєР° РґРѕРґР°РІР°РЅРЅСЏ:", error);
+      console.error("Помилка додавання:", error);
 
-      toast.error(error.message || "РќРµ РІРґР°Р»РѕСЃСЏ Р·'С”РґРЅР°С‚РёСЃСЏ С–Р· СЃРµСЂРІРµСЂРѕРј");
+      toast.error(error.message || "Не вдалося з'єднатися із сервером");
     } finally {
       setIsAdding(false);
     }
@@ -152,9 +152,9 @@ const useAddBook = ({
 
       form.reset();
     } catch (error) {
-      console.error("РџРѕРјРёР»РєР° СЂСѓС‡РЅРѕРіРѕ РґРѕРґР°РІР°РЅРЅСЏ:", error);
+      console.error("Помилка ручного додавання:", error);
 
-      toast.error(error.message || "РќРµ РІРґР°Р»РѕСЃСЏ Р·'С”РґРЅР°С‚РёСЃСЏ С–Р· СЃРµСЂРІРµСЂРѕРј");
+      toast.error(error.message || "Не вдалося з'єднатися із сервером");
     } finally {
       setIsAdding(false);
     }
