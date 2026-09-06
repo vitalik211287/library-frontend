@@ -191,6 +191,7 @@ const HomePage = ({ onOpenReading }) => {
         totalPages={totalPages}
         progress={progress}
         onContinue={handleContinueReading}
+        onOpenCatalog={() => navigate("/catalog")}
       />
       <AchievementCard
         latestAchievement={latestAchievement}

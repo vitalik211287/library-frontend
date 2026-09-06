@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { BookIcon } from "../../../../../home/components/HomeIcons.jsx";
 
 import { getProgress } from "../../utils/readingHelpers.js";
 
@@ -21,6 +22,7 @@ const CurrentReading = ({
   isLoading,
   error,
   onOpenReading,
+  onOpenCatalog,
 }) => {
   const [isCurrentBooksOpen, setIsCurrentBooksOpen] = useState(false);
 
@@ -71,7 +73,26 @@ const CurrentReading = ({
       ) : error ? (
         <div className="profile-empty">{error}</div>
       ) : !mainCurrentBook ? (
-        <div className="profile-empty">Немає активних книг</div>
+        <div
+          className="home-empty-state"
+          role="button"
+          tabIndex={0}
+          onClick={onOpenCatalog}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              onOpenCatalog?.();
+            }
+          }}
+        >
+          <div className="home-empty-state__icon">
+            <BookIcon />
+          </div>
+
+          <div>
+            <strong>Немає активної книги</strong>
+            <span>Обери книгу з бібліотеки, щоб продовжити читання.</span>
+          </div>
+        </div>
       ) : (
         <>
           <article className="current-book">

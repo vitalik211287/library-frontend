@@ -53,6 +53,7 @@ const UserPage = ({ onOpenReading }) => {
           isLoading={isCurrentBooksLoading}
           error={currentBooksError}
           onOpenReading={onOpenReading}
+          onOpenCatalog={() => navigate("/catalog")}
         />
 
         <WishlistSection

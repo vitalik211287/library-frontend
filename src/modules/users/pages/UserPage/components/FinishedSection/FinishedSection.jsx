@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { FinishedBookIcon } from "../../../../../home/components/HomeIcons.jsx";
 
 import "./FinishedSection.css";
 
@@ -57,7 +58,16 @@ const FinishedSection = ({
       ) : error ? (
         <div className="profile-empty">{error}</div>
       ) : books.length === 0 ? (
-        <div className="profile-empty">Тут з’являться прочитані книги</div>
+        <div className="home-empty-state">
+          <div className="home-empty-state__icon">
+            <FinishedBookIcon />
+          </div>
+
+          <div>
+            <strong>Тут з’являться прочитані книги</strong>
+            <span>Завершуй читання та відмічай книги як прочитані, щоб бачити їх тут.</span>
+          </div>
+        </div>
       ) : (
         <div className="profile-books">
           {books.slice(0, 3).map((book) => (

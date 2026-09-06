@@ -1,10 +1,26 @@
-﻿export const BookIcon = () => (
+export const BookIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11a2 2 0 0 1 2 2v16a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 21.5v-16Z" />
     <path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v18a2 2 0 0 1 2-2h2.5a2.5 2.5 0 0 1 2.5 2.5v-16Z" />
   </svg>
 );
 
+export const FinishedBookIcon = () => (
+  <svg viewBox="0 0 32 32" aria-hidden="true">
+    <path d="M3.5 6.5A3.5 3.5 0 0 1 7 3h5a4 4 0 0 1 4 4v17.5a4 4 0 0 0-4-4H7a3.5 3.5 0 0 0-3.5 3.5V6.5Z" />
+
+    <path d="M28.5 6.5A3.5 3.5 0 0 0 25 3h-5a4 4 0 0 0-4 4v17.5a4 4 0 0 1 4-4h5a3.5 3.5 0 0 1 3.5 3.5V6.5Z" />
+
+    <circle
+      cx="24"
+      cy="24"
+      r="6.5"
+      fill="var(--surface)"
+    />
+
+    <path d="m21.2 24 1.9 1.9 3.9-4.4" />
+  </svg>
+);
 export const FlameIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <path

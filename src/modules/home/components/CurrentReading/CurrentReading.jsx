@@ -8,6 +8,7 @@ const CurrentReading = ({
   totalPages,
   progress,
   onContinue,
+  onOpenCatalog,
 }) => {
   return (
     <HomePanel className="current-reading-section">
@@ -22,7 +23,17 @@ const CurrentReading = ({
       </div>
 
       {!book ? (
-        <div className="home-empty-state">
+        <div
+          className="home-empty-state"
+          role="button"
+          tabIndex={0}
+          onClick={onOpenCatalog}
+          onKeyDown={(event) => {
+            if (event.key === "Enter" || event.key === " ") {
+              onOpenCatalog?.();
+            }
+          }}
+        >
           <div className="home-empty-state__icon">
             <BookIcon />
           </div>
