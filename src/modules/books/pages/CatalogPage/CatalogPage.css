@@ -161,6 +161,7 @@
   text-decoration: underline;
 }
 .catalog-view-toggle {
+  box-sizing: border-box;
   width: 100%;
   margin-bottom: 14px;
   padding: 4px;
