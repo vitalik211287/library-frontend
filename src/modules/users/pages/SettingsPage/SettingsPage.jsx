@@ -10,43 +10,16 @@ import { useTheme } from "../../../../shared/context/ThemeContext.jsx";
 
 import { apiFetch } from "../../../../shared/api/apiClient.js";
 
+import {
+  MoonIcon,
+  SunIcon,
+  SystemIcon,
+} from "./components/ThemeIcons.jsx";
+import ChangeNameModal from "./components/ChangeNameModal.jsx";
+import ChangePasswordModal from "./components/ChangePasswordModal.jsx";
+import ThemeSettingsSection from "./components/ThemeSettingsSection.jsx";
+
 import "./SettingsPage.css";
-
-const SystemIcon = () => {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <rect x="3" y="4" width="18" height="14" rx="2" />
-
-      <path d="M8 21h8" />
-      <path d="M12 18v3" />
-    </svg>
-  );
-};
-
-const SunIcon = () => {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <circle cx="12" cy="12" r="4" />
-
-      <path d="M12 2v2" />
-      <path d="M12 20v2" />
-      <path d="m4.93 4.93 1.41 1.41" />
-      <path d="m17.66 17.66 1.41 1.41" />
-      <path d="M2 12h2" />
-      <path d="M20 12h2" />
-      <path d="m6.34 17.66-1.41 1.41" />
-      <path d="m19.07 4.93-1.41 1.41" />
-    </svg>
-  );
-};
-
-const MoonIcon = () => {
-  return (
-    <svg viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M21 12.8A9 9 0 1 1 11.2 3 7 7 0 0 0 21 12.8Z" />
-    </svg>
-  );
-};
 
 const SettingsPage = () => {
   const navigate = useNavigate();
@@ -400,75 +373,10 @@ const SettingsPage = () => {
           </div>
         </section>
 
-        <section className="settings-page__section">
-          <h2>Застосунок</h2>
-
-          <div className="settings-page__card settings-page__theme-card">
-            <div className="settings-page__theme-header">
-              <span className="settings-page__row-icon">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9Z" />
-                </svg>
-              </span>
-
-              <div className="settings-page__row-content">
-                <span className="settings-page__row-title">Тема</span>
-
-                <span className="settings-page__row-value">
-                  {themeMode === "system"
-                    ? "Системна"
-                    : themeMode === "light"
-                      ? "Світла"
-                      : "Темна"}
-                </span>
-              </div>
-            </div>
-
-            <div className="settings-page__theme-options">
-              <button
-                type="button"
-                className={`settings-page__theme-option ${
-                  themeMode === "system"
-                    ? "settings-page__theme-option--active"
-                    : ""
-                }`}
-                onClick={() => setThemeMode("system")}
-              >
-                <SystemIcon />
-
-                <span>Системна</span>
-              </button>
-
-              <button
-                type="button"
-                className={`settings-page__theme-option ${
-                  themeMode === "light"
-                    ? "settings-page__theme-option--active"
-                    : ""
-                }`}
-                onClick={() => setThemeMode("light")}
-              >
-                <SunIcon />
-
-                <span>Світла</span>
-              </button>
-
-              <button
-                type="button"
-                className={`settings-page__theme-option ${
-                  themeMode === "dark"
-                    ? "settings-page__theme-option--active"
-                    : ""
-                }`}
-                onClick={() => setThemeMode("dark")}
-              >
-                <MoonIcon />
-
-                <span>Темна</span>
-              </button>
-            </div>
-          </div>
-        </section>
+        <ThemeSettingsSection
+          themeMode={themeMode}
+          setThemeMode={setThemeMode}
+        />
 
         <button
           type="button"
@@ -484,114 +392,28 @@ const SettingsPage = () => {
         </button>
       </section>
 
-      {isNameOpen && (
-        <Modal
-          isOpen={isNameOpen}
-          onClose={handleCloseName}
-          className="settings-page__modal"
-          showHeader={false}
-        >
-          <form onSubmit={handleSaveName}>
-            <h2>Змінити ім&apos;я</h2>
+      <ChangeNameModal
+        isOpen={isNameOpen}
+        name={name}
+        setName={setName}
+        isSaving={isSavingName}
+        onClose={handleCloseName}
+        onSubmit={handleSaveName}
+      />
 
-            <label className="settings-page__field">
-              <span>Ім&apos;я</span>
+      <ChangePasswordModal
+        isOpen={isPasswordOpen}
+        currentPassword={currentPassword}
+        setCurrentPassword={setCurrentPassword}
+        newPassword={newPassword}
+        setNewPassword={setNewPassword}
+        confirmPassword={confirmPassword}
+        setConfirmPassword={setConfirmPassword}
+        isSaving={isSavingPassword}
+        onClose={handleClosePassword}
+        onSubmit={handleSavePassword}
+      />
 
-              <input
-                type="text"
-                value={name}
-                maxLength={50}
-                autoFocus
-                onChange={(event) => setName(event.target.value)}
-              />
-            </label>
-
-            <div className="settings-page__modal-actions">
-              <button
-                type="button"
-                className="settings-page__modal-button settings-page__modal-button--secondary"
-                onClick={handleCloseName}
-                disabled={isSavingName}
-              >
-                Скасувати
-              </button>
-
-              <button
-                type="submit"
-                className="settings-page__modal-button settings-page__modal-button--primary"
-                disabled={isSavingName}
-              >
-                {isSavingName ? "Збереження..." : "Зберегти"}
-              </button>
-            </div>
-          </form>
-        </Modal>
-      )}
-
-      {isPasswordOpen && (
-        <Modal
-          isOpen={isPasswordOpen}
-          onClose={handleClosePassword}
-          className="settings-page__modal"
-          showHeader={false}
-        >
-          <form onSubmit={handleSavePassword}>
-            <h2>Змінити пароль</h2>
-
-            <label className="settings-page__field">
-              <span>Поточний пароль</span>
-
-              <input
-                type="password"
-                value={currentPassword}
-                autoComplete="current-password"
-                onChange={(event) => setCurrentPassword(event.target.value)}
-              />
-            </label>
-
-            <label className="settings-page__field">
-              <span>Новий пароль</span>
-
-              <input
-                type="password"
-                value={newPassword}
-                autoComplete="new-password"
-                onChange={(event) => setNewPassword(event.target.value)}
-              />
-            </label>
-
-            <label className="settings-page__field">
-              <span>Повтори новий пароль</span>
-
-              <input
-                type="password"
-                value={confirmPassword}
-                autoComplete="new-password"
-                onChange={(event) => setConfirmPassword(event.target.value)}
-              />
-            </label>
-
-            <div className="settings-page__modal-actions">
-              <button
-                type="button"
-                className="settings-page__modal-button settings-page__modal-button--secondary"
-                onClick={handleClosePassword}
-                disabled={isSavingPassword}
-              >
-                Скасувати
-              </button>
-
-              <button
-                type="submit"
-                className="settings-page__modal-button settings-page__modal-button--primary"
-                disabled={isSavingPassword}
-              >
-                {isSavingPassword ? "Збереження..." : "Змінити пароль"}
-              </button>
-            </div>
-          </form>
-        </Modal>
-      )}
     </main>
   );
 };
