@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 
-import { apiFetch } from "../../../../../shared/api/apiClient.js";
+import { finishReadingSession, getActiveReadingSession, getReadingStats, pauseReadingSession, resumeReadingSession, startReadingSession, updateUserBook } from "../api/readingSessionApi.js";
+import { validateEndProgress as validateEndProgressValue, validateStartProgress as validateStartProgressValue } from "./utils/readingSessionValidation.js";
 
 const PROGRESS_MODES = {
   PAGES: "PAGES",
@@ -108,7 +109,7 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
 
   const fetchReadingStats = async () => {
     try {
-      const data = await apiFetch(`/api/user-books/${book.id}/reading/stats`);
+      const data = await getReadingStats(book.id);
 
       setStats(data.stats);
     } catch (error) {
@@ -118,7 +119,7 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
 
   const fetchActiveSession = async () => {
     try {
-      const data = await apiFetch(`/api/user-books/${book.id}/reading/active`);
+      const data = await getActiveReadingSession(book.id);
 
       if (!data.session) {
         setActiveSession(null);
@@ -180,8 +181,7 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
       setStatusLoading(true);
       setMessage("");
 
-      const data = await apiFetch(`/api/user-books/${book.id}`, {
-        method: "PATCH",
+      const data = await updateUserBook(book.id, {
 
         body: {
           status,
@@ -235,42 +235,8 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
     }
   };
 
-  const validateStartProgress = () => {
-    if (startProgress.trim() === "") {
-      return progressMode === PROGRESS_MODES.PERCENT
-        ? "Вкажи початковий відсоток"
-        : "Вкажи початкову сторінку";
-    }
-
-    const value = Number(startProgress);
-
-    if (!Number.isInteger(value)) {
-      return progressMode === PROGRESS_MODES.PERCENT
-        ? "Вкажи цілий відсоток"
-        : "Вкажи коректний номер сторінки";
-    }
-
-    if (value < 0) {
-      return "Прогрес не може бути меншим за 0";
-    }
-
-    if (progressMode === PROGRESS_MODES.PERCENT && value > 100) {
-      return "Відсоток має бути від 0 до 100";
-    }
-
-    if (
-      progressMode === PROGRESS_MODES.PAGES &&
-      currentBook.pages &&
-      value > currentBook.pages
-    ) {
-      return `У книзі всього ${currentBook.pages} сторінок`;
-    }
-
-    return "";
-  };
-
   const startReading = async () => {
-    const validationMessage = validateStartProgress();
+    const validationMessage = validateStartProgressValue({ startProgress, progressMode, currentBook });
 
     if (validationMessage) {
       setMessage(validationMessage);
@@ -295,10 +261,7 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
               startPage: value,
             };
 
-      const data = await apiFetch(`/api/user-books/${book.id}/reading/start`, {
-        method: "POST",
-        body,
-      });
+      const data = await startReadingSession(book.id, body);
 
       setElapsedSeconds(data.elapsedSeconds ?? 0);
 
@@ -337,9 +300,7 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
       setPauseLoading(true);
       setMessage("");
 
-      const data = await apiFetch(`/api/user-books/${book.id}/reading/pause`, {
-        method: "POST",
-      });
+      const data = await pauseReadingSession(book.id);
 
       setActiveSession(data.session);
 
@@ -369,9 +330,7 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
       setPauseLoading(true);
       setMessage("");
 
-      const data = await apiFetch(`/api/user-books/${book.id}/reading/resume`, {
-        method: "POST",
-      });
+      const data = await resumeReadingSession(book.id);
 
       setActiveSession(data.session);
 
@@ -401,8 +360,7 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
       setRatingLoading(true);
       setMessage("");
 
-      const data = await apiFetch(`/api/user-books/${book.id}`, {
-        method: "PATCH",
+      const data = await updateUserBook(book.id, {
 
         body: {
           rating,
@@ -432,54 +390,8 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
     }
   };
 
-  const validateEndProgress = () => {
-    if (endProgress.trim() === "") {
-      return isPercentMode
-        ? "Вкажи кінцевий відсоток"
-        : "Вкажи сторінку, на якій зупинилися";
-    }
-
-    const value = Number(endProgress);
-
-    if (!Number.isInteger(value)) {
-      return isPercentMode
-        ? "Вкажи цілий відсоток"
-        : "Вкажи коректний номер сторінки";
-    }
-
-    if (value < 0) {
-      return "Прогрес не може бути меншим за 0";
-    }
-
-    if (isPercentMode) {
-      const sessionStartPercent = activeSession?.startPercent ?? 0;
-
-      if (value > 100) {
-        return "Відсоток має бути від 0 до 100";
-      }
-
-      if (value < sessionStartPercent) {
-        return `Відсоток не може бути меншим за ${sessionStartPercent}%`;
-      }
-
-      return "";
-    }
-
-    const sessionStartPage = activeSession?.startPage ?? 0;
-
-    if (value < sessionStartPage) {
-      return `Сторінка не може бути меншою за ${sessionStartPage}`;
-    }
-
-    if (currentBook.pages && value > currentBook.pages) {
-      return `У книзі всього ${currentBook.pages} сторінок`;
-    }
-
-    return "";
-  };
-
   const finishValidationMessage =
-    activeSession && endProgress !== "" ? validateEndProgress() : "";
+    activeSession && endProgress !== "" ? validateEndProgressValue({ endProgress, isPercentMode, activeSession, currentBook }) : "";
 
   const canFinish =
     Boolean(activeSession) &&
@@ -488,7 +400,7 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
     !finishing;
 
   const finishReading = async () => {
-    const validationMessage = validateEndProgress();
+    const validationMessage = validateEndProgressValue({ endProgress, isPercentMode, activeSession, currentBook });
 
     if (validationMessage) {
       setMessage(validationMessage);
@@ -511,10 +423,7 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
               endPage: value,
             };
 
-      await apiFetch(`/api/user-books/${book.id}/reading/finish`, {
-        method: "POST",
-        body,
-      });
+      await finishReadingSession(book.id, body);
 
       setCurrentBook((current) => {
         const finished =
