@@ -22,21 +22,32 @@ const CatalogPage = () => {
   const [searchBy, setSearchBy] = useState("all");
   const [editingBook, setEditingBook] = useState(null);
   const [scannerOpen, setScannerOpen] = useState(false);
-  const [selectedShelf, setSelectedShelf] = useState(null);
 
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+
   const searchInputRef = useRef(null);
+  const catalogTopRef = useRef(null);
 
   const { isAuthenticated, isAuthLoading } = useAuth();
   const { activeLibrary, activeLibraryId } = useLibrary();
 
+  const viewMode = searchParams.get("view") ?? "shelves";
+  const selectedShelf = searchParams.get("shelf");
 
   const canEditLibrary =
-    activeLibrary?.role === "OWNER" || activeLibrary?.role === "ADMIN";
-  const { books, message, wishlistLoadingId, toggleWishlist, updateBook } =    useCatalogBooks();
+    activeLibrary?.role === "OWNER" ||
+    activeLibrary?.role === "ADMIN";
 
-useEffect(() => {
+  const {
+    books,
+    message,
+    wishlistLoadingId,
+    toggleWishlist,
+    updateBook,
+  } = useCatalogBooks();
+
+  useEffect(() => {
     searchInputRef.current?.focus();
   }, []);
 
@@ -51,7 +62,10 @@ useEffect(() => {
       updateBook(updatedBook);
     };
 
-    window.addEventListener("library-book-updated", handleLibraryBookUpdated);
+    window.addEventListener(
+      "library-book-updated",
+      handleLibraryBookUpdated,
+    );
 
     return () => {
       window.removeEventListener(
@@ -87,6 +101,43 @@ useEffect(() => {
       }),
     [shelfBooks, search, searchBy],
   );
+
+  const scrollToCatalogTop = () => {
+    requestAnimationFrame(() => {
+      catalogTopRef.current?.scrollIntoView({
+        block: "start",
+        behavior: "auto",
+      });
+    });
+  };
+
+  const handleViewModeChange = (mode) => {
+    const params = new URLSearchParams(searchParams);
+
+    params.set("view", mode);
+    params.delete("shelf");
+
+    setSearchParams(params, {
+      replace: true,
+    });
+
+    scrollToCatalogTop();
+  };
+
+  const handleShelfSelect = (shelfId) => {
+    const params = new URLSearchParams(searchParams);
+
+    params.set("view", "shelves");
+    params.set("shelf", shelfId);
+
+    setSearchParams(params);
+
+    scrollToCatalogTop();
+  };
+
+  const handleShelfBack = () => {
+    navigate(-1);
+  };
 
   const handleScan = (isbn) => {
     setSearchBy("isbn");
@@ -127,12 +178,22 @@ useEffect(() => {
     }
 
     const params = new URLSearchParams(searchParams);
+
     params.set("reading", book.id);
+
     setSearchParams(params);
   };
 
+  const showShelves =
+    viewMode === "shelves" &&
+    !selectedShelf &&
+    !search.trim();
+
   return (
-    <div className="catalog-page">
+    <div
+      ref={catalogTopRef}
+      className="catalog-page"
+    >
       <h1>Каталог бібліотеки</h1>
 
       <p className="books-count">
@@ -141,7 +202,41 @@ useEffect(() => {
           : `Книг у бібліотеці: ${books.length}`}
       </p>
 
-      {message && <p className="catalog-message">{message}</p>}
+      {message && (
+        <p className="catalog-message">
+          {message}
+        </p>
+      )}
+
+      <div className="catalog-view-toggle">
+        <button
+          type="button"
+          className={
+            viewMode === "all"
+              ? "catalog-view-toggle__button is-active"
+              : "catalog-view-toggle__button"
+          }
+          onClick={() =>
+            handleViewModeChange("all")
+          }
+        >
+          Усі книги
+        </button>
+
+        <button
+          type="button"
+          className={
+            viewMode === "shelves"
+              ? "catalog-view-toggle__button is-active"
+              : "catalog-view-toggle__button"
+          }
+          onClick={() =>
+            handleViewModeChange("shelves")
+          }
+        >
+          Полички
+        </button>
+      </div>
 
       <CatalogSearch
         search={search}
@@ -149,13 +244,15 @@ useEffect(() => {
         searchInputRef={searchInputRef}
         onSearchChange={setSearch}
         onSearchByChange={setSearchBy}
-        onOpenScanner={() => setScannerOpen(true)}
+        onOpenScanner={() =>
+          setScannerOpen(true)
+        }
       />
 
-      {!selectedShelf && !search.trim() ? (
+      {showShelves ? (
         <GenreShelves
           shelves={genreShelves}
-          onSelect={setSelectedShelf}
+          onSelect={handleShelfSelect}
         />
       ) : (
         <>
@@ -163,7 +260,7 @@ useEffect(() => {
             <button
               type="button"
               className="catalog-shelf-back"
-              onClick={() => setSelectedShelf(null)}
+              onClick={handleShelfBack}
             >
               ← Усі полички
             </button>
@@ -176,8 +273,12 @@ useEffect(() => {
                 book={book}
                 isAuthenticated={isAuthenticated}
                 isAuthLoading={isAuthLoading}
-                wishlistLoadingId={wishlistLoadingId}
-                onWishlistToggle={handleWishlistToggle}
+                wishlistLoadingId={
+                  wishlistLoadingId
+                }
+                onWishlistToggle={
+                  handleWishlistToggle
+                }
                 onEdit={setEditingBook}
                 onRead={handleOpenReading}
                 canEdit={canEditLibrary}
@@ -191,7 +292,9 @@ useEffect(() => {
         <EditBookModal
           book={editingBook}
           activeLibraryId={activeLibraryId}
-          onClose={() => setEditingBook(null)}
+          onClose={() =>
+            setEditingBook(null)
+          }
           onUpdated={handleBookUpdated}
         />
       )}
@@ -199,7 +302,9 @@ useEffect(() => {
       {scannerOpen && (
         <BarcodeScanner
           onScan={handleScan}
-          onClose={() => setScannerOpen(false)}
+          onClose={() =>
+            setScannerOpen(false)
+          }
         />
       )}
     </div>
@@ -207,8 +312,3 @@ useEffect(() => {
 };
 
 export default CatalogPage;
-
-
-
-
-

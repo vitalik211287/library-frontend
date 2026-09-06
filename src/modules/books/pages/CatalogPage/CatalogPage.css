@@ -160,3 +160,49 @@
 .catalog-shelf-back:hover {
   text-decoration: underline;
 }
+.catalog-view-toggle {
+  width: 100%;
+  margin-bottom: 14px;
+  padding: 4px;
+
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4px;
+
+  border: 1px solid var(--border);
+  border-radius: 14px;
+
+  background: var(--surface-secondary);
+}
+
+.catalog-view-toggle__button {
+  min-height: 42px;
+  padding: 8px 14px;
+
+  border: 0;
+  border-radius: 10px;
+
+  background: transparent;
+  color: var(--text-secondary, #a7a7b5);
+
+  font: inherit;
+  font-size: 14px;
+  font-weight: 750;
+
+  cursor: pointer;
+
+  transition:
+    background 0.18s ease,
+    color 0.18s ease,
+    box-shadow 0.18s ease;
+}
+
+.catalog-view-toggle__button.is-active {
+  background: var(--accent);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+}
+
+.catalog-shelf-back {
+  margin-bottom: 14px;
+}
