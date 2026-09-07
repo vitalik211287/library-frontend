@@ -65,3 +65,32 @@
 
   font-size: 15px;
 }
+
+.stats-extra__item--button {
+  position: relative;
+  padding-right: 28px;
+  background: color-mix(in srgb, var(--accent) 9%, transparent);
+  border-color: var(--accent);
+  box-shadow: 0 6px 18px rgba(176, 112, 255, 0.12);
+}
+
+.stats-extra__item--button::after {
+  content: "\203A";
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  transform: translateY(-50%);
+  color: var(--accent);
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.stats-extra__item--button:hover {
+  transform: translateY(-2px);
+  border-color: var(--accent);
+}
+
+.stats-extra__item--button:active {
+  transform: scale(0.98);
+}

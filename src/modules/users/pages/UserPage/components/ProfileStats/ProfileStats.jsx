@@ -1,14 +1,7 @@
 import useReadingStreak from "../../hooks/useReadingStreak.js";
+import { FinishedBookIcon } from "../../../../../home/components/HomeIcons.jsx";
 
 import "./ProfileStats.css";
-
-const BookIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11a2 2 0 0 1 2 2v16a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 21.5v-16Z" />
-
-    <path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v18a2 2 0 0 1 2-2h2.5a2.5 2.5 0 0 1 2.5 2.5v-16Z" />
-  </svg>
-);
 
 const BookmarkIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -43,7 +36,7 @@ const ProfileStats = ({
   return (
     <section className="profile-stats">
       <article className="profile-stat">
-        <BookIcon />
+        <FinishedBookIcon />
 
         <strong>{finishedCount}</strong>
 

@@ -49,6 +49,8 @@
 
   display: flex;
   flex-direction: column;
+
+  flex: 1;
 }
 
 .book-card h2 {
@@ -460,5 +462,11 @@
 
   .book-card__extra-info {
     display: block;
+  }
+}
+
+@media (max-width: 767px) {
+  .book-card__reading-info {
+    margin-top: auto;
   }
 }
