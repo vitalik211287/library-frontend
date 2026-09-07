@@ -6,6 +6,12 @@ export const getAdminUsers = async () => {
   return data?.users ?? [];
 };
 
+
+export const getAdminUserById = async (userId) => {
+  const data = await apiFetch(`/api/admin/users/${userId}`);
+
+  return data?.user ?? null;
+};
 export const blockAdminUser = async (userId) => {
   const data = await apiFetch(`/api/admin/users/${userId}/block`, {
     method: "PATCH",
