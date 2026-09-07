@@ -1,4 +1,4 @@
-.admin-users-page {
+﻿.admin-users-page {
   width: 100%;
   max-width: 1100px;
   margin: 0 auto;
@@ -373,7 +373,7 @@
 }
 
 .admin-library__stats {
-  padding: 0 22px 18px;
+  padding: 0 22px 12px;
 
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -382,8 +382,9 @@
 
 .admin-library__stats > div {
   min-width: 0;
-  min-height: 82px;
-  padding: 12px;
+  height: 60px;
+  padding: 7px 10px;
+  box-sizing: border-box;
 
   display: flex;
   flex-direction: column;
@@ -448,9 +449,10 @@
   min-height: 0;
   flex: 1;
 
-  padding: 0 18px 20px;
+  padding: 0 18px 40px;
 
   overflow-y: auto;
+  scroll-padding-bottom: 40px;
   overscroll-behavior: contain;
 }
 
@@ -1140,4 +1142,63 @@
   color: #aab1bd;
   border: 1px solid #3b424d;
   background: rgba(59, 66, 77, 0.18);
+}
+
+@media (max-width: 767px) {
+  .admin-library__filters {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: visible;
+  }
+
+  .admin-library__filter {
+    width: 100%;
+  }
+
+  .admin-library__filter:last-child {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-library-modal .modal__header {
+    min-height: 44px;
+    padding: 8px 12px 4px;
+  }
+}
+
+
+@media (max-width: 600px) {
+  .admin-library__user {
+    padding-top: 10px;
+  }
+}
+
+@media (max-width: 600px) {
+  .admin-library-modal {
+    position: relative;
+  }
+
+  .admin-library-modal .modal__header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 20;
+
+    min-height: 0;
+    padding: 12px;
+
+    pointer-events: none;
+  }
+
+  .admin-library-modal .modal__close {
+    margin-left: auto;
+    pointer-events: auto;
+  }
+
+  .admin-library__user {
+    padding-top: 16px;
+    padding-right: 58px;
+  }
 }
