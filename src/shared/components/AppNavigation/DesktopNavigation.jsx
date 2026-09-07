@@ -15,6 +15,7 @@ import {
 } from "./NavigationIcons.jsx";
 
 const DesktopNavigation = ({
+  user,
   isAuthenticated,
   isAuthLoading,
   onOpenReader,
@@ -70,6 +71,14 @@ const DesktopNavigation = ({
           <span>{isAuthenticated ? "Мій профіль" : "Увійти"}</span>
         </NavLink>
 
+        {user?.role === "ADMIN" && (
+          <NavLink to="/admin/users" className="desktop-nav__link">
+            <SettingsIcon />
+
+            <span>Адміністрування</span>
+          </NavLink>
+        )}
+
         <NavLink to="/settings" className="desktop-nav__link">
           <SettingsIcon />
 
@@ -118,4 +127,3 @@ const DesktopNavigation = ({
 };
 
 export default DesktopNavigation;
-

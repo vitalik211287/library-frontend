@@ -160,6 +160,18 @@ const MobileNavigation = ({
 
               <span>{isAuthenticated ? "Профіль" : "Увійти"}</span>
             </NavLink>
+
+            {user?.role === "ADMIN" && (
+              <NavLink
+                to="/admin/users"
+                className="mobile-drawer__link"
+                onClick={onClose}
+              >
+                <SettingsIcon />
+
+                <span>Адміністрування</span>
+              </NavLink>
+            )}
           </nav>
 
           <div className="mobile-drawer__settings">
@@ -226,4 +238,3 @@ const MobileNavigation = ({
 };
 
 export default MobileNavigation;
-

@@ -1,4 +1,4 @@
-import { useLocation } from "react-router-dom";
+﻿import { useLocation } from "react-router-dom";
 
 import { Toaster } from "react-hot-toast";
 
@@ -28,6 +28,7 @@ import { useTheme } from "../shared/context/ThemeContext.jsx";
 const App = () => {
   const { user, isAuthenticated, isAuthLoading } = useAuth();
 
+
   const { themeMode, setThemeMode } = useTheme();
 
   const location = useLocation();
@@ -35,6 +36,7 @@ const App = () => {
   const { isMobileMenuOpen, openMobileMenu, closeMobileMenu } = useMobileMenu(
     location.pathname,
   );
+
   const {
     readingBook,
     isReadingBookLoading,
@@ -100,6 +102,7 @@ const App = () => {
       />
 
       <DesktopNavigation
+        user={user}
         isAuthenticated={isAuthenticated}
         isAuthLoading={isAuthLoading}
         onOpenReader={handleOpenReader}

@@ -18,8 +18,10 @@ import LibraryManagementPage from "../../modules/libraries/pages/LibraryManageme
 import UserSearchPage from "../../modules/users/pages/UserSearchPage/UserSearchPage.jsx";
 import FollowingPage from "../../modules/users/pages/FollowingPage/FollowingPage.jsx";
 import FollowersPage from "../../modules/users/pages/FollowersPage/FollowersPage.jsx";
+import AdminUsersPage from "../../modules/admin/pages/AdminUsersPage/AdminUsersPage.jsx";
 
 import ProtectedRoute from "./ProtectedRoute.jsx";
+import AdminRoute from "./AdminRoute.jsx";
 
 export const PublicRoutes = ({ isAuthenticated }) => {
   return (
@@ -27,33 +29,21 @@ export const PublicRoutes = ({ isAuthenticated }) => {
       <Route
         path="/"
         element={
-          isAuthenticated ? (
-            <Navigate to="/home" replace />
-          ) : (
-            <LandingPage />
-          )
+          isAuthenticated ? <Navigate to="/home" replace /> : <LandingPage />
         }
       />
 
       <Route
         path="/login"
         element={
-          isAuthenticated ? (
-            <Navigate to="/home" replace />
-          ) : (
-            <LoginPage />
-          )
+          isAuthenticated ? <Navigate to="/home" replace /> : <LoginPage />
         }
       />
 
       <Route
         path="/register"
         element={
-          isAuthenticated ? (
-            <Navigate to="/home" replace />
-          ) : (
-            <RegisterPage />
-          )
+          isAuthenticated ? <Navigate to="/home" replace /> : <RegisterPage />
         }
       />
     </Routes>
@@ -185,6 +175,17 @@ export const PrivateRoutes = ({ onOpenReading }) => {
         element={
           <ProtectedRoute>
             <FollowersPage />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/admin/users"
+        element={
+          <ProtectedRoute>
+            <AdminRoute>
+              <AdminUsersPage />
+            </AdminRoute>
           </ProtectedRoute>
         }
       />
