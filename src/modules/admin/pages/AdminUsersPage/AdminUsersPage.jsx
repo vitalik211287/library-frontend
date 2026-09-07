@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 
 import {
@@ -34,8 +35,56 @@ const ACTIVITY_FILTERS = [
   { value: "STATUS", label: "Зміни статусу" },
 ];
 
+const createUserSlug = (name) => {
+  const transliteration = {
+    "\u0430": "a",
+    "\u0431": "b",
+    "\u0432": "v",
+    "\u0433": "h",
+    "\u0491": "g",
+    "\u0434": "d",
+    "\u0435": "e",
+    "\u0454": "ie",
+    "\u0436": "zh",
+    "\u0437": "z",
+    "\u0438": "y",
+    "\u0456": "i",
+    "\u0457": "i",
+    "\u0439": "i",
+    "\u043a": "k",
+    "\u043b": "l",
+    "\u043c": "m",
+    "\u043d": "n",
+    "\u043e": "o",
+    "\u043f": "p",
+    "\u0440": "r",
+    "\u0441": "s",
+    "\u0442": "t",
+    "\u0443": "u",
+    "\u0444": "f",
+    "\u0445": "kh",
+    "\u0446": "ts",
+    "\u0447": "ch",
+    "\u0448": "sh",
+    "\u0449": "shch",
+    "\u044c": "",
+    "\u044e": "iu",
+    "\u044f": "ia",
+  };
+
+  return (name || "user")
+    .toLowerCase()
+    .split("")
+    .map((char) => transliteration[char] ?? char)
+    .join("")
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "") || "user";
+};
+
 const AdminUsersPage = () => {
   const { user: currentUser } = useAuth();
+  const navigate = useNavigate();
+  const { userId } = useParams();
 
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -186,27 +235,42 @@ const AdminUsersPage = () => {
     }
   };
 
-  const handleOpenUserDetails = async (userId) => {
-    try {
-      setIsDetailsLoading(true);
-
-      const userDetails = await getAdminUserById(userId);
-
-      setSelectedUser(userDetails);
+  useEffect(() => {
+    if (!userId) {
+      setSelectedUser(null);
       setSelectedBookId(null);
-      setBookFilter("ALL");
-      setActivityFilter("ALL");
-    } catch (error) {
-      console.error("Load admin user details error:", error);
-      toast.error(error?.message || "Не вдалося завантажити дані користувача");
-    } finally {
-      setIsDetailsLoading(false);
+      return;
     }
+
+    const loadUserDetails = async () => {
+      try {
+        setIsDetailsLoading(true);
+
+        const userDetails = await getAdminUserById(userId);
+
+        setSelectedUser(userDetails);
+        setSelectedBookId(null);
+        setBookFilter("ALL");
+        setActivityFilter("ALL");
+      } catch (error) {
+        console.error("Load admin user details error:", error);
+        toast.error(error?.message || "Не вдалося завантажити дані користувача");
+        navigate("/admin/users", { replace: true });
+      } finally {
+        setIsDetailsLoading(false);
+      }
+    };
+
+    loadUserDetails();
+  }, [userId, navigate]);
+
+  const handleOpenUserDetails = (user) => {
+    const slug = createUserSlug(user.name);
+    navigate(`/admin/users/${slug}/${user.id}`);
   };
 
   const handleCloseUserDetails = () => {
-    setSelectedUser(null);
-    setSelectedBookId(null);
+    navigate("/admin/users");
   };
 
   const handleSelectBook = (bookId) => {
@@ -507,7 +571,7 @@ const AdminUsersPage = () => {
                   <button
                     type="button"
                     className="admin-user-card__books-button"
-                    onClick={() => handleOpenUserDetails(user.id)}
+                    onClick={() => handleOpenUserDetails(user)}
                     disabled={isDetailsLoading}
                   >
                     {user._count?.books ?? 0}

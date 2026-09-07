@@ -190,6 +190,17 @@ export const PrivateRoutes = ({ onOpenReading }) => {
         }
       />
 
+      <Route
+        path="/admin/users/:userSlug/:userId"
+        element={
+          <ProtectedRoute>
+            <AdminRoute>
+              <AdminUsersPage />
+            </AdminRoute>
+          </ProtectedRoute>
+        }
+      />
+
       <Route path="*" element={<Navigate to="/home" replace />} />
     </Routes>
   );
