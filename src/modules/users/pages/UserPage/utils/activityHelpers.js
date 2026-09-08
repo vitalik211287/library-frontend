@@ -11,75 +11,160 @@ export const createEmptyWeeks = (
     }),
   );
 
-export const buildPreviousMonthWeeks = (
-  days,
-) => {
-  const weeks = createEmptyWeeks(
-    4,
-    false,
+const getMonday = (date) => {
+  const result = new Date(date);
+
+  result.setHours(0, 0, 0, 0);
+
+  const dayOfWeek = result.getDay();
+
+  const daysFromMonday =
+    dayOfWeek === 0
+      ? 6
+      : dayOfWeek - 1;
+
+  result.setDate(
+    result.getDate() -
+      daysFromMonday,
   );
 
-  days.forEach((day) => {
-    const dayNumber =
-      Number(day.day) || 0;
-
-    const seconds =
-      Number(day.seconds) || 0;
-
-    let weekIndex = 0;
-
-    if (dayNumber <= 7) {
-      weekIndex = 0;
-    } else if (dayNumber <= 14) {
-      weekIndex = 1;
-    } else if (dayNumber <= 21) {
-      weekIndex = 2;
-    } else {
-      weekIndex = 3;
-    }
-
-    weeks[weekIndex].value +=
-      seconds / 60;
-  });
-
-  return weeks.map((week) => ({
-    ...week,
-    value: Math.round(week.value),
-  }));
+  return result;
 };
 
-export const buildCurrentMonthWeeks = (
-  days,
-) => {
-  const weeks = createEmptyWeeks(
-    5,
-    true,
+const formatWeekLabel = (monday) => {
+  const sunday = new Date(monday);
+
+  sunday.setDate(
+    sunday.getDate() + 6,
   );
 
-  days.forEach((day) => {
-    const dayNumber =
-      Number(day.day) || 0;
+  const formatDate = (date) =>
+    `${String(date.getDate()).padStart(2, "0")}.${String(
+      date.getMonth() + 1,
+    ).padStart(2, "0")}`;
 
-    const seconds =
-      Number(day.seconds) || 0;
+  return `${formatDate(monday)}?${formatDate(sunday)}`;
+};
 
-    let weekIndex = Math.floor(
-      (dayNumber - 1) / 7,
+export const buildCalendarWeeks = ({
+  previousDays,
+  currentDays,
+  previousYear,
+  previousMonth,
+  currentYear,
+  currentMonth,
+}) => {
+  const now = new Date();
+
+  const firstMonday = getMonday(
+    new Date(
+      previousYear,
+      previousMonth - 1,
+      1,
+    ),
+  );
+
+  const currentMonday =
+    getMonday(now);
+
+  const weeks = [];
+
+  const weekMap = new Map();
+
+  for (
+    let cursor = new Date(firstMonday);
+    cursor <= currentMonday;
+    cursor.setDate(
+      cursor.getDate() + 7,
+    )
+  ) {
+    const monday =
+      new Date(cursor);
+
+    const key =
+      monday.getTime();
+
+    const week = {
+      label:
+        formatWeekLabel(monday),
+
+      value: 0,
+
+      current:
+        key ===
+        currentMonday.getTime(),
+
+      monday,
+    };
+
+    weeks.push(week);
+
+    weekMap.set(
+      key,
+      week,
     );
+  }
 
-    weekIndex = Math.min(
-      Math.max(weekIndex, 0),
-      4,
-    );
+  const daysWithDates = [
+    ...previousDays.map(
+      (day) => ({
+        ...day,
 
-    weeks[weekIndex].value +=
-      seconds / 60;
-  });
+        date: new Date(
+          previousYear,
+          previousMonth - 1,
+          Number(day.day),
+        ),
+      }),
+    ),
 
-  return weeks.map((week) => ({
-    ...week,
-    value: Math.round(week.value),
-  }));
+    ...currentDays.map(
+      (day) => ({
+        ...day,
+
+        date: new Date(
+          currentYear,
+          currentMonth - 1,
+          Number(day.day),
+        ),
+      }),
+    ),
+  ];
+
+  daysWithDates.forEach(
+    (day) => {
+      const monday =
+        getMonday(day.date);
+
+      const week =
+        weekMap.get(
+          monday.getTime(),
+        );
+
+      if (!week) {
+        return;
+      }
+
+      week.value +=
+        (Number(
+          day.seconds,
+        ) || 0) / 60;
+    },
+  );
+
+  return weeks.map(
+    ({
+      monday,
+      ...week
+    }) => ({
+      ...week,
+
+      value:
+        Math.round(
+          week.value,
+        ),
+    }),
+  );
 };
 
 export const getCurrentMonthSeconds = (

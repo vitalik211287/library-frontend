@@ -3,8 +3,7 @@ import { useEffect, useMemo } from "react";
 import { useReadingActivityContext } from "../../../../reading/context/ReadingActivityContext.jsx";
 
 import {
-  buildCurrentMonthWeeks,
-  buildPreviousMonthWeeks,
+  buildCalendarWeeks,
   getCurrentMonthSeconds,
   getCurrentWeekStats,
 } from "../utils/activityHelpers.js";
@@ -61,9 +60,14 @@ const useReadingActivity = () => {
       ? currentData.days
       : [];
 
-    const previousWeeks = buildPreviousMonthWeeks(previousDays);
-
-    const currentWeeks = buildCurrentMonthWeeks(currentDays);
+    const weeks = buildCalendarWeeks({
+      previousDays,
+      currentDays,
+      previousYear,
+      previousMonth,
+      currentYear,
+      currentMonth,
+    });
 
     const currentMonthSeconds = getCurrentMonthSeconds(currentDays);
 
@@ -77,7 +81,7 @@ const useReadingActivity = () => {
     });
 
     return {
-      weeks: [...previousWeeks, ...currentWeeks],
+      weeks,
 
       currentMonthSeconds,
 
