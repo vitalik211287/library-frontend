@@ -211,6 +211,11 @@ const ReadingActivityChart = ({ chartData }) => {
     chartData.length > 1
       ? (safeSelectedWeekIndex / (chartData.length - 1)) * 100
       : 50;
+
+  const selectedWeekTop =
+    selectedWeek
+      ? (getY(selectedWeekValue) / height) * 100
+      : 50;
 /*
    * =========================
    * MONTHS
@@ -306,25 +311,16 @@ const ReadingActivityChart = ({ chartData }) => {
                 WEEK VERTICALS
             ========================= */}
 
-            {chartData.map((item, index) => {
-              const isSelected = index === safeSelectedWeekIndex;
-
-              return (
-                <line
-                  key={`vertical-${item.label}-${index}`}
-                  onClick={() => setSelectedWeekIndex(index)}
-                  x1={getX(index)}
-                  x2={getX(index)}
-                  y1={paddingTop}
-                  y2={height}
-                  className={
-                    isSelected
-                      ? "reading-chart__grid-line reading-chart__grid-line--current"
-                      : "reading-chart__grid-line"
-                  }
-                />
-              );
-            })}
+            {chartData.map((item, index) => (
+              <line
+                key={`vertical-${item.label}-${index}`}
+                x1={getX(index)}
+                x2={getX(index)}
+                y1={paddingTop}
+                y2={height}
+                className="reading-chart__grid-line"
+              />
+            ))}
 
             {/* =========================
                 AREA + LINE
@@ -344,13 +340,70 @@ const ReadingActivityChart = ({ chartData }) => {
             )}
           </svg>
 
+          {selectedWeek && (
+            <>
+              <div
+                className="reading-chart__selection-line"
+                style={{
+                  left: `${selectedWeekLeft}%`,
+                  top: `${paddingTop}px`,
+                }}
+              />
+
+              <span
+                className="reading-chart__selection-dot"
+                style={{
+                  left: `${selectedWeekLeft}%`,
+                  top: `${selectedWeekTop}%`,
+                }}
+              />
+            </>
+          )}
+
+          <div
+            className="reading-chart__hit-zones"
+            style={{
+              top: `${paddingTop}px`,
+            }}
+          >
+            {chartData.map((item, index) => {
+              const count = chartData.length;
+
+              const left =
+                count <= 1
+                  ? 0
+                  : index === 0
+                    ? 0
+                    : ((index - 0.5) / (count - 1)) * 100;
+
+              const right =
+                count <= 1
+                  ? 100
+                  : index === count - 1
+                    ? 100
+                    : ((index + 0.5) / (count - 1)) * 100;
+
+              return (
+                <button
+                  key={`hit-${item.label}-${index}`}
+                  type="button"
+                  className="reading-chart__hit-zone"
+                  style={{
+                    left: `${left}%`,
+                    width: `${right - left}%`,
+                  }}
+                  onClick={() => setSelectedWeekIndex(index)}
+                  aria-label={`Показати ${item.label}: ${Number(item.value) || 0} хв`}
+                />
+              );
+            })}
+          </div>
+
           {/* =========================
               DOTS
           ========================= */}
 
           {chartData.map((item, index) => {
-            const isSelected = index === safeSelectedWeekIndex;
-
             const isPeak = index === peakIndex && peakValue > 0;
 
             const left =
@@ -364,10 +417,6 @@ const ReadingActivityChart = ({ chartData }) => {
 
             if (isPeak) {
               className += " reading-chart__html-dot--peak";
-            }
-
-            if (isSelected) {
-              className += " reading-chart__html-dot--current";
             }
 
             return (
