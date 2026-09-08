@@ -100,13 +100,6 @@ const getMonthMarkers = (chartData) => {
   return markers;
 };
 
-const formatChartValue = (minutes, maxValue) => {
-  if (maxValue >= 120) {
-    return `${Math.round(minutes / 60)} год`;
-  }
-
-  return `${Math.round(minutes)} хв`;
-};
 const ReadingActivityChart = ({ chartData }) => {
   const width = 760;
   const height = 240;
@@ -195,7 +188,12 @@ const ReadingActivityChart = ({ chartData }) => {
     currentWeekIndex >= 0 ? chartData[currentWeekIndex] : null;
 
   const currentWeekValue = Number(currentWeek?.value) || 0;
-/*
+
+  const currentWeekTop = currentWeek
+    ? (getY(currentWeekValue) / height) * 100
+    : 0;
+
+  /*
    * =========================
    * MONTHS
    * =========================
@@ -212,7 +210,7 @@ const ReadingActivityChart = ({ chartData }) => {
 
         <div className="reading-chart__scale">
           {[...yTicks].reverse().map((tick) => (
-            <span key={tick}>{formatChartValue(tick, maxValue)}</span>
+            <span key={tick}>{tick} хв</span>
           ))}
         </div>
 
@@ -231,7 +229,7 @@ const ReadingActivityChart = ({ chartData }) => {
               style={{
                 left: "100%",
 
-                top: `${paddingTop}px`,
+                top: `${currentWeekTop}%`,
               }}
             >
               {currentWeekValue} хв
