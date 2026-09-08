@@ -26,58 +26,58 @@ const useReadingActivity = () => {
 
   const now = useMemo(() => new Date(), []);
 
-  const currentYear = now.getFullYear();
-  const currentMonth = now.getMonth() + 1;
+  const monthDescriptors = useMemo(() => {
+    return [2, 1, 0].map((monthsAgo) => {
+      const date = new Date(
+        now.getFullYear(),
+        now.getMonth() - monthsAgo,
+        1,
+      );
 
-  const previousDate = useMemo(
-    () => new Date(currentYear, currentMonth - 2, 1),
-    [currentYear, currentMonth],
-  );
-
-  const previousYear = previousDate.getFullYear();
-  const previousMonth = previousDate.getMonth() + 1;
-
-  const currentKey = `${currentYear}-${currentMonth}`;
-
-  const previousKey = `${previousYear}-${previousMonth}`;
+      return {
+        year: date.getFullYear(),
+        month: date.getMonth() + 1,
+        key: `${date.getFullYear()}-${date.getMonth() + 1}`,
+      };
+    });
+  }, [now]);
 
   useEffect(() => {
-    ensureActivity(previousYear, previousMonth);
-
-    ensureActivity(currentYear, currentMonth);
-  }, [previousYear, previousMonth, currentYear, currentMonth, ensureActivity]);
+    monthDescriptors.forEach(({ year, month }) => {
+      ensureActivity(year, month);
+    });
+  }, [monthDescriptors, ensureActivity]);
 
   const readingActivity = useMemo(() => {
-    const previousData = activityByMonth[previousKey] ?? null;
+    const months = monthDescriptors.map(({ year, month, key }) => {
+      const data = activityByMonth[key] ?? null;
 
-    const currentData = activityByMonth[currentKey] ?? null;
+      return {
+        year,
+        month,
+        days: Array.isArray(data?.days) ? data.days : [],
+      };
+    });
 
-    const previousDays = Array.isArray(previousData?.days)
-      ? previousData.days
-      : [];
+    const weeks = buildCalendarWeeks({
+      months,
+      weeksCount: 12,
+    });
+
+    const currentDescriptor = monthDescriptors[monthDescriptors.length - 1];
+
+    const currentData = currentDescriptor
+      ? activityByMonth[currentDescriptor.key] ?? null
+      : null;
 
     const currentDays = Array.isArray(currentData?.days)
       ? currentData.days
       : [];
 
-    const weeks = buildCalendarWeeks({
-      previousDays,
-      currentDays,
-      previousYear,
-      previousMonth,
-      currentYear,
-      currentMonth,
-    });
-
     const currentMonthSeconds = getCurrentMonthSeconds(currentDays);
 
     const currentWeek = getCurrentWeekStats({
-      previousDays,
-      currentDays,
-      previousYear,
-      previousMonth,
-      currentYear,
-      currentMonth,
+      months,
     });
 
     return {
@@ -87,21 +87,16 @@ const useReadingActivity = () => {
 
       currentWeek,
     };
-  }, [
-    activityByMonth,
-    previousKey,
-    currentKey,
-    previousYear,
-    previousMonth,
-    currentYear,
-    currentMonth,
-  ]);
+  }, [activityByMonth, monthDescriptors]);
 
-  const isLoading =
-    (loadingByMonth[previousKey] ?? false) ||
-    (loadingByMonth[currentKey] ?? false);
+  const isLoading = monthDescriptors.some(
+    ({ key }) => loadingByMonth[key] ?? false,
+  );
 
-  const error = errorByMonth[previousKey] || errorByMonth[currentKey] || "";
+  const error =
+    monthDescriptors
+      .map(({ key }) => errorByMonth[key])
+      .find(Boolean) || "";
 
   return {
     readingActivity: readingActivity ?? INITIAL_ACTIVITY,
@@ -112,6 +107,3 @@ const useReadingActivity = () => {
 };
 
 export default useReadingActivity;
-
-
-
