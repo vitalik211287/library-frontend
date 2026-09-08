@@ -167,7 +167,9 @@ const useReadingSessions = ({ bookId, totalPages, onChanged }) => {
       setEditValue("");
 
       await loadSessions();
-      await onChanged?.();
+      if (typeof onChanged === "function") {
+        await onChanged();
+      }
     } catch (error) {
       console.error("Помилка редагування сесії:", error);
 
@@ -218,7 +220,9 @@ const useReadingSessions = ({ bookId, totalPages, onChanged }) => {
       setDeletingSession(null);
 
       await loadSessions();
-      await onChanged?.();
+      if (typeof onChanged === "function") {
+        await onChanged();
+      }
     } catch (error) {
       console.error("Помилка видалення сесії:", error);
 

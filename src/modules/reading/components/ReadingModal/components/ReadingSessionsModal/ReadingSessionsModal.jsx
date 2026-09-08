@@ -49,6 +49,9 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
   const isCloseBlocked =
     Boolean(editingSession) || Boolean(deletingSession) || saving || deleting;
 
+  const editingSessionTotalPages =
+    totalPages ?? editingSession?.book?.pages ?? null;
+
   return (
     <>
       <Modal
@@ -218,7 +221,7 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
                   max={
                     editingSession.progressMode === "PERCENT"
                       ? 100
-                      : (sessionTotalPages ?? undefined)
+                      : (editingSessionTotalPages ?? undefined)
                   }
                   step="1"
                   inputMode="numeric"
@@ -228,8 +231,8 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
                 <span>
                   {editingSession.progressMode === "PERCENT"
                     ? "%"
-                    : sessionTotalPages
-                      ? `/ ${sessionTotalPages}`
+                    : editingSessionTotalPages
+                      ? `/ ${editingSessionTotalPages}`
                       : "стор."}
                 </span>
               </div>
