@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { getChartScale } from "../../../utils/activityHelpers.js";
 
 const MONTH_NAMES = [
@@ -191,10 +193,24 @@ const ReadingActivityChart = ({ chartData }) => {
 
   const currentWeekIndex = chartData.length - 1;
 
-  const currentWeek =
-    currentWeekIndex >= 0 ? chartData[currentWeekIndex] : null;
+  const [selectedWeekIndex, setSelectedWeekIndex] = useState(currentWeekIndex);
 
-  const currentWeekValue = Number(currentWeek?.value) || 0;
+  const safeSelectedWeekIndex =
+    selectedWeekIndex >= 0 && selectedWeekIndex < chartData.length
+      ? selectedWeekIndex
+      : currentWeekIndex;
+
+  const selectedWeek =
+    safeSelectedWeekIndex >= 0
+      ? chartData[safeSelectedWeekIndex]
+      : null;
+
+  const selectedWeekValue = Number(selectedWeek?.value) || 0;
+
+  const selectedWeekLeft =
+    chartData.length > 1
+      ? (safeSelectedWeekIndex / (chartData.length - 1)) * 100
+      : 50;
 /*
    * =========================
    * MONTHS
@@ -225,16 +241,16 @@ const ReadingActivityChart = ({ chartData }) => {
               CURRENT WEEK VALUE
           ========================= */}
 
-          {currentWeek && (
+          {selectedWeek && (
             <div
               className="reading-chart__current-value"
               style={{
-                left: "100%",
+                left: `${selectedWeekLeft}%`,
 
                 top: `${paddingTop}px`,
               }}
             >
-              {currentWeekValue} хв
+              {selectedWeekValue} хв
             </div>
           )}
 
@@ -291,17 +307,18 @@ const ReadingActivityChart = ({ chartData }) => {
             ========================= */}
 
             {chartData.map((item, index) => {
-              const isCurrent = index === currentWeekIndex;
+              const isSelected = index === safeSelectedWeekIndex;
 
               return (
                 <line
                   key={`vertical-${item.label}-${index}`}
+                  onClick={() => setSelectedWeekIndex(index)}
                   x1={getX(index)}
                   x2={getX(index)}
                   y1={paddingTop}
                   y2={height}
                   className={
-                    isCurrent
+                    isSelected
                       ? "reading-chart__grid-line reading-chart__grid-line--current"
                       : "reading-chart__grid-line"
                   }
@@ -332,7 +349,7 @@ const ReadingActivityChart = ({ chartData }) => {
           ========================= */}
 
           {chartData.map((item, index) => {
-            const isCurrent = index === currentWeekIndex;
+            const isSelected = index === safeSelectedWeekIndex;
 
             const isPeak = index === peakIndex && peakValue > 0;
 
@@ -349,7 +366,7 @@ const ReadingActivityChart = ({ chartData }) => {
               className += " reading-chart__html-dot--peak";
             }
 
-            if (isCurrent) {
+            if (isSelected) {
               className += " reading-chart__html-dot--current";
             }
 

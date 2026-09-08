@@ -309,6 +309,8 @@
 
 .reading-chart__grid-line {
   stroke: var(--border);
+  cursor: pointer;
+  pointer-events: stroke;
 
   stroke-width: 1;
   stroke-dasharray: 5 7;
