@@ -2,6 +2,9 @@ export const createEmptyWeeks = (count, current) =>
   Array.from({ length: count }, (_, index) => ({
     label: `Тиждень ${index + 1}`,
     value: 0,
+      seconds: 0,
+      pages: 0,
+      sessions: 0,
     current,
   }));
 
@@ -53,6 +56,9 @@ export const buildCalendarWeeks = ({ months, weeksCount = 12 }) => {
       label: formatWeekLabel(monday),
 
       value: 0,
+      seconds: 0,
+      pages: 0,
+      sessions: 0,
 
       current: key === currentMonday.getTime(),
 
@@ -76,14 +82,16 @@ export const buildCalendarWeeks = ({ months, weeksCount = 12 }) => {
         return;
       }
 
-      week.value += (Number(day.seconds) || 0) / 60;
+      week.seconds += Number(day.seconds) || 0;
+      week.pages += Number(day.pages) || 0;
+      week.sessions += Number(day.sessions) || 0;
     });
   });
 
   return weeks.map((week) => ({
     ...week,
 
-    value: Math.round(week.value),
+    value: Math.round(week.seconds / 60),
   }));
 };
 

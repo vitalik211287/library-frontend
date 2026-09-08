@@ -739,6 +739,7 @@
 }
 
 .reading-chart__hit-zones {
+  touch-action: pan-y;
   position: absolute;
   z-index: 8;
 
@@ -746,7 +747,7 @@
   right: 0;
   bottom: 0;
 
-  pointer-events: none;
+  pointer-events: auto;
 }
 
 .reading-chart__hit-zone {

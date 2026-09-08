@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef } from "react";
 
 import { getChartScale } from "../../../utils/activityHelpers.js";
 
@@ -109,9 +109,85 @@ const formatChartValue = (minutes, maxValue) => {
 
   return `${Math.round(minutes)} хв`;
 };
-const ReadingActivityChart = ({ chartData }) => {
+const ReadingActivityChart = ({
+  chartData,
+  selectedWeekIndex,
+  onSelectWeek,
+}) => {
   const width = 760;
   const height = 240;
+
+  const scrubRef = useRef({
+    active: false,
+    horizontal: false,
+    startX: 0,
+    startY: 0,
+  });
+
+  const selectWeekFromPointer = (clientX, element) => {
+    if (!element || chartData.length === 0) {
+      return;
+    }
+
+    const rect = element.getBoundingClientRect();
+
+    if (!rect.width) {
+      return;
+    }
+
+    const ratio = Math.max(
+      0,
+      Math.min(1, (clientX - rect.left) / rect.width),
+    );
+
+    const index = Math.round(ratio * (chartData.length - 1));
+
+    onSelectWeek?.(index);
+  };
+
+  const handlePointerDown = (event) => {
+    scrubRef.current = {
+      active: true,
+      horizontal: false,
+      startX: event.clientX,
+      startY: event.clientY,
+    };
+
+    selectWeekFromPointer(event.clientX, event.currentTarget);
+  };
+
+  const handlePointerMove = (event) => {
+    const state = scrubRef.current;
+
+    if (!state.active) {
+      return;
+    }
+
+    const dx = event.clientX - state.startX;
+    const dy = event.clientY - state.startY;
+
+    if (!state.horizontal) {
+      if (Math.abs(dx) < 6 && Math.abs(dy) < 6) {
+        return;
+      }
+
+      if (Math.abs(dy) > Math.abs(dx)) {
+        state.active = false;
+        return;
+      }
+
+      state.horizontal = true;
+    }
+
+    event.preventDefault();
+
+    selectWeekFromPointer(event.clientX, event.currentTarget);
+  };
+
+  const handlePointerEnd = () => {
+    scrubRef.current.active = false;
+    scrubRef.current.horizontal = false;
+  };
 
   const paddingTop = 28;
   const paddingBottom = 8;
@@ -192,8 +268,6 @@ const ReadingActivityChart = ({ chartData }) => {
    */
 
   const currentWeekIndex = chartData.length - 1;
-
-  const [selectedWeekIndex, setSelectedWeekIndex] = useState(currentWeekIndex);
 
   const safeSelectedWeekIndex =
     selectedWeekIndex >= 0 && selectedWeekIndex < chartData.length
@@ -365,6 +439,11 @@ const ReadingActivityChart = ({ chartData }) => {
             style={{
               top: `${paddingTop}px`,
             }}
+            onPointerDown={handlePointerDown}
+            onPointerMove={handlePointerMove}
+            onPointerUp={handlePointerEnd}
+            onPointerCancel={handlePointerEnd}
+            onPointerLeave={handlePointerEnd}
           >
             {chartData.map((item, index) => {
               const count = chartData.length;
@@ -392,7 +471,7 @@ const ReadingActivityChart = ({ chartData }) => {
                     left: `${left}%`,
                     width: `${right - left}%`,
                   }}
-                  onClick={() => setSelectedWeekIndex(index)}
+                  onClick={() => onSelectWeek?.(index)}
                   aria-label={`Показати ${item.label}: ${Number(item.value) || 0} хв`}
                 />
               );

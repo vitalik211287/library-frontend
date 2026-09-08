@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import useReadingActivity from "../../hooks/useReadingActivity.js";
 
 import {
@@ -37,6 +39,22 @@ const ReadingActivity = ({ onDetails }) => {
     readingActivity.weeks.length > 0
       ? readingActivity.weeks
       : [...createEmptyWeeks(4, false), ...createEmptyWeeks(5, true)];
+
+  const [selectedWeekIndex, setSelectedWeekIndex] = useState(null);
+
+  const currentWeekIndex = chartData.length - 1;
+
+  const safeSelectedWeekIndex =
+    selectedWeekIndex !== null &&
+    selectedWeekIndex >= 0 &&
+    selectedWeekIndex < chartData.length
+      ? selectedWeekIndex
+      : currentWeekIndex;
+
+  const selectedWeek =
+    safeSelectedWeekIndex >= 0
+      ? chartData[safeSelectedWeekIndex]
+      : null;
 
   const today = new Date();
 
@@ -123,7 +141,7 @@ const ReadingActivity = ({ onDetails }) => {
             <path d="M3 10h18" />
           </svg>
 
-          <span>Цього тижня</span>
+          <span>{selectedWeek?.current ? "Цього тижня" : selectedWeek?.label || "Цього тижня"}</span>
         </div>
 
         <div className="reading-week__stats">
@@ -140,7 +158,7 @@ const ReadingActivity = ({ onDetails }) => {
 
             <div className="reading-week__content">
               <strong>
-                {formatReadingTime(readingActivity.currentWeek.seconds)}
+                {formatReadingTime(selectedWeek?.seconds || 0)}
               </strong>
 
               <span>Час читання</span>
@@ -155,7 +173,7 @@ const ReadingActivity = ({ onDetails }) => {
             </div>
 
             <div className="reading-week__content">
-              <strong>{readingActivity.currentWeek.pages} стор.</strong>
+              <strong>{selectedWeek?.pages || 0} стор.</strong>
 
               <span>Сторінки</span>
             </div>
@@ -173,7 +191,7 @@ const ReadingActivity = ({ onDetails }) => {
             </div>
 
             <div className="reading-week__content">
-              <strong>{readingActivity.currentWeek.sessions}</strong>
+              <strong>{selectedWeek?.sessions || 0}</strong>
 
               <span>Сесії</span>
             </div>
@@ -187,6 +205,8 @@ const ReadingActivity = ({ onDetails }) => {
 
       <ReadingActivityChart
         chartData={chartData}
+        selectedWeekIndex={safeSelectedWeekIndex}
+        onSelectWeek={setSelectedWeekIndex}
         previousMonthName={previousMonthName}
         currentMonthName={currentMonthName}
       />
