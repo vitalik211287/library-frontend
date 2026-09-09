@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 
 import useReadingStats from "./hooks/useReadingStats.js";
 
@@ -27,7 +27,7 @@ const StatsPage = () => {
   const [goalModalOpen, setGoalModalOpen] = useState(false);
 
   const { refreshReadingStats } = useReadingStatsContext();
-  const { refreshReadingData } = useRefreshReadingData();
+  const refreshReadingData = useRefreshReadingData();
 
   const { stats, goal, isLoading, error } = useReadingStats({
     year,
@@ -45,7 +45,7 @@ const StatsPage = () => {
   if (isLoading) {
     return (
       <main className="stats-page">
-        <div className="stats-state">Завантажуємо статистику...</div>
+        <div className="stats-state">Р—Р°РІР°РЅС‚Р°Р¶СѓС”РјРѕ СЃС‚Р°С‚РёСЃС‚РёРєСѓ...</div>
       </main>
     );
   }
@@ -116,3 +116,4 @@ const StatsPage = () => {
 };
 
 export default StatsPage;
+
