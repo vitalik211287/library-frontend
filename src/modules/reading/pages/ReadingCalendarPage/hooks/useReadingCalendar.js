@@ -25,8 +25,10 @@ const useReadingCalendar = ({ year, month }) => {
         setIsLoading(true);
         setError("");
 
+        const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
         const data = await apiFetch(
-          `/api/reading/calendar?year=${year}&month=${month}`,
+          `/api/reading/calendar?year=${year}&month=${month}&timeZone=${encodeURIComponent(timeZone)}`,
         );
 
         setCalendar(data);
