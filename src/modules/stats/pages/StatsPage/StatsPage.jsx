@@ -45,7 +45,7 @@ const StatsPage = () => {
   if (isLoading) {
     return (
       <main className="stats-page">
-        <div className="stats-state">Р—Р°РІР°РЅС‚Р°Р¶СѓС”РјРѕ СЃС‚Р°С‚РёСЃС‚РёРєСѓ...</div>
+        <div className="stats-state">Завантажуємо статистику...</div>
       </main>
     );
   }
