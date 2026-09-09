@@ -1,5 +1,16 @@
 ﻿import { useMemo } from "react";
 
+const getPercent = (current, goal) => {
+  if (!goal || goal <= 0) {
+    return 0;
+  }
+
+  return Math.min(
+    100,
+    Math.round((current / goal) * 100),
+  );
+};
+
 const useHomeStats = ({
   stats,
   readingGoal,
@@ -27,34 +38,45 @@ const useHomeStats = ({
   );
 
   const goalProgress = useMemo(() => {
+    const goals = [];
+
     if (goalBooks > 0) {
-      return {
+      goals.push({
+        type: "books",
         current: finishedBooks,
         goal: goalBooks,
         unit: "книг",
         label: "Прочитано цього року",
-      };
+        percent: getPercent(finishedBooks, goalBooks),
+      });
     }
 
     if (goalPages > 0) {
-      return {
+      goals.push({
+        type: "pages",
         current: pagesRead,
         goal: goalPages,
         unit: "стор.",
-        label: "Прочитано цього року",
-      };
+        label: "Прочитано сторінок",
+        percent: getPercent(pagesRead, goalPages),
+      });
     }
 
     if (goalMinutes > 0) {
-      return {
+      goals.push({
+        type: "time",
         current: totalReadingMinutes,
         goal: goalMinutes,
         unit: "хв",
-        label: "Час читання цього року",
-      };
+        label: "Час читання",
+        percent: getPercent(
+          totalReadingMinutes,
+          goalMinutes,
+        ),
+      });
     }
 
-    return null;
+    return goals;
   }, [
     finishedBooks,
     goalBooks,
@@ -64,14 +86,12 @@ const useHomeStats = ({
     totalReadingMinutes,
   ]);
 
-  const goalPercent = goalProgress
-    ? Math.min(
-        100,
-        Math.round(
-          (goalProgress.current /
-            goalProgress.goal) *
-            100,
-        ),
+  const goalPercent = goalProgress.length
+    ? Math.round(
+        goalProgress.reduce(
+          (sum, item) => sum + item.percent,
+          0,
+        ) / goalProgress.length,
       )
     : 0;
 

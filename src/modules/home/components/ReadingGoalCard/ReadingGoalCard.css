@@ -118,3 +118,32 @@
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
+
+.reading-goal__item {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.reading-goal__content {
+  flex: 1;
+  min-width: 0;
+}
+
+.reading-goal__row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.reading-goal__row > span {
+  color: var(--text-secondary, #a7a7b5);
+  font-size: 11px;
+}
+
+.reading-goal__row > strong {
+  color: var(--accent);
+  font-size: 12px;
+  font-weight: 850;
+}
