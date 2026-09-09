@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 
 import { useReadingGoalContext } from "../../context/ReadingGoalContext.jsx";
 
@@ -37,17 +37,28 @@ const EditIcon = () => (
 ========================= */
 
 const ReadingGoal = () => {
-  const { currentYear, readingGoal, isGoalLoading, goalError } =
-      useReadingGoalContext();
+  const {
+    currentYear,
+    readingGoal,
+    readingGoalProgress,
+    readingGoalPercent,
+    isGoalLoading,
+    goalError,
+  } = useReadingGoalContext();
 
   const [isGoalModalOpen, setIsGoalModalOpen] = useState(false);
 
   const goal = readingGoal;
+  const progress = readingGoalProgress ?? {};
+  const percent = readingGoalPercent ?? {};
   
   const goalHours =
     goal?.minutes !== null && goal?.minutes !== undefined
       ? Math.round((goal.minutes / 60) * 10) / 10
       : null;
+
+  const progressHours =
+    Math.round(((progress.minutes ?? 0) / 60) * 10) / 10;
 
   return (
     <>
@@ -75,9 +86,11 @@ const ReadingGoal = () => {
               <BookIcon />
 
               <div>
-                <strong>{goal?.books ?? "—"}</strong>
+                <strong>
+                  {progress.books ?? 0} / {goal?.books ?? "—"}
+                </strong>
 
-                <span>книг</span>
+                <span>книг · {percent.books ?? 0}%</span>
               </div>
             </div>
 
@@ -85,9 +98,11 @@ const ReadingGoal = () => {
               <BookmarkIcon />
 
               <div>
-                <strong>{goal?.pages ?? "—"}</strong>
+                <strong>
+                  {progress.pages ?? 0} / {goal?.pages ?? "—"}
+                </strong>
 
-                <span>сторінок</span>
+                <span>сторінок · {percent.pages ?? 0}%</span>
               </div>
             </div>
 
@@ -99,9 +114,11 @@ const ReadingGoal = () => {
               </svg>
 
               <div>
-                <strong>{goalHours ?? "—"}</strong>
+                <strong>
+                  {progressHours} / {goalHours ?? "—"}
+                </strong>
 
-                <span>годин</span>
+                <span>годин · {percent.minutes ?? 0}%</span>
               </div>
             </div>
           </div>
