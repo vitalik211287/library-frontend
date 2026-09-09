@@ -213,6 +213,24 @@ const useReadingRouter = ({ closeMobileMenu }) => {
   const handleReadingDataChanged = async () => {
     try {
       await refreshReadingData();
+
+      const libraryId =
+        readingLibraryId || activeLibraryId;
+
+      if (readingBookId && libraryId) {
+        const updatedBook = await apiFetch(
+          `/api/libraries/${libraryId}/books/${readingBookId}`,
+        );
+
+        setReadingBook(updatedBook);
+
+        if (
+          !readingLibraryId ||
+          readingLibraryId === activeLibraryId
+        ) {
+          updateBook(updatedBook);
+        }
+      }
     } catch (error) {
       console.error(
         "Refresh reading data error:",
