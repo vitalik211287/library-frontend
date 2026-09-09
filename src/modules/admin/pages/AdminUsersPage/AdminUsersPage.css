@@ -1202,3 +1202,40 @@
     padding-right: 58px;
   }
 }
+
+/* Mobile subscriber books sheet scroll */
+@media (max-width: 900px) {
+  .admin-library__sidebar {
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: hidden;
+    overscroll-behavior-y: contain;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .admin-library__user,
+  .admin-library__stats {
+    flex-shrink: 0;
+  }
+
+  .admin-library__filters {
+    position: sticky;
+    top: 0;
+    z-index: 4;
+    flex-shrink: 0;
+
+    padding-top: 10px;
+
+    background: #12151b;
+  }
+
+  .admin-library__books {
+    min-height: 0;
+    flex: 0 0 auto;
+
+    overflow: visible;
+    overscroll-behavior: auto;
+
+    padding-bottom: calc(28px + env(safe-area-inset-bottom));
+  }
+}
