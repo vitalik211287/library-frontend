@@ -68,6 +68,12 @@ const useAddBook = ({
 
       await refreshBooks();
 
+      window.dispatchEvent(
+        new CustomEvent("library-book-added", {
+          detail: { libraryId: activeLibraryId },
+        }),
+      );
+
       toast.success(getSuccessMessage());
 
       resetAfterAdd();
@@ -140,6 +146,12 @@ const useAddBook = ({
       });
 
       await refreshBooks();
+
+      window.dispatchEvent(
+        new CustomEvent("library-book-added", {
+          detail: { libraryId: activeLibraryId },
+        }),
+      );
 
       toast.success(getSuccessMessage());
 
