@@ -89,8 +89,6 @@
 .profile-book h3 {
   margin: 0 0 3px;
 
-  overflow: hidden;
-
   color: var(--text-h);
 
   font-size: 11px;
