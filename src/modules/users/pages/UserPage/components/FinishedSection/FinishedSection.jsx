@@ -91,17 +91,13 @@ const FinishedSection = ({
                   )}
                 </div>
               </button>
-
-              <h3>
                 <button
                   type="button"
-                  className="profile-book__title-button"
+                  className="finished-book__title-button"
                   onClick={() => handleOpenBook(book)}
                 >
                   {book.title}
                 </button>
-              </h3>
-
               <p>{book.author}</p>
 
               {book.rating ? (
