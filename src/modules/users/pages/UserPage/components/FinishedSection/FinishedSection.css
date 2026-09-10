@@ -98,11 +98,11 @@
 .profile-book__title-button {
   width: 100%;
 
-  display: -webkit-box;
+  display: block;
 
   padding: 0;
 
-  overflow: hidden;
+  overflow: visible;
 
   border: none;
 
@@ -116,8 +116,6 @@
 
   cursor: pointer;
 
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
 }
 
 /* =========================
