@@ -5,6 +5,7 @@ import "./UserPage.css";
 import ProfileHero from "./components/ProfileHero/ProfileHero.jsx";
 import ProfileStats from "./components/ProfileStats/ProfileStats.jsx";
 import ReadingGoal from "../../../stats/components/ReadingGoal/ReadingGoal.jsx";
+import LibraryGoal from "./components/LibraryGoal/LibraryGoal.jsx";
 import AchievementsPreview from "./components/AchievementsPreview/AchievementsPreview.jsx";
 import CurrentReading from "./components/CurrentReading/CurrentReading.jsx";
 import WishlistSection from "./components/WishlistSection/WishlistSection.jsx";
@@ -45,6 +46,8 @@ const UserPage = ({ onOpenReading }) => {
         />
 
         <ReadingGoal />
+
+        <LibraryGoal />
 
         <AchievementsPreview />
 
