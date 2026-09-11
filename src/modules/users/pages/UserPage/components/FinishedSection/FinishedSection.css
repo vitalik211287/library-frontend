@@ -37,6 +37,7 @@
 
 .profile-book__open {
   width: 100%;
+  height: auto;
 
   display: block;
 
@@ -89,7 +90,7 @@
   width: 100%;
   display: block;
 
-  margin: 0 0 3px;
+  margin: auto 0 3px;
   padding: 0;
 
   overflow: visible;

@@ -311,3 +311,13 @@
     font-size: 12px;
   }
 }
+
+.reading-goal-card__percent {
+  display: block;
+  margin-top: 2px;
+
+  color: var(--accent);
+  font-size: 9px;
+  font-weight: 600;
+  line-height: 1;
+}

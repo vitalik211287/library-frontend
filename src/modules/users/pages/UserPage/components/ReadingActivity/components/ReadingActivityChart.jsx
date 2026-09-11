@@ -191,6 +191,7 @@ const ReadingActivityChart = ({
 
   const paddingTop = 28;
   const paddingBottom = 8;
+  const horizontalPadding = 36;
 
   const chartHeight = height - paddingTop - paddingBottom;
 
@@ -201,7 +202,12 @@ const ReadingActivityChart = ({
       return width / 2;
     }
 
-    return (width / (chartData.length - 1)) * index;
+    const usableWidth = width - horizontalPadding * 2;
+
+    return (
+      horizontalPadding +
+      (usableWidth / (chartData.length - 1)) * index
+    );
   };
 
   const getY = (value) => {
@@ -282,9 +288,7 @@ const ReadingActivityChart = ({
   const selectedWeekValue = Number(selectedWeek?.value) || 0;
 
   const selectedWeekLeft =
-    chartData.length > 1
-      ? (safeSelectedWeekIndex / (chartData.length - 1)) * 100
-      : 50;
+    (getX(safeSelectedWeekIndex) / width) * 100;
 
   const selectedWeekTop =
     selectedWeek
@@ -485,10 +489,7 @@ const ReadingActivityChart = ({
           {chartData.map((item, index) => {
             const isPeak = index === peakIndex && peakValue > 0;
 
-            const left =
-              chartData.length > 1
-                ? (index / (chartData.length - 1)) * 100
-                : 50;
+            const left = (getX(index) / width) * 100;
 
             const top = (getY(item.value) / height) * 100;
 
@@ -518,10 +519,7 @@ const ReadingActivityChart = ({
 
       <div className="reading-chart__periods">
         {monthMarkers.map((marker) => {
-          const left =
-            chartData.length > 1
-              ? (marker.index / (chartData.length - 1)) * 100
-              : 0;
+          const left = (getX(marker.index) / width) * 100;
 
           return (
             <span

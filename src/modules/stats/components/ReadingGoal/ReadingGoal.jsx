@@ -52,13 +52,35 @@ const ReadingGoal = () => {
   const progress = readingGoalProgress ?? {};
   const percent = readingGoalPercent ?? {};
   
-  const goalHours =
-    goal?.minutes !== null && goal?.minutes !== undefined
-      ? Math.round((goal.minutes / 60) * 10) / 10
-      : null;
+  const formatMinutes = (minutes) => {
+    const totalMinutes = Math.max(0, Math.round(Number(minutes) || 0));
+    const hours = Math.floor(totalMinutes / 60);
+    const restMinutes = totalMinutes % 60;
 
-  const progressHours =
-    Math.round(((progress.minutes ?? 0) / 60) * 10) / 10;
+    if (hours === 0) {
+      return `${restMinutes} хв`;
+    }
+
+    if (restMinutes === 0) {
+      return `${hours} год`;
+    }
+
+    return `${hours} год ${restMinutes} хв`;
+  };
+
+  const goalTime =
+    goal?.minutes !== null && goal?.minutes !== undefined
+      ? formatMinutes(goal.minutes)
+      : "—";
+
+  const progressTime = formatMinutes(progress.minutes ?? 0);
+
+  const timePercent =
+    Number(goal?.minutes) > 0
+      ? Math.round(
+          ((Number(progress.minutes) || 0) / Number(goal.minutes)) * 10000
+        ) / 100
+      : 0;
 
   return (
     <>
@@ -90,7 +112,8 @@ const ReadingGoal = () => {
                   {progress.books ?? 0} / {goal?.books ?? "—"}
                 </strong>
 
-                <span>книг · {percent.books ?? 0}%</span>
+                <span>книг</span>
+                <span className="reading-goal-card__percent">{percent.books ?? 0}%</span>
               </div>
             </div>
 
@@ -102,7 +125,8 @@ const ReadingGoal = () => {
                   {progress.pages ?? 0} / {goal?.pages ?? "—"}
                 </strong>
 
-                <span>сторінок · {percent.pages ?? 0}%</span>
+                <span>сторінок</span>
+                <span className="reading-goal-card__percent">{percent.pages ?? 0}%</span>
               </div>
             </div>
 
@@ -115,10 +139,11 @@ const ReadingGoal = () => {
 
               <div>
                 <strong>
-                  {progressHours} / {goalHours ?? "—"}
+                  {progressTime}
                 </strong>
 
-                <span>годин · {percent.minutes ?? 0}%</span>
+                <span>з {goalTime}</span>
+                <span className="reading-goal-card__percent">{timePercent}%</span>
               </div>
             </div>
           </div>
