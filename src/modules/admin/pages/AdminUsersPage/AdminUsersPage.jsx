@@ -376,14 +376,19 @@ const AdminUsersPage = () => {
         activity,
       }));
 
+    const libraryEvents = (selectedUser.libraryBookEvents ?? [])
+      .filter((event) => event.bookId === bookId)
+      .map((event) => ({
+        id: `library-event-${event.id}`,
+        category: event.type,
+        createdAt: event.occurredAt,
+        libraryEvent: event,
+      }));
+
     const items = [
       ...sessions,
       ...activities,
-      {
-        id: `added-${selectedBook.id}`,
-        category: "BOOK_ADDED",
-        createdAt: selectedBook.createdAt,
-      },
+      ...libraryEvents,
     ];
 
     return items
@@ -489,11 +494,14 @@ const AdminUsersPage = () => {
     }
 
     if (item.category === "BOOK_ADDED") {
+      const libraryName =
+        item.libraryEvent?.library?.name || "Бібліотека";
+
       return {
         icon: "+",
         type: "added",
         title: "Додано книгу до бібліотеки",
-        description: "",
+        description: `${selectedUser?.name || "Користувач"} · ${libraryName}`,
       };
     }
 
