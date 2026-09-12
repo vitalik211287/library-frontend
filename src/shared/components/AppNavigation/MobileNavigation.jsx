@@ -50,17 +50,23 @@ const MobileNavigation = ({
         </NavLink>
 
         <div className="mobile-header__actions">
-          {isAuthenticated && unreadCount > 0 && (
+          {isAuthenticated && (
             <NavLink
               to="/notifications"
               className="mobile-header__notifications"
-              aria-label={`Сповіщення: ${unreadCount} непрочитаних`}
+              aria-label={
+                unreadCount > 0
+                  ? `Сповіщення: ${unreadCount} непрочитаних`
+                  : "Сповіщення"
+              }
             >
               <BellIcon />
 
-              <span className="mobile-header__notifications-badge">
-                {unreadCount > 99 ? "99+" : unreadCount}
-              </span>
+              {unreadCount > 0 && (
+                <span className="mobile-header__notifications-badge">
+                  {unreadCount > 99 ? "99+" : unreadCount}
+                </span>
+              )}
             </NavLink>
           )}
 

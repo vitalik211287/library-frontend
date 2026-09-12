@@ -903,3 +903,63 @@
   font-weight: 700;
   line-height: 1;
 }
+
+/* =========================
+   MOBILE NOTIFICATIONS BELL
+========================= */
+
+.mobile-header__notifications {
+  position: relative;
+
+  width: 36px;
+  height: 40px;
+  flex: 0 0 36px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+
+  color: var(--accent);
+  text-decoration: none;
+
+  background: transparent;
+  border: 0;
+}
+
+.mobile-header__notifications svg {
+  width: 27px;
+  height: 27px;
+
+  fill: none;
+  stroke: currentColor;
+
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.mobile-header__notifications-badge {
+  position: absolute;
+  top: -1px;
+  right: -5px;
+
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  box-sizing: border-box;
+  border-radius: 999px;
+
+  background: var(--accent);
+  color: #fff;
+
+  font-size: 10px;
+  font-weight: 800;
+  line-height: 1;
+
+  pointer-events: none;
+}
