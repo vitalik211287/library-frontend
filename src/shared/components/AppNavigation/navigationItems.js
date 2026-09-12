@@ -31,3 +31,11 @@ export const mainNavigationItems = [
   },
 ];
 
+export const swipeNavigationPaths = [
+  "/home",
+  ...mainNavigationItems
+    .filter((item) => item.to)
+    .map((item) => item.to),
+  "/account",
+  "/settings",
+];

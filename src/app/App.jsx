@@ -1,4 +1,4 @@
-﻿import { useEffect } from "react";
+import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 import { Toaster } from "react-hot-toast";
@@ -8,6 +8,7 @@ import "./App.css";
 import { PrivateRoutes, PublicRoutes } from "./components/AppRoutes.jsx";
 import useMobileMenu from "./hooks/useMobileMenu.js";
 import useReadingRouter from "./hooks/useReadingRouter.js";
+import useSwipeNavigation from "./hooks/useSwipeNavigation.js";
 
 import RightSidebar from "../shared/components/RightSidebar/RightSidebar.jsx";
 import ReadingModal from "../modules/reading/components/ReadingModal/ReadingModal.jsx";
@@ -33,6 +34,8 @@ const App = () => {
   const { themeMode, setThemeMode } = useTheme();
 
   const location = useLocation();
+
+  useSwipeNavigation();
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
