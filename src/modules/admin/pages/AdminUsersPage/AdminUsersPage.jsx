@@ -92,6 +92,7 @@ const AdminUsersPage = () => {
 
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedBookId, setSelectedBookId] = useState(null);
+  const [isUserHistoryOpen, setIsUserHistoryOpen] = useState(false);
 
   const [bookFilter, setBookFilter] = useState("ALL");
   const [activityFilter, setActivityFilter] = useState("ALL");
@@ -451,7 +452,7 @@ const AdminUsersPage = () => {
       return {
         icon: "▣",
         type: "status",
-        title: "Змінено статус",
+        title: `Змінено статус · ${activity.book?.title || "Книга"}`,
         description: `${
           STATUS_LABELS[activity.oldValue] ?? activity.oldValue ?? "—"
         } → ${STATUS_LABELS[activity.newValue] ?? activity.newValue ?? "—"}`,
@@ -462,7 +463,7 @@ const AdminUsersPage = () => {
       return {
         icon: "↗",
         type: "progress",
-        title: "Змінено прогрес",
+        title: `Змінено прогрес · ${item.activity.book?.title || "Книга"}`,
         description: `${item.activity.oldValue ?? "0"} → ${
           item.activity.newValue ?? "0"
         }`,
@@ -473,7 +474,7 @@ const AdminUsersPage = () => {
       return {
         icon: "↺",
         type: "progress",
-        title: "Скинуто прогрес",
+        title: `Скинуто прогрес · ${item.activity.book?.title || "Книга"}`,
         description: `${item.activity.oldValue ?? "0"} → 0`,
       };
     }
@@ -482,7 +483,7 @@ const AdminUsersPage = () => {
       return {
         icon: "★",
         type: "rating",
-        title: "Змінено рейтинг",
+        title: `Змінено рейтинг · ${item.activity.book?.title || "Книга"}`,
         description: `${item.activity.oldValue ?? "—"} → ${
           item.activity.newValue ?? "—"
         }`,
@@ -506,11 +507,17 @@ const AdminUsersPage = () => {
       const libraryName =
         item.libraryEvent?.library?.name || "Бібліотека";
 
+      const bookTitle =
+        item.libraryEvent?.book?.title || "Книга";
+
+      const bookAuthor =
+        item.libraryEvent?.book?.author || "Автор не вказаний";
+
       return {
         icon: "+",
         type: "added",
-        title: "Додано книгу до бібліотеки",
-        description: `${selectedUser?.name || "Користувач"} · ${libraryName}`,
+        title: `Додано книгу · ${bookTitle}`,
+        description: `${bookAuthor} · ${libraryName}`,
       };
     }
 
@@ -700,6 +707,18 @@ const AdminUsersPage = () => {
                 </div>
               </div>
 
+              <button
+                type="button"
+                className="admin-library__history-button"
+                onClick={() => {
+                  setSelectedBookId(null);
+                  setIsUserHistoryOpen(true);
+                  setActivityFilter("ALL");
+                }}
+              >
+                <span>Історія користувача</span>
+                <span>›</span>
+              </button>
               <div className="admin-library__filters">
                 {BOOK_FILTERS.map((filter) => (
                   <button
@@ -770,7 +789,7 @@ const AdminUsersPage = () => {
 
             <section
               className={
-                selectedBook
+                selectedBook || isUserHistoryOpen
                   ? "admin-book-history admin-book-history--open"
                   : "admin-book-history"
               }
@@ -883,6 +902,14 @@ const AdminUsersPage = () => {
                 </>
               ) : (
                 <>
+  <button
+    type="button"
+    className="admin-book-history__back"
+    onClick={() => setIsUserHistoryOpen(false)}
+  >
+    ← До книг
+  </button>
+
   <div className="admin-book-history__title-row">
     <div>
       <h3>Історія користувача</h3>
