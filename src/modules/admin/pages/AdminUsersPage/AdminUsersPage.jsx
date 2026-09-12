@@ -352,14 +352,17 @@ const AdminUsersPage = () => {
   }, [selectedUser]);
 
   const timeline = useMemo(() => {
-    if (!selectedBook || !selectedUser) {
+    if (!selectedUser) {
       return [];
     }
 
-    const bookId = selectedBook.book?.id;
+    const selectedBookId = selectedBook?.book?.id ?? null;
 
     const sessions = (selectedUser.readingSessions ?? [])
-      .filter((session) => session.bookId === bookId)
+      .filter(
+        (session) =>
+          !selectedBookId || session.bookId === selectedBookId,
+      )
       .map((session) => ({
         id: `session-${session.id}`,
         category: "SESSION",
@@ -368,7 +371,10 @@ const AdminUsersPage = () => {
       }));
 
     const activities = (selectedUser.activityLogs ?? [])
-      .filter((activity) => activity.bookId === bookId)
+      .filter(
+        (activity) =>
+          !selectedBookId || activity.bookId === selectedBookId,
+      )
       .map((activity) => ({
         id: `activity-${activity.id}`,
         category: activity.type,
@@ -377,7 +383,10 @@ const AdminUsersPage = () => {
       }));
 
     const libraryEvents = (selectedUser.libraryBookEvents ?? [])
-      .filter((event) => event.bookId === bookId)
+      .filter(
+        (event) =>
+          !selectedBookId || event.bookId === selectedBookId,
+      )
       .map((event) => ({
         id: `library-event-${event.id}`,
         category: event.type,
@@ -873,9 +882,70 @@ const AdminUsersPage = () => {
                   </div>
                 </>
               ) : (
-                <div className="admin-book-history__empty">
-                  Вибери книгу ліворуч
-                </div>
+                <>
+  <div className="admin-book-history__title-row">
+    <div>
+      <h3>Історія користувача</h3>
+      <span>Уся активність</span>
+    </div>
+
+    <span>{timeline.length} подій</span>
+  </div>
+
+  <div className="admin-book-history__tabs">
+    {ACTIVITY_FILTERS.map((filter) => (
+      <button
+        key={filter.value}
+        type="button"
+        className={
+          activityFilter === filter.value
+            ? "admin-book-history__tab admin-book-history__tab--active"
+            : "admin-book-history__tab"
+        }
+        onClick={() => setActivityFilter(filter.value)}
+      >
+        {filter.label}
+      </button>
+    ))}
+  </div>
+
+  <div className="admin-timeline">
+    {timeline.length ? (
+      timeline.map((item) => {
+        const content = getTimelineContent(item);
+
+        return (
+          <article
+            key={item.id}
+            className="admin-timeline__item"
+          >
+            <div className="admin-timeline__rail">
+              <span
+                className={`admin-timeline__icon admin-timeline__icon--${content.type}`}
+              >
+                {content.icon}
+              </span>
+            </div>
+
+            <div className="admin-timeline__content">
+              <time>{formatDateTime(item.createdAt)}</time>
+
+              <strong>{content.title}</strong>
+
+              {content.description && (
+                <p>{content.description}</p>
+              )}
+            </div>
+          </article>
+        );
+      })
+    ) : (
+      <p className="admin-book-history__empty-message">
+        Історії користувача поки немає.
+      </p>
+    )}
+  </div>
+</>
               )}
             </section>
           </div>
