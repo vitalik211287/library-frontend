@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+﻿import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 import { Toaster } from "react-hot-toast";
@@ -76,6 +76,12 @@ const App = () => {
   const handleThemeChange = (mode) => {
     setThemeMode(mode);
   };
+
+  if (isAuthLoading) {
+    return null;
+  }
+
+
 
   /* =========================
      PUBLIC ROUTES
@@ -162,4 +168,8 @@ const App = () => {
 };
 
 export default App;
+
+
+
+
 
