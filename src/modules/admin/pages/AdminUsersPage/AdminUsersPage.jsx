@@ -337,6 +337,9 @@ const AdminUsersPage = () => {
     const dates = [
       ...(selectedUser?.activityLogs ?? []).map((item) => item.createdAt),
       ...(selectedUser?.readingSessions ?? []).map((item) => item.startedAt),
+      ...(selectedUser?.libraryBookEvents ?? []).map(
+        (item) => item.occurredAt,
+      ),
     ]
       .filter(Boolean)
       .map((date) => new Date(date));
