@@ -1,4 +1,4 @@
-import { StrictMode } from "react";
+﻿import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 
@@ -16,6 +16,7 @@ import { ReadingGoalProvider } from "./modules/stats/context/ReadingGoalContext.
 import { ReadingStatsProvider } from "./modules/stats/context/ReadingStatsContext.jsx";
 import { ReadingActivityProvider } from "./modules/reading/context/ReadingActivityContext.jsx";
 import { AchievementsProvider } from "./modules/stats/context/AchievementsContext.jsx";
+import { NotificationsProvider } from "./modules/notifications/context/NotificationsContext.jsx";
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
@@ -26,13 +27,15 @@ createRoot(document.getElementById("root")).render(
             <ReadingStatsProvider>
               <ReadingActivityProvider>
                 <AchievementsProvider>
-                  <LibraryProvider>
-                    <LibraryBooksProvider>
-                      <UserBooksProvider>
-                        <App />
-                      </UserBooksProvider>
-                    </LibraryBooksProvider>
-                  </LibraryProvider>
+                  <NotificationsProvider>
+                    <LibraryProvider>
+                      <LibraryBooksProvider>
+                        <UserBooksProvider>
+                          <App />
+                        </UserBooksProvider>
+                      </LibraryBooksProvider>
+                    </LibraryProvider>
+                  </NotificationsProvider>
                 </AchievementsProvider>
               </ReadingActivityProvider>
             </ReadingStatsProvider>
@@ -42,11 +45,3 @@ createRoot(document.getElementById("root")).render(
     </BrowserRouter>
   </StrictMode>,
 );
-
-
-
-
-
-
-
-

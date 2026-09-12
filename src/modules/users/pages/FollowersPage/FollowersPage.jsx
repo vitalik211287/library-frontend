@@ -41,32 +41,38 @@ const FollowersPage = () => {
     loadFollowers();
   }, []);
 
-  const handleFollow = async (userId) => {
-    if (updatingUserId) {
+  const handleFollowToggle = async (user) => {
+    if (updatingUserId || user.isCurrentUser) {
       return;
     }
 
-    try {
-      setUpdatingUserId(userId);
+    const nextIsFollowing = !user.isFollowing;
 
-      await apiFetch(`/api/users/${userId}/follow`, {
-        method: "POST",
+    try {
+      setUpdatingUserId(user.id);
+
+      await apiFetch(`/api/users/${user.id}/follow`, {
+        method: nextIsFollowing ? "POST" : "DELETE",
       });
 
       setUsers((currentUsers) =>
-        currentUsers.map((user) => {
-          if (user.id !== userId) {
-            return user;
+        currentUsers.map((item) => {
+          if (item.id !== user.id) {
+            return item;
           }
 
           return {
-            ...user,
-            isFollowing: true,
+            ...item,
+            isFollowing: nextIsFollowing,
+            followersCount: Math.max(
+              0,
+              (item.followersCount ?? 0) + (nextIsFollowing ? 1 : -1),
+            ),
           };
         }),
       );
     } catch (requestError) {
-      console.error("Follow follower error:", requestError);
+      console.error("Update follow state error:", requestError);
     } finally {
       setUpdatingUserId(null);
     }
@@ -148,20 +154,25 @@ const FollowersPage = () => {
                       </div>
                     </div>
                   </button>
-
-                  {!user.isFollowing && (
+                  {user.isCurrentUser ? (
+                    <span className="follower-card__self">Ви</span>
+                  ) : (
                     <button
                       type="button"
-                      className="follower-card__follow"
+                      className={
+                        user.isFollowing
+                          ? "follower-card__unfollow"
+                          : "follower-card__follow"
+                      }
                       disabled={updatingUserId === user.id}
-                      onClick={() => handleFollow(user.id)}
+                      onClick={() => handleFollowToggle(user)}
                     >
-                      {updatingUserId === user.id ? "..." : "Підписатися"}
+                      {updatingUserId === user.id
+                        ? "..."
+                        : user.isFollowing
+                          ? "Відписатися"
+                          : "Підписатися"}
                     </button>
-                  )}
-
-                  {user.isFollowing && (
-                    <span className="follower-card__following">Підписані</span>
                   )}
                 </article>
               );
@@ -174,4 +185,6 @@ const FollowersPage = () => {
 };
 
 export default FollowersPage;
+
+
 

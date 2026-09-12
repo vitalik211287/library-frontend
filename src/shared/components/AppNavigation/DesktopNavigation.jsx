@@ -3,8 +3,10 @@ import "./AppNavigation.css";
 import { NavLink } from "react-router-dom";
 
 import { mainNavigationItems } from "./navigationItems.js";
+import { useNotifications } from "../../../modules/notifications/context/NotificationsContext.jsx";
 
 import {
+  BellIcon,
   CatalogIcon,
   MoonIcon,
   ProfileIcon,
@@ -24,11 +26,12 @@ const DesktopNavigation = ({
 }) => {
   const accountPath = isAuthenticated ? "/account" : "/login";
 
+  const { unreadCount } = useNotifications();
+
   return (
     <aside className="app-sidebar">
       <NavLink to="/home" className="app-brand">
         <CatalogIcon />
-
         <span>Бібліотека</span>
       </NavLink>
 
@@ -45,20 +48,39 @@ const DesktopNavigation = ({
                 onClick={onOpenReader}
               >
                 <Icon />
-
                 <span>{item.label}</span>
               </button>
             );
           }
 
           return (
-            <NavLink key={item.key} to={item.to} className="desktop-nav__link">
+            <NavLink
+              key={item.key}
+              to={item.to}
+              className="desktop-nav__link"
+            >
               <Icon />
-
               <span>{item.label}</span>
             </NavLink>
           );
         })}
+
+        {isAuthenticated && (
+          <NavLink
+            to="/notifications"
+            className="desktop-nav__link desktop-nav__link--notifications"
+          >
+            <BellIcon />
+
+            <span>Сповіщення</span>
+
+            {unreadCount > 0 && (
+              <span className="desktop-nav__badge">
+                {unreadCount > 99 ? "99+" : unreadCount}
+              </span>
+            )}
+          </NavLink>
+        )}
 
         <NavLink
           to={accountPath}
@@ -67,28 +89,21 @@ const DesktopNavigation = ({
           }`}
         >
           <ProfileIcon />
-
           <span>{isAuthenticated ? "Мій профіль" : "Увійти"}</span>
         </NavLink>
 
         {user?.role === "ADMIN" && (
           <NavLink to="/admin/users" className="desktop-nav__link">
             <SettingsIcon />
-
             <span>Адміністрування</span>
           </NavLink>
         )}
 
         <NavLink to="/settings" className="desktop-nav__link">
           <SettingsIcon />
-
           <span>Налаштування</span>
         </NavLink>
       </nav>
-
-      {/* =========================
-          DESKTOP THEME
-      ========================= */}
 
       <div className="desktop-theme">
         <span className="desktop-theme__title">Тема</span>

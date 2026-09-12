@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+﻿import { Navigate, Route, Routes } from "react-router-dom";
 
 import LandingPage from "../../modules/landing/pages/LandingPage/LandingPage.jsx";
 import LoginPage from "../../modules/auth/pages/LoginPage/LoginPage.jsx";
@@ -18,6 +18,8 @@ import LibraryManagementPage from "../../modules/libraries/pages/LibraryManageme
 import UserSearchPage from "../../modules/users/pages/UserSearchPage/UserSearchPage.jsx";
 import FollowingPage from "../../modules/users/pages/FollowingPage/FollowingPage.jsx";
 import FollowersPage from "../../modules/users/pages/FollowersPage/FollowersPage.jsx";
+import NotificationsPage from "../../modules/notifications/pages/NotificationsPage/NotificationsPage.jsx";
+import PublicUserProfilePage from "../../modules/users/pages/PublicUserProfilePage/PublicUserProfilePage.jsx";
 import AdminUsersPage from "../../modules/admin/pages/AdminUsersPage/AdminUsersPage.jsx";
 
 import ProtectedRoute from "./ProtectedRoute.jsx";
@@ -178,6 +180,42 @@ export const PrivateRoutes = ({ onOpenReading }) => {
           </ProtectedRoute>
         }
       />
+      <Route
+        path="/users/:userId/following"
+        element={
+          <ProtectedRoute>
+            <FollowingPage />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/users/:userId/followers"
+        element={
+          <ProtectedRoute>
+            <FollowersPage />
+          </ProtectedRoute>
+        }
+      />
+
+      <Route
+        path="/users/:userId"
+        element={
+          <ProtectedRoute>
+            <PublicUserProfilePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/notifications"
+        element={
+          <ProtectedRoute>
+            <NotificationsPage />
+          </ProtectedRoute>
+        }
+      />
+
+
 
       <Route
         path="/admin/users"
@@ -205,3 +243,10 @@ export const PrivateRoutes = ({ onOpenReading }) => {
     </Routes>
   );
 };
+
+
+
+
+
+
+

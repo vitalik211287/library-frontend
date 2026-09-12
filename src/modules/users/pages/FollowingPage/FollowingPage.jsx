@@ -1,5 +1,5 @@
 ﻿import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { apiFetch } from "../../../../shared/api/apiClient.js";
 
@@ -13,6 +13,7 @@ const BackIcon = () => (
 
 const FollowingPage = () => {
   const navigate = useNavigate();
+  const { userId } = useParams();
 
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -25,7 +26,11 @@ const FollowingPage = () => {
         setIsLoading(true);
         setError(null);
 
-        const data = await apiFetch("/api/users/me/following");
+        const endpoint = userId
+          ? `/api/users/${userId}/following`
+          : "/api/users/me/following";
+
+        const data = await apiFetch(endpoint);
 
         setUsers(Array.isArray(data?.users) ? data.users : []);
       } catch (requestError) {
@@ -41,23 +46,42 @@ const FollowingPage = () => {
     loadFollowing();
   }, []);
 
-  const handleUnfollow = async (userId) => {
-    if (updatingUserId) {
+  const handleFollowToggle = async (user) => {
+    if (updatingUserId || user.isCurrentUser) {
       return;
     }
 
-    try {
-      setUpdatingUserId(userId);
+    const nextIsFollowing = !user.isFollowing;
 
-      await apiFetch(`/api/users/${userId}/follow`, {
-        method: "DELETE",
+    try {
+      setUpdatingUserId(user.id);
+
+      await apiFetch(`/api/users/${user.id}/follow`, {
+        method: nextIsFollowing ? "POST" : "DELETE",
       });
 
-      setUsers((currentUsers) =>
-        currentUsers.filter((user) => user.id !== userId),
-      );
+      setUsers((currentUsers) => {
+        if (!userId && !nextIsFollowing) {
+          return currentUsers.filter((item) => item.id !== user.id);
+        }
+
+        return currentUsers.map((item) => {
+          if (item.id !== user.id) {
+            return item;
+          }
+
+          return {
+            ...item,
+            isFollowing: nextIsFollowing,
+            followersCount: Math.max(
+              0,
+              (item.followersCount ?? 0) + (nextIsFollowing ? 1 : -1),
+            ),
+          };
+        });
+      });
     } catch (requestError) {
-      console.error("Unfollow user error:", requestError);
+      console.error("Update follow state error:", requestError);
     } finally {
       setUpdatingUserId(null);
     }
@@ -79,7 +103,7 @@ const FollowingPage = () => {
           <div>
             <h1>Підписки</h1>
 
-            <p>Читачі, на яких ви підписані</p>
+            <p>{userId ? "Читачі, на яких підписаний користувач" : "Читачі, на яких ви підписані"}</p>
           </div>
         </header>
 
@@ -147,15 +171,26 @@ const FollowingPage = () => {
                       </div>
                     </div>
                   </button>
-
-                  <button
-                    type="button"
-                    className="following-card__unfollow"
-                    disabled={updatingUserId === user.id}
-                    onClick={() => handleUnfollow(user.id)}
-                  >
-                    {updatingUserId === user.id ? "..." : "Відписатися"}
-                  </button>
+                  {user.isCurrentUser ? (
+                    <span className="following-card__self">Ви</span>
+                  ) : (
+                    <button
+                      type="button"
+                      className={
+                        user.isFollowing
+                          ? "following-card__unfollow"
+                          : "following-card__follow"
+                      }
+                      disabled={updatingUserId === user.id}
+                      onClick={() => handleFollowToggle(user)}
+                    >
+                      {updatingUserId === user.id
+                        ? "..."
+                        : user.isFollowing
+                          ? "Відписатися"
+                          : "Підписатися"}
+                    </button>
+                  )}
                 </article>
               );
             })}
@@ -167,4 +202,8 @@ const FollowingPage = () => {
 };
 
 export default FollowingPage;
+
+
+
+
 

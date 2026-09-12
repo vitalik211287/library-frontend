@@ -403,3 +403,30 @@
     font-size: 30px;
   }
 }
+
+.following-card__follow {
+  flex-shrink: 0;
+  min-height: 34px;
+  padding: 7px 10px;
+  border: 1px solid var(--accent);
+  border-radius: 9px;
+  background: var(--accent);
+  color: #fff;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.following-card__follow:disabled {
+  opacity: 0.6;
+  cursor: default;
+}
+
+.following-card__self {
+  flex-shrink: 0;
+  padding: 7px 10px;
+  color: var(--text);
+  font-size: 10px;
+  font-weight: 600;
+}

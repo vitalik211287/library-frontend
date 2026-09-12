@@ -3,8 +3,10 @@ import "./AppNavigation.css";
 import { NavLink } from "react-router-dom";
 
 import { mainNavigationItems } from "./navigationItems.js";
+import { useNotifications } from "../../../modules/notifications/context/NotificationsContext.jsx";
 
 import {
+  BellIcon,
   CatalogIcon,
   MoonIcon,
   ProfileIcon,
@@ -27,6 +29,8 @@ const MobileNavigation = ({
 }) => {
   const accountPath = isAuthenticated ? "/account" : "/login";
 
+  const { unreadCount } = useNotifications();
+
   const handleMenuButtonClick = () => {
     if (isOpen) {
       onClose();
@@ -39,18 +43,27 @@ const MobileNavigation = ({
 
   return (
     <>
-      {/* =========================
-          MOBILE HEADER
-      ========================= */}
-
       <header className="mobile-header">
         <NavLink to="/home" className="mobile-header__brand">
           <CatalogIcon />
-
           <span>Бібліотека</span>
         </NavLink>
 
         <div className="mobile-header__actions">
+          {isAuthenticated && unreadCount > 0 && (
+            <NavLink
+              to="/notifications"
+              className="mobile-header__notifications"
+              aria-label={`Сповіщення: ${unreadCount} непрочитаних`}
+            >
+              <BellIcon />
+
+              <span className="mobile-header__notifications-badge">
+                {unreadCount > 99 ? "99+" : unreadCount}
+              </span>
+            </NavLink>
+          )}
+
           {isAuthenticated && (
             <NavLink
               to="/account"
@@ -81,10 +94,6 @@ const MobileNavigation = ({
         </div>
       </header>
 
-      {/* =========================
-          MOBILE OVERLAY
-      ========================= */}
-
       <div
         className={`mobile-menu-overlay ${
           isOpen ? "mobile-menu-overlay--open" : ""
@@ -93,16 +102,11 @@ const MobileNavigation = ({
         aria-hidden="true"
       />
 
-      {/* =========================
-          MOBILE DRAWER
-      ========================= */}
-
       {isOpen && (
         <aside className="mobile-drawer mobile-drawer--open">
           <div className="mobile-drawer__header">
             <div className="mobile-drawer__brand">
               <CatalogIcon />
-
               <span>Бібліотека</span>
             </div>
 
@@ -129,7 +133,6 @@ const MobileNavigation = ({
                     onClick={onOpenReader}
                   >
                     <Icon />
-
                     <span>{item.label}</span>
                   </button>
                 );
@@ -143,11 +146,28 @@ const MobileNavigation = ({
                   onClick={onClose}
                 >
                   <Icon />
-
                   <span>{item.label}</span>
                 </NavLink>
               );
             })}
+
+            {isAuthenticated && (
+              <NavLink
+                to="/notifications"
+                className="mobile-drawer__link mobile-drawer__link--notifications"
+                onClick={onClose}
+              >
+                <BellIcon />
+
+                <span>Сповіщення</span>
+
+                {unreadCount > 0 && (
+                  <span className="mobile-drawer__badge">
+                    {unreadCount > 99 ? "99+" : unreadCount}
+                  </span>
+                )}
+              </NavLink>
+            )}
 
             <NavLink
               to={accountPath}
@@ -157,7 +177,6 @@ const MobileNavigation = ({
               onClick={onClose}
             >
               <ProfileIcon />
-
               <span>{isAuthenticated ? "Профіль" : "Увійти"}</span>
             </NavLink>
 
@@ -168,7 +187,6 @@ const MobileNavigation = ({
                 onClick={onClose}
               >
                 <SettingsIcon />
-
                 <span>Адміністрування</span>
               </NavLink>
             )}
@@ -181,14 +199,9 @@ const MobileNavigation = ({
               onClick={onClose}
             >
               <SettingsIcon />
-
               <span>Налаштування</span>
             </NavLink>
           </div>
-
-          {/* =========================
-              MOBILE THEME
-          ========================= */}
 
           <div className="mobile-theme">
             <span className="mobile-theme__title">Тема</span>
@@ -202,7 +215,6 @@ const MobileNavigation = ({
                 onClick={() => onThemeChange("system")}
               >
                 <SystemIcon />
-
                 <span>Системна</span>
               </button>
 
@@ -214,7 +226,6 @@ const MobileNavigation = ({
                 onClick={() => onThemeChange("light")}
               >
                 <SunIcon />
-
                 <span>Світла</span>
               </button>
 
@@ -226,7 +237,6 @@ const MobileNavigation = ({
                 onClick={() => onThemeChange("dark")}
               >
                 <MoonIcon />
-
                 <span>Темна</span>
               </button>
             </div>
