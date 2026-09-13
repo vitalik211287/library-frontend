@@ -1,17 +1,12 @@
-﻿import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import PageBackButton from "../../../../shared/components/PageBackButton/PageBackButton.jsx";
 
 import { apiFetch } from "../../../../shared/api/apiClient.js";
 
 import KudosUsersSheet from "./components/KudosUsersSheet/KudosUsersSheet.jsx";
 
 import "./PublicUserProfilePage.css";
-
-const BackIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="m15 18-6-6 6-6" />
-  </svg>
-);
 
 const getCountLabel = (count, forms) => {
   const value = Math.abs(Number(count) || 0);
@@ -260,14 +255,7 @@ const PublicUserProfilePage = () => {
     return (
       <main className="public-profile-page">
         <div className="public-profile-page__container">
-          <button
-            type="button"
-            className="public-profile-page__back"
-            onClick={() => navigate(-1)}
-            aria-label="Назад"
-          >
-            <BackIcon />
-          </button>
+          <PageBackButton label="Профіль читача" />
 
           <div className="public-profile-page__state">
             <strong>Не вдалося відкрити профіль</strong>
@@ -283,14 +271,7 @@ const PublicUserProfilePage = () => {
   return (
     <main className="public-profile-page">
       <div className="public-profile-page__container">
-        <button
-          type="button"
-          className="public-profile-page__back"
-          onClick={() => navigate(-1)}
-          aria-label="Назад"
-        >
-          <BackIcon />
-        </button>
+          <PageBackButton label="Профіль читача" />
 
         <section className="public-profile-hero">
           <div className="public-profile-hero__avatar">

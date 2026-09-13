@@ -145,23 +145,7 @@
   stroke-width: 1.9;
 }
 
-.streak-card__pagination {
-  display: flex;
-  justify-content: center;
-  gap: 7px;
-  margin-top: 18px;
-}
 
-.streak-card__page-dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--border);
-}
-
-.streak-card__page-dot--active {
-  background: var(--accent);
-}
 
 @media (max-width: 370px) {
   .streak-card {

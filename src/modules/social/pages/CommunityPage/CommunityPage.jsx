@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import PageBackButton from "../../../../shared/components/PageBackButton/PageBackButton.jsx";
 
 import SocialFeed from "../../../home/components/SocialFeed/SocialFeed.jsx";
 
@@ -10,19 +11,7 @@ const CommunityPage = () => {
   return (
     <main className="community-page">
       <header className="community-page__header">
-        <button
-          type="button"
-          className="community-page__back"
-          onClick={() => navigate(-1)}
-          aria-label="Назад"
-        >
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M19 12H5" />
-            <path d="m12 19-7-7 7-7" />
-          </svg>
-
-          <span>Спільнота</span>
-        </button>
+        <PageBackButton label="Спільнота" />
 
         <h1>Активність читачів</h1>
 

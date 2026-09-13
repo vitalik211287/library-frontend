@@ -1,15 +1,10 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import PageBackButton from "../../../../shared/components/PageBackButton/PageBackButton.jsx";
 
 import { apiFetch } from "../../../../shared/api/apiClient.js";
 
 import "./FollowingPage.css";
-
-const BackIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="m15 18-6-6 6-6" />
-  </svg>
-);
 
 const FollowingPage = () => {
   const navigate = useNavigate();
@@ -91,14 +86,7 @@ const FollowingPage = () => {
     <main className="following-page">
       <div className="following-page__container">
         <header className="following-page__header">
-          <button
-            type="button"
-            className="following-page__back"
-            onClick={() => navigate(-1)}
-            aria-label="Назад"
-          >
-            <BackIcon />
-          </button>
+          <PageBackButton label="Підписки" />
 
           <div>
             <h1>Підписки</h1>

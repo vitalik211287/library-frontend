@@ -131,7 +131,6 @@ const HomePage = ({ onOpenReading }) => {
       });
     });
   };
-
   const { handleShare } = useHomeShare(streak);
 
   /* =========================

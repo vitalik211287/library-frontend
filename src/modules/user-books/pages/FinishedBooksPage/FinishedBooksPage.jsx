@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import PageBackButton from "../../../../shared/components/PageBackButton/PageBackButton.jsx";
 
 import BookCard from "../../../books/pages/CatalogPage/components/BookCard/BookCard.jsx";
 
@@ -39,14 +40,7 @@ const FinishedBooksPage = ({ onOpenReading }) => {
   return (
     <main className="finished-books-page">
       <div className="finished-books-page__header">
-        <button
-          type="button"
-          className="finished-books-page__back"
-          onClick={handleBack}
-          aria-label="Назад"
-        >
-          ←
-        </button>
+        <PageBackButton label="Прочитано" to="/account" />
 
         <div>
           <span className="finished-books-page__eyebrow">Бібліотека</span>

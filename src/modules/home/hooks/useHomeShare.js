@@ -17,7 +17,9 @@
 
       await navigator.clipboard.writeText(text);
     } catch (shareError) {
-      console.error("Share error:", shareError);
+      if (shareError?.name !== "AbortError") {
+        console.error("Share error:", shareError);
+      }
     }
   };
 

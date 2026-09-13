@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import PageBackButton from "../../../../shared/components/PageBackButton/PageBackButton.jsx";
 
 import BookCard from "../../../books/pages/CatalogPage/components/BookCard/BookCard.jsx";
 
@@ -57,14 +58,7 @@ const WishlistPage = ({ onOpenReading }) => {
   return (
     <main className="wishlist-page">
       <div className="wishlist-page__header">
-        <button
-          type="button"
-          className="wishlist-page__back"
-          onClick={handleBack}
-          aria-label="Назад"
-        >
-          ←
-        </button>
+        <PageBackButton label="Хочу прочитати" to="/account" />
 
         <div>
           <h1>Хочу прочитати</h1>

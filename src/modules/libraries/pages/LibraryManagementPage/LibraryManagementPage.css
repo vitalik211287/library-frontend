@@ -13,16 +13,7 @@
   margin-bottom: 18px;
 }
 
-.library-management-page__back {
-  width: fit-content;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  color: var(--text);
-  font: inherit;
-  font-weight: 700;
-  cursor: pointer;
-}
+
 
 .library-management-page__eyebrow {
   margin: 0 0 6px;

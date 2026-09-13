@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
+import PageBackButton from "../../../../shared/components/PageBackButton/PageBackButton.jsx";
 
 import AchievementCard from "./components/AchievementCard/AchievementCard.jsx";
 import AchievementsFilters from "./components/AchievementsFilters/AchievementsFilters.jsx";
@@ -29,6 +30,7 @@ const AchievementsPage = () => {
 
   return (
     <main className="achievements-page">
+      <PageBackButton label="Досягнення" />
       <AchievementsHero summary={summary} />
 
       <AchievementsFilters

@@ -1,5 +1,6 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import PageBackButton from "../../../../shared/components/PageBackButton/PageBackButton.jsx";
 
 import UsersSearch from "../../components/UsersSearch/UsersSearch.jsx";
 import UsersResults from "../../components/UsersResults/UsersResults.jsx";
@@ -7,12 +8,6 @@ import UsersResults from "../../components/UsersResults/UsersResults.jsx";
 import useUserSearch from "../../hooks/useUserSearch.js";
 
 import "./UserSearchPage.css";
-
-const BackIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="m15 18-6-6 6-6" />
-  </svg>
-);
 
 const UserSearchPage = () => {
   const navigate = useNavigate();
@@ -24,14 +19,7 @@ const UserSearchPage = () => {
   return (
     <main className="users-page">
       <div className="users-page__header">
-        <button
-          type="button"
-          className="users-page__back"
-          onClick={() => navigate(-1)}
-          aria-label="Назад"
-        >
-          <BackIcon />
-        </button>
+        <PageBackButton label="Знайти читачів" />
 
         <div>
           <h1>Знайти читачів</h1>

@@ -1,4 +1,5 @@
-﻿import { useState } from "react";
+import { useState } from "react";
+import PageBackButton from "../../../../shared/components/PageBackButton/PageBackButton.jsx";
 
 import useReadingStats from "./hooks/useReadingStats.js";
 
@@ -45,6 +46,7 @@ const StatsPage = () => {
   if (isLoading) {
     return (
       <main className="stats-page">
+
         <div className="stats-state">Завантажуємо статистику...</div>
       </main>
     );
@@ -53,6 +55,7 @@ const StatsPage = () => {
   if (error) {
     return (
       <main className="stats-page">
+
         <div className="stats-state stats-state--error">{error}</div>
       </main>
     );
@@ -67,6 +70,7 @@ const StatsPage = () => {
   return (
     <>
       <main className="stats-page">
+        <PageBackButton label="Статистика" />
         <StatsHeader
           year={year}
           currentYear={currentYear}

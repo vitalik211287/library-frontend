@@ -42,44 +42,7 @@
   line-height: 1.2;
 }
 
-.settings-page__back {
-  position: absolute;
-  left: 0;
 
-  width: 42px;
-  height: 42px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  margin: 0;
-  padding: 0;
-
-  border: none;
-  border-radius: 50%;
-
-  background: transparent;
-  color: var(--text-h);
-
-  cursor: pointer;
-}
-
-.settings-page__back:hover {
-  background: var(--surface-secondary);
-}
-
-.settings-page__back svg {
-  width: 26px;
-  height: 26px;
-
-  fill: none;
-  stroke: currentColor;
-
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
 
 /* =========================
    SECTION

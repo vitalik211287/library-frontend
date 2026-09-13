@@ -1,4 +1,4 @@
-﻿.public-profile-page {
+.public-profile-page {
   width: 100%;
   min-height: 100dvh;
   padding: 18px 12px 88px;
@@ -13,35 +13,7 @@
   margin: 0 auto;
 }
 
-.public-profile-page__back {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 18px;
-  padding: 0;
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  background: var(--surface);
-  color: var(--text-h);
-  cursor: pointer;
-}
 
-.public-profile-page__back svg {
-  width: 21px;
-  height: 21px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.public-profile-page__back:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
 
 .public-profile-hero {
   display: flex;

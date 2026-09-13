@@ -1,0 +1,35 @@
+﻿.page-back-button {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+
+  margin: 0 0 16px;
+  padding: 0;
+
+  border: 0;
+  background: transparent;
+
+  color: var(--accent);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+.page-back-button svg {
+  width: 20px;
+  height: 20px;
+
+  flex-shrink: 0;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.page-back-button:active {
+  opacity: 0.7;
+}

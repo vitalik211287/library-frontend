@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
+import PageBackButton from "../../../../shared/components/PageBackButton/PageBackButton.jsx";
 
 import BarcodeScanner from "../../components/BarcodeScanner/BarcodeScanner.jsx";
 import { useLibrary } from "../../../libraries/context/LibraryContext.jsx";
@@ -89,6 +90,7 @@ const AddBookPage = () => {
 
   return (
     <div className="add-book-page">
+      <PageBackButton label="Додати книгу" />
       <h1>Додати книгу</h1>
 
       <IsbnSearch

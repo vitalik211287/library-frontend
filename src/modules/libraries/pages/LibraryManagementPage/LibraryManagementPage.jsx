@@ -11,6 +11,7 @@ import { useLibrary } from "../../context/LibraryContext.jsx";
 
 import { apiFetch } from "../../../../shared/api/apiClient.js";
 import ConfirmDeleteModal from "../../../../shared/components/ConfirmDeleteModal/ConfirmDeleteModal.jsx";
+import PageBackButton from "../../../../shared/components/PageBackButton/PageBackButton.jsx";
 import {
   ROLE_OPTIONS,
   getInitials,
@@ -289,13 +290,7 @@ const LibraryManagementPage = () => {
   if (!activeLibraryId && !isLibrariesLoading) {
     return (
       <main className="library-management-page">
-        <button
-          type="button"
-          className="library-management-page__back"
-          onClick={() => navigate("/home")}
-        >
-          ← Назад
-        </button>
+        <PageBackButton label="Керування бібліотекою" to="/home" />
 
         <section className="library-management-card library-management-card--empty">
           <h1>Керування бібліотекою</h1>
@@ -309,13 +304,7 @@ const LibraryManagementPage = () => {
   return (
     <main className="library-management-page">
       <header className="library-management-page__header">
-        <button
-          type="button"
-          className="library-management-page__back"
-          onClick={() => navigate("/home")}
-        >
-          ← Назад
-        </button>
+        <PageBackButton label="Керування бібліотекою" to="/home" />
 
         <div>
           <p className="library-management-page__eyebrow">БІБЛІОТЕКА</p>

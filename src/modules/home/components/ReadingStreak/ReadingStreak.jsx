@@ -57,12 +57,6 @@ const ReadingStreak = ({ streak, weeklyActivity, onShare }) => {
           ))}
         </div>
       </div>
-
-      <div className="streak-card__pagination">
-        <span className="streak-card__page-dot streak-card__page-dot--active" />
-        <span className="streak-card__page-dot" />
-        <span className="streak-card__page-dot" />
-      </div>
     </section>
   );
 };

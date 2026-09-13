@@ -52,43 +52,7 @@
   line-height: 1.35;
 }
 
-.following-page__back {
-  width: 40px;
-  height: 40px;
 
-  flex: 0 0 40px;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
-  padding: 0;
-
-  border: 1px solid var(--border);
-  border-radius: 12px;
-
-  background: var(--surface);
-  color: var(--text-h);
-
-  cursor: pointer;
-}
-
-.following-page__back svg {
-  width: 21px;
-  height: 21px;
-
-  fill: none;
-  stroke: currentColor;
-
-  stroke-width: 2;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
-.following-page__back:hover {
-  border-color: var(--accent);
-  color: var(--accent);
-}
 
 /* =========================
    LIST
