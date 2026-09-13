@@ -17,7 +17,6 @@ const CatalogSearch = ({
             type="text"
             placeholder="Пошук..."
             value={search}
-            autoFocus
             onChange={(event) => onSearchChange(event.target.value)}
           />
 

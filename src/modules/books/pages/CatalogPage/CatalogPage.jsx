@@ -48,7 +48,11 @@ const CatalogPage = ({ onOpenReading }) => {
   } = useCatalogBooks();
 
   useEffect(() => {
-    searchInputRef.current?.focus();
+    const isMobile = window.matchMedia("(max-width: 600px)").matches;
+
+    if (!isMobile) {
+      searchInputRef.current?.focus();
+    }
   }, []);
 
   useEffect(() => {
