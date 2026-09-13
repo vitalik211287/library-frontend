@@ -1,0 +1,144 @@
+.mobile-bottom-nav {
+  display: none;
+}
+
+@media (max-width: 599px) {
+  .mobile-bottom-nav {
+    position: fixed;
+
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    z-index: 1900;
+
+    height:
+      calc(
+        72px +
+        env(safe-area-inset-bottom)
+      );
+
+    display: grid;
+    grid-template-columns:
+      repeat(5, minmax(0, 1fr));
+
+    align-items: start;
+
+    padding:
+      6px
+      4px
+      env(safe-area-inset-bottom);
+
+    box-sizing: border-box;
+
+    border-top:
+      1px solid
+      var(--border);
+
+    background:
+      color-mix(
+        in srgb,
+        var(--surface) 96%,
+        transparent
+      );
+
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+
+    box-shadow:
+      0 -8px 30px
+      rgba(0, 0, 0, 0.18);
+  }
+
+  .mobile-bottom-nav__item {
+    min-width: 0;
+    height: 60px;
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    gap: 3px;
+
+    color: var(--text);
+
+    font-size: 10px;
+    font-weight: 500;
+    line-height: 1;
+
+    text-decoration: none;
+
+    transition:
+      color 0.2s ease,
+      transform 0.15s ease;
+  }
+
+  .mobile-bottom-nav__item svg {
+    width: 23px;
+    height: 23px;
+
+    fill: none;
+    stroke: currentColor;
+
+    stroke-width: 1.8;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  .mobile-bottom-nav__item.active {
+    color: var(--accent);
+  }
+
+  .mobile-bottom-nav__item:active {
+    transform: scale(0.94);
+  }
+
+  .mobile-bottom-nav__item--add {
+    margin-top: -17px;
+  }
+
+  .mobile-bottom-nav__add-button {
+    width: 54px;
+    height: 54px;
+    min-width: 54px;
+    min-height: 54px;
+
+    flex: 0 0 54px;
+    aspect-ratio: 1 / 1;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border:
+      1px solid
+      var(--accent-border);
+
+    border-radius: 999px;
+
+    background:
+      linear-gradient(
+        145deg,
+        var(--accent),
+        #a855f7
+      );
+
+    color: #ffffff;
+
+    box-shadow:
+      0 8px 22px
+      rgba(170, 59, 255, 0.34);
+  }
+
+  .mobile-bottom-nav__item--add svg {
+    width: 29px;
+    height: 29px;
+
+    stroke-width: 1.7;
+  }
+
+  .mobile-bottom-nav__item--add > span:last-child {
+    margin-top: 3px;
+  }
+}

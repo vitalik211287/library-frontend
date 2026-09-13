@@ -1,4 +1,4 @@
-﻿import { useEffect } from "react";
+import { useEffect, useLayoutEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 import { Toaster } from "react-hot-toast";
@@ -16,6 +16,7 @@ import ReadingBookPicker from "../modules/reading/components/ReadingBookPicker/R
 
 import MobileNavigation from "../shared/components/AppNavigation/MobileNavigation.jsx";
 import DesktopNavigation from "../shared/components/AppNavigation/DesktopNavigation.jsx";
+import MobileBottomNavigation from "../shared/components/MobileBottomNavigation/MobileBottomNavigation.jsx";
 
 import { API_URL } from "../shared/api/apiClient.js";
 
@@ -114,6 +115,8 @@ const App = () => {
         themeMode={themeMode}
         onThemeChange={handleThemeChange}
       />
+
+      <MobileBottomNavigation />
 
       <DesktopNavigation
         user={user}
