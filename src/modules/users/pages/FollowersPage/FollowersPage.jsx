@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import PageBackButton from "../../../../shared/components/PageBackButton/PageBackButton.jsx";
 
 import { apiFetch } from "../../../../shared/api/apiClient.js";
@@ -8,6 +8,7 @@ import "./FollowersPage.css";
 
 const FollowersPage = () => {
   const navigate = useNavigate();
+  const { userId } = useParams();
 
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -20,7 +21,11 @@ const FollowersPage = () => {
         setIsLoading(true);
         setError(null);
 
-        const data = await apiFetch("/api/users/me/followers");
+        const endpoint = userId
+          ? `/api/users/${userId}/followers`
+          : "/api/users/me/followers";
+
+        const data = await apiFetch(endpoint);
 
         setUsers(Array.isArray(data?.users) ? data.users : []);
       } catch (requestError) {
@@ -34,7 +39,7 @@ const FollowersPage = () => {
     };
 
     loadFollowers();
-  }, []);
+  }, [userId]);
 
   const handleFollowToggle = async (user) => {
     if (updatingUserId || user.isCurrentUser) {
@@ -82,7 +87,7 @@ const FollowersPage = () => {
           <div>
             <h1>Підписники</h1>
 
-            <p>Читачі, які підписані на вас</p>
+            <p>{userId ? "Читачі, які підписані на користувача" : "Читачі, які підписані на вас"}</p>
           </div>
         </header>
 

@@ -33,8 +33,8 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
   const [menuActivity, setMenuActivity] = useState(null);
   const [selectedBook, setSelectedBook] = useState(null);
   const [isUnfollowing, setIsUnfollowing] = useState(false);
-  const [muteNotifications, setMuteNotifications] = useState(false);
-  const [isMuting, setIsMuting] = useState(false);
+  const [notifyActivity, setNotifyActivity] = useState(false);
+  const [isUpdatingNotifications, setIsUpdatingNotifications] = useState(false);
 
   useEffect(() => {
     let isActive = true;
@@ -108,23 +108,23 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
       return;
     }
 
-    const nextValue = !muteNotifications;
+    const nextValue = !notifyActivity;
 
     try {
-      setIsMuting(true);
+      setIsUpdatingNotifications(true);
 
       const data = await apiFetch(
         `/api/users/${userId}/social-preferences`,
         {
           method: "PATCH",
           body: JSON.stringify({
-            muteNotifications: nextValue,
+            notifyActivity: nextValue,
           }),
         },
       );
 
-      setMuteNotifications(
-        Boolean(data?.muteNotifications),
+      setNotifyActivity(
+        Boolean(data?.notifyActivity),
       );
     } catch (error) {
       console.error(
@@ -132,7 +132,7 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
         error,
       );
     } finally {
-      setIsMuting(false);
+      setIsUpdatingNotifications(false);
     }
   };
   const handleUnfollow = async () => {
@@ -173,12 +173,28 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
   const handleShare = async (activity) => {
     const userName = activity.user?.name || "Користувач";
 
-    const text =
-      activity.type === "BOOK_FINISHED"
-        ? `${userName} прочитав книгу «${activity.book?.title || "Книга"}»`
-        : `${userName} отримав досягнення «${
-            activity.achievement?.title || "Досягнення"
-          }»`;
+    let text;
+
+    switch (activity.type) {
+      case "READING_STARTED":
+        text = `${userName} почав читати книгу «${activity.book?.title || "Книга"}»`;
+        break;
+
+      case "BOOK_FINISHED":
+        text = `${userName} прочитав книгу «${activity.book?.title || "Книга"}»`;
+        break;
+
+      case "RATING_ADDED":
+        text = `${userName} оцінив книгу «${activity.book?.title || "Книга"}» на ${activity.rating ?? 0}/5`;
+        break;
+
+      case "ACHIEVEMENT_UNLOCKED":
+        text = `${userName} отримав досягнення «${activity.achievement?.title || "Досягнення"}»`;
+        break;
+
+      default:
+        text = `${userName} поділився новою активністю`;
+    }
 
     try {
       if (navigator.share) {
@@ -302,8 +318,8 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
                           `/api/users/${activity.user.id}/social-preferences`,
                         );
 
-                        setMuteNotifications(
-                          Boolean(data?.muteNotifications),
+                        setNotifyActivity(
+                          Boolean(data?.notifyActivity),
                         );
                       } catch (error) {
                         console.error(
@@ -311,7 +327,7 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
                           error,
                         );
 
-                        setMuteNotifications(false);
+                        setNotifyActivity(false);
                       }
                     }
                   }}
@@ -394,8 +410,8 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
       <SocialFeedMenu
         activity={menuActivity}
         isUnfollowing={isUnfollowing}
-        isMuting={isMuting}
-        muteNotifications={muteNotifications}
+        isUpdatingNotifications={isUpdatingNotifications}
+        notifyActivity={notifyActivity}
         onClose={() => setMenuActivity(null)}
         onOpenProfile={handleOpenProfileFromMenu}
         onToggleNotifications={handleToggleNotifications}

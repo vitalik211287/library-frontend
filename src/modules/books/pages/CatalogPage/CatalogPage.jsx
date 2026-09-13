@@ -34,6 +34,7 @@ const CatalogPage = ({ onOpenReading }) => {
 
   const viewMode = searchParams.get("view") ?? "shelves";
   const selectedShelf = searchParams.get("shelf");
+  const linkedBookId = searchParams.get("bookId");
 
   const canEditLibrary =
     activeLibrary?.role === "OWNER" ||
@@ -96,15 +97,17 @@ const CatalogPage = ({ onOpenReading }) => {
     return shelf?.books ?? [];
   }, [books, genreShelves, selectedShelf]);
 
-  const filteredBooks = useMemo(
-    () =>
-      filterCatalogBooks({
-        books: shelfBooks,
-        search,
-        searchBy,
-      }),
-    [shelfBooks, search, searchBy],
-  );
+  const filteredBooks = useMemo(() => {
+    if (linkedBookId) {
+      return books.filter((book) => book.id === linkedBookId);
+    }
+
+    return filterCatalogBooks({
+      books: shelfBooks,
+      search,
+      searchBy,
+    });
+  }, [books, linkedBookId, shelfBooks, search, searchBy]);
 
   const scrollToCatalogTop = () => {
     requestAnimationFrame(() => {
@@ -262,6 +265,23 @@ const CatalogPage = ({ onOpenReading }) => {
               onClick={handleShelfBack}
             >
               ← Усі полички
+            </button>
+          )}
+
+          {linkedBookId && (
+            <button
+              type="button"
+              className="catalog-shelf-back"
+              onClick={() => {
+                const params = new URLSearchParams(searchParams);
+
+                params.delete("bookId");
+                params.set("view", "all");
+
+                setSearchParams(params);
+              }}
+            >
+              ← Усі книги
             </button>
           )}
 

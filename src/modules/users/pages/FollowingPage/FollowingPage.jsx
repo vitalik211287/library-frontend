@@ -39,7 +39,7 @@ const FollowingPage = () => {
     };
 
     loadFollowing();
-  }, []);
+  }, [userId]);
 
   const handleFollowToggle = async (user) => {
     if (updatingUserId || user.isCurrentUser) {

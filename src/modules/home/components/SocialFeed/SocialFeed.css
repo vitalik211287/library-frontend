@@ -1,5 +1,6 @@
-.social-feed {
+﻿.social-feed {
   width: 100%;
+  margin-bottom: 16px;
 }
 
 .social-feed__header {
@@ -626,3 +627,5 @@
 .social-feed-card__user-info {
   min-width: 0;
 }
+
+

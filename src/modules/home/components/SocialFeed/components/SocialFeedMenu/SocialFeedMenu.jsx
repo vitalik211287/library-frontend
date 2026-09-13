@@ -4,8 +4,8 @@ import "./SocialFeedMenu.css";
 const SocialFeedMenu = ({
   activity,
   isUnfollowing = false,
-  isMuting = false,
-  muteNotifications = false,
+  isUpdatingNotifications = false,
+  notifyActivity = false,
   onClose,
   onOpenProfile,
   onToggleNotifications,
@@ -49,11 +49,11 @@ const SocialFeedMenu = ({
           <button
             type="button"
             className="social-feed-menu__item"
-            disabled={isMuting}
+            disabled={isUpdatingNotifications}
             onClick={onToggleNotifications}
           >
             <span className="social-feed-menu__item-icon social-feed-menu__item-icon--notification">
-              {muteNotifications ? (
+              {notifyActivity ? (
                 <svg viewBox="0 0 24 24" aria-hidden="true">
                   <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" />
                   <path d="M10 21h4" />
@@ -69,17 +69,17 @@ const SocialFeedMenu = ({
 
             <span>
               <strong>
-                {isMuting
+                {isUpdatingNotifications
                   ? "Зберігаємо..."
-                  : muteNotifications
-                    ? "Увімкнути сповіщення"
-                    : "Не сповіщати"}
+                  : notifyActivity
+                  ? "Не сповіщати"
+                  : "Увімкнути сповіщення"}
               </strong>
 
               <small>
-                {muteNotifications
-                  ? "Знову отримувати сповіщення від цього користувача"
-                  : "Не отримувати сповіщення від цього користувача"}
+                {notifyActivity
+                ? "Не отримувати сповіщення від цього користувача"
+                : "Знову отримувати сповіщення від цього користувача"}
               </small>
             </span>
           </button>
