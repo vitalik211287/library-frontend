@@ -6,6 +6,7 @@ import { apiFetch } from "../../../../shared/api/apiClient.js";
 import { TrophyIcon } from "../HomeIcons.jsx";
 import SocialFeedMenu from "./components/SocialFeedMenu/SocialFeedMenu.jsx";
 import SocialFeedEvent from "./components/SocialFeedEvent/SocialFeedEvent.jsx";
+import SocialBookModal from "./components/SocialBookModal/SocialBookModal.jsx";
 import "./SocialFeed.css";
 
 const CommentIcon = () => (
@@ -30,6 +31,7 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
   const [activities, setActivities] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [menuActivity, setMenuActivity] = useState(null);
+  const [selectedBook, setSelectedBook] = useState(null);
   const [isUnfollowing, setIsUnfollowing] = useState(false);
   const [muteNotifications, setMuteNotifications] = useState(false);
   const [isMuting, setIsMuting] = useState(false);
@@ -322,7 +324,7 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
                 activity={activity}
                 onOpenBook={(book) => {
                   if (book?.id) {
-                    navigate(`/catalog?bookId=${book.id}`);
+                    setSelectedBook(book);
                   }
                 }}
                 onOpenAchievement={(item) => {
@@ -376,6 +378,18 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
           );
         })}
       </div>
+
+      <SocialBookModal
+        book={selectedBook}
+        onClose={() => setSelectedBook(null)}
+        onOpenCatalog={(book) => {
+          setSelectedBook(null);
+
+          if (book?.id) {
+            navigate(`/catalog?bookId=${book.id}`);
+          }
+        }}
+      />
 
       <SocialFeedMenu
         activity={menuActivity}

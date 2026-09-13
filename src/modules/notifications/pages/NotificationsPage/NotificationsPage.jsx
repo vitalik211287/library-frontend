@@ -1,12 +1,14 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import PageBackButton from "../../../../shared/components/PageBackButton/PageBackButton.jsx";
+import SocialBookModal from "../../../home/components/SocialFeed/components/SocialBookModal/SocialBookModal.jsx";
 
 import { useNotifications } from "../../context/NotificationsContext.jsx";
 
 import "./NotificationsPage.css";
 
 const NotificationsPage = () => {
+  const [selectedBook, setSelectedBook] = useState(null);
   const navigate = useNavigate();
 
   const {
@@ -44,6 +46,17 @@ const NotificationsPage = () => {
       notification.book?.id
     ) {
       navigate(`/catalog?bookId=${notification.book.id}`);
+      return;
+    }
+
+    if (
+      notification.type === "SOCIAL_ACTIVITY" &&
+      ["READING_STARTED", "BOOK_FINISHED", "RATING_ADDED"].includes(
+        notification.activity?.type,
+      ) &&
+      notification.book?.id
+    ) {
+      setSelectedBook(notification.book);
       return;
     }
 
@@ -299,6 +312,17 @@ const NotificationsPage = () => {
             </div>
           )}
       </div>
+      <SocialBookModal
+        book={selectedBook}
+        onClose={() => setSelectedBook(null)}
+        onOpenCatalog={(book) => {
+          setSelectedBook(null);
+
+          if (book?.id) {
+            navigate(`/catalog?bookId=${book.id}`);
+          }
+        }}
+      />
     </main>
   );
 };
