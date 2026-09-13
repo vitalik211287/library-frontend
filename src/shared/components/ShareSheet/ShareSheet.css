@@ -1,0 +1,226 @@
+.share-sheet__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 4000;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+
+  background: rgba(0, 0, 0, 0.62);
+}
+
+.share-sheet {
+  width: 100%;
+  max-width: 430px;
+
+  padding: 10px 16px 16px;
+
+  box-sizing: border-box;
+
+  border: 1px solid var(--border);
+  border-radius: 22px 22px 0 0;
+
+  background: var(--surface);
+  color: var(--text);
+}
+
+.share-sheet__handle {
+  width: 42px;
+  height: 4px;
+
+  margin: 0 auto 14px;
+
+  border-radius: 999px;
+
+  background: var(--border);
+}
+
+.share-sheet__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  margin-bottom: 16px;
+}
+
+.share-sheet__header h2 {
+  margin: 0;
+
+  color: var(--text-h);
+
+  font-size: 18px;
+}
+
+.share-sheet__close {
+  width: 34px;
+  height: 34px;
+
+  display: grid;
+  place-items: center;
+
+  padding: 0;
+
+  border: 0;
+  background: transparent;
+
+  color: var(--text);
+
+  font-size: 24px;
+
+  cursor: pointer;
+}
+
+.share-sheet__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+
+  gap: 10px;
+}
+
+.share-sheet__item {
+  min-width: 0;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  gap: 7px;
+
+  padding: 12px 5px;
+
+  border: 0;
+  border-radius: 12px;
+
+  background: var(--surface-secondary);
+  color: var(--text-h);
+
+  font: inherit;
+  font-size: 10px;
+
+  cursor: pointer;
+}
+
+.share-sheet__icon {
+  width: 42px;
+  height: 42px;
+
+  display: grid;
+  place-items: center;
+
+  border: 1px solid var(--accent-border);
+  border-radius: 50%;
+
+  background: var(--accent-bg);
+  color: var(--accent);
+
+  font-size: 19px;
+  font-weight: 700;
+}
+
+.share-sheet__cancel {
+  width: 100%;
+  min-height: 44px;
+
+  margin-top: 14px;
+
+  border: 1px solid var(--border);
+  border-radius: 11px;
+
+  background: transparent;
+  color: var(--text-h);
+
+  font: inherit;
+  font-size: 11px;
+  font-weight: 700;
+
+  cursor: pointer;
+}
+
+@media (min-width: 600px) {
+  .share-sheet__backdrop {
+    align-items: center;
+  }
+
+  .share-sheet {
+    border-radius: 22px;
+  }
+}
+
+.share-sheet__icon svg {
+  width: 22px;
+  height: 22px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+
+
+
+
+
+/* Brand share icons */
+.share-sheet__icon {
+  overflow: hidden;
+}
+
+
+
+
+
+
+
+
+
+.share-sheet__icon {
+  color: var(--accent);
+}
+
+.share-sheet__icon > svg {
+  width: 24px;
+  height: 24px;
+
+  display: block;
+
+  fill: currentColor;
+  color: currentColor;
+}
+
+/* Brand icons: Telegram / WhatsApp / Viber */
+.share-sheet__item:nth-child(-n + 3) .share-sheet__icon svg {
+  width: 22px;
+  height: 22px;
+
+  fill: currentColor;
+  stroke: none;
+  stroke-width: 0;
+}
+
+/* Default icons: Email / Copy / More */
+.share-sheet__icon > svg {
+  width: 22px;
+  height: 22px;
+
+  display: block;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Brand icons: Telegram / WhatsApp / Viber */
+.share-sheet__item:nth-child(-n + 3) .share-sheet__icon > svg {
+  width: 21px;
+  height: 21px;
+
+  fill: currentColor;
+  stroke: none;
+  stroke-width: 0;
+}
+
