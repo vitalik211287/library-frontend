@@ -607,3 +607,22 @@
   font-size: 18px;
   line-height: 1;
 }
+
+/* Keep social cards inside available width */
+.social-feed,
+.social-feed__list,
+.social-feed-card {
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+.social-feed-card {
+  width: 100%;
+}
+
+.social-feed-card__header,
+.social-feed-card__user,
+.social-feed-card__user-info {
+  min-width: 0;
+}

@@ -72,3 +72,27 @@
 .community-page__back:active {
   opacity: 0.7;
 }
+
+/* Prevent community feed from overflowing mobile viewport */
+.community-page,
+.community-page * {
+  box-sizing: border-box;
+}
+
+.community-page {
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.community-page .social-feed,
+.community-page .social-feed__list,
+.community-page .social-feed-card {
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+}
+
+.community-page .social-feed-card {
+  overflow: hidden;
+}
