@@ -15,21 +15,30 @@
 .social-feed__list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: 14px;
 }
 
 .social-feed-card {
-  padding: 14px;
+  overflow: hidden;
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: 18px;
   background: var(--surface);
 }
 
-.social-feed-card__user {
-  width: 100%;
+.social-feed-card__header {
   display: flex;
   align-items: center;
-  gap: 10px;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 14px 0;
+}
+
+.social-feed-card__user {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: 11px;
   padding: 0;
   border: 0;
   background: transparent;
@@ -39,9 +48,9 @@
 }
 
 .social-feed-card__avatar {
-  width: 42px;
-  height: 42px;
-  flex: 0 0 42px;
+  width: 46px;
+  height: 46px;
+  flex: 0 0 46px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -58,109 +67,237 @@
   object-fit: cover;
 }
 
-.social-feed-card__user > div:last-child {
+.social-feed-card__user-info {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 3px;
 }
 
-.social-feed-card__user strong {
+.social-feed-card__user-info strong {
+  overflow: hidden;
   color: var(--text-h);
-  font-size: 13px;
+  font-size: 14px;
+  line-height: 1.2;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.social-feed-card__user span {
+.social-feed-card__user-info span {
   color: var(--text);
   font-size: 10px;
 }
 
-.social-feed-card__book {
-  margin-top: 12px;
-  display: flex;
-  gap: 12px;
+.social-feed-card__more {
+  flex: 0 0 auto;
+  color: var(--text);
+  font-size: 17px;
+  letter-spacing: 2px;
 }
 
-.social-feed-card__cover {
-  width: 64px;
-  height: 92px;
-  flex: 0 0 64px;
+/* Achievement */
+
+.social-feed-card__achievement {
+  width: calc(100% - 28px);
+  margin: 14px;
+  padding: 0;
   overflow: hidden;
-  border-radius: 8px;
+  border: 1px solid var(--border);
+  border-radius: 15px;
   background: var(--surface-secondary);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
 }
 
-.social-feed-card__cover img {
+.social-feed-card__achievement-main {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 15px;
+}
+
+.social-feed-card__achievement-icon {
+  flex: 0 0 auto;
+  font-size: 28px;
+}
+
+.social-feed-card__achievement-content {
+  min-width: 0;
+  flex: 1;
+}
+
+.social-feed-card__achievement-content small {
+  display: block;
+  margin-bottom: 4px;
+  color: var(--text);
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.social-feed-card__achievement-content strong {
+  display: block;
+  color: var(--text-h);
+  font-size: 17px;
+  line-height: 1.2;
+}
+
+.social-feed-card__achievement-content p {
+  margin: 5px 0 0;
+  color: var(--text);
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.social-feed-card__achievement-arrow {
+  flex: 0 0 auto;
+  color: var(--accent);
+  font-size: 28px;
+  line-height: 1;
+}
+
+.social-feed-card__achievement-book {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin: 0 12px 12px;
+  padding: 10px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.035);
+}
+
+.social-feed-card__achievement-cover {
+  width: 54px;
+  height: 78px;
+  flex: 0 0 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 7px;
+  background: var(--surface);
+}
+
+.social-feed-card__achievement-cover img {
   width: 100%;
   height: 100%;
   object-fit: cover;
 }
 
-.social-feed-card__book-content {
+.social-feed-card__achievement-book-content {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  gap: 3px;
 }
 
-.social-feed-card__book-content > span {
-  color: var(--accent);
-  font-size: 10px;
-  font-weight: 700;
+.social-feed-card__achievement-book-content small {
+  color: var(--text);
+  font-size: 9px;
 }
 
-.social-feed-card__book-content h3 {
-  margin: 4px 0 2px;
+.social-feed-card__achievement-book-content strong {
+  overflow: hidden;
   color: var(--text-h);
   font-size: 14px;
+  line-height: 1.25;
+  text-overflow: ellipsis;
 }
 
-.social-feed-card__book-content p {
-  margin: 0;
+.social-feed-card__achievement-book-content span {
+  color: var(--text);
+  font-size: 10px;
+}
+
+/* Finished book */
+
+.social-feed-card__finished-book {
+  width: calc(100% - 28px);
+  margin: 14px;
+  padding: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: var(--surface-secondary);
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.social-feed-card__finished-cover {
+  width: 64px;
+  height: 92px;
+  flex: 0 0 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--surface);
+}
+
+.social-feed-card__finished-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.social-feed-card__finished-content {
+  min-width: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.social-feed-card__finished-content small {
+  color: var(--accent);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.social-feed-card__finished-content strong {
+  color: var(--text-h);
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.social-feed-card__finished-content span {
   color: var(--text);
   font-size: 11px;
 }
 
-.social-feed-card__achievement {
-  margin-top: 12px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding: 12px;
-  border-radius: 12px;
-  background: var(--surface-secondary);
+.social-feed-card__finished-arrow {
+  color: var(--accent);
+  font-size: 28px;
 }
 
-.social-feed-card__achievement > span {
-  font-size: 24px;
-}
-
-.social-feed-card__achievement div {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.social-feed-card__achievement small {
-  color: var(--text);
-  font-size: 10px;
-}
-
-.social-feed-card__achievement strong {
-  color: var(--text-h);
-  font-size: 13px;
-}
+/* Actions */
 
 .social-feed-card__actions {
-  margin-top: 12px;
-  display: flex;
-  justify-content: flex-end;
+  min-height: 52px;
+  display: grid;
+  grid-template-columns: 0.72fr 1.4fr 1.3fr;
+  align-items: stretch;
+  margin: 0 14px;
+  border-top: 1px solid var(--border);
 }
 
-.social-feed-card__kudos {
-  padding: 6px 10px;
-  border: 1px solid var(--border);
-  border-radius: 999px;
+.social-feed-card__action {
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  padding: 9px 8px;
+  border: 0;
   background: transparent;
   color: var(--text);
   font: inherit;
@@ -168,13 +305,31 @@
   cursor: pointer;
 }
 
-.social-feed-card__kudos--active {
-  border-color: var(--accent);
+.social-feed-card__action + .social-feed-card__action {
+  border-left: 1px solid var(--border);
+}
+
+.social-feed-card__action svg {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.social-feed-card__clap {
+  font-size: 20px;
+  line-height: 1;
+}
+
+.social-feed-card__action--active {
   color: var(--accent);
 }
 
-.social-feed-card__kudos:disabled {
-  opacity: 0.6;
+.social-feed-card__action:disabled {
   cursor: default;
 }
 
@@ -186,24 +341,269 @@
   color: var(--text);
   font-size: 11px;
 }
-.social-feed-card__achievement {
-  width: 100%;
+
+/* Mobile */
+
+@media (max-width: 600px) {
+  .social-feed__header {
+    margin-bottom: 8px;
+  }
+
+  .social-feed__header h2 {
+    font-size: 16px;
+  }
+
+  .social-feed__list {
+    gap: 10px;
+  }
+
+  .social-feed-card {
+    border-radius: 16px;
+  }
+
+  .social-feed-card__header {
+    padding: 11px 11px 0;
+  }
+
+  .social-feed-card__avatar {
+    width: 38px;
+    height: 38px;
+    flex-basis: 38px;
+  }
+
+  .social-feed-card__user {
+    gap: 8px;
+  }
+
+  .social-feed-card__user-info strong {
+    font-size: 12px;
+  }
+
+  .social-feed-card__user-info span {
+    font-size: 8px;
+  }
+
+  .social-feed-card__more {
+    font-size: 14px;
+  }
+
+  .social-feed-card__achievement {
+    width: calc(100% - 22px);
+    margin: 10px 11px;
+    border-radius: 12px;
+  }
+
+  .social-feed-card__achievement-main {
+    gap: 9px;
+    padding: 10px;
+  }
+
+  .social-feed-card__achievement-icon {
+    font-size: 22px;
+  }
+
+  .social-feed-card__achievement-content small {
+    margin-bottom: 2px;
+    font-size: 8px;
+  }
+
+  .social-feed-card__achievement-content strong {
+    font-size: 13px;
+  }
+
+  .social-feed-card__achievement-content p {
+    margin-top: 3px;
+    font-size: 9px;
+  }
+
+  .social-feed-card__achievement-arrow {
+    font-size: 20px;
+  }
+
+  .social-feed-card__achievement-book {
+    gap: 9px;
+    margin: 0 8px 8px;
+    padding: 8px;
+    border-radius: 9px;
+  }
+
+  .social-feed-card__achievement-cover {
+    width: 42px;
+    height: 61px;
+    flex-basis: 42px;
+  }
+
+  .social-feed-card__achievement-book-content small {
+    font-size: 8px;
+  }
+
+  .social-feed-card__achievement-book-content strong {
+    font-size: 12px;
+  }
+
+  .social-feed-card__achievement-book-content span {
+    font-size: 9px;
+  }
+
+  .social-feed-card__finished-book {
+    width: calc(100% - 22px);
+    margin: 10px 11px;
+    padding: 9px;
+    gap: 9px;
+    border-radius: 12px;
+  }
+
+  .social-feed-card__finished-cover {
+    width: 50px;
+    height: 72px;
+    flex-basis: 50px;
+  }
+
+  .social-feed-card__finished-content small {
+    font-size: 8px;
+  }
+
+  .social-feed-card__finished-content strong {
+    font-size: 13px;
+  }
+
+  .social-feed-card__finished-content span {
+    font-size: 9px;
+  }
+
+  .social-feed-card__finished-arrow {
+    font-size: 20px;
+  }
+
+  .social-feed-card__actions {
+    min-height: 43px;
+    margin: 0 10px;
+    grid-template-columns: 0.65fr 1.4fr 1.25fr;
+  }
+
+  .social-feed-card__action {
+    gap: 5px;
+    padding: 6px 4px;
+    font-size: 9px;
+  }
+
+  .social-feed-card__action svg {
+    width: 18px;
+    height: 18px;
+    flex-basis: 18px;
+  }
+
+  .social-feed-card__clap {
+    font-size: 17px;
+  }
+}
+/* Social feed achievement trophy */
+.social-feed-card__achievement-icon {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--accent);
+  border-radius: 10px;
+  color: var(--accent);
+}
+
+.social-feed-card__achievement-icon svg {
+  width: 18px;
+  height: 18px;
+}
+
+/* Match trophy style with AchievementCard */
+.social-feed-card__achievement-icon {
+  width: 36px;
+  height: 36px;
+  flex: 0 0 36px;
+  display: grid;
+  place-items: center;
+
+  border: 1px solid color-mix(in srgb, var(--accent) 56%, var(--border));
+  border-radius: 10px;
+
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+  color: var(--accent);
+}
+
+.social-feed-card__achievement-icon svg {
+  width: 19px;
+  height: 19px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* Clean three-dot menu button */
+.social-feed-card__more {
+  width: 34px;
+  height: 34px;
+  flex: 0 0 34px;
+
+  display: grid;
+  place-items: center;
+
+  padding: 0;
   border: 0;
-  color: inherit;
+  border-radius: 50%;
+
+  background: transparent !important;
+  box-shadow: none;
+
+  color: var(--text);
   font: inherit;
-  text-align: left;
+  font-size: 16px;
+  line-height: 1;
+  letter-spacing: 2px;
+
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.social-feed-card__more:hover,
+.social-feed-card__more:focus,
+.social-feed-card__more:active {
+  background: transparent !important;
+  box-shadow: none;
+}
+
+.social-feed-card__more:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.social-feed__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.social-feed__view-all {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+
+  padding: 0;
+  border: 0;
+  background: transparent;
+
+  color: var(--accent);
+  font: inherit;
+  font-size: 10px;
+  font-weight: 700;
+
   cursor: pointer;
 }
 
-.social-feed-card__achievement p {
-  margin: 2px 0 0;
-  color: var(--text);
-  font-size: 10px;
-}
-
-.social-feed-card__achievement-arrow {
-  margin-left: auto;
-  color: var(--accent);
-  font-size: 22px;
+.social-feed__view-all span {
+  font-size: 18px;
   line-height: 1;
 }

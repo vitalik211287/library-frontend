@@ -53,6 +53,14 @@ export const AchievementsIcon = () => (
 );
 
 
+export const CommunityIcon = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="9" cy="8" r="3" />
+    <circle cx="17" cy="9" r="2.5" />
+    <path d="M3.5 20a5.5 5.5 0 0 1 11 0" />
+    <path d="M14 15.5a4.5 4.5 0 0 1 6.5 4" />
+  </svg>
+);
 export const BellIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" />
@@ -112,5 +120,6 @@ export const navigationIcons = {
   reader: ReaderIcon,
   stats: StatsIcon,
   achievements: AchievementsIcon,
+  community: CommunityIcon,
 };
 

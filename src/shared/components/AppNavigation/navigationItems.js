@@ -29,6 +29,11 @@ export const mainNavigationItems = [
     to: "/achievements",
     label: "Досягнення",
   },
+  {
+    key: "community",
+    to: "/community",
+    label: "Спільнота",
+  },
 ];
 
 export const swipeNavigationPaths = [

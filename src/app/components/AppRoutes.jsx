@@ -1,10 +1,11 @@
-﻿import { Navigate, Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 
 import LandingPage from "../../modules/landing/pages/LandingPage/LandingPage.jsx";
 import LoginPage from "../../modules/auth/pages/LoginPage/LoginPage.jsx";
 import RegisterPage from "../../modules/auth/pages/RegisterPage/RegisterPage.jsx";
 
 import HomePage from "../../modules/home/pages/HomePage/HomePage.jsx";
+import CommunityPage from "../../modules/social/pages/CommunityPage/CommunityPage.jsx";
 import CatalogPage from "../../modules/books/pages/CatalogPage/CatalogPage.jsx";
 import AddBookPage from "../../modules/books/pages/AddBookPage/AddBookPage.jsx";
 import ReadingCalendarPage from "../../modules/reading/pages/ReadingCalendarPage/ReadingCalendarPage.jsx";
@@ -64,6 +65,14 @@ export const PrivateRoutes = ({ onOpenReading }) => {
         }
       />
 
+      <Route
+        path="/community"
+        element={
+          <ProtectedRoute>
+            <CommunityPage />
+          </ProtectedRoute>
+        }
+      />
       <Route
         path="/catalog"
         element={

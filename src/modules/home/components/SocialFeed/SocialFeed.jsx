@@ -3,13 +3,36 @@ import { useNavigate } from "react-router-dom";
 
 import { apiFetch } from "../../../../shared/api/apiClient.js";
 
+import { TrophyIcon } from "../HomeIcons.jsx";
+import SocialFeedMenu from "./components/SocialFeedMenu/SocialFeedMenu.jsx";
+import SocialFeedEvent from "./components/SocialFeedEvent/SocialFeedEvent.jsx";
 import "./SocialFeed.css";
 
-const SocialFeed = () => {
+const CommentIcon = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z" />
+  </svg>
+);
+
+const ShareIcon = () => (
+  <svg viewBox="0 0 24 24" aria-hidden="true">
+    <circle cx="18" cy="5" r="3" />
+    <circle cx="6" cy="12" r="3" />
+    <circle cx="18" cy="19" r="3" />
+    <path d="m8.6 10.7 6.8-4.4" />
+    <path d="m8.6 13.3 6.8 4.4" />
+  </svg>
+);
+
+const SocialFeed = ({ limit = null, showViewAll = false }) => {
   const navigate = useNavigate();
 
   const [activities, setActivities] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [menuActivity, setMenuActivity] = useState(null);
+  const [isUnfollowing, setIsUnfollowing] = useState(false);
+  const [muteNotifications, setMuteNotifications] = useState(false);
+  const [isMuting, setIsMuting] = useState(false);
 
   useEffect(() => {
     let isActive = true;
@@ -76,6 +99,106 @@ const SocialFeed = () => {
     }
   };
 
+  const handleToggleNotifications = async () => {
+    const userId = menuActivity?.user?.id;
+
+    if (!userId || menuActivity?.isOwnActivity) {
+      return;
+    }
+
+    const nextValue = !muteNotifications;
+
+    try {
+      setIsMuting(true);
+
+      const data = await apiFetch(
+        `/api/users/${userId}/social-preferences`,
+        {
+          method: "PATCH",
+          body: JSON.stringify({
+            muteNotifications: nextValue,
+          }),
+        },
+      );
+
+      setMuteNotifications(
+        Boolean(data?.muteNotifications),
+      );
+    } catch (error) {
+      console.error(
+        "Update social preference error:",
+        error,
+      );
+    } finally {
+      setIsMuting(false);
+    }
+  };
+  const handleUnfollow = async () => {
+    const userId = menuActivity?.user?.id;
+
+    if (!userId || menuActivity?.isOwnActivity) {
+      return;
+    }
+
+    try {
+      setIsUnfollowing(true);
+
+      await apiFetch(`/api/users/${userId}/follow`, {
+        method: "DELETE",
+      });
+
+      setActivities((current) =>
+        current.filter((activity) => activity.user?.id !== userId),
+      );
+
+      setMenuActivity(null);
+    } catch (error) {
+      console.error("Unfollow from feed error:", error);
+    } finally {
+      setIsUnfollowing(false);
+    }
+  };
+
+  const handleOpenProfileFromMenu = () => {
+    const userId = menuActivity?.user?.id;
+
+    setMenuActivity(null);
+
+    if (userId) {
+      navigate(`/users/${userId}`);
+    }
+  };
+  const handleShare = async (activity) => {
+    const userName = activity.user?.name || "Користувач";
+
+    const text =
+      activity.type === "BOOK_FINISHED"
+        ? `${userName} прочитав книгу «${activity.book?.title || "Книга"}»`
+        : `${userName} отримав досягнення «${
+            activity.achievement?.title || "Досягнення"
+          }»`;
+
+    try {
+      if (navigator.share) {
+        await navigator.share({
+          title: "Бібліотека",
+          text,
+          url: window.location.origin,
+        });
+
+        return;
+      }
+
+      await navigator.clipboard.writeText(
+        `${text} — ${window.location.origin}`,
+      );
+    } catch (error) {
+      if (error?.name !== "AbortError") {
+        console.error("Share activity error:", error);
+      }
+    }
+  };
+
   const formatTime = (value) =>
     new Intl.DateTimeFormat("uk-UA", {
       day: "2-digit",
@@ -98,110 +221,172 @@ const SocialFeed = () => {
     return null;
   }
 
+  const displayedActivities =
+    limit === null ? activities : activities.slice(0, limit);
+
   return (
     <section className="social-feed">
       <div className="social-feed__header">
         <h2>Активність читачів</h2>
+
+        {showViewAll && activities.length > displayedActivities.length && (
+          <button
+            type="button"
+            className="social-feed__view-all"
+            onClick={() => {
+              navigate("/community");
+
+              requestAnimationFrame(() => {
+                window.scrollTo({
+                  top: 0,
+                  left: 0,
+                  behavior: "instant",
+                });
+              });
+            }}
+          >
+            Уся активність
+            <span>›</span>
+          </button>
+        )}
       </div>
 
       <div className="social-feed__list">
-        {activities.map((activity) => {
+        {displayedActivities.map((activity) => {
           const userName = activity.user?.name || "Користувач";
 
           return (
-            <article key={activity.id} className="social-feed-card">
-              <button
-                type="button"
-                className="social-feed-card__user"
-                onClick={() => navigate(`/users/${activity.user?.id}`)}
-              >
-                <div className="social-feed-card__avatar">
-                  {activity.user?.avatarUrl ? (
-                    <img
-                      src={activity.user.avatarUrl}
-                      alt={userName}
-                    />
-                  ) : (
-                    <span>{userName.charAt(0).toUpperCase()}</span>
-                  )}
-                </div>
-
-                <div>
-                  <strong>{userName}</strong>
-                  <span>{formatTime(activity.createdAt)}</span>
-                </div>
-              </button>
-
-              {activity.type === "BOOK_FINISHED" && (
-                <div className="social-feed-card__book">
-                  <div className="social-feed-card__cover">
-                    {activity.book?.coverUrl ? (
+            <article
+              key={activity.id}
+              className="social-feed-card"
+            >
+              <header className="social-feed-card__header">
+                <button
+                  type="button"
+                  className="social-feed-card__user"
+                  onClick={() =>
+                    navigate(`/users/${activity.user?.id}`)
+                  }
+                >
+                  <div className="social-feed-card__avatar">
+                    {activity.user?.avatarUrl ? (
                       <img
-                        src={activity.book.coverUrl}
-                        alt={activity.book.title}
+                        src={activity.user.avatarUrl}
+                        alt={userName}
                       />
                     ) : (
-                      <span>📚</span>
+                      <span>
+                        {userName.charAt(0).toUpperCase()}
+                      </span>
                     )}
                   </div>
 
-                  <div className="social-feed-card__book-content">
-                    <span>Прочитав книгу</span>
-                    <h3>{activity.book?.title || "Книга"}</h3>
-                    <p>{activity.book?.author || "Автор не вказаний"}</p>
+                  <div className="social-feed-card__user-info">
+                    <strong>{userName}</strong>
+                    <span>{formatTime(activity.createdAt)}</span>
                   </div>
-                </div>
-              )}
+                </button>
 
-              {activity.type === "ACHIEVEMENT_UNLOCKED" && (
-  <button
-    type="button"
-    className="social-feed-card__achievement"
-    onClick={() =>
-      activity.isOwnActivity
-        ? navigate("/achievements")
-        : navigate(`/users/${activity.user?.id}`)
-    }
-  >
-    <span>🏆</span>
+                <button
+                  type="button"
+                  className="social-feed-card__more"
+                  aria-label="Додаткові дії"
+                  onClick={async () => {
+                    setMenuActivity(activity);
 
-    <div>
-      <small>Нове досягнення</small>
+                    if (!activity.isOwnActivity && activity.user?.id) {
+                      try {
+                        const data = await apiFetch(
+                          `/api/users/${activity.user.id}/social-preferences`,
+                        );
 
-      <strong>
-        {activity.achievement?.title || "Досягнення"}
-      </strong>
+                        setMuteNotifications(
+                          Boolean(data?.muteNotifications),
+                        );
+                      } catch (error) {
+                        console.error(
+                          "Load social preference error:",
+                          error,
+                        );
 
-      {activity.achievement?.description && (
-        <p>{activity.achievement.description}</p>
-      )}
-    </div>
+                        setMuteNotifications(false);
+                      }
+                    }
+                  }}
+                >
+                  •••
+                </button>
+              </header>
 
-    <span className="social-feed-card__achievement-arrow">
-      ›
-    </span>
-  </button>
-)}
+                            <SocialFeedEvent
+                activity={activity}
+                onOpenBook={(book) => {
+                  if (book?.id) {
+                    navigate(`/catalog?bookId=${book.id}`);
+                  }
+                }}
+                onOpenAchievement={(item) => {
+                  item.isOwnActivity
+                    ? navigate("/achievements")
+                    : navigate(`/users/${item.user?.id}`);
+                }}
+              />
 
-<div className="social-feed-card__actions">
+
+              <div className="social-feed-card__actions">
                 <button
                   type="button"
                   className={
                     activity.hasKudos
-                      ? "social-feed-card__kudos social-feed-card__kudos--active"
-                      : "social-feed-card__kudos"
+                      ? "social-feed-card__action social-feed-card__action--active"
+                      : "social-feed-card__action"
                   }
                   disabled={activity.isOwnActivity}
                   onClick={() => handleKudos(activity)}
+                  aria-label="Підтримати"
                 >
-                  👏 {activity.kudosCount ?? 0}
+                  <span className="social-feed-card__clap">
+                    👏
+                  </span>
+
+                  <span>{activity.kudosCount ?? 0}</span>
+                </button>
+
+                <button
+                  type="button"
+                  className="social-feed-card__action social-feed-card__action--comment"
+                  aria-label="Коментувати"
+                  title="Коментарі додамо наступним кроком"
+                >
+                  <CommentIcon />
+                  <span>Коментувати</span>
+                </button>
+
+                <button
+                  type="button"
+                  className="social-feed-card__action"
+                  onClick={() => handleShare(activity)}
+                  aria-label="Поділитися"
+                >
+                  <ShareIcon />
+                  <span>Поділитися</span>
                 </button>
               </div>
             </article>
           );
         })}
       </div>
-    </section>
+
+      <SocialFeedMenu
+        activity={menuActivity}
+        isUnfollowing={isUnfollowing}
+        isMuting={isMuting}
+        muteNotifications={muteNotifications}
+        onClose={() => setMenuActivity(null)}
+        onOpenProfile={handleOpenProfileFromMenu}
+        onToggleNotifications={handleToggleNotifications}
+        onUnfollow={handleUnfollow}
+      />    </section>
   );
 };
 

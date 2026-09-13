@@ -15,6 +15,7 @@ import LibrarySwitcher from "../../components/LibrarySwitcher/LibrarySwitcher.js
 import HomeWelcome from "../../components/HomeWelcome/HomeWelcome.jsx";
 import ReadingStreak from "../../components/ReadingStreak/ReadingStreak.jsx";
 import CurrentReading from "../../components/CurrentReading/CurrentReading.jsx";
+import SocialFeed from "../../components/SocialFeed/SocialFeed.jsx";
 import AchievementCard from "../../components/AchievementCard/AchievementCard.jsx";
 import ReadingGoalCard from "../../components/ReadingGoalCard/ReadingGoalCard.jsx";
 import MonthlySummary from "../../components/MonthlySummary/MonthlySummary.jsx";
@@ -193,6 +194,8 @@ const HomePage = ({ onOpenReading }) => {
         onContinue={handleContinueReading}
         onOpenCatalog={() => navigate("/catalog")}
       />
+      <SocialFeed limit={2} showViewAll />
+
       <AchievementCard
         latestAchievement={latestAchievement}
         featuredAchievement={featuredAchievement}
