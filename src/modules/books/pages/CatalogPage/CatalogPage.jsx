@@ -189,7 +189,8 @@ const CatalogPage = ({ onOpenReading }) => {
   const showShelves =
     viewMode === "shelves" &&
     !selectedShelf &&
-    !search.trim();
+    !search.trim() &&
+    !linkedBookId;
 
   return (
     <div
