@@ -40,11 +40,13 @@ const NotificationsPage = () => {
     if (!notification.isRead) {
       await markAsRead(notification.id);
     }
+    if (notification.type === "KUDOS_RECEIVED" && notification.activity?.id) {
+      const activityId = notification.activity.id;
+      navigate(`/community?activityId=${activityId}`);
+      return;
+    }
 
-    if (
-      notification.type === "LIBRARY_BOOK_ADDED" &&
-      notification.book?.id
-    ) {
+    if (notification.type === "LIBRARY_BOOK_ADDED" && notification.book?.id) {
       navigate(`/catalog?bookId=${notification.book.id}`);
       return;
     }
@@ -84,23 +86,16 @@ const NotificationsPage = () => {
           <div className="activity-notification__actor">
             <div className="activity-notification__avatar">
               {notification.actor?.avatarUrl ? (
-                <img
-                  src={notification.actor.avatarUrl}
-                  alt={actorName}
-                />
+                <img src={notification.actor.avatarUrl} alt={actorName} />
               ) : (
-                <span>
-                  {actorName.charAt(0).toUpperCase()}
-                </span>
+                <span>{actorName.charAt(0).toUpperCase()}</span>
               )}
             </div>
 
             <div className="activity-notification__actor-text">
               <strong>{actorName}</strong>
 
-              <span>
-                додав книгу · {formatTime(notification.createdAt)}
-              </span>
+              <span>додав книгу · {formatTime(notification.createdAt)}</span>
             </div>
           </div>
 
@@ -112,10 +107,7 @@ const NotificationsPage = () => {
         <div className="activity-notification__book">
           <div className="activity-notification__cover">
             {book?.coverUrl ? (
-              <img
-                src={book.coverUrl}
-                alt={book.title || "Книга"}
-              />
+              <img src={book.coverUrl} alt={book.title || "Книга"} />
             ) : (
               <span>📚</span>
             )}
@@ -128,23 +120,16 @@ const NotificationsPage = () => {
 
             <h2>{book?.title || "Нова книга"}</h2>
 
-            {book?.author && (
-              <p>{book.author}</p>
-            )}
+            {book?.author && <p>{book.author}</p>}
 
             <div className="activity-notification__library">
-              <span className="activity-notification__library-icon">
-                📖
-              </span>
+              <span className="activity-notification__library-icon">📖</span>
 
               <span>Домашня бібліотека</span>
             </div>
           </div>
 
-          <span
-            className="activity-notification__arrow"
-            aria-hidden="true"
-          >
+          <span className="activity-notification__arrow" aria-hidden="true">
             ›
           </span>
         </div>
@@ -152,12 +137,53 @@ const NotificationsPage = () => {
     );
   };
 
+  const getKudosActivityText = (notification) => {
+    const activity = notification.activity;
+    const bookTitle = activity?.book?.title;
+
+    switch (activity?.type) {
+      case "READING_STARTED":
+        return bookTitle
+          ? `Ви почали читати «${bookTitle}»`
+          : "Ви почали читати книгу";
+
+      case "BOOK_FINISHED":
+        return bookTitle ? `Ви прочитали «${bookTitle}»` : "Ви прочитали книгу";
+
+      case "RATING_ADDED":
+        return bookTitle
+          ? `Ви оцінили «${bookTitle}» на ${activity.rating ?? 0}/5`
+          : `Ви оцінили книгу на ${activity.rating ?? 0}/5`;
+
+      case "ACHIEVEMENT_UNLOCKED":
+        return "Ви отримали досягнення";
+
+      default:
+        return "Ваша активність";
+    }
+  };
+
   const renderSocialNotification = (notification) => {
     const actorName = notification.actor?.name || "Користувач";
 
     const getNotificationText = () => {
       if (notification.type === "KUDOS_RECEIVED") {
-        return "підтримав вашу активність";
+        switch (notification.activity?.type) {
+          case "READING_STARTED":
+            return "підтримав початок читання";
+
+          case "BOOK_FINISHED":
+            return "підтримав завершення книги";
+
+          case "RATING_ADDED":
+            return "підтримав вашу оцінку";
+
+          case "ACHIEVEMENT_UNLOCKED":
+            return "підтримав ваше досягнення";
+
+          default:
+            return "підтримав вашу активність";
+        }
       }
 
       if (notification.type === "NEW_FOLLOWER") {
@@ -190,6 +216,11 @@ const NotificationsPage = () => {
 
     const text = getNotificationText();
 
+    const kudosActivityText =
+      notification.type === "KUDOS_RECEIVED"
+        ? getKudosActivityText(notification)
+        : null;
+
     return (
       <button
         key={notification.id}
@@ -203,21 +234,15 @@ const NotificationsPage = () => {
       >
         <div className="social-notification__avatar">
           {notification.actor?.avatarUrl ? (
-            <img
-              src={notification.actor.avatarUrl}
-              alt={actorName}
-            />
+            <img src={notification.actor.avatarUrl} alt={actorName} />
           ) : (
-            <span>
-              {actorName.charAt(0).toUpperCase()}
-            </span>
+            <span>{actorName.charAt(0).toUpperCase()}</span>
           )}
         </div>
 
         <div className="social-notification__content">
           <div>
-            <strong>{actorName}</strong>{" "}
-            <span>{text}</span>
+            <strong>{actorName}</strong> <span>{text}</span>
           </div>
 
           {notification.book?.title && (
@@ -226,27 +251,26 @@ const NotificationsPage = () => {
             </span>
           )}
 
+          {kudosActivityText && (
+            <span className="social-notification__book-title">
+              {kudosActivityText}
+            </span>
+          )}
+
           {notification.achievement && (
             <div className="social-notification__achievement">
               <strong>{notification.achievement.title}</strong>
 
-              <span>
-                {notification.achievement.description}
-              </span>
+              <span>{notification.achievement.description}</span>
             </div>
           )}
 
           <small>{formatTime(notification.createdAt)}</small>
         </div>
 
-        {!notification.isRead && (
-          <span className="social-notification__dot" />
-        )}
+        {!notification.isRead && <span className="social-notification__dot" />}
 
-        <span
-          className="social-notification__arrow"
-          aria-hidden="true"
-        >
+        <span className="social-notification__arrow" aria-hidden="true">
           ›
         </span>
       </button>
@@ -287,9 +311,7 @@ const NotificationsPage = () => {
         )}
 
         {!isNotificationsLoading && notificationsError && (
-          <div className="notifications-page__state">
-            {notificationsError}
-          </div>
+          <div className="notifications-page__state">{notificationsError}</div>
         )}
 
         {!isNotificationsLoading &&

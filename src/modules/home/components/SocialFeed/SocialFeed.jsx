@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { apiFetch } from "../../../../shared/api/apiClient.js";
 
@@ -36,6 +36,8 @@ const ShareIcon = () => (
 
 const SocialFeed = ({ limit = null, showViewAll = false }) => {
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const linkedActivityId = searchParams.get("activityId");
 
   const [activities, setActivities] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -76,6 +78,21 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
       isActive = false;
     };
   }, []);
+
+  useEffect(() => {
+    if (!linkedActivityId || isLoading) {
+      return;
+    }
+
+    requestAnimationFrame(() => {
+      document
+        .getElementById(`activity-${linkedActivityId}`)
+        ?.scrollIntoView({
+          behavior: "smooth",
+          block: "center",
+        });
+    });
+  }, [linkedActivityId, isLoading, activities]);
 
   const handleKudos = async (activity) => {
     if (!activity?.id || activity.isOwnActivity) {
@@ -270,7 +287,11 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
           const userName = activity.user?.name || "Користувач";
 
           return (
-            <article key={activity.id} className="social-feed-card">
+            <article
+              id={`activity-${activity.id}`}
+              key={activity.id}
+              className="social-feed-card"
+            >
               <header className="social-feed-card__header">
                 <button
                   type="button"
