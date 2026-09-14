@@ -46,9 +46,7 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
         const data = await apiFetch("/api/social/feed");
 
         if (isActive) {
-          setActivities(
-            Array.isArray(data?.activities) ? data.activities : [],
-          );
+          setActivities(Array.isArray(data?.activities) ? data.activities : []);
         }
       } catch (error) {
         console.error("Load social feed error:", error);
@@ -113,24 +111,16 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
     try {
       setIsUpdatingNotifications(true);
 
-      const data = await apiFetch(
-        `/api/users/${userId}/social-preferences`,
-        {
-          method: "PATCH",
-          body: JSON.stringify({
-            notifyActivity: nextValue,
-          }),
+      const data = await apiFetch(`/api/users/${userId}/social-preferences`, {
+        method: "PATCH",
+        body: {
+          notifyActivity: nextValue,
         },
-      );
+      });
 
-      setNotifyActivity(
-        Boolean(data?.notifyActivity),
-      );
+      setNotifyActivity(Boolean(data?.notifyActivity));
     } catch (error) {
-      console.error(
-        "Update social preference error:",
-        error,
-      );
+      console.error("Update social preference error:", error);
     } finally {
       setIsUpdatingNotifications(false);
     }
@@ -228,9 +218,7 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
   if (isLoading) {
     return (
       <section className="social-feed">
-        <div className="social-feed__state">
-          Завантажуємо активність...
-        </div>
+        <div className="social-feed__state">Завантажуємо активність...</div>
       </section>
     );
   }
@@ -268,34 +256,23 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
           </button>
         )}
       </div>
-
       <div className="social-feed__list">
         {displayedActivities.map((activity) => {
           const userName = activity.user?.name || "Користувач";
 
           return (
-            <article
-              key={activity.id}
-              className="social-feed-card"
-            >
+            <article key={activity.id} className="social-feed-card">
               <header className="social-feed-card__header">
                 <button
                   type="button"
                   className="social-feed-card__user"
-                  onClick={() =>
-                    navigate(`/users/${activity.user?.id}`)
-                  }
+                  onClick={() => navigate(`/users/${activity.user?.id}`)}
                 >
                   <div className="social-feed-card__avatar">
                     {activity.user?.avatarUrl ? (
-                      <img
-                        src={activity.user.avatarUrl}
-                        alt={userName}
-                      />
+                      <img src={activity.user.avatarUrl} alt={userName} />
                     ) : (
-                      <span>
-                        {userName.charAt(0).toUpperCase()}
-                      </span>
+                      <span>{userName.charAt(0).toUpperCase()}</span>
                     )}
                   </div>
 
@@ -318,14 +295,9 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
                           `/api/users/${activity.user.id}/social-preferences`,
                         );
 
-                        setNotifyActivity(
-                          Boolean(data?.notifyActivity),
-                        );
+                        setNotifyActivity(Boolean(data?.notifyActivity));
                       } catch (error) {
-                        console.error(
-                          "Load social preference error:",
-                          error,
-                        );
+                        console.error("Load social preference error:", error);
 
                         setNotifyActivity(false);
                       }
@@ -336,7 +308,7 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
                 </button>
               </header>
 
-                            <SocialFeedEvent
+              <SocialFeedEvent
                 activity={activity}
                 onOpenBook={(book) => {
                   if (book?.id) {
@@ -350,7 +322,6 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
                 }}
               />
 
-
               <div className="social-feed-card__actions">
                 <button
                   type="button"
@@ -363,9 +334,7 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
                   onClick={() => handleKudos(activity)}
                   aria-label="Підтримати"
                 >
-                  <span className="social-feed-card__clap">
-                    👏
-                  </span>
+                  <span className="social-feed-card__clap">👏</span>
 
                   <span>{activity.kudosCount ?? 0}</span>
                 </button>
@@ -394,7 +363,6 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
           );
         })}
       </div>
-
       <SocialBookModal
         book={selectedBook}
         onClose={() => setSelectedBook(null)}
@@ -406,7 +374,6 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
           }
         }}
       />
-
       <SocialFeedMenu
         activity={menuActivity}
         isUnfollowing={isUnfollowing}
@@ -416,7 +383,8 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
         onOpenProfile={handleOpenProfileFromMenu}
         onToggleNotifications={handleToggleNotifications}
         onUnfollow={handleUnfollow}
-      />    </section>
+      />{" "}
+    </section>
   );
 };
 
