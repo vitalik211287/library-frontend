@@ -1,9 +1,10 @@
-import "./ReadingStreak.css";
+﻿import "./ReadingStreak.css";
+import HomePanel from "../HomePanel/HomePanel.jsx";
 import { BookIcon, FlameIcon, ShareIcon } from "../HomeIcons.jsx";
 
 const ReadingStreak = ({ streak, weeklyActivity, onShare }) => {
   return (
-    <section className="streak-card">
+    <HomePanel className="streak-card">
       <div className="streak-card__top">
         <div>
           <span className="home-section__kicker">Активність</span>
@@ -57,7 +58,7 @@ const ReadingStreak = ({ streak, weeklyActivity, onShare }) => {
           ))}
         </div>
       </div>
-    </section>
+    </HomePanel>
   );
 };
 

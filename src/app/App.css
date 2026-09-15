@@ -1,4 +1,4 @@
-/* =========================
+﻿/* =========================
    APP
 ========================= */
 
@@ -170,3 +170,50 @@
       );
   }
 }
+/* Dark library background */
+:root.dark .app-shell {
+  background:
+    linear-gradient(
+      rgba(10, 13, 22, 0.15),
+      rgba(10, 13, 22, 0.25)
+    ),
+    url("/images/library-dark-bg.png") center top / cover fixed;
+}
+
+/* Dark library background */
+:root.dark .app-shell {
+  background:
+    linear-gradient(
+      rgba(10, 13, 22, 0.15),
+      rgba(10, 13, 22, 0.25)
+    ),
+    url("/images/library-dark-bg.png") center top / cover fixed;
+}
+
+
+
+
+/* Mobile dark library background */
+@media (max-width: 600px) {
+  :root.dark .app-shell {
+    background:
+      linear-gradient(
+        rgba(10, 13, 22, 0.15),
+        rgba(10, 13, 22, 0.25)
+      ),
+      url("/images/library-dark-bg-high.png") center top / cover fixed;
+  }
+}
+
+/* Mobile dark library background */
+@media (max-width: 600px) {
+  :root.dark .app-shell {
+    background:
+      linear-gradient(
+        rgba(10, 13, 22, 0.15),
+        rgba(10, 13, 22, 0.25)
+      ),
+      url("/images/library-dark-bg-high.png") center top / cover fixed;
+  }
+}
+

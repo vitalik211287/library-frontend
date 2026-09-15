@@ -1,9 +1,10 @@
-import { getStatusLabel } from "../../utils/catalogHelpers.js";
+﻿import { getStatusLabel } from "../../utils/catalogHelpers.js";
 
 import "./BookCard.css";
 
 const BookCard = ({
   book,
+  variant = "default",
   isAuthenticated,
   isAuthLoading,
   wishlistLoadingId,
@@ -12,9 +13,14 @@ const BookCard = ({
   onWishlistToggle,
   onEdit,
   onRead,
+  recommendationMeta,
 }) => {
   return (
-    <article className="book-card">
+    <article
+      className={`book-card ${
+        variant === "compact" ? "book-card--compact" : ""
+      }`}
+    >
       {isAuthenticated && showWishlist && (
         <button
           type="button"
@@ -46,6 +52,21 @@ const BookCard = ({
         <h2>{book.title}</h2>
 
         <p className="book-card__author">{book.author}</p>
+
+        {variant === "compact" && recommendationMeta && (
+          <div className="book-card__recommendation">
+            <div className="book-card__recommendation-tags">
+              {recommendationMeta.labels.map((label) => (
+                <span key={label}>{label}</span>
+              ))}
+            </div>
+
+            <strong className="book-card__recommendation-score">
+              {recommendationMeta.matchedCount} з{" "}
+              {recommendationMeta.selectedCount} збігів
+            </strong>
+          </div>
+        )}
 
         {isAuthenticated && (
           <div className="book-card__reading-info">
@@ -104,4 +125,3 @@ const BookCard = ({
 };
 
 export default BookCard;
-

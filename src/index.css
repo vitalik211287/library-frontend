@@ -1,4 +1,4 @@
-:root {
+﻿:root {
   color-scheme: light;
 
   --text: #6b6375;
@@ -59,6 +59,12 @@
   --accent-border: rgba(192, 132, 252, 0.5);
 
   --social-bg: rgba(47, 48, 58, 0.5);
+
+  /* Shared glass panels */
+  --glass-surface: rgba(27, 28, 37, 0.35);
+  --glass-border: rgba(255, 255, 255, 0.16);
+  --glass-blur: 16px;
+  --glass-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
 
   --shadow:
     rgba(0, 0, 0, 0.4) 0 10px 15px -3px,

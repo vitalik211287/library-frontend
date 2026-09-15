@@ -1,9 +1,10 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { apiFetch } from "../../../../shared/api/apiClient.js";
 
 import { TrophyIcon } from "../HomeIcons.jsx";
+import HomePanel from "../HomePanel/HomePanel.jsx";
 import SocialFeedMenu from "./components/SocialFeedMenu/SocialFeedMenu.jsx";
 import SocialFeedEvent from "./components/SocialFeedEvent/SocialFeedEvent.jsx";
 import SocialBookModal from "./components/SocialBookModal/SocialBookModal.jsx";
@@ -85,12 +86,10 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
     }
 
     requestAnimationFrame(() => {
-      document
-        .getElementById(`activity-${linkedActivityId}`)
-        ?.scrollIntoView({
-          behavior: "smooth",
-          block: "center",
-        });
+      document.getElementById(`activity-${linkedActivityId}`)?.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
     });
   }, [linkedActivityId, isLoading, activities]);
 
@@ -287,7 +286,7 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
           const userName = activity.user?.name || "Користувач";
 
           return (
-            <article
+            <HomePanel
               id={`activity-${activity.id}`}
               key={activity.id}
               className="social-feed-card"
@@ -364,7 +363,9 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
                   onClick={() => handleKudos(activity)}
                   aria-label="Підтримати"
                 >
-                  <span className="social-feed-card__clap"><ClapIcon /></span>
+                  <span className="social-feed-card__clap">
+                    <ClapIcon />
+                  </span>
 
                   <span>{activity.kudosCount ?? 0}</span>
                 </button>
@@ -389,7 +390,7 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
                   <span>Поділитися</span>
                 </button>
               </div>
-            </article>
+            </HomePanel>
           );
         })}
       </div>

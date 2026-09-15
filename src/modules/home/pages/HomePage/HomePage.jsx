@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+﻿import { useMemo, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -16,6 +16,7 @@ import HomeWelcome from "../../components/HomeWelcome/HomeWelcome.jsx";
 import ReadingStreak from "../../components/ReadingStreak/ReadingStreak.jsx";
 import CurrentReading from "../../components/CurrentReading/CurrentReading.jsx";
 import SocialFeed from "../../components/SocialFeed/SocialFeed.jsx";
+import BookRecommendations from "../../../recommendations/components/BookRecommendations/BookRecommendations.jsx";
 import AchievementCard from "../../components/AchievementCard/AchievementCard.jsx";
 import ReadingGoalCard from "../../components/ReadingGoalCard/ReadingGoalCard.jsx";
 import MonthlySummary from "../../components/MonthlySummary/MonthlySummary.jsx";
@@ -145,7 +146,7 @@ const HomePage = ({ onOpenReading }) => {
   ) {
     return (
       <main className="home-page">
-        <div className="home-section">Завантаження...</div>
+        <div className="home-section">Р—Р°РІР°РЅС‚Р°Р¶РµРЅРЅСЏ...</div>
       </main>
     );
   }
@@ -193,6 +194,7 @@ const HomePage = ({ onOpenReading }) => {
         onContinue={handleContinueReading}
         onOpenCatalog={() => navigate("/catalog")}
       />
+      <BookRecommendations onOpenReading={onOpenReading} />
       <SocialFeed limit={2} showViewAll />
 
       <AchievementCard

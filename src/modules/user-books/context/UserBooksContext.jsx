@@ -1,4 +1,4 @@
-import {
+﻿import {
   createContext,
   useCallback,
   useContext,
@@ -7,7 +7,13 @@ import {
   useState,
 } from "react";
 
-import { addBookToWishlist, getCurrentBooks, getFinishedBooks, getWishlistBooks, removeBookFromWishlist } from "../api/userBooksApi.js";
+import {
+  addBookToWishlist,
+  getCurrentBooks,
+  getFinishedBooks,
+  getWishlistBooks,
+  removeBookFromWishlist,
+} from "../api/userBooksApi.js";
 
 import { useAuth } from "../../auth/context/AuthContext.jsx";
 import { useLibrary } from "../../libraries/context/LibraryContext.jsx";
@@ -55,7 +61,7 @@ export const UserBooksProvider = ({ children }) => {
   }, []);
 
   const refreshCurrentBooks = useCallback(async () => {
-    if (isAuthLoading || isLibrariesLoading) {
+    if (isAuthLoading || isLibrariesLoading || !activeLibraryId) {
       return [];
     }
 
@@ -82,7 +88,9 @@ export const UserBooksProvider = ({ children }) => {
 
       setCurrentBooks([]);
 
-      setCurrentBooksError("Не вдалося завантажити поточне читання");
+      setCurrentBooksError(
+        "РќРµ РІРґР°Р»РѕСЃСЏ Р·Р°РІР°РЅС‚Р°Р¶РёС‚Рё РїРѕС‚РѕС‡РЅРµ С‡РёС‚Р°РЅРЅСЏ",
+      );
 
       return [];
     } finally {
@@ -91,7 +99,7 @@ export const UserBooksProvider = ({ children }) => {
   }, [activeLibraryId, isAuthenticated, isAuthLoading, isLibrariesLoading]);
 
   const refreshWishlist = useCallback(async () => {
-    if (isAuthLoading || isLibrariesLoading) {
+    if (isAuthLoading || isLibrariesLoading || !activeLibraryId) {
       return [];
     }
 
@@ -118,7 +126,9 @@ export const UserBooksProvider = ({ children }) => {
 
       setWishlistBooks([]);
 
-      setWishlistError("Не вдалося завантажити список");
+      setWishlistError(
+        "РќРµ РІРґР°Р»РѕСЃСЏ Р·Р°РІР°РЅС‚Р°Р¶РёС‚Рё СЃРїРёСЃРѕРє",
+      );
 
       return [];
     } finally {
@@ -127,7 +137,7 @@ export const UserBooksProvider = ({ children }) => {
   }, [activeLibraryId, isAuthenticated, isAuthLoading, isLibrariesLoading]);
 
   const refreshFinishedBooks = useCallback(async () => {
-    if (isAuthLoading || isLibrariesLoading) {
+    if (isAuthLoading || isLibrariesLoading || !activeLibraryId) {
       return [];
     }
 
@@ -159,7 +169,9 @@ export const UserBooksProvider = ({ children }) => {
       setFinishedBooks([]);
       setFinishedTotal(0);
 
-      setFinishedBooksError("Не вдалося завантажити прочитані книги");
+      setFinishedBooksError(
+        "РќРµ РІРґР°Р»РѕСЃСЏ Р·Р°РІР°РЅС‚Р°Р¶РёС‚Рё РїСЂРѕС‡РёС‚Р°РЅС– РєРЅРёРіРё",
+      );
 
       return [];
     } finally {
@@ -276,7 +288,7 @@ export const UserBooksProvider = ({ children }) => {
   );
 
   useEffect(() => {
-    if (isAuthLoading || isLibrariesLoading) {
+    if (isAuthLoading || isLibrariesLoading || !activeLibraryId) {
       return;
     }
 
@@ -367,9 +379,3 @@ export const useUserBooks = () => {
 };
 
 export default UserBooksContext;
-
-
-
-
-
-

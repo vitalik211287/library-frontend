@@ -1,4 +1,4 @@
-.social-feed {
+﻿.social-feed {
   width: 100%;
   margin-bottom: 16px;
 }
@@ -21,9 +21,6 @@
 
 .social-feed-card {
   overflow: hidden;
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  background: var(--surface);
 }
 
 .social-feed-card__header {
@@ -357,11 +354,6 @@
   .social-feed__list {
     gap: 10px;
   }
-
-  .social-feed-card {
-    border-radius: 16px;
-  }
-
   .social-feed-card__header {
     padding: 11px 11px 0;
   }
@@ -627,5 +619,3 @@
 .social-feed-card__user-info {
   min-width: 0;
 }
-
-

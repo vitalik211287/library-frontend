@@ -1,13 +1,10 @@
-import "./HomePanel.css";
+﻿import "./HomePanel.css";
 
 const HomePanel = ({
   children,
   className = "",
   clickable = false,
-  onClick,
-  onKeyDown,
-  role,
-  tabIndex,
+  ...props
 }) => {
   const classes = [
     "home-panel",
@@ -18,13 +15,7 @@ const HomePanel = ({
     .join(" ");
 
   return (
-    <section
-      className={classes}
-      onClick={onClick}
-      onKeyDown={onKeyDown}
-      role={role}
-      tabIndex={tabIndex}
-    >
+    <section className={classes} {...props}>
       {children}
     </section>
   );
