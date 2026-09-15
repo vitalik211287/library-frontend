@@ -1,9 +1,9 @@
-.public-profile-page {
+﻿.public-profile-page {
   width: 100%;
   min-height: 100dvh;
   padding: 18px 12px 88px;
   box-sizing: border-box;
-  background: var(--bg);
+  background: transparent;
   color: var(--text);
 }
 
@@ -12,8 +12,6 @@
   max-width: 860px;
   margin: 0 auto;
 }
-
-
 
 .public-profile-hero {
   display: flex;

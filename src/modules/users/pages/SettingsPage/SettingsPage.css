@@ -1,4 +1,4 @@
-.settings-page {
+﻿.settings-page {
   width: 100%;
   min-height: calc(100dvh - 80px);
 
@@ -6,7 +6,7 @@
 
   box-sizing: border-box;
 
-  background: var(--bg);
+  background: transparent;
   color: var(--text);
 }
 
@@ -41,8 +41,6 @@
   font-size: 21px;
   line-height: 1.2;
 }
-
-
 
 /* =========================
    SECTION
@@ -424,8 +422,7 @@ button.settings-page__row:disabled {
 .settings-page__field input:focus {
   border-color: var(--accent);
 
-  box-shadow:
-    0 0 0 3px var(--accent-bg);
+  box-shadow: 0 0 0 3px var(--accent-bg);
 }
 
 .settings-page__modal-actions {

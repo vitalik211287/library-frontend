@@ -1,4 +1,4 @@
-.register-page {
+﻿.register-page {
   width: 100%;
   max-width: 480px;
 
@@ -55,7 +55,7 @@
   box-sizing: border-box;
 
   color: var(--text);
-  background: var(--bg);
+  background: transparent;
 
   border: 1px solid var(--border);
   border-radius: 10px;

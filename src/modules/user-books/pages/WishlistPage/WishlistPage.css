@@ -1,4 +1,4 @@
-.wishlist-page {
+﻿.wishlist-page {
   width: 100%;
 
   margin: 0 auto;
@@ -6,7 +6,7 @@
 
   box-sizing: border-box;
 
-  background: var(--bg);
+  background: transparent;
   color: var(--text);
 
   border-radius: 12px;
@@ -20,8 +20,6 @@
 
   margin-bottom: 10px;
 }
-
-
 
 .wishlist-page h1 {
   margin: 0 0 10px;

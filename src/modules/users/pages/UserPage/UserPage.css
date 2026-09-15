@@ -1,4 +1,4 @@
-/* =========================
+﻿/* =========================
    PAGE
 ========================= */
 
@@ -10,7 +10,7 @@
 
   box-sizing: border-box;
 
-  background: var(--bg);
+  background: transparent;
   color: var(--text);
 }
 

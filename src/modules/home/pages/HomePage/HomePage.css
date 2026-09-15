@@ -1,4 +1,4 @@
-/* =========================
+﻿/* =========================
    HOME LAYOUT
 ========================= */
 
@@ -20,7 +20,6 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
-
 
 /* =========================
    SHARED PROGRESS
@@ -111,7 +110,7 @@
   box-sizing: border-box;
   border: 1px solid var(--border);
   border-radius: 15px;
-  background: var(--bg);
+  background: transparent;
 }
 
 .home-empty-state > div:last-child {
@@ -138,5 +137,4 @@
   .home-page {
     padding: 24px;
   }
-
 }

@@ -1,4 +1,5 @@
 ﻿:root {
+  --app-background: var(--bg);
   color-scheme: light;
 
   --text: #6b6375;
@@ -20,8 +21,7 @@
   --social-bg: rgba(244, 243, 236, 0.5);
 
   --shadow:
-    rgba(0, 0, 0, 0.1) 0 10px 15px -3px,
-    rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
   --sans: system-ui, "Segoe UI", Roboto, sans-serif;
   --heading: system-ui, "Segoe UI", Roboto, sans-serif;
@@ -40,6 +40,9 @@
 /* DARK THEME */
 
 :root.dark {
+  --app-background:
+    linear-gradient(rgba(10, 13, 22, 0.15), rgba(10, 13, 22, 0.25)),
+    url("/images/library-dark-bg-high.png") center top / cover fixed;
   color-scheme: dark;
 
   --text: #b6bbc5;
@@ -67,8 +70,7 @@
   --glass-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
 
   --shadow:
-    rgba(0, 0, 0, 0.4) 0 10px 15px -3px,
-    rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+    rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
 }
 
 /* PAGE */

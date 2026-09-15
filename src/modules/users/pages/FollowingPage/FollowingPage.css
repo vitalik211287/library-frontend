@@ -1,4 +1,4 @@
-.following-page {
+﻿.following-page {
   width: 100%;
   min-height: 100dvh;
 
@@ -6,7 +6,7 @@
 
   box-sizing: border-box;
 
-  background: var(--bg);
+  background: transparent;
   color: var(--text);
 }
 
@@ -51,8 +51,6 @@
   font-size: 12px;
   line-height: 1.35;
 }
-
-
 
 /* =========================
    LIST

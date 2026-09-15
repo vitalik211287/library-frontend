@@ -1,4 +1,4 @@
-.admin-users-page {
+﻿.admin-users-page {
   width: 100%;
   max-width: 1100px;
   margin: 0 auto;
@@ -97,7 +97,7 @@
 
   border: 1px solid var(--border);
   border-radius: 50%;
-  background: var(--bg);
+  background: transparent;
 
   color: var(--text);
   font-size: 18px;
@@ -256,7 +256,9 @@
   text-align: center;
   text-decoration: none;
 
-  transition: background 0.2s ease, transform 0.2s ease;
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
 }
 
 /* ===== ADMIN LIBRARY MODAL ===== */
@@ -1167,7 +1169,6 @@
   }
 }
 
-
 @media (max-width: 600px) {
   .admin-library__user {
     padding-top: 10px;
@@ -1256,7 +1257,7 @@
 
     border: 1px solid rgba(157, 103, 245, 0.45);
     border-radius: 13px;
-    background: rgba(157, 103, 245, 0.10);
+    background: rgba(157, 103, 245, 0.1);
 
     color: #c7a6ff;
     font: inherit;

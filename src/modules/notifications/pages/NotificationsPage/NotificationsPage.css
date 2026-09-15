@@ -1,9 +1,9 @@
-.notifications-page {
+﻿.notifications-page {
   width: 100%;
   min-height: 100dvh;
   padding: 18px 14px 90px;
   box-sizing: border-box;
-  background: var(--bg);
+  background: transparent;
   color: var(--text);
 }
 

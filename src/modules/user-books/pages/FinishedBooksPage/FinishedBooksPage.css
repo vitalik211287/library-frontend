@@ -1,4 +1,4 @@
-.finished-books-page {
+﻿.finished-books-page {
   width: 100%;
 
   margin: 0 auto;
@@ -6,7 +6,7 @@
 
   box-sizing: border-box;
 
-  background: var(--bg);
+  background: transparent;
   color: var(--text);
 
   border-radius: 12px;
@@ -24,8 +24,6 @@
 
   margin-bottom: 20px;
 }
-
-
 
 .finished-books-page__eyebrow {
   display: block;

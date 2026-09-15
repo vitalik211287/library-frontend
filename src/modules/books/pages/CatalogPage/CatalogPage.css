@@ -1,11 +1,11 @@
-.catalog-page {
+﻿.catalog-page {
   width: 100%;
   margin: 0 auto;
   padding: 16px;
 
   box-sizing: border-box;
 
-  background: var(--bg);
+  background: transparent;
   color: var(--text);
 
   border-radius: 12px;

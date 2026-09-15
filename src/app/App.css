@@ -6,7 +6,7 @@
   width: 100%;
   min-height: 100dvh;
 
-  background: var(--bg);
+  background: var(--app-background);
   color: var(--text);
 }
 
@@ -18,11 +18,7 @@
   width: 100%;
   min-width: 0;
 
-  padding-top:
-    calc(
-      58px +
-      env(safe-area-inset-top)
-    );
+  padding-top: calc(58px + env(safe-area-inset-top));
 
   box-sizing: border-box;
 }
@@ -43,11 +39,7 @@
 
 @media (min-width: 600px) {
   .app-content {
-    padding-top:
-      calc(
-        64px +
-        env(safe-area-inset-top)
-      );
+    padding-top: calc(64px + env(safe-area-inset-top));
   }
 }
 
@@ -61,10 +53,7 @@
   }
 
   .app-content {
-    width:
-      calc(
-        100% - 220px
-      );
+    width: calc(100% - 220px);
 
     min-height: 100dvh;
 
@@ -107,23 +96,18 @@
     box-sizing: border-box;
   }
 
-  .app-main-layout--with-sidebar
-    .app-main-column {
+  .app-main-layout--with-sidebar .app-main-column {
     min-width: 0;
   }
 
-  .app-main-layout--with-sidebar
-    .right-sidebar {
+  .app-main-layout--with-sidebar .right-sidebar {
     position: sticky;
 
     top: 20px;
 
     width: 360px;
 
-    max-height:
-      calc(
-        100dvh - 40px
-      );
+    max-height: calc(100dvh - 40px);
 
     overflow-y: auto;
 
@@ -137,10 +121,7 @@
 
 @media (min-width: 1750px) {
   .app-content {
-    width:
-      calc(
-        100% - 240px
-      );
+    width: calc(100% - 240px);
 
     margin-left: 240px;
   }
@@ -155,65 +136,13 @@
     padding-right: 28px;
   }
 
-  .app-main-layout--with-sidebar
-    .right-sidebar {
+  .app-main-layout--with-sidebar .right-sidebar {
     width: 390px;
   }
 }
 
 @media (max-width: 599px) {
   .app-content {
-    padding-bottom:
-      calc(
-        84px +
-        env(safe-area-inset-bottom)
-      );
+    padding-bottom: calc(84px + env(safe-area-inset-bottom));
   }
 }
-/* Dark library background */
-:root.dark .app-shell {
-  background:
-    linear-gradient(
-      rgba(10, 13, 22, 0.15),
-      rgba(10, 13, 22, 0.25)
-    ),
-    url("/images/library-dark-bg.png") center top / cover fixed;
-}
-
-/* Dark library background */
-:root.dark .app-shell {
-  background:
-    linear-gradient(
-      rgba(10, 13, 22, 0.15),
-      rgba(10, 13, 22, 0.25)
-    ),
-    url("/images/library-dark-bg.png") center top / cover fixed;
-}
-
-
-
-
-/* Mobile dark library background */
-@media (max-width: 600px) {
-  :root.dark .app-shell {
-    background:
-      linear-gradient(
-        rgba(10, 13, 22, 0.15),
-        rgba(10, 13, 22, 0.25)
-      ),
-      url("/images/library-dark-bg-high.png") center top / cover fixed;
-  }
-}
-
-/* Mobile dark library background */
-@media (max-width: 600px) {
-  :root.dark .app-shell {
-    background:
-      linear-gradient(
-        rgba(10, 13, 22, 0.15),
-        rgba(10, 13, 22, 0.25)
-      ),
-      url("/images/library-dark-bg-high.png") center top / cover fixed;
-  }
-}
-

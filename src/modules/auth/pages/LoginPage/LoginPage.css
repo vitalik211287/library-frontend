@@ -1,4 +1,4 @@
-.login-page {
+﻿.login-page {
   width: 100%;
   max-width: 480px;
 
@@ -53,7 +53,7 @@
   padding: 0 14px;
 
   color: var(--text);
-  background: var(--bg);
+  background: transparent;
 
   border: 1px solid var(--border);
   border-radius: 10px;
