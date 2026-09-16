@@ -1,3 +1,4 @@
+﻿import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 import useReadingStreak from "../../hooks/useReadingStreak.js";
 import { FinishedBookIcon } from "../../../../../home/components/HomeIcons.jsx";
 
@@ -26,49 +27,44 @@ const StreakIcon = () => (
   </svg>
 );
 
-const ProfileStats = ({
-  finishedCount,
-  wishlistCount,
-  currentBooksCount,
-}) => {
+const ProfileStats = ({ finishedCount, wishlistCount, currentBooksCount }) => {
   const { currentStreak, isStreakLoading } = useReadingStreak();
 
   return (
     <section className="profile-stats">
-      <article className="profile-stat">
+      <AppPanel as="article" variant="secondary" className="profile-stat">
         <FinishedBookIcon />
 
         <strong>{finishedCount}</strong>
 
         <span>Прочитано</span>
-      </article>
+      </AppPanel>
 
-      <article className="profile-stat">
+      <AppPanel as="article" variant="secondary" className="profile-stat">
         <BookmarkIcon />
 
         <strong>{wishlistCount}</strong>
 
         <span>Хочу прочитати</span>
-      </article>
+      </AppPanel>
 
-      <article className="profile-stat">
+      <AppPanel as="article" variant="secondary" className="profile-stat">
         <ReadingIcon />
 
         <strong>{currentBooksCount}</strong>
 
         <span>Читаю зараз</span>
-      </article>
+      </AppPanel>
 
-      <article className="profile-stat">
+      <AppPanel as="article" variant="secondary" className="profile-stat">
         <StreakIcon />
 
         <strong>{isStreakLoading ? "..." : currentStreak}</strong>
 
         <span>Днів поспіль</span>
-      </article>
+      </AppPanel>
     </section>
   );
 };
 
 export default ProfileStats;
-
