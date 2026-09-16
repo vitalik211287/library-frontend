@@ -13,12 +13,12 @@
   box-sizing: border-box;
   border: 1px solid var(--border);
   border-radius: 15px;
-  background: var(--bg);
+  background: var(--surface-secondary);
 }
 
 .monthly-summary__primary span,
 .monthly-summary__grid span {
-  color: var(--text-secondary, #a7a7b5);
+  color: var(--text-secondary);
   font-size: 10px;
 }
 
@@ -44,7 +44,7 @@
   box-sizing: border-box;
   border: 1px solid var(--border);
   border-radius: 15px;
-  background: var(--bg);
+  background: var(--surface-secondary);
 }
 
 .monthly-summary__grid strong {

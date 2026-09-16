@@ -1,4 +1,4 @@
-﻿.streak-card {
+.streak-card {
   padding: 18px 14px 14px;
 }
 
@@ -89,7 +89,7 @@
 
 .streak-day__label {
   margin-bottom: 9px;
-  color: var(--text-secondary, #a7a7b5);
+  color: var(--text-secondary);
   font-size: 9px;
   font-weight: 650;
 }

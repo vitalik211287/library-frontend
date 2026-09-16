@@ -1,4 +1,4 @@
-﻿/* =========================
+/* =========================
    HOME LAYOUT
 ========================= */
 
@@ -124,7 +124,7 @@
 }
 
 .home-empty-state span {
-  color: var(--text-secondary, #a7a7b5);
+  color: var(--text-secondary);
   font-size: 11px;
   line-height: 1.4;
 }

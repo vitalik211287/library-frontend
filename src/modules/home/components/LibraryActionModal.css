@@ -38,8 +38,7 @@
 
 .library-action-modal__field input:focus {
   border-color: var(--accent);
-  box-shadow: 0 0 0 3px
-    color-mix(in srgb, var(--accent) 16%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent);
 }
 
 .library-action-modal__actions {

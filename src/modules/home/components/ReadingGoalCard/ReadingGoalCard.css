@@ -13,7 +13,7 @@
   box-sizing: border-box;
   border: 1px solid var(--border);
   border-radius: 15px;
-  background: var(--bg);
+  background: var(--surface-secondary);
 }
 
 .reading-goal__icon {
@@ -39,7 +39,7 @@
 }
 
 .reading-goal__hero > div:last-child > span {
-  color: var(--text-secondary, #a7a7b5);
+  color: var(--text-secondary);
   font-size: 11px;
 }
 
@@ -57,7 +57,7 @@
 }
 
 .reading-goal__numbers span {
-  color: var(--text-secondary, #a7a7b5);
+  color: var(--text-secondary);
   font-size: 11px;
 }
 
@@ -138,7 +138,7 @@
 }
 
 .reading-goal__row > span {
-  color: var(--text-secondary, #a7a7b5);
+  color: var(--text-secondary);
   font-size: 11px;
 }
 
