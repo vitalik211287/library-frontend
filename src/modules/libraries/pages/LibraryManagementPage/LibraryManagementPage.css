@@ -36,9 +36,6 @@
 .library-management-card {
   margin-top: 14px;
   padding: 18px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 20px;
   box-sizing: border-box;
 }
 

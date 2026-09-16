@@ -1,4 +1,4 @@
-import { useState } from "react";
+﻿import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { formatDuration } from "../../utils/readingModalHelpers.js";
@@ -6,6 +6,8 @@ import { formatEstimatedTime } from "./utils/readingStatsHelpers.js";
 
 import ReadingQuickStats from "./components/ReadingQuickStats.jsx";
 import ReadingStatsDetails from "./components/ReadingStatsDetails.jsx";
+
+import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 
 import "./ReadingStats.css";
 
@@ -79,7 +81,7 @@ const ReadingStats = ({
   );
 
   return (
-    <section className="reading-modal__stats-section">
+    <AppPanel variant="secondary" className="reading-modal__stats-section">
       <ReadingQuickStats
         totalReadingValue={formatDuration(totalReadingSeconds)}
         progressReadValue={progressReadValue}
@@ -105,9 +107,8 @@ const ReadingStats = ({
         onOpenSessions={handleOpenSessions}
         onOpenCalendar={handleOpenCalendar}
       />
-    </section>
+    </AppPanel>
   );
 };
 
 export default ReadingStats;
-

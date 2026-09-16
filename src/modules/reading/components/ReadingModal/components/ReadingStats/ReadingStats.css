@@ -1,11 +1,5 @@
-.reading-modal__stats-section {
+﻿.reading-modal__stats-section {
   box-sizing: border-box;
-
-  border: 1px solid var(--border);
-  border-radius: 16px;
-
-  background: var(--surface-secondary);
-
   overflow: hidden;
 }
 
@@ -120,8 +114,6 @@
   padding: 9px 12px;
 
   box-sizing: border-box;
-
-  border: 1px solid var(--border);
   border-radius: 10px;
 
   background: var(--surface);
@@ -225,8 +217,6 @@
   padding: 8px 10px;
 
   box-sizing: border-box;
-
-  border: 1px solid var(--border);
   border-radius: 11px;
 
   background: var(--surface);
