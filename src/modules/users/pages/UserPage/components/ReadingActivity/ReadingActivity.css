@@ -14,11 +14,6 @@
 
   box-sizing: border-box;
   overflow: hidden;
-
-  border: 1px solid var(--border);
-  border-radius: 18px;
-
-  background: var(--surface);
 }
 
 /* =========================
@@ -606,8 +601,6 @@
 @media (min-width: 600px) {
   .reading-chart-card {
     padding: 20px 18px 18px;
-
-    border-radius: 16px;
   }
 
   .reading-chart-card__header {

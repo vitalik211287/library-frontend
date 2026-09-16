@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { FinishedBookIcon } from "../../../../../home/components/HomeIcons.jsx";
+import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 
 import "./FinishedSection.css";
 
@@ -34,14 +35,11 @@ const FinishedSection = ({
       return;
     }
 
-    onOpenReading?.(
-      book.id,
-      book.sourceLibrary?.id ?? null,
-    );
+    onOpenReading?.(book.id, book.sourceLibrary?.id ?? null);
   };
 
   return (
-    <section className="profile-section profile-section--books">
+    <AppPanel className="profile-section profile-section--books">
       <div className="profile-section__header">
         <h2>Прочитано</h2>
 
@@ -65,7 +63,10 @@ const FinishedSection = ({
 
           <div>
             <strong>Тут з’являться прочитані книги</strong>
-            <span>Завершуй читання та відмічай книги як прочитані, щоб бачити їх тут.</span>
+            <span>
+              Завершуй читання та відмічай книги як прочитані, щоб бачити їх
+              тут.
+            </span>
           </div>
         </div>
       ) : (
@@ -91,13 +92,13 @@ const FinishedSection = ({
                   )}
                 </div>
               </button>
-                <button
-                  type="button"
-                  className="finished-book__title-button"
-                  onClick={() => handleOpenBook(book)}
-                >
-                  {book.title}
-                </button>
+              <button
+                type="button"
+                className="finished-book__title-button"
+                onClick={() => handleOpenBook(book)}
+              >
+                {book.title}
+              </button>
               <p>{book.author}</p>
 
               {book.rating ? (
@@ -111,9 +112,8 @@ const FinishedSection = ({
           ))}
         </div>
       )}
-    </section>
+    </AppPanel>
   );
 };
 
 export default FinishedSection;
-

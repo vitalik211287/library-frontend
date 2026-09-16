@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 
 import "./WishlistSection.css";
 
@@ -23,7 +24,6 @@ const WishlistSection = ({
 }) => {
   const navigate = useNavigate();
 
-
   const handleOpenAll = () => {
     navigate("/wishlist");
 
@@ -41,10 +41,7 @@ const WishlistSection = ({
       return;
     }
 
-    onOpenReading?.(
-      book.id,
-      book.sourceLibrary?.id ?? null,
-    );
+    onOpenReading?.(book.id, book.sourceLibrary?.id ?? null);
   };
 
   const handleRemoveFromWishlist = async (event, bookId) => {
@@ -54,7 +51,7 @@ const WishlistSection = ({
   };
 
   return (
-    <section className="profile-section profile-section--books">
+    <AppPanel className="profile-section profile-section--books">
       <div className="profile-section__header">
         <h2>Хочу прочитати</h2>
 
@@ -127,9 +124,8 @@ const WishlistSection = ({
           ))}
         </div>
       )}
-    </section>
+    </AppPanel>
   );
 };
 
 export default WishlistSection;
-

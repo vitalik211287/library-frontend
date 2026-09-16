@@ -1,4 +1,4 @@
-﻿.public-profile-page {
+.public-profile-page {
   width: 100%;
   min-height: 100dvh;
   padding: 18px 12px 88px;
@@ -19,9 +19,6 @@
   gap: 18px;
   margin-bottom: 28px;
   padding: 18px;
-  border: 1px solid var(--border);
-  border-radius: 18px;
-  background: var(--surface);
 }
 
 .public-profile-hero__avatar {
@@ -133,9 +130,6 @@
   display: flex;
   gap: 12px;
   padding: 10px;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: var(--surface);
 }
 
 .public-profile-book__cover {
@@ -367,9 +361,6 @@
   align-items: center;
   gap: 12px;
   padding: 12px;
-  border: 1px solid var(--border);
-  border-radius: 14px;
-  background: var(--surface);
 }
 
 .public-profile-achievement__medal {

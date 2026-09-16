@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import PageBackButton from "../../../../shared/components/PageBackButton/PageBackButton.jsx";
+import AppPanel from "../../../../shared/components/AppPanel/AppPanel.jsx";
 
 import { apiFetch } from "../../../../shared/api/apiClient.js";
 
@@ -87,7 +88,11 @@ const FollowersPage = () => {
           <div>
             <h1>Підписники</h1>
 
-            <p>{userId ? "Читачі, які підписані на користувача" : "Читачі, які підписані на вас"}</p>
+            <p>
+              {userId
+                ? "Читачі, які підписані на користувача"
+                : "Читачі, які підписані на вас"}
+            </p>
           </div>
         </header>
 
@@ -121,7 +126,7 @@ const FollowersPage = () => {
               const profileName = user?.name || "Користувач";
 
               return (
-                <article key={user.id} className="follower-card">
+                <AppPanel as="article" key={user.id} className="follower-card">
                   <button
                     type="button"
                     className="follower-card__profile"
@@ -167,7 +172,7 @@ const FollowersPage = () => {
                           : "Підписатися"}
                     </button>
                   )}
-                </article>
+                </AppPanel>
               );
             })}
           </div>
@@ -178,6 +183,3 @@ const FollowersPage = () => {
 };
 
 export default FollowersPage;
-
-
-

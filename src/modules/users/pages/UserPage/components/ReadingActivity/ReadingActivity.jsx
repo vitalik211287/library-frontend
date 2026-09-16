@@ -8,6 +8,7 @@ import {
 } from "../../utils/activityHelpers.js";
 
 import ReadingActivityChart from "./components/ReadingActivityChart.jsx";
+import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 
 import "./ReadingActivity.css";
 
@@ -52,9 +53,7 @@ const ReadingActivity = ({ onDetails }) => {
       : currentWeekIndex;
 
   const selectedWeek =
-    safeSelectedWeekIndex >= 0
-      ? chartData[safeSelectedWeekIndex]
-      : null;
+    safeSelectedWeekIndex >= 0 ? chartData[safeSelectedWeekIndex] : null;
 
   const today = new Date();
 
@@ -83,17 +82,17 @@ const ReadingActivity = ({ onDetails }) => {
 
   if (isLoading) {
     return (
-      <div className="reading-chart-card">
+      <AppPanel className="reading-chart-card">
         <div className="profile-empty">Завантаження активності...</div>
-      </div>
+      </AppPanel>
     );
   }
 
   if (error) {
     return (
-      <div className="reading-chart-card">
+      <AppPanel className="reading-chart-card">
         <div className="profile-empty">{error}</div>
-      </div>
+      </AppPanel>
     );
   }
 
@@ -102,7 +101,7 @@ const ReadingActivity = ({ onDetails }) => {
   ========================= */
 
   return (
-    <div className="reading-chart-card">
+    <AppPanel className="reading-chart-card">
       <div className="reading-chart-card__header">
         <div>
           <h2>Активність читання</h2>
@@ -141,7 +140,11 @@ const ReadingActivity = ({ onDetails }) => {
             <path d="M3 10h18" />
           </svg>
 
-          <span>{selectedWeek?.current ? "Цього тижня" : selectedWeek?.label || "Цього тижня"}</span>
+          <span>
+            {selectedWeek?.current
+              ? "Цього тижня"
+              : selectedWeek?.label || "Цього тижня"}
+          </span>
         </div>
 
         <div className="reading-week__stats">
@@ -157,9 +160,7 @@ const ReadingActivity = ({ onDetails }) => {
             </div>
 
             <div className="reading-week__content">
-              <strong>
-                {formatReadingTime(selectedWeek?.seconds || 0)}
-              </strong>
+              <strong>{formatReadingTime(selectedWeek?.seconds || 0)}</strong>
 
               <span>Час читання</span>
             </div>
@@ -210,9 +211,8 @@ const ReadingActivity = ({ onDetails }) => {
         previousMonthName={previousMonthName}
         currentMonthName={currentMonthName}
       />
-    </div>
+    </AppPanel>
   );
 };
 
 export default ReadingActivity;
-

@@ -1,6 +1,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import PageBackButton from "../../../../shared/components/PageBackButton/PageBackButton.jsx";
+import AppPanel from "../../../../shared/components/AppPanel/AppPanel.jsx";
 
 import { apiFetch } from "../../../../shared/api/apiClient.js";
 
@@ -142,7 +143,8 @@ const PublicUserProfilePage = () => {
   );
 
   const finishedBooks = useMemo(
-    () => (Array.isArray(profile?.finished?.books) ? profile.finished.books : []),
+    () =>
+      Array.isArray(profile?.finished?.books) ? profile.finished.books : [],
     [profile],
   );
 
@@ -271,9 +273,9 @@ const PublicUserProfilePage = () => {
   return (
     <main className="public-profile-page">
       <div className="public-profile-page__container">
-          <PageBackButton label="Профіль читача" />
+        <PageBackButton label="Профіль читача" />
 
-        <section className="public-profile-hero">
+        <AppPanel as="section" className="public-profile-hero">
           <div className="public-profile-hero__avatar">
             {profile.avatarUrl ? (
               <img src={profile.avatarUrl} alt={profileName} />
@@ -344,7 +346,7 @@ const PublicUserProfilePage = () => {
               </button>
             )}
           </div>
-        </section>
+        </AppPanel>
 
         <section className="public-profile-section">
           <div className="public-profile-section__header">
@@ -367,7 +369,9 @@ const PublicUserProfilePage = () => {
           ) : (
             <div className="public-profile-achievements">
               {achievements.slice(0, 4).map((achievement) => (
-                <article
+                <AppPanel
+                  as="article"
+                  variant="secondary"
                   key={achievement.id}
                   className="public-profile-achievement"
                 >
@@ -412,7 +416,7 @@ const PublicUserProfilePage = () => {
                       {achievement.kudosCount ?? 0}
                     </button>
                   </div>
-                </article>
+                </AppPanel>
               ))}
             </div>
           )}
@@ -439,12 +443,19 @@ const PublicUserProfilePage = () => {
                   totalPages > 0
                     ? Math.min(
                         100,
-                        Math.round(((item.currentPage ?? 0) / totalPages) * 100),
+                        Math.round(
+                          ((item.currentPage ?? 0) / totalPages) * 100,
+                        ),
                       )
                     : null;
 
                 return (
-                  <article key={book?.id} className="public-profile-book">
+                  <AppPanel
+                    as="article"
+                    variant="secondary"
+                    key={book?.id}
+                    className="public-profile-book"
+                  >
                     <div className="public-profile-book__cover">
                       <BookCover book={book} />
                     </div>
@@ -463,7 +474,7 @@ const PublicUserProfilePage = () => {
                         </div>
                       )}
                     </div>
-                  </article>
+                  </AppPanel>
                 );
               })}
             </div>
@@ -488,7 +499,12 @@ const PublicUserProfilePage = () => {
                 const book = item.book;
 
                 return (
-                  <article key={book?.id} className="public-profile-book">
+                  <AppPanel
+                    as="article"
+                    variant="secondary"
+                    key={book?.id}
+                    className="public-profile-book"
+                  >
                     <div className="public-profile-book__cover">
                       <BookCover book={book} />
                     </div>
@@ -503,7 +519,7 @@ const PublicUserProfilePage = () => {
                         </small>
                       )}
                     </div>
-                  </article>
+                  </AppPanel>
                 );
               })}
             </div>
@@ -523,14 +539,3 @@ const PublicUserProfilePage = () => {
 };
 
 export default PublicUserProfilePage;
-
-
-
-
-
-
-
-
-
-
-

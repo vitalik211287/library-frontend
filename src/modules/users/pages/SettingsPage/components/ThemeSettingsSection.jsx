@@ -1,18 +1,13 @@
-import {
-  MoonIcon,
-  SunIcon,
-  SystemIcon,
-} from "./ThemeIcons.jsx";
+import AppPanel from "../../../../../shared/components/AppPanel/AppPanel.jsx";
 
-const ThemeSettingsSection = ({
-  themeMode,
-  setThemeMode,
-}) => {
+import { MoonIcon, SunIcon, SystemIcon } from "./ThemeIcons.jsx";
+
+const ThemeSettingsSection = ({ themeMode, setThemeMode }) => {
   return (
     <section className="settings-page__section">
       <h2>Застосунок</h2>
 
-      <div className="settings-page__card settings-page__theme-card">
+      <AppPanel className="settings-page__card settings-page__theme-card">
         <div className="settings-page__theme-header">
           <span className="settings-page__row-icon">
             <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -21,9 +16,7 @@ const ThemeSettingsSection = ({
           </span>
 
           <div className="settings-page__row-content">
-            <span className="settings-page__row-title">
-              Тема
-            </span>
+            <span className="settings-page__row-title">Тема</span>
 
             <span className="settings-page__row-value">
               {themeMode === "system"
@@ -43,9 +36,7 @@ const ThemeSettingsSection = ({
                 ? "settings-page__theme-option--active"
                 : ""
             }`}
-            onClick={() =>
-              setThemeMode("system")
-            }
+            onClick={() => setThemeMode("system")}
           >
             <SystemIcon />
 
@@ -55,13 +46,9 @@ const ThemeSettingsSection = ({
           <button
             type="button"
             className={`settings-page__theme-option ${
-              themeMode === "light"
-                ? "settings-page__theme-option--active"
-                : ""
+              themeMode === "light" ? "settings-page__theme-option--active" : ""
             }`}
-            onClick={() =>
-              setThemeMode("light")
-            }
+            onClick={() => setThemeMode("light")}
           >
             <SunIcon />
 
@@ -71,20 +58,16 @@ const ThemeSettingsSection = ({
           <button
             type="button"
             className={`settings-page__theme-option ${
-              themeMode === "dark"
-                ? "settings-page__theme-option--active"
-                : ""
+              themeMode === "dark" ? "settings-page__theme-option--active" : ""
             }`}
-            onClick={() =>
-              setThemeMode("dark")
-            }
+            onClick={() => setThemeMode("dark")}
           >
             <MoonIcon />
 
             <span>Темна</span>
           </button>
         </div>
-      </div>
+      </AppPanel>
     </section>
   );
 };

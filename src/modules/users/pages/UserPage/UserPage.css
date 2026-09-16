@@ -1,4 +1,4 @@
-﻿/* =========================
+/* =========================
    PAGE
 ========================= */
 
@@ -158,11 +158,6 @@
 
 .profile-section--books {
   padding: 14px;
-
-  border: 1px solid var(--border);
-  border-radius: 14px;
-
-  background: var(--surface);
 }
 
 @media (min-width: 600px) {

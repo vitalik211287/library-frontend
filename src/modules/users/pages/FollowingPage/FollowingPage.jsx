@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import PageBackButton from "../../../../shared/components/PageBackButton/PageBackButton.jsx";
+import AppPanel from "../../../../shared/components/AppPanel/AppPanel.jsx";
 
 import { apiFetch } from "../../../../shared/api/apiClient.js";
 
@@ -91,7 +92,11 @@ const FollowingPage = () => {
           <div>
             <h1>Підписки</h1>
 
-            <p>{userId ? "Читачі, на яких підписаний користувач" : "Читачі, на яких ви підписані"}</p>
+            <p>
+              {userId
+                ? "Читачі, на яких підписаний користувач"
+                : "Читачі, на яких ви підписані"}
+            </p>
           </div>
         </header>
 
@@ -133,7 +138,7 @@ const FollowingPage = () => {
               const profileName = user?.name || "Користувач";
 
               return (
-                <article key={user.id} className="following-card">
+                <AppPanel as="article" key={user.id} className="following-card">
                   <button
                     type="button"
                     className="following-card__profile"
@@ -179,7 +184,7 @@ const FollowingPage = () => {
                           : "Підписатися"}
                     </button>
                   )}
-                </article>
+                </AppPanel>
               );
             })}
           </div>
@@ -190,8 +195,3 @@ const FollowingPage = () => {
 };
 
 export default FollowingPage;
-
-
-
-
-
