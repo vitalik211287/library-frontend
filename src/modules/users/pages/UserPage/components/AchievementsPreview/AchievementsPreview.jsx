@@ -49,9 +49,12 @@ const AchievementsPreview = ({ readingBookId }) => {
       ) : (
         <div className="profile-achievements">
           {previewAchievements.map((achievement) => (
-            <button
+            <AppPanel
+              as="button"
               key={achievement.id}
               type="button"
+              variant="secondary"
+              clickable
               className={
                 achievement.unlocked
                   ? "profile-achievement profile-achievement--unlocked"
@@ -82,7 +85,7 @@ const AchievementsPreview = ({ readingBookId }) => {
               {!achievement.unlocked && (
                 <span className="profile-achievement__lock">🔒</span>
               )}
-            </button>
+            </AppPanel>
           ))}
         </div>
       )}
