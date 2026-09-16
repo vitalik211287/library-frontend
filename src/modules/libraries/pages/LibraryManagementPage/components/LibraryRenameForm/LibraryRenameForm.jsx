@@ -1,3 +1,5 @@
+﻿import LibraryManagementPanel from "../LibraryManagementPanel.jsx";
+
 import "../LibraryManagementForm.css";
 
 const LibraryRenameForm = ({
@@ -8,7 +10,7 @@ const LibraryRenameForm = ({
   onSubmit,
 }) => {
   return (
-    <section className="library-management-card">
+    <LibraryManagementPanel>
       <div className="library-management-card__header">
         <div>
           <h2>Назва бібліотеки</h2>
@@ -17,16 +19,11 @@ const LibraryRenameForm = ({
         </div>
       </div>
 
-      <form
-        className="library-management-add"
-        onSubmit={onSubmit}
-      >
+      <form className="library-management-add" onSubmit={onSubmit}>
         <input
           type="text"
           value={libraryName}
-          onChange={(event) =>
-            onLibraryNameChange(event.target.value)
-          }
+          onChange={(event) => onLibraryNameChange(event.target.value)}
           placeholder="Назва бібліотеки"
           disabled={isRenamingLibrary}
           required
@@ -39,12 +36,10 @@ const LibraryRenameForm = ({
             libraryName.trim() === activeLibraryName?.trim()
           }
         >
-          {isRenamingLibrary
-            ? "Збереження..."
-            : "Зберегти"}
+          {isRenamingLibrary ? "Збереження..." : "Зберегти"}
         </button>
       </form>
-    </section>
+    </LibraryManagementPanel>
   );
 };
 

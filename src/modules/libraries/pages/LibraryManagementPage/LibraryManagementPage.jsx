@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -21,6 +21,7 @@ import LibraryMembersList from "./components/LibraryMembersList/LibraryMembersLi
 import LibraryRenameForm from "./components/LibraryRenameForm/LibraryRenameForm.jsx";
 import AddLibraryMemberForm from "./components/AddLibraryMemberForm/AddLibraryMemberForm.jsx";
 import LibraryDangerZone from "./components/LibraryDangerZone/LibraryDangerZone.jsx";
+import LibraryManagementPanel from "./components/LibraryManagementPanel.jsx";
 
 const LibraryManagementPage = () => {
   const navigate = useNavigate();
@@ -292,11 +293,11 @@ const LibraryManagementPage = () => {
       <main className="library-management-page">
         <PageBackButton label="Керування бібліотекою" to="/home" />
 
-        <section className="library-management-card library-management-card--empty">
+        <LibraryManagementPanel className="library-management-card--empty">
           <h1>Керування бібліотекою</h1>
 
           <p>Спочатку створіть або виберіть бібліотеку.</p>
-        </section>
+        </LibraryManagementPanel>
       </main>
     );
   }
@@ -347,29 +348,11 @@ const LibraryManagementPage = () => {
         onRoleChange={handleRoleChange}
         onRemoveMemberRequest={handleRemoveMemberRequest}
       />
-{isOwner && (
-        <section className="library-management-card library-management-danger">
-          <div className="library-management-card__header">
-            <div>
-              <h2>Небезпечна зона</h2>
-
-              <p>
-                Видалення бібліотеки незворотне. Книги та читацькі дані
-                користувачів не видаляються, але сам простір бібліотеки та його
-                учасники буде видалено.
-              </p>
-            </div>
-          </div>
-
-          <button
-            type="button"
-            className="library-management-danger__button"
-            onClick={handleDeleteLibraryRequest}
-            disabled={isDeletingLibrary}
-          >
-            {isDeletingLibrary ? "Видалення..." : "Видалити бібліотеку"}
-          </button>
-        </section>
+      {isOwner && (
+        <LibraryDangerZone
+          isDeletingLibrary={isDeletingLibrary}
+          onDeleteRequest={handleDeleteLibraryRequest}
+        />
       )}
 
       {!canManage && !isLoading && (
@@ -406,6 +389,3 @@ const LibraryManagementPage = () => {
 };
 
 export default LibraryManagementPage;
-
-
-

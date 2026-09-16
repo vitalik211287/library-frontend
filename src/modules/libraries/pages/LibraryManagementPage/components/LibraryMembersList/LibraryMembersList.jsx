@@ -1,3 +1,5 @@
+﻿import LibraryManagementPanel from "../LibraryManagementPanel.jsx";
+
 import "./LibraryMembersList.css";
 
 import {
@@ -18,7 +20,7 @@ const LibraryMembersList = ({
   onRemoveMemberRequest,
 }) => {
   return (
-    <section className="library-management-card">
+    <LibraryManagementPanel>
       <div className="library-management-card__header">
         <div>
           <h2>Учасники</h2>
@@ -36,34 +38,23 @@ const LibraryMembersList = ({
       ) : (
         <div className="library-members-list">
           {members.map((member) => {
-            const isCurrentUser =
-              String(member.userId) === String(userId);
+            const isCurrentUser = String(member.userId) === String(userId);
 
-            const isUpdating =
-              updatingMemberId === member.userId;
+            const isUpdating = updatingMemberId === member.userId;
 
-            const isRemoving =
-              removingMemberId === member.userId;
+            const isRemoving = removingMemberId === member.userId;
 
             const adminCannotManageOwner =
-              currentMembershipRole === "ADMIN" &&
-              member.role === "OWNER";
+              currentMembershipRole === "ADMIN" && member.role === "OWNER";
 
-            const canEditThisMember =
-              canManage && !adminCannotManageOwner;
+            const canEditThisMember = canManage && !adminCannotManageOwner;
 
             return (
-              <article
-                key={member.id}
-                className="library-member"
-              >
+              <article key={member.id} className="library-member">
                 <div className="library-member__identity">
                   <div className="library-member__avatar">
                     {member.user?.avatarUrl ? (
-                      <img
-                        src={member.user.avatarUrl}
-                        alt=""
-                      />
+                      <img src={member.user.avatarUrl} alt="" />
                     ) : (
                       <span>{getInitials(member)}</span>
                     )}
@@ -78,18 +69,15 @@ const LibraryMembersList = ({
                       </strong>
 
                       {isCurrentUser && (
-                        <span className="library-member__you">
-                          Ви
-                        </span>
+                        <span className="library-member__you">Ви</span>
                       )}
                     </div>
 
-                    {member.user?.name &&
-                      member.user?.email && (
-                        <span className="library-member__email">
-                          {member.user.email}
-                        </span>
-                      )}
+                    {member.user?.name && member.user?.email && (
+                      <span className="library-member__email">
+                        {member.user.email}
+                      </span>
+                    )}
 
                     <span className="library-member__role-mobile">
                       {getRoleLabel(member.role)}
@@ -102,18 +90,12 @@ const LibraryMembersList = ({
                     <select
                       value={member.role}
                       onChange={(event) =>
-                        onRoleChange(
-                          member,
-                          event.target.value,
-                        )
+                        onRoleChange(member, event.target.value)
                       }
                       disabled={isUpdating || isRemoving}
                     >
                       {ROLE_OPTIONS.map((roleOption) => (
-                        <option
-                          key={roleOption.value}
-                          value={roleOption.value}
-                        >
+                        <option key={roleOption.value} value={roleOption.value}>
                           {roleOption.label}
                         </option>
                       ))}
@@ -124,27 +106,23 @@ const LibraryMembersList = ({
                     </span>
                   )}
 
-                  {canManage &&
-                    !isCurrentUser &&
-                    !adminCannotManageOwner && (
-                      <button
-                        type="button"
-                        className="library-member__remove"
-                        onClick={() =>
-                          onRemoveMemberRequest(member)
-                        }
-                        disabled={isUpdating || isRemoving}
-                      >
-                        {isRemoving ? "..." : "Видалити"}
-                      </button>
-                    )}
+                  {canManage && !isCurrentUser && !adminCannotManageOwner && (
+                    <button
+                      type="button"
+                      className="library-member__remove"
+                      onClick={() => onRemoveMemberRequest(member)}
+                      disabled={isUpdating || isRemoving}
+                    >
+                      {isRemoving ? "..." : "Видалити"}
+                    </button>
+                  )}
                 </div>
               </article>
             );
           })}
         </div>
       )}
-    </section>
+    </LibraryManagementPanel>
   );
 };
 

@@ -1,3 +1,4 @@
+﻿import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 import "./ReadingBookInfo.css";
 
 const ReadingBookInfo = ({
@@ -43,20 +44,15 @@ const ReadingBookInfo = ({
 
   const isPercentMode = progressMode === "PERCENT";
 
-  const safeProgress = Math.min(
-    Math.max(Number(progress) || 0, 0),
-    100,
-  );
+  const safeProgress = Math.min(Math.max(Number(progress) || 0, 0), 100);
 
   const progressAngle = safeProgress * 3.6;
 
   const currentValue = isPercentMode
     ? `${currentBook.currentPercent ?? 0}%`
-    : currentBook.currentPage ?? 0;
+    : (currentBook.currentPage ?? 0);
 
-  const totalValue = isPercentMode
-    ? "100%"
-    : currentBook.pages ?? "—";
+  const totalValue = isPercentMode ? "100%" : (currentBook.pages ?? "—");
 
   const handleStatusClick = (event) => {
     event.preventDefault();
@@ -68,17 +64,12 @@ const ReadingBookInfo = ({
   };
 
   return (
-    <section className="reading-modal__book-card">
+    <AppPanel className="reading-modal__book-card">
       <div className="reading-modal__cover">
         {coverUrl ? (
-          <img
-            src={coverUrl}
-            alt={currentBook.title}
-          />
+          <img src={coverUrl} alt={currentBook.title} />
         ) : (
-          <div className="reading-modal__no-cover">
-            Немає обкладинки
-          </div>
+          <div className="reading-modal__no-cover">Немає обкладинки</div>
         )}
 
         <button
@@ -92,10 +83,7 @@ const ReadingBookInfo = ({
 
           <strong>{statusLabel}</strong>
 
-          <span
-            className="reading-modal__cover-status-edit"
-            aria-hidden="true"
-          >
+          <span className="reading-modal__cover-status-edit" aria-hidden="true">
             ✎
           </span>
         </button>
@@ -104,9 +92,7 @@ const ReadingBookInfo = ({
       <div className="reading-modal__book-content">
         <div className="reading-modal__book-progress">
           <div className="reading-modal__book-progress-info">
-            <span className="reading-modal__book-meta-label">
-              Прогрес
-            </span>
+            <span className="reading-modal__book-meta-label">Прогрес</span>
 
             <strong className="reading-modal__book-meta-value">
               {currentValue}
@@ -116,10 +102,7 @@ const ReadingBookInfo = ({
               )}
             </strong>
 
-            <div
-              className="reading-modal__progress-line"
-              aria-hidden="true"
-            >
+            <div className="reading-modal__progress-line" aria-hidden="true">
               <div
                 className="reading-modal__progress-line-value"
                 style={{
@@ -134,9 +117,7 @@ const ReadingBookInfo = ({
             style={{
               "--reading-progress-angle": `${progressAngle}deg`,
             }}
-            aria-label={`Прогрес читання ${Math.round(
-              safeProgress,
-            )}%`}
+            aria-label={`Прогрес читання ${Math.round(safeProgress)}%`}
           >
             <div className="reading-modal__progress-ring-inner">
               <strong>{Math.round(safeProgress)}%</strong>
@@ -147,9 +128,7 @@ const ReadingBookInfo = ({
         </div>
 
         <div className="reading-modal__book-rating">
-          <span className="reading-modal__book-meta-label">
-            Оцінка
-          </span>
+          <span className="reading-modal__book-meta-label">Оцінка</span>
 
           <div className="reading-modal__rating">
             {[1, 2, 3, 4, 5].map((value) => (
@@ -161,9 +140,7 @@ const ReadingBookInfo = ({
                 disabled={ratingLoading}
                 aria-label={`Оцінити на ${value} з 5`}
               >
-                {value <= (currentBook.rating ?? 0)
-                  ? "★"
-                  : "☆"}
+                {value <= (currentBook.rating ?? 0) ? "★" : "☆"}
               </button>
             ))}
           </div>
@@ -173,9 +150,7 @@ const ReadingBookInfo = ({
           <div className="reading-modal__book-footer-item">
             <span>Спосіб прогресу</span>
 
-            <strong>
-              {isPercentMode ? "Відсотки" : "Сторінки"}
-            </strong>
+            <strong>{isPercentMode ? "Відсотки" : "Сторінки"}</strong>
           </div>
 
           <div className="reading-modal__book-footer-item">
@@ -185,7 +160,7 @@ const ReadingBookInfo = ({
           </div>
         </div>
       </div>
-    </section>
+    </AppPanel>
   );
 };
 

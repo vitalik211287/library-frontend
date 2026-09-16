@@ -1,3 +1,5 @@
+﻿import LibraryManagementPanel from "../LibraryManagementPanel.jsx";
+
 import "../LibraryManagementForm.css";
 
 const AddLibraryMemberForm = ({
@@ -7,7 +9,7 @@ const AddLibraryMemberForm = ({
   onSubmit,
 }) => {
   return (
-    <section className="library-management-card">
+    <LibraryManagementPanel>
       <div className="library-management-card__header">
         <div>
           <h2>Додати учасника</h2>
@@ -16,32 +18,22 @@ const AddLibraryMemberForm = ({
         </div>
       </div>
 
-      <form
-        className="library-management-add"
-        onSubmit={onSubmit}
-      >
+      <form className="library-management-add" onSubmit={onSubmit}>
         <input
           type="email"
           value={memberEmail}
-          onChange={(event) =>
-            onMemberEmailChange(event.target.value)
-          }
+          onChange={(event) => onMemberEmailChange(event.target.value)}
           placeholder="email@example.com"
           autoComplete="email"
           disabled={isAddingMember}
           required
         />
 
-        <button
-          type="submit"
-          disabled={isAddingMember}
-        >
-          {isAddingMember
-            ? "Додаємо..."
-            : "Додати учасника"}
+        <button type="submit" disabled={isAddingMember}>
+          {isAddingMember ? "Додаємо..." : "Додати учасника"}
         </button>
       </form>
-    </section>
+    </LibraryManagementPanel>
   );
 };
 
