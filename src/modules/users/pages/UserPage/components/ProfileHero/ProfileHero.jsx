@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../../../../auth/context/AuthContext.jsx";
+import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 import { apiFetch } from "../../../../../../shared/api/apiClient.js";
 
 import "./ProfileHero.css";
@@ -95,7 +96,10 @@ const ProfileHero = () => {
       </div>
 
       <div className="profile-hero__social">
-        <button
+        <AppPanel
+          as="button"
+          variant="secondary"
+          clickable
           type="button"
           className="profile-hero__social-item"
           onClick={() => navigate("/users/following")}
@@ -112,9 +116,12 @@ const ProfileHero = () => {
           <span className="profile-hero__chevron">
             <ChevronIcon />
           </span>
-        </button>
+        </AppPanel>
 
-        <button
+        <AppPanel
+          as="button"
+          variant="secondary"
+          clickable
           type="button"
           className="profile-hero__social-item"
           onClick={() => navigate("/users/followers")}
@@ -131,9 +138,12 @@ const ProfileHero = () => {
           <span className="profile-hero__chevron">
             <ChevronIcon />
           </span>
-        </button>
+        </AppPanel>
 
-        <button
+        <AppPanel
+          as="button"
+          variant="secondary"
+          clickable
           type="button"
           className="profile-hero__social-item"
           onClick={() => navigate("/users")}
@@ -150,9 +160,12 @@ const ProfileHero = () => {
           <span className="profile-hero__chevron">
             <ChevronIcon />
           </span>
-        </button>
+        </AppPanel>
 
-        <button
+        <AppPanel
+          as="button"
+          variant="secondary"
+          clickable
           type="button"
           className="profile-hero__social-item"
           onClick={() => navigate("/settings")}
@@ -169,17 +182,10 @@ const ProfileHero = () => {
           <span className="profile-hero__chevron">
             <ChevronIcon />
           </span>
-        </button>
+        </AppPanel>
       </div>
     </section>
   );
 };
 
 export default ProfileHero;
-
-
-
-
-
-
-
