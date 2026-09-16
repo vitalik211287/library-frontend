@@ -109,3 +109,10 @@
     height: 123px;
   }
 }
+
+@media (max-width: 599px) {
+  .genre-shelf.app-panel {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+}

@@ -1,4 +1,4 @@
-﻿.add-book-page {
+.add-book-page {
   width: 100%;
   max-width: 900px;
 
@@ -32,36 +32,26 @@
 
   padding: 11px 18px;
 
-  background: #222222;
+  background: var(--accent);
   color: #ffffff;
 
   font-family: inherit;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
 
   cursor: pointer;
 
   transition:
-    background-color 0.2s ease,
-    color 0.2s ease,
+    filter 0.2s ease,
     transform 0.15s ease;
 }
 
 .manual-toggle:hover {
-  background: #3a3a3a;
+  filter: brightness(1.08);
 }
 
 .manual-toggle:active {
   transform: scale(0.98);
-}
-
-:root.dark .manual-toggle {
-  background: #f3f4f6;
-  color: #16171d;
-}
-
-:root.dark .manual-toggle:hover {
-  background: #d9dce1;
 }
 
 /* =========================

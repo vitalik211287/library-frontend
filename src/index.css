@@ -50,7 +50,7 @@
 :root.dark {
   --app-background:
     linear-gradient(rgba(10, 13, 22, 0.15), rgba(10, 13, 22, 0.25)),
-    url("/images/library-dark-bg-high.png") center top / cover fixed;
+    url("/images/library-dark-bg-high.jpg") center top / cover fixed;
   color-scheme: dark;
 
   --text: #b6bbc5;
@@ -196,3 +196,5 @@ code {
     font-size: 20px;
   }
 }
+
+
