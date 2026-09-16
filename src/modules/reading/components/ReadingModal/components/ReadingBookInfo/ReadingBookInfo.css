@@ -1,4 +1,4 @@
-/* =========================
+﻿/* =========================
    BOOK CARD
 ========================= */
 
@@ -13,11 +13,6 @@
   padding: 14px;
 
   box-sizing: border-box;
-
-  border: 1px solid var(--border);
-  border-radius: 16px;
-
-  background: var(--surface-secondary);
 }
 
 /* =========================

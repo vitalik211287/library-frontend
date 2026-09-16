@@ -1,5 +1,6 @@
-import { formatTime } from "../../utils/readingModalHelpers.js";
+﻿import { formatTime } from "../../utils/readingModalHelpers.js";
 
+import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 import "./ReadingSessionCard.css";
 
 const ReadingSessionCard = ({
@@ -41,7 +42,7 @@ const ReadingSessionCard = ({
 
   if (!activeSession) {
     return (
-      <section className="reading-modal__session-card">
+      <AppPanel className="reading-modal__session-card">
         <div className="reading-modal__session-setup">
           <div className="reading-modal__setup-section">
             <div className="reading-modal__setup-heading">
@@ -138,12 +139,12 @@ const ReadingSessionCard = ({
             {loading ? "Запускаємо..." : "Почати читання"}
           </span>
         </button>
-      </section>
+      </AppPanel>
     );
   }
 
   return (
-    <section className="reading-modal__session-card">
+    <AppPanel className="reading-modal__session-card">
       <div className="reading-modal__session-header">
         <h3>Сесія читання</h3>
 
@@ -261,9 +262,8 @@ const ReadingSessionCard = ({
           </span>
         </button>
       </div>
-    </section>
+    </AppPanel>
   );
 };
 
 export default ReadingSessionCard;
-
