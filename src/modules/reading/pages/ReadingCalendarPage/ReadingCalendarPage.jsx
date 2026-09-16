@@ -1,6 +1,8 @@
-import { useMemo, useState } from "react";
+﻿import { useMemo, useState } from "react";
 
 import { useLocation, useNavigate } from "react-router-dom";
+
+import AppPanel from "../../../../shared/components/AppPanel/AppPanel.jsx";
 
 import CalendarGrid from "./components/CalendarGrid/CalendarGrid.jsx";
 import CalendarHeader from "./components/CalendarHeader/CalendarHeader.jsx";
@@ -71,7 +73,7 @@ const ReadingCalendarPage = () => {
 
   return (
     <main className="reading-calendar-page">
-      <section className="reading-calendar">
+      <AppPanel className="reading-calendar">
         <button
           type="button"
           className="reading-calendar__close"
@@ -98,10 +100,9 @@ const ReadingCalendarPage = () => {
         )}
 
         <CalendarLegend />
-      </section>
+      </AppPanel>
     </main>
   );
 };
 
 export default ReadingCalendarPage;
-

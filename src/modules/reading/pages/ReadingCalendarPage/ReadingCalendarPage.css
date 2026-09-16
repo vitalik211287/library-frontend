@@ -1,4 +1,4 @@
-.reading-calendar-page {
+﻿.reading-calendar-page {
   width: 100%;
   padding: 12px;
 
@@ -116,8 +116,6 @@
 
   .reading-calendar {
     padding: 18px 18px 20px;
-
-    border-radius: 20px;
   }
 
   .reading-calendar__close {

@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+﻿import { useRef, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -10,14 +10,12 @@ import { useTheme } from "../../../../shared/context/ThemeContext.jsx";
 
 import { apiFetch } from "../../../../shared/api/apiClient.js";
 
-import {
-  MoonIcon,
-  SunIcon,
-  SystemIcon,
-} from "./components/ThemeIcons.jsx";
+import { MoonIcon, SunIcon, SystemIcon } from "./components/ThemeIcons.jsx";
 import ChangeNameModal from "./components/ChangeNameModal.jsx";
 import ChangePasswordModal from "./components/ChangePasswordModal.jsx";
 import ThemeSettingsSection from "./components/ThemeSettingsSection.jsx";
+
+import AppPanel from "../../../../shared/components/AppPanel/AppPanel.jsx";
 
 import "./SettingsPage.css";
 
@@ -261,7 +259,7 @@ const SettingsPage = () => {
         <section className="settings-page__section">
           <h2>Профіль</h2>
 
-          <div className="settings-page__card">
+          <AppPanel className="settings-page__card">
             <button
               type="button"
               className="settings-page__row"
@@ -344,13 +342,13 @@ const SettingsPage = () => {
               accept="image/*"
               onChange={handleAvatarChange}
             />
-          </div>
+          </AppPanel>
         </section>
 
         <section className="settings-page__section">
           <h2>Акаунт</h2>
 
-          <div className="settings-page__card">
+          <AppPanel className="settings-page__card">
             <button
               type="button"
               className="settings-page__row"
@@ -370,7 +368,7 @@ const SettingsPage = () => {
 
               <span className="settings-page__chevron">›</span>
             </button>
-          </div>
+          </AppPanel>
         </section>
 
         <ThemeSettingsSection
@@ -413,15 +411,8 @@ const SettingsPage = () => {
         onClose={handleClosePassword}
         onSubmit={handleSavePassword}
       />
-
     </main>
   );
 };
 
 export default SettingsPage;
-
-
-
-
-
-
