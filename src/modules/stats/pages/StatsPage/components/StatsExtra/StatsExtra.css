@@ -94,3 +94,10 @@
 .stats-extra__item--button:active {
   transform: scale(0.98);
 }
+
+.stats-extra .app-panel.stats-extra__item {
+  background: var(--panel-bg-secondary);
+  border-color: var(--panel-border);
+  border-radius: var(--panel-radius);
+  box-shadow: var(--panel-shadow);
+}

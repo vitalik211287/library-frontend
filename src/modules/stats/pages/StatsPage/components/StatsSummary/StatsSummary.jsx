@@ -1,10 +1,11 @@
+﻿import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 import { formatReadingTime } from "../../utils/statsHelpers.js";
 import "./StatsSummary.css";
 
 const StatsSummary = ({ summary, streak }) => {
   return (
     <section className="stats-summary">
-      <article className="stats-summary-card">
+      <AppPanel className="stats-summary-card" variant="secondary">
         <div className="stats-summary-card__icon">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11a2 2 0 0 1 2 2v16a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 21.5v-16Z" />
@@ -18,9 +19,9 @@ const StatsSummary = ({ summary, streak }) => {
 
           <span>прочитано книг</span>
         </div>
-      </article>
+      </AppPanel>
 
-      <article className="stats-summary-card">
+      <AppPanel className="stats-summary-card" variant="secondary">
         <div className="stats-summary-card__icon">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M6 3h12a2 2 0 0 1 2 2v16l-8-4-8 4V5a2 2 0 0 1 2-2Z" />
@@ -32,9 +33,9 @@ const StatsSummary = ({ summary, streak }) => {
 
           <span>сторінок</span>
         </div>
-      </article>
+      </AppPanel>
 
-      <article className="stats-summary-card">
+      <AppPanel className="stats-summary-card" variant="secondary">
         <div className="stats-summary-card__icon">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <circle cx="12" cy="12" r="9" />
@@ -48,9 +49,9 @@ const StatsSummary = ({ summary, streak }) => {
 
           <span>час читання</span>
         </div>
-      </article>
+      </AppPanel>
 
-      <article className="stats-summary-card">
+      <AppPanel className="stats-summary-card" variant="secondary">
         <div className="stats-summary-card__icon">
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M13 2s1 4-2 7c-2 2-4 4-4 7a5 5 0 0 0 10 0c0-2-1-4-2-5 0 3-2 4-3 4 1-3-1-5-1-5" />
@@ -62,10 +63,9 @@ const StatsSummary = ({ summary, streak }) => {
 
           <span>днів поспіль</span>
         </div>
-      </article>
+      </AppPanel>
     </section>
   );
 };
 
 export default StatsSummary;
-

@@ -1,6 +1,7 @@
 ﻿import "./AppPanel.css";
 
 const AppPanel = ({
+  as: Component = "section",
   children,
   className = "",
   variant = "primary",
@@ -17,9 +18,9 @@ const AppPanel = ({
     .join(" ");
 
   return (
-    <section className={classes} {...props}>
+    <Component className={classes} {...props}>
       {children}
-    </section>
+    </Component>
   );
 };
 

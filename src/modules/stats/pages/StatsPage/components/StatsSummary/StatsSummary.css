@@ -1,7 +1,6 @@
-.stats-summary {
+﻿.stats-summary {
   display: grid;
-  grid-template-columns:
-    repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 
   margin-bottom: 16px;
@@ -9,27 +8,11 @@
 
 .stats-summary-card {
   min-width: 0;
-
   padding: 14px;
 
   display: flex;
   align-items: center;
   gap: 10px;
-
-  background: var(
-    --card-bg,
-    rgba(255, 255, 255, 0.05)
-  );
-
-  border: 1px solid
-    var(
-      --border,
-      rgba(255, 255, 255, 0.09)
-    );
-
-  border-radius: 16px;
-
-  box-sizing: border-box;
 }
 
 .stats-summary-card__icon {
@@ -42,12 +25,7 @@
 
   color: #8b5cf6;
 
-  background: rgba(
-    139,
-    92,
-    246,
-    0.12
-  );
+  background: rgba(139, 92, 246, 0.12);
 
   border-radius: 11px;
 }
@@ -79,10 +57,7 @@
 
   margin-top: 4px;
 
-  color: var(
-    --text-secondary,
-    #8b8b96
-  );
+  color: var(--text-secondary, #8b8b96);
 
   font-size: 11px;
   line-height: 1.2;
@@ -90,14 +65,18 @@
 
 @media (min-width: 600px) {
   .stats-summary {
-    grid-template-columns:
-      repeat(4, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
 @media (min-width: 900px) {
   .stats-summary-card {
-    padding: 17px;
+    min-width: 0;
+    padding: 14px;
+
+    display: flex;
+    align-items: center;
+    gap: 10px;
   }
 
   .stats-summary-card strong {
