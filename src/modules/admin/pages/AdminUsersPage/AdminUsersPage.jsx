@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+﻿import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 
@@ -11,6 +11,7 @@ import {
 
 import { useAuth } from "../../../auth/context/AuthContext.jsx";
 import Modal from "../../../../shared/components/Modal/Modal.jsx";
+import AppPanel from "../../../../shared/components/AppPanel/AppPanel.jsx";
 
 import "./AdminUsersPage.css";
 
@@ -72,13 +73,15 @@ const createUserSlug = (name) => {
     "\u044f": "ia",
   };
 
-  return (name || "user")
-    .toLowerCase()
-    .split("")
-    .map((char) => transliteration[char] ?? char)
-    .join("")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "") || "user";
+  return (
+    (name || "user")
+      .toLowerCase()
+      .split("")
+      .map((char) => transliteration[char] ?? char)
+      .join("")
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "") || "user"
+  );
 };
 
 const AdminUsersPage = () => {
@@ -255,7 +258,9 @@ const AdminUsersPage = () => {
         setActivityFilter("ALL");
       } catch (error) {
         console.error("Load admin user details error:", error);
-        toast.error(error?.message || "Не вдалося завантажити дані користувача");
+        toast.error(
+          error?.message || "Не вдалося завантажити дані користувача",
+        );
         navigate("/admin/users", { replace: true });
       } finally {
         setIsDetailsLoading(false);
@@ -338,9 +343,7 @@ const AdminUsersPage = () => {
     const dates = [
       ...(selectedUser?.activityLogs ?? []).map((item) => item.createdAt),
       ...(selectedUser?.readingSessions ?? []).map((item) => item.startedAt),
-      ...(selectedUser?.libraryBookEvents ?? []).map(
-        (item) => item.occurredAt,
-      ),
+      ...(selectedUser?.libraryBookEvents ?? []).map((item) => item.occurredAt),
     ]
       .filter(Boolean)
       .map((date) => new Date(date));
@@ -360,10 +363,7 @@ const AdminUsersPage = () => {
     const selectedBookId = selectedBook?.book?.id ?? null;
 
     const sessions = (selectedUser.readingSessions ?? [])
-      .filter(
-        (session) =>
-          !selectedBookId || session.bookId === selectedBookId,
-      )
+      .filter((session) => !selectedBookId || session.bookId === selectedBookId)
       .map((session) => ({
         id: `session-${session.id}`,
         category: "SESSION",
@@ -373,8 +373,7 @@ const AdminUsersPage = () => {
 
     const activities = (selectedUser.activityLogs ?? [])
       .filter(
-        (activity) =>
-          !selectedBookId || activity.bookId === selectedBookId,
+        (activity) => !selectedBookId || activity.bookId === selectedBookId,
       )
       .map((activity) => ({
         id: `activity-${activity.id}`,
@@ -384,10 +383,7 @@ const AdminUsersPage = () => {
       }));
 
     const libraryEvents = (selectedUser.libraryBookEvents ?? [])
-      .filter(
-        (event) =>
-          !selectedBookId || event.bookId === selectedBookId,
-      )
+      .filter((event) => !selectedBookId || event.bookId === selectedBookId)
       .map((event) => ({
         id: `library-event-${event.id}`,
         category: event.type,
@@ -395,11 +391,7 @@ const AdminUsersPage = () => {
         libraryEvent: event,
       }));
 
-    const items = [
-      ...sessions,
-      ...activities,
-      ...libraryEvents,
-    ];
+    const items = [...sessions, ...activities, ...libraryEvents];
 
     return items
       .filter((item) => {
@@ -504,14 +496,11 @@ const AdminUsersPage = () => {
     }
 
     if (item.category === "BOOK_ADDED") {
-      const libraryName =
-        item.libraryEvent?.library?.name || "Бібліотека";
+      const libraryName = item.libraryEvent?.library?.name || "Бібліотека";
 
-      const bookTitle =
-        item.libraryEvent?.book?.title || "Книга";
+      const bookTitle = item.libraryEvent?.book?.title || "Книга";
 
-      const bookAuthor =
-        item.libraryEvent?.book?.author || "Автор не вказаний";
+      const bookAuthor = item.libraryEvent?.book?.author || "Автор не вказаний";
 
       return {
         icon: "+",
@@ -532,9 +521,13 @@ const AdminUsersPage = () => {
   if (isLoading) {
     return (
       <section className="admin-users-page">
-        <p className="admin-users-page__message">
+        <AppPanel
+          as="p"
+          variant="secondary"
+          className="admin-users-page__message"
+        >
           Завантаження користувачів...
-        </p>
+        </AppPanel>
       </section>
     );
   }
@@ -559,7 +552,7 @@ const AdminUsersPage = () => {
           const isActionLoading = actionUserId === user.id;
 
           return (
-            <article key={user.id} className="admin-user-card">
+            <AppPanel as="article" key={user.id} className="admin-user-card">
               <div className="admin-user-card__main">
                 <div className="admin-user-card__avatar">
                   {user.avatarUrl ? (
@@ -642,7 +635,7 @@ const AdminUsersPage = () => {
                   <span className="admin-user-card__self">Ваш акаунт</span>
                 )}
               </div>
-            </article>
+            </AppPanel>
           );
         })}
       </div>
@@ -794,7 +787,6 @@ const AdminUsersPage = () => {
                   : "admin-book-history"
               }
             >
-
               {selectedBook ? (
                 <>
                   <button
@@ -902,77 +894,77 @@ const AdminUsersPage = () => {
                 </>
               ) : (
                 <>
-  <button
-    type="button"
-    className="admin-book-history__back"
-    onClick={() => setIsUserHistoryOpen(false)}
-  >
-    ← До книг
-  </button>
+                  <button
+                    type="button"
+                    className="admin-book-history__back"
+                    onClick={() => setIsUserHistoryOpen(false)}
+                  >
+                    ← До книг
+                  </button>
 
-  <div className="admin-book-history__title-row">
-    <div>
-      <h3>Історія користувача</h3>
-      <span>Уся активність</span>
-    </div>
+                  <div className="admin-book-history__title-row">
+                    <div>
+                      <h3>Історія користувача</h3>
+                      <span>Уся активність</span>
+                    </div>
 
-    <span>{timeline.length} подій</span>
-  </div>
+                    <span>{timeline.length} подій</span>
+                  </div>
 
-  <div className="admin-book-history__tabs">
-    {ACTIVITY_FILTERS.map((filter) => (
-      <button
-        key={filter.value}
-        type="button"
-        className={
-          activityFilter === filter.value
-            ? "admin-book-history__tab admin-book-history__tab--active"
-            : "admin-book-history__tab"
-        }
-        onClick={() => setActivityFilter(filter.value)}
-      >
-        {filter.label}
-      </button>
-    ))}
-  </div>
+                  <div className="admin-book-history__tabs">
+                    {ACTIVITY_FILTERS.map((filter) => (
+                      <button
+                        key={filter.value}
+                        type="button"
+                        className={
+                          activityFilter === filter.value
+                            ? "admin-book-history__tab admin-book-history__tab--active"
+                            : "admin-book-history__tab"
+                        }
+                        onClick={() => setActivityFilter(filter.value)}
+                      >
+                        {filter.label}
+                      </button>
+                    ))}
+                  </div>
 
-  <div className="admin-timeline">
-    {timeline.length ? (
-      timeline.map((item) => {
-        const content = getTimelineContent(item);
+                  <div className="admin-timeline">
+                    {timeline.length ? (
+                      timeline.map((item) => {
+                        const content = getTimelineContent(item);
 
-        return (
-          <article
-            key={item.id}
-            className="admin-timeline__item"
-          >
-            <div className="admin-timeline__rail">
-              <span
-                className={`admin-timeline__icon admin-timeline__icon--${content.type}`}
-              >
-                {content.icon}
-              </span>
-            </div>
+                        return (
+                          <article
+                            key={item.id}
+                            className="admin-timeline__item"
+                          >
+                            <div className="admin-timeline__rail">
+                              <span
+                                className={`admin-timeline__icon admin-timeline__icon--${content.type}`}
+                              >
+                                {content.icon}
+                              </span>
+                            </div>
 
-            <div className="admin-timeline__content">
-              <time>{formatDateTime(item.createdAt)}</time>
+                            <div className="admin-timeline__content">
+                              <time>{formatDateTime(item.createdAt)}</time>
 
-              <strong>{content.title}</strong>
+                              <strong>{content.title}</strong>
 
-              {content.description && (
-                <p>{content.description}</p>
-              )}
-            </div>
-          </article>
-        );
-      })
-    ) : (
-      <p className="admin-book-history__empty-message">
-        Історії користувача поки немає.
-      </p>
-    )}
-  </div>
-</>
+                              {content.description && (
+                                <p>{content.description}</p>
+                              )}
+                            </div>
+                          </article>
+                        );
+                      })
+                    ) : (
+                      <p className="admin-book-history__empty-message">
+                        Історії користувача поки немає.
+                      </p>
+                    )}
+                  </div>
+                </>
               )}
             </section>
           </div>

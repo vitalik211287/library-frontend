@@ -41,6 +41,10 @@
 }
 
 .achievement-card--locked {
+  opacity: 1;
+}
+
+.achievement-card--locked > * {
   opacity: 0.62;
 }
 

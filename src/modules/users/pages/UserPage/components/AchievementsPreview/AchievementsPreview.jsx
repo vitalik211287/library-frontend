@@ -1,6 +1,8 @@
-import { useNavigate } from "react-router-dom";
+﻿import { useNavigate } from "react-router-dom";
 
 import useAchievements from "../../hooks/useAchievements.js";
+
+import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 
 import "./AchievementsPreview.css";
 
@@ -89,4 +91,3 @@ const AchievementsPreview = ({ readingBookId }) => {
 };
 
 export default AchievementsPreview;
-

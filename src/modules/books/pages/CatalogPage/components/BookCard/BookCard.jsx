@@ -1,5 +1,6 @@
 ﻿import { getStatusLabel } from "../../utils/catalogHelpers.js";
 
+import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 import "./BookCard.css";
 
 const BookCard = ({
@@ -16,7 +17,8 @@ const BookCard = ({
   recommendationMeta,
 }) => {
   return (
-    <article
+    <AppPanel
+      as="article"
       className={`book-card ${
         variant === "compact" ? "book-card--compact" : ""
       }`}
@@ -120,7 +122,7 @@ const BookCard = ({
           Читати
         </button>
       </div>
-    </article>
+    </AppPanel>
   );
 };
 

@@ -1,7 +1,8 @@
-import GoalProgress from "./GoalProgress.jsx";
+﻿import GoalProgress from "./GoalProgress.jsx";
 import LibraryGoalProgress from "../LibraryGoalProgress/LibraryGoalProgress.jsx";
 
 import { formatGoalMinutes } from "../../utils/statsHelpers.js";
+import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 
 import "./StatsGoals.css";
 
@@ -18,7 +19,14 @@ const StatsGoals = ({ year, goal, onOpen }) => {
   };
 
   return (
-    <section className="stats-goals">
+    <AppPanel
+      as="section"
+      className="stats-goals stats-goals--clickable"
+      role="button"
+      tabIndex={0}
+      onClick={onOpen}
+      onKeyDown={handleKeyDown}
+    >
       <div className="stats-goals__header">
         <div>
           <h2>Цілі на {year}</h2>
@@ -26,13 +34,7 @@ const StatsGoals = ({ year, goal, onOpen }) => {
         </div>
       </div>
 
-      <div
-        className="reading-goals reading-goals--clickable"
-        role="button"
-        tabIndex={0}
-        onClick={onOpen}
-        onKeyDown={handleKeyDown}
-      >
+      <div className="reading-goals">
         <GoalProgress
           label="Книги"
           current={progress.books}
@@ -57,7 +59,7 @@ const StatsGoals = ({ year, goal, onOpen }) => {
       </div>
 
       <LibraryGoalProgress year={year} />
-    </section>
+    </AppPanel>
   );
 };
 
