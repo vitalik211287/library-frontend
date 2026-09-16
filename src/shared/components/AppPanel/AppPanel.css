@@ -1,0 +1,31 @@
+﻿.app-panel {
+  background: var(--panel-bg);
+  border: 1px solid var(--panel-border);
+  border-radius: var(--panel-radius);
+  box-shadow: var(--panel-shadow);
+
+  backdrop-filter: blur(var(--panel-blur));
+  -webkit-backdrop-filter: blur(var(--panel-blur));
+
+  box-sizing: border-box;
+}
+
+.app-panel--secondary {
+  background: var(--panel-bg-secondary);
+}
+
+.app-panel--clickable {
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    transform 160ms ease,
+    box-shadow 160ms ease;
+}
+
+.app-panel--clickable:hover {
+  border-color: var(--panel-border-hover);
+}
+
+.app-panel--clickable:active {
+  transform: scale(0.99);
+}
