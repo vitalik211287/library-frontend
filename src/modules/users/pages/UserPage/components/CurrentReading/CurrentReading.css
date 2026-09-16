@@ -1,4 +1,4 @@
-/* =========================
+﻿/* =========================
    MAIN CURRENT BOOK
 ========================= */
 
@@ -12,11 +12,6 @@
   padding: 11px;
 
   box-sizing: border-box;
-
-  border: 1px solid var(--border);
-  border-radius: 14px;
-
-  background: var(--surface);
 }
 
 .current-book__cover {
@@ -228,10 +223,7 @@
   box-sizing: border-box;
   overflow: hidden;
 
-  border: 1px solid var(--border);
   border-radius: 11px;
-
-  background: var(--surface);
 }
 
 .current-books-dropdown__cover {

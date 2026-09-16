@@ -1,4 +1,5 @@
-import { useState } from "react";
+﻿import { useState } from "react";
+import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 import { BookIcon } from "../../../../../home/components/HomeIcons.jsx";
 
 import { getProgress } from "../../utils/readingHelpers.js";
@@ -95,7 +96,7 @@ const CurrentReading = ({
         </div>
       ) : (
         <>
-          <article className="current-book">
+          <AppPanel as="article" variant="secondary" className="current-book">
             <div className="current-book__cover">
               {mainCurrentBook.coverUrl ? (
                 <img
@@ -153,7 +154,7 @@ const CurrentReading = ({
                 Продовжити читання
               </button>
             </div>
-          </article>
+          </AppPanel>
 
           {otherCurrentBooks.length > 0 && (
             <div
@@ -229,4 +230,3 @@ const CurrentReading = ({
 };
 
 export default CurrentReading;
-
