@@ -1,15 +1,10 @@
-.profile-section--library-goal .profile-section__header button:disabled {
+﻿.profile-section--library-goal .profile-section__header button:disabled {
   opacity: 0.5;
   cursor: default;
 }
 
 .library-goal-card {
   padding: 14px;
-
-  border: 1px solid var(--border);
-  border-radius: 14px;
-
-  background: var(--surface);
 }
 
 .library-goal-card__main {

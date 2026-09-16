@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 
+import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 import { apiFetch } from "../../../../../../shared/api/apiClient.js";
 import { useLibrary } from "../../../../../libraries/context/LibraryContext.jsx";
 import LibraryGoalModal from "../../../../../stats/pages/StatsPage/components/LibraryGoalProgress/LibraryGoalModal.jsx";
@@ -32,8 +33,7 @@ const LibraryGoal = () => {
   const [refreshKey, setRefreshKey] = useState(0);
 
   const canManage =
-    activeLibrary?.role === "OWNER" ||
-    activeLibrary?.role === "ADMIN";
+    activeLibrary?.role === "OWNER" || activeLibrary?.role === "ADMIN";
 
   useEffect(() => {
     const loadGoal = async () => {
@@ -105,7 +105,7 @@ const LibraryGoal = () => {
         {isLoading ? (
           <div className="profile-empty">Завантаження мети...</div>
         ) : (
-          <div className="library-goal-card">
+          <AppPanel variant="secondary" className="library-goal-card">
             <div className="library-goal-card__main">
               <LibraryIcon />
 
@@ -127,17 +127,14 @@ const LibraryGoal = () => {
 
             <div className="library-goal-card__footer">
               <span>
-                {goal?.goal
-                  ? `${percent}% виконано`
-                  : "Ціль ще не встановлена"}
+                {goal?.goal ? `${percent}% виконано` : "Ціль ще не встановлена"}
               </span>
 
-              {goal?.remaining !== null &&
-                goal?.remaining !== undefined && (
-                  <span>Залишилось {goal.remaining}</span>
-                )}
+              {goal?.remaining !== null && goal?.remaining !== undefined && (
+                <span>Залишилось {goal.remaining}</span>
+              )}
             </div>
-          </div>
+          </AppPanel>
         )}
       </section>
 
