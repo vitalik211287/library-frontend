@@ -1,4 +1,4 @@
-/* =========================
+﻿/* =========================
    ACHIEVEMENTS PREVIEW
 ========================= */
 
@@ -35,11 +35,6 @@
   padding: 10px;
 
   box-sizing: border-box;
-
-  border: 1px solid var(--border);
-  border-radius: 12px;
-
-  background: var(--surface);
 
   color: inherit;
   text-align: left;
