@@ -1,3 +1,4 @@
+﻿import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 import { useMemo } from "react";
 
 import "./GenreStats.css";
@@ -12,7 +13,7 @@ const GenreStats = ({ genres = [] }) => {
   }, [genres]);
 
   return (
-    <article className="stats-card">
+    <AppPanel className="stats-card">
       <div className="stats-card__header">
         <div>
           <h2>Жанри</h2>
@@ -51,9 +52,8 @@ const GenreStats = ({ genres = [] }) => {
           })}
         </div>
       )}
-    </article>
+    </AppPanel>
   );
 };
 
 export default GenreStats;
-

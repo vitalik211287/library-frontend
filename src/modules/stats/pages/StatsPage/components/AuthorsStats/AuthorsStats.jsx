@@ -1,8 +1,9 @@
+﻿import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 import "./AuthorsStats.css";
 
 const AuthorsStats = ({ authors = [] }) => {
   return (
-    <article className="stats-card">
+    <AppPanel className="stats-card">
       <div className="stats-card__header">
         <div>
           <h2>Улюблені автори</h2>
@@ -30,9 +31,8 @@ const AuthorsStats = ({ authors = [] }) => {
           ))}
         </div>
       )}
-    </article>
+    </AppPanel>
   );
 };
 
 export default AuthorsStats;
-

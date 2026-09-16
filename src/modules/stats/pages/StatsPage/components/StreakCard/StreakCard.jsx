@@ -1,9 +1,10 @@
+﻿import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 
 import "./StreakCard.css";
 
 const StreakCard = ({ streak }) => {
   return (
-    <article className="stats-card stats-card--streak">
+    <AppPanel className="stats-card stats-card--streak">
       <div className="stats-card__header">
         <div>
           <h2>Серія читання</h2>
@@ -39,9 +40,8 @@ const StreakCard = ({ streak }) => {
           <strong>{streak.readToday ? "Прочитано" : "Ще ні"}</strong>
         </div>
       </div>
-    </article>
+    </AppPanel>
   );
 };
 
 export default StreakCard;
-

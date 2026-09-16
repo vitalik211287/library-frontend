@@ -1,3 +1,4 @@
+﻿import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 import { useMemo } from "react";
 
 import { MONTH_NAMES } from "../../utils/statsHelpers.js";
@@ -14,7 +15,7 @@ const YearActivity = ({ months = [] }) => {
   }, [months]);
 
   return (
-    <article className="stats-card stats-card--activity">
+    <AppPanel className="stats-card stats-card--activity">
       <div className="stats-card__header">
         <div>
           <h2>Активність за рік</h2>
@@ -49,9 +50,8 @@ const YearActivity = ({ months = [] }) => {
           );
         })}
       </div>
-    </article>
+    </AppPanel>
   );
 };
 
 export default YearActivity;
-
