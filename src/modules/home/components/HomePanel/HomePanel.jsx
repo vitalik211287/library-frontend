@@ -1,4 +1,5 @@
-﻿import "./HomePanel.css";
+﻿import AppPanel from "../../../../shared/components/AppPanel/AppPanel.jsx";
+import "./HomePanel.css";
 
 const HomePanel = ({
   children,
@@ -6,18 +7,14 @@ const HomePanel = ({
   clickable = false,
   ...props
 }) => {
-  const classes = [
-    "home-panel",
-    clickable ? "home-panel--clickable" : "",
-    className,
-  ]
-    .filter(Boolean)
-    .join(" ");
-
   return (
-    <section className={classes} {...props}>
+    <AppPanel
+      className={`home-panel ${className}`.trim()}
+      clickable={clickable}
+      {...props}
+    >
       {children}
-    </section>
+    </AppPanel>
   );
 };
 

@@ -1,15 +1,6 @@
 ﻿.home-panel {
   margin-bottom: 16px;
   padding: 18px;
-
-  border: 1px solid var(--border);
-  border-radius: 22px;
-
-  background: var(--surface);
-
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.018),
-    0 10px 28px rgba(0, 0, 0, 0.13);
 }
 
 .home-panel__header {
@@ -40,18 +31,10 @@
 
   padding: 0 10px;
 
-  border: 1px solid color-mix(
-    in srgb,
-    var(--accent) 50%,
-    var(--border)
-  );
+  border: 1px solid color-mix(in srgb, var(--accent) 50%, var(--border));
   border-radius: 10px;
 
-  background: color-mix(
-    in srgb,
-    var(--accent) 12%,
-    var(--surface)
-  );
+  background: color-mix(in srgb, var(--accent) 12%, var(--surface));
 
   color: var(--accent);
 
@@ -69,11 +52,7 @@
 }
 
 .home-panel--clickable:hover {
-  border-color: color-mix(
-    in srgb,
-    var(--accent) 55%,
-    var(--border)
-  );
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
 }
 
 .home-panel--clickable:active {
@@ -96,20 +75,3 @@
     align-items: flex-start;
   }
 }
-
-/* Glass panels for dark theme */
-:root.dark .home-panel {
-  background: var(--glass-surface);
-
-  backdrop-filter: blur(var(--glass-blur));
-  -webkit-backdrop-filter: blur(var(--glass-blur));
-
-  border-color: var(--glass-border);
-
-  box-shadow:
-    inset 0 0 0 1px rgba(255, 255, 255, 0.025),
-    0 12px 32px rgba(0, 0, 0, 0.24);
-}
-
-
-

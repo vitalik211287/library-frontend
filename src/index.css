@@ -20,6 +20,14 @@
 
   --social-bg: rgba(244, 243, 236, 0.5);
 
+  /* APP PANELS */
+  --panel-bg: rgba(255, 255, 255, 0.88);
+  --panel-bg-secondary: rgba(247, 247, 247, 0.92);
+  --panel-border: rgba(80, 70, 90, 0.22);
+  --panel-border-hover: var(--accent-border);
+  --panel-blur: 16px;
+  --panel-radius: 22px;
+  --panel-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
 
@@ -63,12 +71,14 @@
 
   --social-bg: rgba(47, 48, 58, 0.5);
 
-  /* Shared glass panels */
-  --glass-surface: rgba(27, 28, 37, 0.35);
-  --glass-border: rgba(255, 255, 255, 0.16);
-  --glass-blur: 16px;
-  --glass-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
-
+  /* APP PANELS */
+  --panel-bg: rgba(27, 28, 37, 0.65);
+  --panel-bg-secondary: rgba(39, 40, 50, 0.72);
+  --panel-border: rgba(255, 255, 255, 0.16);
+  --panel-border-hover: var(--accent-border);
+  --panel-blur: 16px;
+  --panel-radius: 22px;
+  --panel-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
   --shadow:
     rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
 }
