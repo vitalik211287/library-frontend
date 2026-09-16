@@ -64,13 +64,6 @@
 
 .settings-page__card {
   overflow: hidden;
-
-  border: 1px solid var(--border);
-  border-radius: 16px;
-
-  background: var(--surface);
-
-  box-shadow: var(--shadow);
 }
 
 /* =========================

@@ -22,11 +22,6 @@
   padding: 14px 10px 16px;
 
   box-sizing: border-box;
-
-  background: var(--surface);
-
-  border: 1px solid var(--border);
-  border-radius: 18px;
 }
 
 /* =========================
