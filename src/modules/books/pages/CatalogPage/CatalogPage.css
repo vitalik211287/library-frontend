@@ -207,3 +207,11 @@
 .catalog-shelf-back {
   margin-bottom: 14px;
 }
+
+/* =========================
+   SHELVES VIEW CACHE
+========================= */
+
+.catalog-shelves-view--hidden {
+  display: none;
+}

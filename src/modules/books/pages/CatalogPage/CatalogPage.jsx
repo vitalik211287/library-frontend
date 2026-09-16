@@ -252,12 +252,20 @@ const CatalogPage = ({ onOpenReading }) => {
         }
       />
 
-      {showShelves ? (
+      <div
+        className={
+          showShelves
+            ? "catalog-shelves-view"
+            : "catalog-shelves-view catalog-shelves-view--hidden"
+        }
+      >
         <GenreShelves
           shelves={genreShelves}
           onSelect={handleShelfSelect}
         />
-      ) : (
+      </div>
+
+      {!showShelves && (
         <>
           {selectedShelf && (
             <button
