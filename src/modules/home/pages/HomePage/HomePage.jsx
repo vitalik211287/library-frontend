@@ -146,7 +146,7 @@ const HomePage = ({ onOpenReading }) => {
   ) {
     return (
       <main className="home-page">
-        <div className="home-section">Р—Р°РІР°РЅС‚Р°Р¶РµРЅРЅСЏ...</div>
+        <div className="home-section">Завантаження...</div>
       </main>
     );
   }

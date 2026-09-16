@@ -88,9 +88,7 @@ export const UserBooksProvider = ({ children }) => {
 
       setCurrentBooks([]);
 
-      setCurrentBooksError(
-        "РќРµ РІРґР°Р»РѕСЃСЏ Р·Р°РІР°РЅС‚Р°Р¶РёС‚Рё РїРѕС‚РѕС‡РЅРµ С‡РёС‚Р°РЅРЅСЏ",
-      );
+      setCurrentBooksError("Не вдалося завантажити поточне читання");
 
       return [];
     } finally {
@@ -126,9 +124,7 @@ export const UserBooksProvider = ({ children }) => {
 
       setWishlistBooks([]);
 
-      setWishlistError(
-        "РќРµ РІРґР°Р»РѕСЃСЏ Р·Р°РІР°РЅС‚Р°Р¶РёС‚Рё СЃРїРёСЃРѕРє",
-      );
+      setWishlistError("Не вдалося завантажити список бажаного");
 
       return [];
     } finally {
@@ -169,9 +165,7 @@ export const UserBooksProvider = ({ children }) => {
       setFinishedBooks([]);
       setFinishedTotal(0);
 
-      setFinishedBooksError(
-        "РќРµ РІРґР°Р»РѕСЃСЏ Р·Р°РІР°РЅС‚Р°Р¶РёС‚Рё РїСЂРѕС‡РёС‚Р°РЅС– РєРЅРёРіРё",
-      );
+      setFinishedBooksError("Не вдалося завантажити прочитані книги");
 
       return [];
     } finally {

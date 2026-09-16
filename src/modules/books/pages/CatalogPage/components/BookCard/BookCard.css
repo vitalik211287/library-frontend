@@ -19,12 +19,6 @@
     background-color 0.2s ease;
 }
 
-.book-card:hover {
-  border-color: var(--border-hover);
-
-  box-shadow: var(--shadow);
-}
-
 .book-cover {
   display: block;
 
@@ -445,10 +439,6 @@
 ========================= */
 
 @media (min-width: 1025px) {
-  .book-card:hover {
-    transform: translateY(-3px);
-  }
-
   .book-card__reading-info {
     display: block;
   }
