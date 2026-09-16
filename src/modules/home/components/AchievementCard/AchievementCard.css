@@ -1,4 +1,4 @@
-.home-achievement-card {
+﻿.home-achievement-card {
   display: block;
   align-self: start;
 
@@ -6,8 +6,6 @@
   height: fit-content;
 
   padding: 14px;
-
-  background: var(--surface);
 }
 
 .home-achievement-card__inner {
