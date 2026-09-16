@@ -1,4 +1,5 @@
-import Modal from "../../../../../../shared/components/Modal/Modal.jsx";
+﻿import Modal from "../../../../../../shared/components/Modal/Modal.jsx";
+import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 import ConfirmDeleteModal from "../../../../../../shared/components/ConfirmDeleteModal/ConfirmDeleteModal.jsx";
 
 import useReadingSessions from "./hooks/useReadingSessions.js";
@@ -101,8 +102,9 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
                 totalPages ?? session.book?.pages ?? null;
 
               return (
-                <article
+                <AppPanel
                   key={session.id}
+                  variant="secondary"
                   className="reading-sessions-modal__session"
                 >
                   {!bookId && session.book && (
@@ -177,7 +179,7 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
                       Видалити
                     </button>
                   </div>
-                </article>
+                </AppPanel>
               );
             })}
           </div>
