@@ -1,4 +1,4 @@
-.achievements-hero {
+﻿.achievements-hero {
   display: grid;
   gap: 16px;
 
@@ -7,11 +7,6 @@
 
 .achievements-hero__content {
   padding: 22px;
-
-  background: var(--surface);
-
-  border: 1px solid var(--border);
-  border-radius: 20px;
 }
 
 .achievements-hero__eyebrow {
@@ -52,11 +47,7 @@
 
   background:
     linear-gradient(145deg, rgba(139, 92, 246, 0.14), rgba(168, 85, 247, 0.05)),
-    var(--surface);
-
-  border: 1px solid rgba(139, 92, 246, 0.3);
-
-  border-radius: 20px;
+    var(--panel-bg-secondary);
 }
 
 .achievements-summary__medal {
@@ -144,7 +135,15 @@
 
   .achievements-hero__content,
   .achievements-summary {
-    padding: 28px;
+    padding: 20px;
+
+    background:
+      linear-gradient(
+        145deg,
+        rgba(139, 92, 246, 0.14),
+        rgba(168, 85, 247, 0.05)
+      ),
+      var(--panel-bg-secondary);
   }
 
   .achievements-hero h1 {

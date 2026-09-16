@@ -1,3 +1,4 @@
+﻿import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 import {
   formatAchievementValue,
   getAchievementIcon,
@@ -14,7 +15,9 @@ const AchievementCard = ({ achievement }) => {
   );
 
   return (
-    <article
+    <AppPanel
+      as="article"
+      variant="secondary"
       className={`achievement-card ${
         achievement.unlocked
           ? "achievement-card--unlocked"
@@ -74,9 +77,8 @@ const AchievementCard = ({ achievement }) => {
             : `${safePercent}% виконано`}
         </div>
       </div>
-    </article>
+    </AppPanel>
   );
 };
 
 export default AchievementCard;
-

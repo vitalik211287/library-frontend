@@ -1,3 +1,4 @@
+﻿import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 import "./AchievementsHero.css";
 
 const AchievementsHero = ({ summary }) => {
@@ -8,7 +9,7 @@ const AchievementsHero = ({ summary }) => {
 
   return (
     <section className="achievements-hero">
-      <div className="achievements-hero__content">
+      <AppPanel className="achievements-hero__content">
         <span className="achievements-hero__eyebrow">Колекція нагород</span>
 
         <h1>Досягнення</h1>
@@ -17,9 +18,9 @@ const AchievementsHero = ({ summary }) => {
           Читай книги, набирай сторінки, проводь більше часу за читанням і
           відкривай нові медалі.
         </p>
-      </div>
+      </AppPanel>
 
-      <div className="achievements-summary">
+      <AppPanel variant="secondary" className="achievements-summary">
         <div className="achievements-summary__medal">
           <span>🏅</span>
         </div>
@@ -42,10 +43,9 @@ const AchievementsHero = ({ summary }) => {
         </div>
 
         <small>{totalPercent}% колекції</small>
-      </div>
+      </AppPanel>
     </section>
   );
 };
 
 export default AchievementsHero;
-
