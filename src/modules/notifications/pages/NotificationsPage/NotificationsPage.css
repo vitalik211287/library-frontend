@@ -49,14 +49,15 @@
 
 .notifications-page__state {
   min-height: 150px;
+
   display: flex;
   align-items: center;
   justify-content: center;
+
   padding: 20px;
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  background: var(--surface);
+
   color: var(--text);
+
   font-size: 11px;
   text-align: center;
 }
@@ -76,10 +77,6 @@
   padding: 0;
   overflow: hidden;
 
-  border: 1px solid var(--border);
-  border-radius: 18px;
-
-  background: var(--surface);
   color: inherit;
 
   font: inherit;
@@ -301,10 +298,6 @@
 
   padding: 12px;
 
-  border: 1px solid var(--border);
-  border-radius: 16px;
-
-  background: var(--surface);
   color: inherit;
 
   font: inherit;

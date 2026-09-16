@@ -1,5 +1,6 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import AppPanel from "../../../../shared/components/AppPanel/AppPanel.jsx";
 import PageBackButton from "../../../../shared/components/PageBackButton/PageBackButton.jsx";
 import SocialBookModal from "../../../home/components/SocialFeed/components/SocialBookModal/SocialBookModal.jsx";
 
@@ -72,7 +73,10 @@ const NotificationsPage = () => {
     const book = notification.book;
 
     return (
-      <button
+      <AppPanel
+        as="button"
+        variant="secondary"
+        clickable
         key={notification.id}
         type="button"
         className={
@@ -133,7 +137,7 @@ const NotificationsPage = () => {
             ›
           </span>
         </div>
-      </button>
+      </AppPanel>
     );
   };
 
@@ -222,7 +226,10 @@ const NotificationsPage = () => {
         : null;
 
     return (
-      <button
+      <AppPanel
+        as="button"
+        variant="secondary"
+        clickable
         key={notification.id}
         type="button"
         className={
@@ -273,7 +280,7 @@ const NotificationsPage = () => {
         <span className="social-notification__arrow" aria-hidden="true">
           ›
         </span>
-      </button>
+      </AppPanel>
     );
   };
 
@@ -305,21 +312,23 @@ const NotificationsPage = () => {
         </header>
 
         {isNotificationsLoading && (
-          <div className="notifications-page__state">
+          <AppPanel variant="secondary" className="notifications-page__state">
             Завантажуємо сповіщення...
-          </div>
+          </AppPanel>
         )}
 
         {!isNotificationsLoading && notificationsError && (
-          <div className="notifications-page__state">{notificationsError}</div>
+          <AppPanel variant="secondary" className="notifications-page__state">
+            {notificationsError}
+          </AppPanel>
         )}
 
         {!isNotificationsLoading &&
           !notificationsError &&
           notifications.length === 0 && (
-            <div className="notifications-page__state">
+            <AppPanel variant="secondary" className="notifications-page__state">
               Сповіщень поки немає
-            </div>
+            </AppPanel>
           )}
 
         {!isNotificationsLoading &&
