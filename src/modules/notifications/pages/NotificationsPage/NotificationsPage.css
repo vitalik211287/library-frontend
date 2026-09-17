@@ -495,3 +495,7 @@
   font-weight: 700;
   cursor: pointer;
 }
+
+.notifications-page__state--empty {
+  min-height: 110px;
+}

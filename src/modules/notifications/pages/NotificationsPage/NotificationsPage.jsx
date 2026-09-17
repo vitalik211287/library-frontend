@@ -80,10 +80,16 @@ const NotificationsPage = () => {
     }
   };
 
-  const areAllNotificationsSelected = notifications.length > 0 && selectedNotificationIds.length === notifications.length;
+  const areAllNotificationsSelected =
+    notifications.length > 0 &&
+    selectedNotificationIds.length === notifications.length;
 
   const selectAllNotifications = () => {
-    setSelectedNotificationIds(areAllNotificationsSelected ? [] : notifications.map((notification) => notification.id));
+    setSelectedNotificationIds(
+      areAllNotificationsSelected
+        ? []
+        : notifications.map((notification) => notification.id),
+    );
   };
 
   const toggleNotificationSelection = (notificationId) => {
@@ -122,9 +128,22 @@ const NotificationsPage = () => {
             ? `activity-notification${isSelectionMode ? " activity-notification--selecting" : ""}`
             : `activity-notification activity-notification--unread${isSelectionMode ? " activity-notification--selecting" : ""}`
         }
-        onClick={() => isSelectionMode ? toggleNotificationSelection(notification.id) : handleOpenNotification(notification)}
+        onClick={() =>
+          isSelectionMode
+            ? toggleNotificationSelection(notification.id)
+            : handleOpenNotification(notification)
+        }
       >
-        {isSelectionMode && <input type="checkbox" className="notification-select-checkbox" checked={selectedNotificationIds.includes(notification.id)} onChange={() => toggleNotificationSelection(notification.id)} onClick={(event) => event.stopPropagation()} aria-label="вибрати сповіщення" />}
+        {isSelectionMode && (
+          <input
+            type="checkbox"
+            className="notification-select-checkbox"
+            checked={selectedNotificationIds.includes(notification.id)}
+            onChange={() => toggleNotificationSelection(notification.id)}
+            onClick={(event) => event.stopPropagation()}
+            aria-label="вибрати сповіщення"
+          />
+        )}
         <div className="activity-notification__top">
           <div className="activity-notification__actor">
             <div className="activity-notification__avatar">
@@ -286,9 +305,22 @@ const NotificationsPage = () => {
             ? `social-notification${isSelectionMode ? " social-notification--selecting" : ""}`
             : `social-notification social-notification--unread${isSelectionMode ? " social-notification--selecting" : ""}`
         }
-        onClick={() => isSelectionMode ? toggleNotificationSelection(notification.id) : handleOpenNotification(notification)}
+        onClick={() =>
+          isSelectionMode
+            ? toggleNotificationSelection(notification.id)
+            : handleOpenNotification(notification)
+        }
       >
-        {isSelectionMode && <input type="checkbox" className="notification-select-checkbox" checked={selectedNotificationIds.includes(notification.id)} onChange={() => toggleNotificationSelection(notification.id)} onClick={(event) => event.stopPropagation()} aria-label="вибрати сповіщення" />}
+        {isSelectionMode && (
+          <input
+            type="checkbox"
+            className="notification-select-checkbox"
+            checked={selectedNotificationIds.includes(notification.id)}
+            onChange={() => toggleNotificationSelection(notification.id)}
+            onClick={(event) => event.stopPropagation()}
+            aria-label="вибрати сповіщення"
+          />
+        )}
         <div className="social-notification__avatar">
           {notification.actor?.avatarUrl ? (
             <img src={notification.actor.avatarUrl} alt={actorName} />
@@ -334,7 +366,6 @@ const NotificationsPage = () => {
         >
           🗑️
         </button>
-
       </AppPanel>
     );
   };
@@ -355,38 +386,58 @@ const NotificationsPage = () => {
             </p>
           </div>
 
-          <div className="notifications-page__actions">
-            <button type="button" className="notifications-page__select" onClick={() => { setIsSelectionMode((current) => !current); setSelectedNotificationIds([]); }}>
-              {isSelectionMode ? "Скасувати" : "Вибрати"}
-            </button>
-
-            {isSelectionMode && (
-              <button type="button" className="notifications-page__select-all" onClick={selectAllNotifications}>
-                {areAllNotificationsSelected ? "Зняти вибір" : "Вибрати все"}
+          {notifications.length > 0 && (
+            <div className="notifications-page__actions">
+              <button
+                type="button"
+                className="notifications-page__select"
+                onClick={() => {
+                  setIsSelectionMode((current) => !current);
+                  setSelectedNotificationIds([]);
+                }}
+              >
+                {isSelectionMode ? "Скасувати" : "Вибрати"}
               </button>
-            )}
 
-            {isSelectionMode && selectedNotificationIds.length > 0 && (
-              <button type="button" className="notifications-page__delete-selected" onClick={handleDeleteSelectedNotifications} disabled={selectedNotificationIds.length === 0}>
-                Видалити ({selectedNotificationIds.length})
-              </button>
-            )}
+              {isSelectionMode && (
+                <button
+                  type="button"
+                  className="notifications-page__select-all"
+                  onClick={selectAllNotifications}
+                >
+                  {areAllNotificationsSelected ? "Зняти вибір" : "Вибрати все"}
+                </button>
+              )}
 
-          {unreadCount > 0 && (
-            <button
-              type="button"
-              className="notifications-page__read-all"
-              onClick={markAllAsRead}
-            >
-              Позначити всі прочитаними
-            </button>
+              {isSelectionMode && selectedNotificationIds.length > 0 && (
+                <button
+                  type="button"
+                  className="notifications-page__delete-selected"
+                  onClick={handleDeleteSelectedNotifications}
+                >
+                  Видалити ({selectedNotificationIds.length})
+                </button>
+              )}
+
+              {unreadCount > 0 && (
+                <button
+                  type="button"
+                  className="notifications-page__read-all"
+                  onClick={markAllAsRead}
+                >
+                  Позначити всі прочитаними
+                </button>
+              )}
+            </div>
           )}
-          </div>
         </header>
 
         {isNotificationsLoading && (
-          <AppPanel variant="secondary" className="notifications-page__state">
-            Завантажуємо сповіщення...
+          <AppPanel
+            variant="secondary"
+            className="notifications-page__state notifications-page__state--empty"
+          >
+            Сповіщень поки немає
           </AppPanel>
         )}
 
