@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from "react-router-dom";
+﻿import { Navigate, Route, Routes } from "react-router-dom";
 
 import LandingPage from "../../modules/landing/pages/LandingPage/LandingPage.jsx";
 import LoginPage from "../../modules/auth/pages/LoginPage/LoginPage.jsx";
@@ -21,6 +21,7 @@ import FollowingPage from "../../modules/users/pages/FollowingPage/FollowingPage
 import FollowersPage from "../../modules/users/pages/FollowersPage/FollowersPage.jsx";
 import NotificationsPage from "../../modules/notifications/pages/NotificationsPage/NotificationsPage.jsx";
 import PublicUserProfilePage from "../../modules/users/pages/PublicUserProfilePage/PublicUserProfilePage.jsx";
+import PublicUserAchievementsPage from "../../modules/users/pages/PublicUserAchievementsPage/PublicUserAchievementsPage.jsx";
 import AdminUsersPage from "../../modules/admin/pages/AdminUsersPage/AdminUsersPage.jsx";
 
 import ProtectedRoute from "./ProtectedRoute.jsx";
@@ -208,6 +209,14 @@ export const PrivateRoutes = ({ onOpenReading }) => {
       />
 
       <Route
+        path="/users/:userId/achievements"
+        element={
+          <ProtectedRoute>
+            <PublicUserAchievementsPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
         path="/users/:userId"
         element={
           <ProtectedRoute>
@@ -223,8 +232,6 @@ export const PrivateRoutes = ({ onOpenReading }) => {
           </ProtectedRoute>
         }
       />
-
-
 
       <Route
         path="/admin/users"
@@ -252,10 +259,3 @@ export const PrivateRoutes = ({ onOpenReading }) => {
     </Routes>
   );
 };
-
-
-
-
-
-
-

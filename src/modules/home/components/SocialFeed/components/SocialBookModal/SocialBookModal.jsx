@@ -1,10 +1,6 @@
 import "./SocialBookModal.css";
 
-const SocialBookModal = ({
-  book,
-  onClose,
-  onOpenCatalog,
-}) => {
+const SocialBookModal = ({ book, onClose, onOpenCatalog }) => {
   if (!book) {
     return null;
   }
@@ -12,6 +8,7 @@ const SocialBookModal = ({
   return (
     <div
       className="social-book-modal__backdrop"
+      data-swipe-ignore
       role="presentation"
       onClick={onClose}
     >
@@ -36,19 +33,14 @@ const SocialBookModal = ({
         <div className="social-book-modal__content">
           <div className="social-book-modal__cover">
             {book.coverUrl ? (
-              <img
-                src={book.coverUrl}
-                alt={book.title || "Книга"}
-              />
+              <img src={book.coverUrl} alt={book.title || "Книга"} />
             ) : (
               <span>📚</span>
             )}
           </div>
 
           <div className="social-book-modal__info">
-            <span className="social-book-modal__label">
-              КНИГА
-            </span>
+            <span className="social-book-modal__label">КНИГА</span>
 
             <h2>{book.title || "Книга"}</h2>
 

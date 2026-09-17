@@ -347,7 +347,7 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
                 onOpenAchievement={(item) => {
                   item.isOwnActivity
                     ? navigate("/achievements")
-                    : navigate(`/users/${item.user?.id}`);
+                    : navigate(`/users/${item.user?.id}/achievements`);
                 }}
               />
 

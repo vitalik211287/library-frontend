@@ -63,6 +63,15 @@ const NotificationsPage = () => {
       return;
     }
 
+    if (
+      notification.type === "SOCIAL_ACTIVITY" &&
+      notification.activity?.type === "ACHIEVEMENT_UNLOCKED" &&
+      notification.actor?.id
+    ) {
+      navigate(`/users/${notification.actor.id}/achievements`);
+      return;
+    }
+
     if (notification.actor?.id) {
       navigate(`/users/${notification.actor.id}`);
     }
