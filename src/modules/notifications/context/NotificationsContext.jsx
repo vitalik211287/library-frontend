@@ -1,4 +1,4 @@
-﻿import {
+import {
   createContext,
   useCallback,
   useContext,
@@ -18,8 +18,7 @@ const NotificationsProvider = ({ children }) => {
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
 
-  const [isNotificationsLoading, setIsNotificationsLoading] =
-    useState(false);
+  const [isNotificationsLoading, setIsNotificationsLoading] = useState(false);
 
   const [notificationsError, setNotificationsError] = useState("");
 
@@ -87,31 +86,25 @@ const NotificationsProvider = ({ children }) => {
     }
   }, [isAuthenticated]);
 
-  const markAsRead = useCallback(
-    async (notificationId) => {
-      try {
-        await apiFetch(
-          `/api/notifications/${notificationId}/read`,
-          {
-            method: "PATCH",
-          },
-        );
+  const markAsRead = useCallback(async (notificationId) => {
+    try {
+      await apiFetch(`/api/notifications/${notificationId}/read`, {
+        method: "PATCH",
+      });
 
-        setNotifications((current) =>
-          current.map((notification) =>
-            notification.id === notificationId
-              ? { ...notification, isRead: true }
-              : notification,
-          ),
-        );
+      setNotifications((current) =>
+        current.map((notification) =>
+          notification.id === notificationId
+            ? { ...notification, isRead: true }
+            : notification,
+        ),
+      );
 
-        setUnreadCount((current) => Math.max(0, current - 1));
-      } catch (error) {
-        console.error("Mark notification as read error:", error);
-      }
-    },
-    [],
-  );
+      setUnreadCount((current) => Math.max(0, current - 1));
+    } catch (error) {
+      console.error("Mark notification as read error:", error);
+    }
+  }, []);
 
   const markAllAsRead = useCallback(async () => {
     try {
@@ -132,6 +125,28 @@ const NotificationsProvider = ({ children }) => {
     }
   }, []);
 
+  const deleteNotifications = useCallback(
+    async (ids) => {
+      try {
+        await apiFetch("/api/notifications", {
+          method: "DELETE",
+          body: { ids },
+        });
+
+        setNotifications((current) =>
+          current.filter((notification) => !ids.includes(notification.id)),
+        );
+
+        await refreshUnreadCount();
+        return true;
+      } catch (error) {
+        console.error("Delete notifications error:", error);
+        return false;
+      }
+    },
+    [refreshUnreadCount],
+  );
+
   useEffect(() => {
     if (isAuthLoading) {
       return;
@@ -145,11 +160,7 @@ const NotificationsProvider = ({ children }) => {
     }
 
     refreshUnreadCount();
-  }, [
-    isAuthenticated,
-    isAuthLoading,
-    refreshUnreadCount,
-  ]);
+  }, [isAuthenticated, isAuthLoading, refreshUnreadCount]);
 
   const value = useMemo(
     () => ({
@@ -164,6 +175,7 @@ const NotificationsProvider = ({ children }) => {
 
       markAsRead,
       markAllAsRead,
+      deleteNotifications,
     }),
     [
       notifications,
@@ -174,6 +186,7 @@ const NotificationsProvider = ({ children }) => {
       refreshUnreadCount,
       markAsRead,
       markAllAsRead,
+      deleteNotifications,
     ],
   );
 
@@ -196,7 +209,4 @@ const useNotifications = () => {
   return context;
 };
 
-export {
-  NotificationsProvider,
-  useNotifications,
-};
+export { NotificationsProvider, useNotifications };

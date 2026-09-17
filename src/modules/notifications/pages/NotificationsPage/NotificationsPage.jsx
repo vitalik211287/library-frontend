@@ -20,6 +20,7 @@ const NotificationsPage = () => {
     refreshNotifications,
     markAsRead,
     markAllAsRead,
+    deleteNotifications,
   } = useNotifications();
 
   useEffect(() => {
@@ -77,13 +78,18 @@ const NotificationsPage = () => {
     }
   };
 
+  const handleDeleteNotification = async (event, notificationId) => {
+    event.stopPropagation();
+    await deleteNotifications([notificationId]);
+  };
+
   const renderLibraryBookNotification = (notification) => {
     const actorName = notification.actor?.name || "Користувач";
     const book = notification.book;
 
     return (
       <AppPanel
-        as="button"
+        as="div"
         variant="secondary"
         clickable
         key={notification.id}
@@ -137,10 +143,20 @@ const NotificationsPage = () => {
 
             <div className="activity-notification__library">
               <span className="activity-notification__library-icon">📖</span>
-
               <span>Домашня бібліотека</span>
             </div>
           </div>
+
+          <button
+            type="button"
+            className="notification-delete"
+            onClick={(event) =>
+              handleDeleteNotification(event, notification.id)
+            }
+            aria-label="Видалити сповіщення"
+          >
+            🗑️
+          </button>
 
           <span className="activity-notification__arrow" aria-hidden="true">
             ›
@@ -236,7 +252,7 @@ const NotificationsPage = () => {
 
     return (
       <AppPanel
-        as="button"
+        as="div"
         variant="secondary"
         clickable
         key={notification.id}
@@ -285,10 +301,15 @@ const NotificationsPage = () => {
         </div>
 
         {!notification.isRead && <span className="social-notification__dot" />}
+        <button
+          type="button"
+          className="notification-delete"
+          onClick={(event) => handleDeleteNotification(event, notification.id)}
+          aria-label="Видалити сповіщення"
+        >
+          🗑️
+        </button>
 
-        <span className="social-notification__arrow" aria-hidden="true">
-          ›
-        </span>
       </AppPanel>
     );
   };
