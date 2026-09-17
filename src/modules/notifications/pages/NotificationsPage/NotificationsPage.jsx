@@ -10,6 +10,8 @@ import "./NotificationsPage.css";
 
 const NotificationsPage = () => {
   const [selectedBook, setSelectedBook] = useState(null);
+  const [isSelectionMode, setIsSelectionMode] = useState(false);
+  const [selectedNotificationIds, setSelectedNotificationIds] = useState([]);
   const navigate = useNavigate();
 
   const {
@@ -78,6 +80,27 @@ const NotificationsPage = () => {
     }
   };
 
+  const areAllNotificationsSelected = notifications.length > 0 && selectedNotificationIds.length === notifications.length;
+
+  const selectAllNotifications = () => {
+    setSelectedNotificationIds(areAllNotificationsSelected ? [] : notifications.map((notification) => notification.id));
+  };
+
+  const toggleNotificationSelection = (notificationId) => {
+    setSelectedNotificationIds((current) =>
+      current.includes(notificationId)
+        ? current.filter((id) => id !== notificationId)
+        : [...current, notificationId],
+    );
+  };
+
+  const handleDeleteSelectedNotifications = async () => {
+    if (selectedNotificationIds.length === 0) return;
+    await deleteNotifications(selectedNotificationIds);
+    setSelectedNotificationIds([]);
+    setIsSelectionMode(false);
+  };
+
   const handleDeleteNotification = async (event, notificationId) => {
     event.stopPropagation();
     await deleteNotifications([notificationId]);
@@ -96,11 +119,12 @@ const NotificationsPage = () => {
         type="button"
         className={
           notification.isRead
-            ? "activity-notification"
-            : "activity-notification activity-notification--unread"
+            ? `activity-notification${isSelectionMode ? " activity-notification--selecting" : ""}`
+            : `activity-notification activity-notification--unread${isSelectionMode ? " activity-notification--selecting" : ""}`
         }
-        onClick={() => handleOpenNotification(notification)}
+        onClick={() => isSelectionMode ? toggleNotificationSelection(notification.id) : handleOpenNotification(notification)}
       >
+        {isSelectionMode && <input type="checkbox" className="notification-select-checkbox" checked={selectedNotificationIds.includes(notification.id)} onChange={() => toggleNotificationSelection(notification.id)} onClick={(event) => event.stopPropagation()} aria-label="вибрати сповіщення" />}
         <div className="activity-notification__top">
           <div className="activity-notification__actor">
             <div className="activity-notification__avatar">
@@ -259,11 +283,12 @@ const NotificationsPage = () => {
         type="button"
         className={
           notification.isRead
-            ? "social-notification"
-            : "social-notification social-notification--unread"
+            ? `social-notification${isSelectionMode ? " social-notification--selecting" : ""}`
+            : `social-notification social-notification--unread${isSelectionMode ? " social-notification--selecting" : ""}`
         }
-        onClick={() => handleOpenNotification(notification)}
+        onClick={() => isSelectionMode ? toggleNotificationSelection(notification.id) : handleOpenNotification(notification)}
       >
+        {isSelectionMode && <input type="checkbox" className="notification-select-checkbox" checked={selectedNotificationIds.includes(notification.id)} onChange={() => toggleNotificationSelection(notification.id)} onClick={(event) => event.stopPropagation()} aria-label="вибрати сповіщення" />}
         <div className="social-notification__avatar">
           {notification.actor?.avatarUrl ? (
             <img src={notification.actor.avatarUrl} alt={actorName} />
@@ -330,6 +355,23 @@ const NotificationsPage = () => {
             </p>
           </div>
 
+          <div className="notifications-page__actions">
+            <button type="button" className="notifications-page__select" onClick={() => { setIsSelectionMode((current) => !current); setSelectedNotificationIds([]); }}>
+              {isSelectionMode ? "Скасувати" : "Вибрати"}
+            </button>
+
+            {isSelectionMode && (
+              <button type="button" className="notifications-page__select-all" onClick={selectAllNotifications}>
+                {areAllNotificationsSelected ? "Зняти вибір" : "Вибрати все"}
+              </button>
+            )}
+
+            {isSelectionMode && selectedNotificationIds.length > 0 && (
+              <button type="button" className="notifications-page__delete-selected" onClick={handleDeleteSelectedNotifications} disabled={selectedNotificationIds.length === 0}>
+                Видалити ({selectedNotificationIds.length})
+              </button>
+            )}
+
           {unreadCount > 0 && (
             <button
               type="button"
@@ -339,6 +381,7 @@ const NotificationsPage = () => {
               Позначити всі прочитаними
             </button>
           )}
+          </div>
         </header>
 
         {isNotificationsLoading && (

@@ -433,3 +433,65 @@
   font-size: 15px;
   cursor: pointer;
 }
+
+.activity-notification,
+.social-notification {
+  position: relative;
+}
+
+.notification-select-checkbox {
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+  margin: 0;
+}
+
+
+.social-notification {
+  padding-left: 34px;
+}
+
+.activity-notification__top {
+  padding-left: 34px;
+}
+
+
+
+
+.notifications-page__actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.notifications-page__select,
+.notifications-page__select-all {
+  flex-shrink: 0;
+  padding: 7px 10px;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  background: var(--surface);
+  color: var(--accent);
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+
+.notifications-page__delete-selected {
+  flex-shrink: 0;
+  padding: 7px 10px;
+  border: 1px solid #ef4444;
+  border-radius: 9px;
+  background: var(--surface);
+  color: #ef4444;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
