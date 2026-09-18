@@ -1,147 +1,9 @@
-.catalog-page {
-  width: 100%;
-  margin: 0 auto;
-  padding: var(--space-16);
-
-  background: transparent;
-  color: var(--text);
-
-  border-radius: var(--radius-lg);
-}
-
-/* =========================
-   HEADER
-========================= */
-
-.catalog-page h1 {
-  margin: 0 0 var(--space-10);
-
-  font-size: 28px;
-  line-height: 1.2;
-
-  color: var(--text-h);
-}
-
 .books-count {
   margin: 0 0 var(--space-20);
-
-  font-size: 15px;
-
-  color: var(--text);
-}
-
-/* =========================
-   MESSAGE
-========================= */
-
-.catalog-message {
-  margin-bottom: var(--content-gap);
-
-  padding: var(--space-12) var(--space-14);
-
-  border-radius: var(--radius-sm);
-
-  background: var(--error-bg, #fff1f1);
-
-  color: var(--error-text, #b42318);
-
-  font-size: 14px;
-}
-
-/* =========================
-   BOOK GRID
-   MOBILE-FIRST
-========================= */
-
-.books-grid {
-  display: grid;
-
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-
-  gap: var(--space-16) var(--space-12);
-}
-
-/* =========================
-   VERY SMALL PHONES
-========================= */
-
-@media (max-width: 370px) {
-  .catalog-page {
-    padding: var(--space-12);
-  }
-
-  .books-grid {
-    gap: var(--space-12) var(--space-8);
-  }
-}
-
-/* =========================
-   TABLET - 600+
-========================= */
-
-@media (min-width: 600px) {
-  .catalog-page {
-    padding: var(--space-20);
-  }
-
-  .books-grid {
-    gap: var(--space-16);
-  }
-}
-
-/* =========================
-   TABLET / SMALL DESKTOP
-   768+
-========================= */
-
-@media (min-width: 768px) {
-  .catalog-page {
-    padding: var(--space-24);
-  }
-
-  .books-grid {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-
-    gap: var(--space-18);
-  }
-}
-
-/* =========================
-   DESKTOP - 1100+
-========================= */
-
-@media (min-width: 1100px) {
-  .catalog-page {
-    max-width: 1500px;
-
-    padding: var(--space-32);
-
-    border-radius: var(--radius-xl);
-  }
-
-  .catalog-page h1 {
-    font-size: 32px;
-  }
-
-  .books-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-
-    gap: var(--space-20);
-  }
-}
-
-/* =========================
-   LARGE DESKTOP - 1300+
-========================= */
-
-@media (min-width: 1300px) {
-  .books-grid {
-    grid-template-columns: repeat(5, minmax(0, 1fr));
-  }
 }
 
 .catalog-shelf-back {
-  margin: var(--space-20) 0 var(--space-16);
+  margin: var(--space-20) 0 var(--space-14);
   padding: 0;
 
   border: 0;
@@ -196,9 +58,6 @@
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
 }
 
-.catalog-shelf-back {
-  margin-bottom: 14px;
-}
 
 /* =========================
    SHELVES VIEW CACHE

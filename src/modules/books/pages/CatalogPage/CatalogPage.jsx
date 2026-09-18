@@ -15,6 +15,7 @@ import CatalogSearch from "./components/CatalogSearch/CatalogSearch.jsx";
 import BookCard from "./components/BookCard/BookCard.jsx";
 import GenreShelves from "./components/GenreShelves/GenreShelves.jsx";
 
+import "../../styles/BookGridPage.css";
 import "./CatalogPage.css";
 
 const CatalogPage = ({ onOpenReading }) => {

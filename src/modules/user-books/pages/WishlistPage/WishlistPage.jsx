@@ -7,6 +7,7 @@ import { useAuth } from "../../../auth/context/AuthContext.jsx";
 import { useLibrary } from "../../../libraries/context/LibraryContext.jsx";
 import { useUserBooks } from "../../context/UserBooksContext.jsx";
 
+import "../../../books/styles/BookGridPage.css";
 import "./WishlistPage.css";
 
 const WishlistPage = ({ onOpenReading }) => {

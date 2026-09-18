@@ -6,6 +6,7 @@ import BookCard from "../../../books/pages/CatalogPage/components/BookCard/BookC
 import { useAuth } from "../../../auth/context/AuthContext.jsx";
 import { useUserBooks } from "../../context/UserBooksContext.jsx";
 
+import "../../../books/styles/BookGridPage.css";
 import "./FinishedBooksPage.css";
 
 const FinishedBooksPage = ({ onOpenReading }) => {
