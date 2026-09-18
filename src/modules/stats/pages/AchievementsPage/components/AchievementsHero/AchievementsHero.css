@@ -1,8 +1,6 @@
 ﻿.achievements-hero {
   display: grid;
   gap: var(--space-16);
-
-  margin-bottom: var(--space-20);
 }
 
 .achievements-hero__content {
@@ -129,8 +127,6 @@
       310px;
 
     align-items: stretch;
-
-    margin-bottom: var(--space-24);
   }
 
   .achievements-hero__content,

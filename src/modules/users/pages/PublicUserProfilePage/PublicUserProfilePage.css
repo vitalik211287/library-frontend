@@ -17,7 +17,6 @@
   display: flex;
   align-items: center;
   gap: var(--space-18);
-  margin-bottom: var(--space-28);
   padding: var(--space-18);
 }
 
@@ -94,7 +93,12 @@
 }
 
 .public-profile-section {
-  margin-bottom: var(--space-28);
+  margin-bottom: 0;
+}
+
+.public-profile-hero + .public-profile-section,
+.public-profile-section + .public-profile-section {
+  margin-top: var(--section-gap);
 }
 
 .public-profile-section__header {

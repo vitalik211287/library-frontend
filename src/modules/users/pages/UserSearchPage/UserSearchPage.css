@@ -15,7 +15,7 @@
 
   gap: var(--space-12);
 
-  margin-bottom: 22px;
+  margin-bottom: var(--section-gap);
 }
 
 .users-page__header > div {

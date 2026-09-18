@@ -1,4 +1,7 @@
 ﻿.stats-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--section-gap);
   width: 100%;
   max-width: 1180px;
 
@@ -12,7 +15,7 @@
   display: grid;
   grid-template-columns: 1fr;
 
-  gap: var(--space-10);
+  gap: var(--section-gap);
 }
 
 .stats-card {
@@ -70,10 +73,6 @@
     padding: var(--space-18) var(--space-18) 92px;
   }
 
-  .stats-grid {
-    gap: var(--space-12);
-  }
-
   .stats-card__header {
     margin-bottom: var(--space-14);
   }
@@ -108,9 +107,5 @@
 @media (min-width: 1100px) {
   .stats-page {
     padding: var(--space-24) var(--space-24) 42px;
-  }
-
-  .stats-grid {
-    gap: var(--space-14);
   }
 }

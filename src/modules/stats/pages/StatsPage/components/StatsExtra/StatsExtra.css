@@ -4,8 +4,6 @@
   grid-template-columns: repeat(3, minmax(0, 1fr));
 
   gap: var(--space-8);
-
-  margin-top: var(--space-14);
 }
 
 .stats-extra__item {

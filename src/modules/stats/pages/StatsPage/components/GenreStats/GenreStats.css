@@ -9,8 +9,6 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-12);
-
-  margin-bottom: 7px;
 }
 
 .genre-item__top strong {

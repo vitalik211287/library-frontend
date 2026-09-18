@@ -2,10 +2,9 @@
   display: flex;
   align-items: flex-start;
   gap: var(--space-12);
-  margin-bottom: var(--content-gap);
+  margin-bottom: var(--section-gap);
 }
 
 .wishlist-page .books-count {
   margin: 0;
 }
-
