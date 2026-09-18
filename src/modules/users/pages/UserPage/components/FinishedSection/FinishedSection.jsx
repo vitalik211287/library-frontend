@@ -2,6 +2,8 @@ import { useNavigate } from "react-router-dom";
 import { FinishedBookIcon } from "../../../../../home/components/HomeIcons.jsx";
 import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 
+import "../ProfileBooks.css";
+
 import "./FinishedSection.css";
 
 const ArrowIcon = () => (

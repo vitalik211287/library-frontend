@@ -1,6 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 
+import "../ProfileBooks.css";
+
 import "./WishlistSection.css";
 
 const ArrowIcon = () => (

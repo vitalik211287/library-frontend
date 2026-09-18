@@ -6,9 +6,9 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
 
-  gap: 8px;
+  gap: var(--space-8);
 
-  margin-bottom: 28px;
+  margin-bottom: var(--space-28);
 }
 
 .profile-stat {
@@ -21,8 +21,6 @@
   justify-content: center;
 
   padding: 10px 4px;
-
-  box-sizing: border-box;
 
   text-align: center;
 }
@@ -86,7 +84,7 @@
 
 @media (max-width: 390px) {
   .profile-stats {
-    gap: 6px;
+    gap: var(--space-6);
   }
 
   .profile-stat {
@@ -99,7 +97,7 @@
     width: 24px;
     height: 24px;
 
-    margin-bottom: 6px;
+    margin-bottom: var(--space-6);
   }
 
   .profile-stat strong {
@@ -120,7 +118,7 @@
 
 @media (min-width: 600px) {
   .profile-stats {
-    gap: 12px;
+    gap: var(--space-12);
   }
 
   .profile-stat {
@@ -133,7 +131,7 @@
     width: 30px;
     height: 30px;
 
-    margin-bottom: 8px;
+    margin-bottom: var(--space-8);
   }
 
   .profile-stat strong {
@@ -151,7 +149,7 @@
 
 @media (min-width: 1100px) {
   .profile-stats {
-    gap: 16px;
+    gap: var(--space-16);
 
     margin-bottom: 34px;
   }

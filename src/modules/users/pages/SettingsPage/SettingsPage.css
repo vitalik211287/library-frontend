@@ -4,8 +4,6 @@
 
   padding: 16px 14px 32px;
 
-  box-sizing: border-box;
-
   background: transparent;
   color: var(--text);
 }
@@ -47,7 +45,7 @@
 ========================= */
 
 .settings-page__section {
-  margin-bottom: 24px;
+  margin-bottom: var(--space-24);
 }
 
 .settings-page__section h2 {
@@ -78,11 +76,9 @@
   grid-template-columns: 40px minmax(0, 1fr) auto;
   align-items: center;
 
-  gap: 10px;
+  gap: var(--space-10);
 
   padding: 10px 14px;
-
-  box-sizing: border-box;
 
   border: none;
   border-bottom: 1px solid var(--border);
@@ -90,12 +86,7 @@
   background: transparent;
   color: var(--text);
 
-  font-family: inherit;
   text-align: left;
-}
-
-button.settings-page__row {
-  cursor: pointer;
 }
 
 button.settings-page__row:hover {
@@ -184,7 +175,7 @@ button.settings-page__row:disabled {
 
   overflow: hidden;
 
-  border-radius: 50%;
+  border-radius: var(--radius-round);
 
   background: var(--surface-secondary);
   color: var(--text);
@@ -220,7 +211,7 @@ button.settings-page__row:disabled {
 ========================= */
 
 .settings-page__theme-card {
-  padding: 14px;
+  padding: var(--space-14);
 }
 
 .settings-page__theme-header {
@@ -228,7 +219,7 @@ button.settings-page__row:disabled {
   grid-template-columns: 40px minmax(0, 1fr);
   align-items: center;
 
-  gap: 10px;
+  gap: var(--space-10);
 
   margin-bottom: 14px;
 }
@@ -237,7 +228,7 @@ button.settings-page__row:disabled {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
 
-  gap: 8px;
+  gap: var(--space-8);
 }
 
 .settings-page__theme-option {
@@ -253,19 +244,14 @@ button.settings-page__row:disabled {
 
   padding: 10px 6px;
 
-  box-sizing: border-box;
-
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
 
   background: var(--surface-secondary);
   color: var(--text);
 
-  font-family: inherit;
   font-size: 11px;
   font-weight: 600;
-
-  cursor: pointer;
 
   transition:
     border-color 0.2s ease,
@@ -313,22 +299,19 @@ button.settings-page__row:disabled {
   align-items: center;
   justify-content: flex-start;
 
-  gap: 12px;
+  gap: var(--space-12);
 
-  margin-top: 10px;
+  margin-top: var(--space-10);
   padding: 12px 18px;
 
   border: 1px solid rgba(255, 70, 70, 0.35);
-  border-radius: 14px;
+  border-radius: var(--radius-14);
 
   background: rgba(255, 70, 70, 0.09);
   color: #ff5757;
 
-  font-family: inherit;
   font-size: 15px;
   font-weight: 600;
-
-  cursor: pointer;
 
   transition:
     background-color 0.2s ease,
@@ -379,7 +362,7 @@ button.settings-page__row:disabled {
 
   gap: 7px;
 
-  margin-bottom: 16px;
+  margin-bottom: var(--space-16);
 }
 
 .settings-page__field span {
@@ -395,8 +378,6 @@ button.settings-page__row:disabled {
 
   padding: 0 14px;
 
-  box-sizing: border-box;
-
   border: 1px solid var(--border);
   border-radius: 11px;
 
@@ -404,8 +385,6 @@ button.settings-page__row:disabled {
 
   background: var(--surface-secondary);
   color: var(--text-h);
-
-  font: inherit;
 
   transition:
     border-color 0.2s ease,
@@ -422,7 +401,7 @@ button.settings-page__row:disabled {
   display: grid;
   grid-template-columns: 1fr 1fr;
 
-  gap: 10px;
+  gap: var(--space-10);
 
   margin-top: 22px;
 }
@@ -434,11 +413,8 @@ button.settings-page__row:disabled {
 
   border-radius: 11px;
 
-  font-family: inherit;
   font-size: 14px;
   font-weight: 600;
-
-  cursor: pointer;
 }
 
 .settings-page__modal-button:disabled {
@@ -471,11 +447,11 @@ button.settings-page__row:disabled {
   }
 
   .settings-page__theme-card {
-    padding: 12px;
+    padding: var(--space-12);
   }
 
   .settings-page__theme-options {
-    gap: 6px;
+    gap: var(--space-6);
   }
 
   .settings-page__theme-option {
@@ -502,7 +478,7 @@ button.settings-page__row:disabled {
   }
 
   .settings-page__header {
-    margin-bottom: 32px;
+    margin-bottom: var(--space-32);
   }
 
   .settings-page__header h1 {
@@ -524,7 +500,7 @@ button.settings-page__row:disabled {
   }
 
   .settings-page__theme-card {
-    padding: 18px;
+    padding: var(--space-18);
   }
 
   .settings-page__theme-option {
@@ -546,12 +522,10 @@ button.settings-page__row:disabled {
 
   padding: 0;
   border: 0;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
 
   background: transparent;
   color: var(--text);
-
-  cursor: pointer;
 }
 
 .settings-page__back svg {

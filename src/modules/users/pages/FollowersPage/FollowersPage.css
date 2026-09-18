@@ -5,8 +5,6 @@
   padding: var(--page-padding-top) var(--page-padding-x)
     var(--page-padding-bottom);
 
-  box-sizing: border-box;
-
   background: transparent;
   color: var(--text);
 }
@@ -26,7 +24,7 @@
   display: flex;
   align-items: center;
 
-  gap: 12px;
+  gap: var(--space-12);
 
   margin-bottom: 22px;
 }
@@ -70,11 +68,9 @@
   display: flex;
   align-items: center;
 
-  gap: 10px;
+  gap: var(--space-10);
 
   padding: 10px;
-
-  box-sizing: border-box;
 }
 
 .follower-card__profile {
@@ -95,10 +91,7 @@
 
   color: inherit;
 
-  font-family: inherit;
   text-align: left;
-
-  cursor: pointer;
 }
 
 .follower-card__avatar {
@@ -114,7 +107,7 @@
   overflow: hidden;
 
   border: 2px solid var(--accent);
-  border-radius: 50%;
+  border-radius: var(--radius-round);
 
   background: var(--accent-bg);
   color: var(--accent);
@@ -183,11 +176,8 @@
 
   padding: 7px 8px;
 
-  box-sizing: border-box;
-
   border-radius: 9px;
 
-  font-family: inherit;
   font-size: 10px;
   font-weight: 700;
   line-height: 1;
@@ -200,8 +190,6 @@
 
   background: var(--accent);
   color: #ffffff;
-
-  cursor: pointer;
 }
 
 .follower-card__follow:hover {
@@ -234,12 +222,10 @@
 
   gap: 7px;
 
-  padding: 20px;
-
-  box-sizing: border-box;
+  padding: var(--space-20);
 
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-14);
 
   background: var(--surface);
 
@@ -262,11 +248,11 @@
   width: 26px;
   height: 26px;
 
-  margin-bottom: 4px;
+  margin-bottom: var(--space-4);
 
   border: 3px solid var(--border);
   border-top-color: var(--accent);
-  border-radius: 50%;
+  border-radius: var(--radius-round);
 
   animation: followers-spin 0.8s linear infinite;
 }
@@ -387,10 +373,8 @@
   border-radius: 9px;
   background: var(--surface-secondary);
   color: var(--text-h);
-  font-family: inherit;
   font-size: 10px;
   font-weight: 600;
-  cursor: pointer;
 }
 
 .follower-card__unfollow:hover {

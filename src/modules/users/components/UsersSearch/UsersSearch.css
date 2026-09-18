@@ -1,7 +1,7 @@
 .users-search {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-10);
 
   width: 100%;
   min-height: 48px;
@@ -11,9 +11,7 @@
   background: var(--surface-secondary);
 
   border: 1px solid var(--border);
-  border-radius: 12px;
-
-  box-sizing: border-box;
+  border-radius: var(--radius-lg);
 
   transition:
     border-color 0.2s ease,
@@ -23,8 +21,7 @@
 .users-search:focus-within {
   border-color: var(--accent);
 
-  box-shadow:
-    0 0 0 3px var(--accent-bg);
+  box-shadow: 0 0 0 3px var(--accent-bg);
 }
 
 .users-search > svg {
@@ -55,7 +52,6 @@
   border: 0;
   outline: 0;
 
-  font: inherit;
   font-size: 14px;
 }
 
@@ -79,12 +75,10 @@
   background: transparent;
 
   border: 0;
-  border-radius: 50%;
+  border-radius: var(--radius-round);
 
   font-size: 21px;
   line-height: 1;
-
-  cursor: pointer;
 }
 
 .users-search__clear:hover {

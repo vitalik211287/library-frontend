@@ -4,7 +4,7 @@
 
 .profile-hero {
   width: 100%;
-  margin-bottom: 28px;
+  margin-bottom: var(--space-28);
 }
 
 /* =========================
@@ -14,7 +14,7 @@
 .profile-hero__identity {
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--space-16);
 }
 
 .profile-hero__avatar {
@@ -28,10 +28,8 @@
 
   overflow: hidden;
 
-  box-sizing: border-box;
-
   border: 3px solid var(--accent);
-  border-radius: 50%;
+  border-radius: var(--radius-round);
 
   background: var(--accent-bg);
   color: var(--accent);
@@ -87,7 +85,7 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
 
-  gap: 8px;
+  gap: var(--space-8);
 
   margin-top: 22px;
 }
@@ -107,14 +105,9 @@
 
   padding: 10px 4px;
 
-  box-sizing: border-box;
-
   color: var(--text);
 
-  font-family: inherit;
   text-align: center;
-
-  cursor: pointer;
 
   transition:
     border-color 0.2s ease,
@@ -257,7 +250,7 @@
   }
 
   .profile-hero__social {
-    gap: 6px;
+    gap: var(--space-6);
 
     margin-top: 18px;
   }
@@ -269,7 +262,7 @@
   }
 
   .profile-hero__social-icon {
-    margin-bottom: 6px;
+    margin-bottom: var(--space-6);
   }
 
   .profile-hero__social-icon svg {
@@ -322,7 +315,7 @@
   }
 
   .profile-hero__social {
-    gap: 12px;
+    gap: var(--space-12);
   }
 
   .profile-hero__social-item {
@@ -332,7 +325,7 @@
   }
 
   .profile-hero__social-icon {
-    margin-bottom: 8px;
+    margin-bottom: var(--space-8);
   }
 
   .profile-hero__social-icon svg {
@@ -367,7 +360,7 @@
   .profile-hero {
     max-width: 900px;
 
-    margin-bottom: 32px;
+    margin-bottom: var(--space-32);
   }
 
   .profile-hero__avatar {
@@ -382,7 +375,7 @@
   }
 
   .profile-hero__social {
-    gap: 16px;
+    gap: var(--space-16);
   }
 
   .profile-hero__social-item {

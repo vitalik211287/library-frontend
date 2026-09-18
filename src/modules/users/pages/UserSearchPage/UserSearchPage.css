@@ -6,8 +6,6 @@
   padding: var(--page-padding-top) var(--page-padding-x)
     var(--page-padding-bottom);
 
-  box-sizing: border-box;
-
   color: var(--text);
 }
 
@@ -15,7 +13,7 @@
   display: flex;
   align-items: center;
 
-  gap: 12px;
+  gap: var(--space-12);
 
   margin-bottom: 22px;
 }
@@ -43,7 +41,7 @@
 }
 
 .users-page__results {
-  margin-top: 14px;
+  margin-top: var(--space-14);
 }
 
 @media (max-width: 390px) {
