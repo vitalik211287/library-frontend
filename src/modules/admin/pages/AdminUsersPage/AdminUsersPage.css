@@ -10,7 +10,7 @@
   align-items: center;
   justify-content: space-between;
   gap: var(--space-16);
-  margin-bottom: var(--space-20);
+  margin-bottom: var(--section-gap);
 }
 
 .admin-users-page__title {

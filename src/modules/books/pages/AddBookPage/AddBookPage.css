@@ -3,14 +3,15 @@
   max-width: 900px;
 
   margin: 0 auto;
-  padding: 32px 24px;
+  padding: var(--page-padding-top) var(--page-padding-x)
+    var(--page-padding-bottom);
 
   background: transparent;
   color: var(--text);
 }
 
 .add-book-page h1 {
-  margin: 0 0 20px;
+  margin: 0 0 var(--content-gap);
 
   font-size: 32px;
   line-height: 1.2;
@@ -23,7 +24,7 @@
 ========================= */
 
 .manual-toggle {
-  margin-top: 28px;
+  margin-top: var(--space-28);
 
   border: none;
   border-radius: var(--radius-sm);
@@ -53,21 +54,11 @@
    TABLET
 ========================= */
 
-@media (max-width: 800px) {
-  .add-book-page {
-    padding: 24px;
-  }
-}
-
 /* =========================
    MOBILE
 ========================= */
 
 @media (max-width: 650px) {
-  .add-book-page {
-    padding: 20px;
-  }
-
   .add-book-page h1 {
     font-size: 28px;
   }
@@ -78,10 +69,6 @@
 ========================= */
 
 @media (max-width: 420px) {
-  .add-book-page {
-    padding: 16px;
-  }
-
   .add-book-page h1 {
     font-size: 26px;
   }

@@ -5,8 +5,8 @@
 
   gap: var(--space-14);
 
-  margin-top: 20px;
-  padding-top: 20px;
+  margin-top: var(--space-20);
+  padding-top: var(--space-20);
 
   border-top: 1px solid var(--border);
 }

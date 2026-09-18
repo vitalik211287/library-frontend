@@ -4,7 +4,7 @@
   gap: var(--space-10);
 
   width: 100%;
-  margin-bottom: 32px;
+  margin-bottom: var(--space-32);
 }
 
 .isbn-search__field {
