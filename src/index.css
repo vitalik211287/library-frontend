@@ -51,6 +51,7 @@
   --page-padding-bottom: 88px;
   --section-gap: 24px;
   --content-gap: 20px;
+  --narrow-page-padding-x: 12px;
 
   /* APP PANELS */
   --panel-bg: rgba(255, 255, 255, 0.88);
@@ -79,6 +80,7 @@
 
 @media (max-width: 390px) {
   :root {
+    --narrow-page-padding-x: 10px;
     --page-padding-x: 10px;
   }
 }
@@ -86,6 +88,7 @@
 
 @media (min-width: 600px) {
   :root {
+    --narrow-page-padding-x: 24px;
     --page-padding-x: 24px;
     --page-padding-top: 28px;
     --page-padding-bottom: 90px;

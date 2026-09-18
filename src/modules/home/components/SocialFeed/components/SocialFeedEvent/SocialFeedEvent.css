@@ -1,11 +1,11 @@
 .social-feed-event {
   width: 100%;
-  margin-top: 8px;
+  margin-top: var(--space-8);
   padding: 0;
   overflow: hidden;
 
   border: 0;
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
 
   background: var(--surface-secondary);
   color: inherit;
@@ -19,9 +19,9 @@
 .social-feed-event__heading {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-10);
 
-  padding: 10px;
+  padding: var(--space-10);
 }
 
 .social-feed-event__icon {
@@ -33,7 +33,7 @@
   place-items: center;
 
   border: 1px solid color-mix(in srgb, var(--accent) 56%, var(--border));
-  border-radius: 10px;
+  border-radius: var(--radius-md);
 
   background: color-mix(in srgb, var(--accent) 8%, var(--surface));
   color: var(--accent);
@@ -92,8 +92,8 @@
   align-items: center;
   gap: 9px;
 
-  margin: 0 8px 8px;
-  padding: 8px;
+  margin: 0 var(--space-8) 8px;
+  padding: var(--space-8);
 
   border-radius: 9px;
 
@@ -171,7 +171,7 @@
   place-items: center;
 
   border: 1px solid color-mix(in srgb, var(--accent) 55%, var(--border));
-  border-radius: 10px;
+  border-radius: var(--radius-md);
 
   background: color-mix(in srgb, var(--accent) 8%, var(--surface));
 
@@ -199,14 +199,14 @@
 
 @media (min-width: 601px) {
   .social-feed-event {
-    margin-top: 12px;
+    margin-top: var(--space-12);
   }
 
   .social-feed-event__heading {
-    padding: 12px;
+    padding: var(--space-12);
   }
 
   .social-feed-event__book {
-    margin: 0 10px 10px;
+    margin: 0 var(--space-10) 10px;
   }
 }

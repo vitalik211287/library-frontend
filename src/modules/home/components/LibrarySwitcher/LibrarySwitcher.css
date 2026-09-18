@@ -8,14 +8,14 @@
 .library-switcher__button {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-8);
 
   min-height: 40px;
 
-  padding: 0 12px;
+  padding: 0 var(--space-12);
 
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
 
   background: var(--surface);
   color: var(--text);
@@ -59,13 +59,11 @@
   padding: 7px;
 
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
 
   background: var(--surface);
 
   box-shadow: 0 12px 28px rgba(0, 0, 0, 0.2);
-
-  box-sizing: border-box;
 }
 
 .library-switcher__item {
@@ -75,10 +73,10 @@
   width: 100%;
   min-height: 40px;
 
-  padding: 0 10px;
+  padding: 0 var(--space-10);
 
   border: 0;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 
   background: transparent;
   color: var(--text);
@@ -104,7 +102,7 @@
 .library-switcher__separator {
   height: 1px;
 
-  margin: 6px 4px;
+  margin: var(--space-6) var(--space-4);
 
   background: var(--border);
 }

@@ -1,17 +1,17 @@
 .current-reading-section {
-  padding: 18px;
+  padding: var(--space-18);
 }
 
 .current-reading-card {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--space-16);
 }
 
 .current-reading-card__main {
   display: grid;
   grid-template-columns: 82px minmax(0, 1fr);
-  gap: 14px;
+  gap: var(--space-14);
 }
 
 .current-reading-card__cover {
@@ -66,7 +66,7 @@
 }
 
 .current-reading-card__author {
-  margin: 6px 0 0;
+  margin: var(--space-6) 0 0;
   color: var(--text-secondary);
   font-size: 12px;
 }
@@ -74,9 +74,9 @@
 .current-reading-card__progress-info {
   display: flex;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--space-12);
   margin-top: auto;
-  margin-bottom: 8px;
+  margin-bottom: var(--space-8);
   font-size: 11px;
 }
 

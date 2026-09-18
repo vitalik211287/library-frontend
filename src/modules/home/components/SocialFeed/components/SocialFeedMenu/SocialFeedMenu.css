@@ -10,7 +10,7 @@
 .social-feed-menu {
   width: 100%;
   max-height: 82dvh;
-  padding: 8px 14px max(14px, env(safe-area-inset-bottom));
+  padding: var(--space-8) var(--space-14) max(14px, env(safe-area-inset-bottom));
   overflow-y: auto;
   border: 1px solid var(--border);
   border-radius: 22px 22px 0 0;
@@ -21,8 +21,8 @@
 .social-feed-menu__handle {
   width: 42px;
   height: 4px;
-  margin: 2px auto 12px;
-  border-radius: 999px;
+  margin: 2px auto var(--space-12);
+  border-radius: var(--radius-pill);
   background: var(--border);
 }
 
@@ -30,8 +30,8 @@
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 14px 4px;
+  gap: var(--space-12);
+  padding: var(--space-14) var(--space-4);
   border: 0;
   border-bottom: 1px solid var(--border);
   background: transparent;
@@ -75,10 +75,10 @@
 
 .social-feed-menu__cancel {
   width: 100%;
-  margin-top: 12px;
-  padding: 12px;
+  margin-top: var(--space-12);
+  padding: var(--space-12);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   background: var(--surface-secondary);
   color: var(--text-h);
   font: inherit;
@@ -91,12 +91,12 @@
   .social-feed-menu__backdrop {
     align-items: center;
     justify-content: center;
-    padding: 20px;
+    padding: var(--space-20);
   }
 
   .social-feed-menu {
     max-width: 420px;
-    border-radius: 20px;
+    border-radius: var(--radius-2xl);
   }
 }
 .social-feed-menu__item-icon--notification {

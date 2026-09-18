@@ -1,11 +1,11 @@
 .library-action-modal__form {
   display: grid;
-  gap: 18px;
+  gap: var(--space-18);
 }
 
 .library-action-modal__field {
   display: grid;
-  gap: 8px;
+  gap: var(--space-8);
 }
 
 .library-action-modal__field > span {
@@ -17,11 +17,9 @@
 .library-action-modal__field input {
   width: 100%;
   min-height: 48px;
-  padding: 0 14px;
-  box-sizing: border-box;
-
+  padding: 0 var(--space-14);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
 
   outline: none;
 
@@ -44,14 +42,14 @@
 .library-action-modal__actions {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: var(--space-10);
 }
 
 .library-action-modal__actions button {
   min-height: 46px;
-  padding: 0 16px;
+  padding: 0 var(--space-16);
 
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
 
   font: inherit;
   font-size: 14px;

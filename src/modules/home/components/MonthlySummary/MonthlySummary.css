@@ -1,7 +1,7 @@
 .monthly-summary {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--space-10);
 }
 
 .monthly-summary__primary {
@@ -10,7 +10,6 @@
   flex-direction: column;
   justify-content: center;
   padding: 15px;
-  box-sizing: border-box;
   border: 1px solid var(--border);
   border-radius: 15px;
   background: var(--surface-secondary);
@@ -23,7 +22,7 @@
 }
 
 .monthly-summary__primary strong {
-  margin-top: 6px;
+  margin-top: var(--space-6);
   color: var(--accent);
   font-size: 25px;
   font-weight: 900;
@@ -32,7 +31,7 @@
 .monthly-summary__grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
+  gap: var(--space-10);
 }
 
 .monthly-summary__grid > div {
@@ -40,8 +39,7 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 14px;
-  box-sizing: border-box;
+  padding: var(--space-14);
   border: 1px solid var(--border);
   border-radius: 15px;
   background: var(--surface-secondary);

@@ -1,27 +1,22 @@
 .home-achievement-card {
   display: block;
-  align-self: start;
-
   min-height: 0;
   height: fit-content;
 
-  padding: 14px;
+  padding: var(--space-14);
 }
 
 .home-achievement-card__inner {
   display: grid;
   grid-template-columns: 52px minmax(0, 1fr);
   align-items: center;
-  gap: 14px;
+  gap: var(--space-14);
 
   width: 100%;
   height: auto;
   min-height: 0;
 
-  padding: 16px;
-
-  box-sizing: border-box;
-
+  padding: var(--space-16);
   border: 1px solid var(--border);
   border-radius: 15px;
 
@@ -58,7 +53,7 @@
 
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: var(--space-4);
 }
 
 .home-achievement-card__content .home-section__kicker {
@@ -85,14 +80,14 @@
 }
 
 .home-achievement-card__progress {
-  margin-top: 8px;
+  margin-top: var(--space-8);
 }
 
 .home-achievement-card__progress-info {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: var(--space-10);
 
   margin-bottom: 7px;
 
@@ -117,7 +112,7 @@
     grid-template-columns: 46px minmax(0, 1fr);
     gap: 11px;
 
-    padding: 14px;
+    padding: var(--space-14);
   }
 
   .home-achievement-card__icon {
@@ -134,7 +129,7 @@
 }
 @media (max-width: 430px) {
   .home-achievement-card {
-    padding: 14px;
+    padding: var(--space-14);
   }
 
   .home-achievement-card h2 {

@@ -3,7 +3,7 @@
 }
 
 .social-feed__header {
-  margin-bottom: 12px;
+  margin-bottom: var(--space-12);
 }
 
 .social-feed__header h2 {
@@ -26,8 +26,8 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 14px 14px 0;
+  gap: var(--space-12);
+  padding: var(--space-14) 14px 0;
 }
 
 .social-feed-card__user {
@@ -52,7 +52,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   background: var(--surface-secondary);
   color: var(--accent);
   font-weight: 700;
@@ -96,7 +96,7 @@
 
 .social-feed-card__achievement {
   width: calc(100% - 28px);
-  margin: 14px;
+  margin: var(--space-14);
   padding: 0;
   overflow: hidden;
   border: 1px solid var(--border);
@@ -111,7 +111,7 @@
 .social-feed-card__achievement-main {
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-12);
   padding: 15px;
 }
 
@@ -122,7 +122,7 @@
 
 .social-feed-card__achievement-content small {
   display: block;
-  margin-bottom: 4px;
+  margin-bottom: var(--space-4);
   color: var(--text);
   font-size: 9px;
   letter-spacing: 0.08em;
@@ -153,10 +153,10 @@
 .social-feed-card__achievement-book {
   display: flex;
   align-items: center;
-  gap: 12px;
-  margin: 0 12px 12px;
-  padding: 10px;
-  border-radius: 12px;
+  gap: var(--space-12);
+  margin: 0 var(--space-12) 12px;
+  padding: var(--space-10);
+  border-radius: var(--radius-lg);
   background: rgba(255, 255, 255, 0.035);
 }
 
@@ -207,11 +207,11 @@
 
 .social-feed-card__finished-book {
   width: calc(100% - 28px);
-  margin: 14px;
-  padding: 12px;
+  margin: var(--space-14);
+  padding: var(--space-12);
   display: flex;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-12);
   border: 1px solid var(--border);
   border-radius: 15px;
   background: var(--surface-secondary);
@@ -229,7 +229,7 @@
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   background: var(--surface);
 }
 
@@ -244,7 +244,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: var(--space-4);
 }
 
 .social-feed-card__finished-content small {
@@ -278,7 +278,7 @@
   display: grid;
   grid-template-columns: 0.72fr 1.4fr 1.3fr;
   align-items: stretch;
-  margin: 0 14px;
+  margin: 0 var(--space-14);
   border-top: 1px solid var(--border);
 }
 
@@ -288,7 +288,7 @@
   align-items: center;
   justify-content: center;
   gap: 7px;
-  padding: 9px 8px;
+  padding: 9px var(--space-8);
   border: 0;
   background: transparent;
   color: var(--text);
@@ -326,9 +326,9 @@
 }
 
 .social-feed__state {
-  padding: 16px;
+  padding: var(--space-16);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-14);
   background: var(--surface);
   color: var(--text);
   font-size: 11px;
@@ -338,7 +338,7 @@
 
 @media (max-width: 600px) {
   .social-feed__header {
-    margin-bottom: 8px;
+    margin-bottom: var(--space-8);
   }
 
   .social-feed__header h2 {
@@ -359,7 +359,7 @@
   }
 
   .social-feed-card__user {
-    gap: 8px;
+    gap: var(--space-8);
   }
 
   .social-feed-card__user-info strong {
@@ -376,13 +376,13 @@
 
   .social-feed-card__achievement {
     width: calc(100% - 22px);
-    margin: 10px 11px;
-    border-radius: 12px;
+    margin: var(--space-10) 11px;
+    border-radius: var(--radius-lg);
   }
 
   .social-feed-card__achievement-main {
     gap: 9px;
-    padding: 10px;
+    padding: var(--space-10);
   }
 
   .social-feed-card__achievement-icon {
@@ -409,8 +409,8 @@
 
   .social-feed-card__achievement-book {
     gap: 9px;
-    margin: 0 8px 8px;
-    padding: 8px;
+    margin: 0 var(--space-8) 8px;
+    padding: var(--space-8);
     border-radius: 9px;
   }
 
@@ -434,10 +434,10 @@
 
   .social-feed-card__finished-book {
     width: calc(100% - 22px);
-    margin: 10px 11px;
+    margin: var(--space-10) 11px;
     padding: 9px;
     gap: 9px;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
   }
 
   .social-feed-card__finished-cover {
@@ -464,13 +464,13 @@
 
   .social-feed-card__actions {
     min-height: 43px;
-    margin: 0 10px;
+    margin: 0 var(--space-10);
     grid-template-columns: 0.65fr 1.4fr 1.25fr;
   }
 
   .social-feed-card__action {
     gap: 5px;
-    padding: 6px 4px;
+    padding: var(--space-6) var(--space-4);
     font-size: 9px;
   }
 
@@ -493,7 +493,7 @@
   place-items: center;
 
   border: 1px solid color-mix(in srgb, var(--accent) 56%, var(--border));
-  border-radius: 10px;
+  border-radius: var(--radius-md);
 
   background: color-mix(in srgb, var(--accent) 8%, var(--surface));
   color: var(--accent);
@@ -521,7 +521,7 @@
 
   padding: 0;
   border: 0;
-  border-radius: 50%;
+  border-radius: var(--radius-round);
 
   background: transparent !important;
   box-shadow: none;
@@ -552,13 +552,13 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--space-12);
 }
 
 .social-feed__view-all {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--space-4);
 
   padding: 0;
   border: 0;
@@ -583,7 +583,6 @@
 .social-feed-card {
   min-width: 0;
   max-width: 100%;
-  box-sizing: border-box;
 }
 
 .social-feed-card {

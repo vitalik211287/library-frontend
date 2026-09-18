@@ -1,6 +1,6 @@
 .home-welcome__eyebrow {
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: var(--space-6);
   color: var(--accent);
   font-size: 10px;
   font-weight: 800;
