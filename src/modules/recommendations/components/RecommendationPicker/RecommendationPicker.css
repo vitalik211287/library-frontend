@@ -12,7 +12,7 @@
 
   gap: 9px;
 
-  margin-bottom: 18px;
+  margin-bottom: var(--space-18);
 }
 
 .recommendation-picker__option {
@@ -36,13 +36,10 @@
   background: var(--surface-secondary);
   color: var(--text);
 
-  font: inherit;
   font-size: 11px;
   font-weight: 650;
   line-height: 1.15;
   text-align: center;
-
-  cursor: pointer;
 
   transition:
     transform 160ms ease,
@@ -110,7 +107,7 @@
   width: 16px;
   height: 16px;
 
-  border-radius: 50%;
+  border-radius: var(--radius-round);
 
   background: var(--accent);
   color: #fff;
@@ -137,7 +134,7 @@
 @media (max-width: 600px) {
   .recommendation-picker__options {
     grid-template-columns: repeat(5, minmax(0, 1fr));
-    gap: 6px;
+    gap: var(--space-6);
   }
 
   .recommendation-picker__option {

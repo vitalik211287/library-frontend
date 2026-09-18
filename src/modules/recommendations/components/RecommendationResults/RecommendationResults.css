@@ -1,12 +1,12 @@
 ﻿.recommendation-results {
-  margin-top: 18px;
+  margin-top: var(--space-18);
 }
 
 .recommendation-results__header {
   display: flex;
   align-items: flex-end;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--space-12);
   margin-bottom: 12px;
 }
 
@@ -35,7 +35,7 @@
 
 .recommendation-results__books {
   display: flex;
-  gap: 10px;
+  gap: var(--space-10);
   width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
@@ -64,7 +64,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   background: rgba(255, 255, 255, 0.06);
 }
 
@@ -109,7 +109,7 @@
   width: fit-content;
   margin-top: 2px;
   padding: 3px 6px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   font-size: 10px;
   font-weight: 700;
   color: var(--accent, #c084fc);
