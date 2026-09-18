@@ -84,28 +84,6 @@
    EMPTY STATE
 ========================= */
 
-.home-empty-state__icon {
-  width: 44px;
-  height: 44px;
-  display: grid;
-  place-items: center;
-  flex: 0 0 44px;
-  border: 1px solid color-mix(in srgb, var(--accent) 55%, var(--border));
-  border-radius: 13px;
-  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
-  color: var(--accent);
-}
-
-.home-empty-state__icon svg {
-  width: 25px;
-  height: 25px;
-  fill: none;
-  stroke: currentColor;
-  stroke-width: 1.8;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-
 .home-empty-state {
   min-height: 92px;
   display: flex;
@@ -142,4 +120,32 @@
     padding-top: var(--space-24);
     padding-bottom: var(--space-24);
   }
+}
+
+/* =========================
+   SHARED ICON BOX
+========================= */
+
+.home-icon-box {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 44px;
+
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, var(--border));
+  border-radius: 13px;
+
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+  color: var(--accent);
+}
+
+.home-icon-box svg {
+  width: 25px;
+  height: 25px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }

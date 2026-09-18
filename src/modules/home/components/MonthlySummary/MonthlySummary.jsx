@@ -35,7 +35,7 @@ const MonthlySummary = ({
           <h2>{monthName}</h2>
         </div>
 
-        <div className="month-panel__icon">
+        <div className="month-panel__icon home-icon-box">
           <CalendarIcon />
         </div>
       </div>

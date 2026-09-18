@@ -34,7 +34,7 @@ const CurrentReading = ({
             }
           }}
         >
-          <div className="home-empty-state__icon">
+          <div className="home-empty-state__icon home-icon-box">
             <BookIcon />
           </div>
 

@@ -1,4 +1,4 @@
-﻿import "./ReadingGoalCard.css";
+import "./ReadingGoalCard.css";
 import HomePanel from "../HomePanel/HomePanel.jsx";
 import { TargetIcon } from "../HomeIcons.jsx";
 
@@ -80,7 +80,7 @@ const ReadingGoalCard = ({
               key={item.type}
             >
               <div className="reading-goal__hero">
-                <div className="reading-goal__icon">
+                <div className="reading-goal__icon home-icon-box">
                   <TargetIcon />
                 </div>
 
@@ -114,7 +114,7 @@ const ReadingGoalCard = ({
         </div>
       ) : (
         <div className="home-empty-state">
-          <div className="home-empty-state__icon">
+          <div className="home-empty-state__icon home-icon-box">
             <TargetIcon />
           </div>
 

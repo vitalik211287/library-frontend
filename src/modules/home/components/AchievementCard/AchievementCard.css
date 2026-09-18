@@ -108,28 +108,25 @@
 }
 
 @media (max-width: 430px) {
+  .home-achievement-card {
+    padding: var(--space-14);
+  }
+
   .home-achievement-card__inner {
     grid-template-columns: 46px minmax(0, 1fr);
     gap: 11px;
-
     padding: var(--space-14);
   }
 
   .home-achievement-card__icon {
     width: 46px;
     height: 46px;
-
     border-radius: 13px;
   }
 
   .home-achievement-card__icon svg {
     width: 24px;
     height: 24px;
-  }
-}
-@media (max-width: 430px) {
-  .home-achievement-card {
-    padding: var(--space-14);
   }
 
   .home-achievement-card h2 {
