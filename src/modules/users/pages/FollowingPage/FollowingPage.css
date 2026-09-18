@@ -2,7 +2,8 @@
   width: 100%;
   min-height: 100dvh;
 
-  padding: 18px 12px 88px;
+  padding: var(--page-padding-top) var(--page-padding-x)
+    var(--page-padding-bottom);
 
   box-sizing: border-box;
 
@@ -270,11 +271,6 @@
 }
 
 @media (max-width: 390px) {
-  .following-page {
-    padding-right: 10px;
-    padding-left: 10px;
-  }
-
   .following-page__header h1 {
     font-size: 20px;
   }
@@ -309,10 +305,6 @@
 }
 
 @media (min-width: 600px) {
-  .following-page {
-    padding: 28px 24px 90px;
-  }
-
   .following-page__header h1 {
     font-size: 27px;
   }
@@ -348,10 +340,6 @@
 }
 
 @media (min-width: 1100px) {
-  .following-page {
-    padding: 34px 48px 58px;
-  }
-
   .following-page__container {
     max-width: 800px;
   }

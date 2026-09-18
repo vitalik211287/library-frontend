@@ -1,4 +1,4 @@
-﻿import { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -161,69 +161,71 @@ const HomePage = ({ onOpenReading }) => {
 
   return (
     <main className="home-page">
-      <LibrarySwitcher
-        libraries={libraries}
-        activeLibrary={activeLibrary}
-        isOpen={isLibraryMenuOpen}
-        onToggle={() => setIsLibraryMenuOpen((current) => !current)}
-        onSelect={handleSelectLibrary}
-        onCreate={() => {
-          setIsLibraryMenuOpen(false);
-          setModalType("create");
-        }}
-        onAddMember={() => {
-          setIsLibraryMenuOpen(false);
-          setModalType("member");
-        }}
-        onManage={() => {
-          setIsLibraryMenuOpen(false);
-          navigate("/library/manage");
-        }}
-      />
-      <HomeWelcome greeting={getGreeting()} firstName={firstName} />
-      <ReadingStreak
-        streak={streak}
-        weeklyActivity={weeklyActivity}
-        onShare={handleShare}
-      />
-      <CurrentReading
-        book={book}
-        currentPage={currentPage}
-        totalPages={totalPages}
-        progress={progress}
-        onContinue={handleContinueReading}
-        onOpenCatalog={() => navigate("/catalog")}
-      />
-      <BookRecommendations onOpenReading={onOpenReading} />
-      <SocialFeed limit={2} showViewAll />
+      <div className="home-page__stack">
+        <LibrarySwitcher
+          libraries={libraries}
+          activeLibrary={activeLibrary}
+          isOpen={isLibraryMenuOpen}
+          onToggle={() => setIsLibraryMenuOpen((current) => !current)}
+          onSelect={handleSelectLibrary}
+          onCreate={() => {
+            setIsLibraryMenuOpen(false);
+            setModalType("create");
+          }}
+          onAddMember={() => {
+            setIsLibraryMenuOpen(false);
+            setModalType("member");
+          }}
+          onManage={() => {
+            setIsLibraryMenuOpen(false);
+            navigate("/library/manage");
+          }}
+        />
+        <HomeWelcome greeting={getGreeting()} firstName={firstName} />
+        <ReadingStreak
+          streak={streak}
+          weeklyActivity={weeklyActivity}
+          onShare={handleShare}
+        />
+        <CurrentReading
+          book={book}
+          currentPage={currentPage}
+          totalPages={totalPages}
+          progress={progress}
+          onContinue={handleContinueReading}
+          onOpenCatalog={() => navigate("/catalog")}
+        />
+        <BookRecommendations onOpenReading={onOpenReading} />
+        <SocialFeed limit={2} showViewAll />
 
-      <AchievementCard
-        latestAchievement={latestAchievement}
-        featuredAchievement={featuredAchievement}
-        onOpen={() => {
-          navigate("/achievements");
+        <AchievementCard
+          latestAchievement={latestAchievement}
+          featuredAchievement={featuredAchievement}
+          onOpen={() => {
+            navigate("/achievements");
 
-          window.scrollTo({
-            top: 0,
-            left: 0,
-            behavior: "instant",
-          });
-        }}
-      />
-      <ReadingGoalCard
-        hasReadingGoal={hasReadingGoal}
-        goalProgress={goalProgress}
-        goalPercent={goalPercent}
-        onOpen={() => setIsReadingGoalModalOpen(true)}
-      />
-      <MonthlySummary
-        monthName={MONTHS[currentMonth - 1]}
-        monthSeconds={monthSeconds}
-        monthPages={monthPages}
-        monthBooks={monthBooks}
-        formatReadingTime={formatReadingTime}
-        onOpen={handleOpenStats}
-      />
+            window.scrollTo({
+              top: 0,
+              left: 0,
+              behavior: "instant",
+            });
+          }}
+        />
+        <ReadingGoalCard
+          hasReadingGoal={hasReadingGoal}
+          goalProgress={goalProgress}
+          goalPercent={goalPercent}
+          onOpen={() => setIsReadingGoalModalOpen(true)}
+        />
+        <MonthlySummary
+          monthName={MONTHS[currentMonth - 1]}
+          monthSeconds={monthSeconds}
+          monthPages={monthPages}
+          monthBooks={monthBooks}
+          formatReadingTime={formatReadingTime}
+          onOpen={handleOpenStats}
+        />
+      </div>
 
       {/* =========================
           READING GOAL MODAL

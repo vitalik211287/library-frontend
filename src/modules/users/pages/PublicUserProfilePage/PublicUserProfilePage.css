@@ -1,7 +1,8 @@
 .public-profile-page {
   width: 100%;
   min-height: 100dvh;
-  padding: 18px 12px 88px;
+  padding: var(--page-padding-top) var(--page-padding-x)
+    var(--page-padding-bottom);
   box-sizing: border-box;
   background: transparent;
   color: var(--text);
@@ -257,11 +258,6 @@
 }
 
 @media (max-width: 390px) {
-  .public-profile-page {
-    padding-right: 10px;
-    padding-left: 10px;
-  }
-
   .public-profile-hero {
     gap: 13px;
     padding: 14px;
@@ -284,10 +280,6 @@
 }
 
 @media (min-width: 600px) {
-  .public-profile-page {
-    padding: 28px 24px 90px;
-  }
-
   .public-profile-hero {
     padding: 22px;
   }
@@ -320,10 +312,6 @@
 }
 
 @media (min-width: 1100px) {
-  .public-profile-page {
-    padding: 34px 48px 58px;
-  }
-
   .public-profile-page__container {
     max-width: 920px;
   }

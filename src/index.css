@@ -1,4 +1,4 @@
-﻿:root {
+:root {
   --app-background: var(--bg);
   color-scheme: light;
 
@@ -19,6 +19,12 @@
   --accent-border: rgba(170, 59, 255, 0.5);
 
   --social-bg: rgba(244, 243, 236, 0.5);
+
+  /* LAYOUT */
+  --page-padding-x: 12px;
+  --page-padding-top: 18px;
+  --page-padding-bottom: 88px;
+  --section-gap: 24px;
 
   /* APP PANELS */
   --panel-bg: rgba(255, 255, 255, 0.88);
@@ -43,6 +49,31 @@
 
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+@media (max-width: 390px) {
+  :root {
+    --page-padding-x: 10px;
+  }
+}
+/* RESPONSIVE LAYOUT */
+
+@media (min-width: 600px) {
+  :root {
+    --page-padding-x: 24px;
+    --page-padding-top: 28px;
+    --page-padding-bottom: 90px;
+    --section-gap: 28px;
+  }
+}
+
+@media (min-width: 1100px) {
+  :root {
+    --page-padding-x: 48px;
+    --page-padding-top: 34px;
+    --page-padding-bottom: 58px;
+    --section-gap: 32px;
+  }
 }
 
 /* DARK THEME */
@@ -196,5 +227,3 @@ code {
     font-size: 20px;
   }
 }
-
-

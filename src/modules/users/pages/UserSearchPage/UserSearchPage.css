@@ -3,7 +3,8 @@
   max-width: 760px;
 
   margin: 0 auto;
-  padding: 18px 12px 88px;
+  padding: var(--page-padding-top) var(--page-padding-x)
+    var(--page-padding-bottom);
 
   box-sizing: border-box;
 
@@ -41,8 +42,6 @@
   line-height: 1.35;
 }
 
-
-
 .users-page__results {
   margin-top: 14px;
 }
@@ -63,10 +62,6 @@
 }
 
 @media (min-width: 600px) {
-  .users-page {
-    padding: 28px 24px 90px;
-  }
-
   .users-page__header h1 {
     font-size: 27px;
   }
@@ -78,7 +73,6 @@
 
 @media (min-width: 1100px) {
   .users-page {
-    padding-top: 34px;
-    padding-bottom: 58px;
+    padding: var(--page-padding-top) 24px var(--page-padding-bottom);
   }
 }
