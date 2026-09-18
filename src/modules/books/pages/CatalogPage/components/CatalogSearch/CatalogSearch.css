@@ -7,7 +7,7 @@
   display: grid;
   grid-template-columns: 1fr;
 
-  gap: 10px;
+  gap: var(--space-10);
 
   width: 100%;
 
@@ -18,7 +18,7 @@
   display: flex;
   align-items: center;
 
-  gap: 8px;
+  gap: var(--space-8);
 
   min-width: 0;
 }
@@ -37,17 +37,14 @@
   width: 100%;
   height: 48px;
 
-  box-sizing: border-box;
+  padding: 0 52px 0 var(--space-16);
 
-  padding: 0 52px 0 16px;
-
-  border: 1px solid #000000;
-  border-radius: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
 
   background: var(--surface);
   color: var(--text-h);
 
-  font-family: inherit;
   font-size: 16px;
 
   transition:
@@ -62,7 +59,7 @@
 }
 
 .catalog-search__input input:hover {
-  border-color: #666666;
+  border-color: var(--border-hover);
 }
 
 .catalog-search__input input:focus {
@@ -115,12 +112,10 @@
   padding: 0;
 
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
 
   background: var(--surface);
   color: var(--text-h);
-
-  cursor: pointer;
 
   transition:
     border-color 0.2s ease,
@@ -166,17 +161,14 @@
   width: 100%;
   height: 48px;
 
-  box-sizing: border-box;
+  padding: 0 var(--space-12);
 
-  padding: 0 12px;
-
-  border: 1px solid #000000;
-  border-radius: 10px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
 
   background: var(--surface);
   color: var(--text-h);
 
-  font-family: inherit;
   font-size: 14px;
 
   cursor: pointer;
@@ -189,7 +181,7 @@
 }
 
 .catalog-search select:hover {
-  border-color: #666666;
+  border-color: var(--border-hover);
 }
 
 .catalog-search select:focus {
@@ -200,23 +192,13 @@
   box-shadow: 0 0 0 3px var(--accent-bg);
 }
 
-:root.dark .catalog-search__input input,
-:root.dark .catalog-search select {
-  border-color: #6b6e7d;
-}
-
-:root.dark .catalog-search__input input:hover,
-:root.dark .catalog-search select:hover {
-  border-color: #8b8e9d;
-}
-
 /* =========================
    TABLET - 600+
 ========================= */
 
 @media (min-width: 600px) {
   .catalog-search__field {
-    gap: 10px;
+    gap: var(--space-10);
   }
 }
 
@@ -231,7 +213,7 @@
       minmax(0, 1fr)
       160px;
 
-    gap: 12px;
+    gap: var(--space-12);
   }
 }
 

@@ -6,9 +6,8 @@
   display: flex;
   flex-direction: column;
 
-  padding: 10px;
+  padding: var(--space-10);
 
-  box-sizing: border-box;
 
   color: var(--text);
 
@@ -27,7 +26,7 @@
 
   object-fit: contain;
 
-  margin-bottom: 10px;
+  margin-bottom: var(--space-10);
 
   border-radius: 6px;
 
@@ -44,7 +43,7 @@
 }
 
 .book-card h2 {
-  margin: 0 0 8px;
+  margin: 0 0 var(--space-8);
 
   color: var(--text-h);
 
@@ -55,7 +54,7 @@
 }
 
 .book-card p {
-  margin: 4px 0;
+  margin: var(--space-4) 0;
 
   color: var(--text);
 
@@ -66,7 +65,7 @@
 }
 
 .book-card__author {
-  margin-bottom: 6px;
+  margin-bottom: var(--space-6);
 }
 
 .book-card__reading-info {
@@ -139,30 +138,27 @@
   display: flex;
   flex-direction: column;
 
-  gap: 8px;
+  gap: var(--space-8);
 
   margin-top: auto;
-  padding-top: 14px;
+  padding-top: var(--space-14);
 }
 
 .book-card__button {
   width: 100%;
   min-width: 0;
 
-  padding: 10px 8px;
+  padding: var(--space-10) var(--space-8);
 
-  box-sizing: border-box;
 
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 
-  font-family: inherit;
   font-size: 13px;
   font-weight: 600;
   line-height: 1.2;
 
   white-space: nowrap;
 
-  cursor: pointer;
 
   transition:
     background-color 0.2s ease,
@@ -239,7 +235,6 @@
 
   box-shadow: 0 4px 14px rgba(0, 0, 0, 0.18);
 
-  cursor: pointer;
 
   transition:
     color 0.2s ease,
@@ -294,7 +289,7 @@
 
 @media (max-width: 370px) {
   .book-card {
-    padding: 8px;
+    padding: var(--space-8);
   }
 
   .book-card h2 {
@@ -316,7 +311,7 @@
   }
 
   .book-card__button {
-    padding: 9px 6px;
+    padding: 9px var(--space-6);
 
     font-size: 12px;
   }
@@ -328,15 +323,15 @@
 
 @media (min-width: 600px) {
   .book-card {
-    padding: 14px;
+    padding: var(--space-14);
   }
 
   .book-cover {
-    margin-bottom: 14px;
+    margin-bottom: var(--space-14);
   }
 
   .book-card h2 {
-    margin-bottom: 10px;
+    margin-bottom: var(--space-10);
 
     font-size: 18px;
   }
@@ -366,11 +361,11 @@
 
     grid-template-columns: repeat(2, minmax(0, 1fr));
 
-    gap: 8px;
+    gap: var(--space-8);
   }
 
   .book-card__button {
-    padding: 10px 8px;
+    padding: var(--space-10) var(--space-8);
 
     font-size: 14px;
   }
@@ -408,7 +403,7 @@
 
     min-width: 0;
 
-    margin-top: 4px;
+    margin-top: var(--space-4);
 
     font-size: 14px;
 
@@ -466,9 +461,9 @@
   flex: 0 0 132px;
   width: 132px;
   min-width: 132px;
-  padding: 8px;
+  padding: var(--space-8);
 
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
 
   box-shadow: none;
 
@@ -483,9 +478,9 @@
 .book-card--compact .book-cover {
   width: 100%;
   aspect-ratio: 2 / 3;
-  margin-bottom: 8px;
+  margin-bottom: var(--space-8);
 
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   object-fit: cover;
 }
 
@@ -498,7 +493,7 @@
 .book-card--compact h2 {
   display: -webkit-box;
   min-height: 34px;
-  margin: 0 0 4px;
+  margin: 0 0 var(--space-4);
   overflow: hidden;
 
   color: var(--text-h);
@@ -529,7 +524,7 @@
 
 .book-card--compact .book-card__actions {
   display: block;
-  margin-top: 8px;
+  margin-top: var(--space-8);
   padding-top: 0;
 }
 
@@ -540,10 +535,10 @@
 .book-card--compact .book-card__button--read {
   display: block;
   width: 100%;
-  padding: 8px 6px;
+  padding: var(--space-8) var(--space-6);
 
   border: 0;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 
   background: var(--accent);
   color: #fff;
@@ -553,18 +548,18 @@
 }
 
 .book-card--compact .book-card__recommendation {
-  margin-top: 8px;
+  margin-top: var(--space-8);
 }
 
 .book-card--compact .book-card__recommendation-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 4px;
+  gap: var(--space-4);
 }
 
 .book-card--compact .book-card__recommendation-tags span {
-  padding: 3px 6px;
-  border-radius: 999px;
+  padding: 3px var(--space-6);
+  border-radius: var(--radius-pill);
 
   background: var(--surface-secondary);
   color: var(--text);
@@ -576,7 +571,7 @@
 .book-card--compact .book-card__recommendation-score {
   display: block;
 
-  margin-top: 6px;
+  margin-top: var(--space-6);
 
   color: var(--accent);
   font-size: 10px;

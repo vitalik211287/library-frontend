@@ -1,14 +1,12 @@
 .catalog-page {
   width: 100%;
   margin: 0 auto;
-  padding: 16px;
-
-  box-sizing: border-box;
+  padding: var(--space-16);
 
   background: transparent;
   color: var(--text);
 
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
 }
 
 /* =========================
@@ -16,7 +14,7 @@
 ========================= */
 
 .catalog-page h1 {
-  margin: 0 0 10px;
+  margin: 0 0 var(--space-10);
 
   font-size: 28px;
   line-height: 1.2;
@@ -25,7 +23,7 @@
 }
 
 .books-count {
-  margin: 0 0 20px;
+  margin: 0 0 var(--space-20);
 
   font-size: 15px;
 
@@ -39,9 +37,9 @@
 .catalog-message {
   margin-bottom: var(--content-gap);
 
-  padding: 12px 14px;
+  padding: var(--space-12) var(--space-14);
 
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 
   background: var(--error-bg, #fff1f1);
 
@@ -60,7 +58,7 @@
 
   grid-template-columns: repeat(2, minmax(0, 1fr));
 
-  gap: 16px 12px;
+  gap: var(--space-16) var(--space-12);
 }
 
 /* =========================
@@ -69,11 +67,11 @@
 
 @media (max-width: 370px) {
   .catalog-page {
-    padding: 12px;
+    padding: var(--space-12);
   }
 
   .books-grid {
-    gap: 12px 8px;
+    gap: var(--space-12) var(--space-8);
   }
 }
 
@@ -83,11 +81,11 @@
 
 @media (min-width: 600px) {
   .catalog-page {
-    padding: 20px;
+    padding: var(--space-20);
   }
 
   .books-grid {
-    gap: 16px;
+    gap: var(--space-16);
   }
 }
 
@@ -98,13 +96,13 @@
 
 @media (min-width: 768px) {
   .catalog-page {
-    padding: 24px;
+    padding: var(--space-24);
   }
 
   .books-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
 
-    gap: 18px;
+    gap: var(--space-18);
   }
 }
 
@@ -116,9 +114,9 @@
   .catalog-page {
     max-width: 1500px;
 
-    padding: 32px;
+    padding: var(--space-32);
 
-    border-radius: 16px;
+    border-radius: var(--radius-xl);
   }
 
   .catalog-page h1 {
@@ -128,7 +126,7 @@
   .books-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
 
-    gap: 20px;
+    gap: var(--space-20);
   }
 }
 
@@ -143,7 +141,7 @@
 }
 
 .catalog-shelf-back {
-  margin: 20px 0 16px;
+  margin: var(--space-20) 0 var(--space-16);
   padding: 0;
 
   border: 0;
@@ -151,46 +149,40 @@
   background: transparent;
   color: var(--text);
 
-  font: inherit;
   font-weight: 600;
 
-  cursor: pointer;
 }
 
 .catalog-shelf-back:hover {
   text-decoration: underline;
 }
 .catalog-view-toggle {
-  box-sizing: border-box;
   width: 100%;
   margin-bottom: var(--content-gap);
-  padding: 4px;
+  padding: var(--space-4);
 
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 4px;
+  gap: var(--space-4);
 
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-14);
 
   background: var(--surface-secondary);
 }
 
 .catalog-view-toggle__button {
   min-height: 42px;
-  padding: 8px 14px;
+  padding: var(--space-8) var(--space-14);
 
   border: 0;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
 
   background: transparent;
   color: var(--text-secondary, #a7a7b5);
 
-  font: inherit;
   font-size: 14px;
   font-weight: 750;
-
-  cursor: pointer;
 
   transition:
     background 0.18s ease,
