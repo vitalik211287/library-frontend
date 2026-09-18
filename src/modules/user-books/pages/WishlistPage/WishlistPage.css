@@ -1,4 +1,4 @@
-﻿.wishlist-page {
+.wishlist-page {
   width: 100%;
 
   margin: 0 auto;
@@ -18,7 +18,7 @@
 
   gap: 12px;
 
-  margin-bottom: 10px;
+  margin-bottom: var(--content-gap);
 }
 
 .wishlist-page h1 {
@@ -31,7 +31,7 @@
 }
 
 .wishlist-page .books-count {
-  margin: 0 0 20px;
+  margin: 0;
 
   font-size: 15px;
 
@@ -39,7 +39,7 @@
 }
 
 .wishlist-page .catalog-message {
-  margin-bottom: 20px;
+  margin-bottom: var(--content-gap);
 
   padding: 12px 14px;
 

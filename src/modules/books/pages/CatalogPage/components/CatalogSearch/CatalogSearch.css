@@ -11,7 +11,7 @@
 
   width: 100%;
 
-  margin-bottom: 24px;
+  margin-bottom: var(--content-gap);
 }
 
 .catalog-search__field {
@@ -211,7 +211,7 @@
 }
 
 /* =========================
-   TABLET — 600+
+   TABLET - 600+
 ========================= */
 
 @media (min-width: 600px) {
@@ -236,7 +236,7 @@
 }
 
 /* =========================
-   DESKTOP — 1025+
+   DESKTOP - 1025+
 ========================= */
 
 @media (min-width: 1025px) {
@@ -246,11 +246,11 @@
 }
 
 /* =========================
-   DESKTOP — 1100+
+   DESKTOP - 1100+
 ========================= */
 
 @media (min-width: 1100px) {
   .catalog-search {
-    margin-bottom: 28px;
+    margin-bottom: var(--content-gap);
   }
 }

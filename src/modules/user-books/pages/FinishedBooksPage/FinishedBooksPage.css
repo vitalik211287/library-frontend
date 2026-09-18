@@ -1,4 +1,4 @@
-﻿.finished-books-page {
+.finished-books-page {
   width: 100%;
 
   margin: 0 auto;
@@ -22,7 +22,7 @@
 
   gap: 12px;
 
-  margin-bottom: 20px;
+  margin-bottom: var(--content-gap);
 }
 
 .finished-books-page__eyebrow {
@@ -60,7 +60,7 @@
 ========================= */
 
 .finished-books-page .catalog-message {
-  margin-bottom: 20px;
+  margin-bottom: var(--content-gap);
 
   padding: 12px 14px;
 
