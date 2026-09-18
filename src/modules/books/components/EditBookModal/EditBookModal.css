@@ -24,7 +24,7 @@
   display: flex;
   flex-direction: column;
 
-  gap: 18px;
+  gap: var(--space-18);
 }
 
 /* =========================
@@ -35,7 +35,7 @@
   display: grid;
   grid-template-columns: 92px minmax(0, 1fr);
 
-  gap: 12px;
+  gap: var(--space-12);
 
   align-items: end;
 }
@@ -68,9 +68,7 @@
 
   display: block;
 
-  box-sizing: border-box;
-
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 }
 
 .edit-modal__cover img {
@@ -118,10 +116,8 @@
 
   transform: translate(-50%, -50%);
 
-  box-sizing: border-box;
-
   border: 1px solid rgba(255, 255, 255, 0.8);
-  border-radius: 50%;
+  border-radius: var(--radius-round);
 
   background: rgba(0, 0, 0, 0.7);
   color: #ffffff;
@@ -188,7 +184,7 @@
   display: grid;
   grid-template-rows: repeat(2, minmax(0, 1fr));
 
-  gap: 14px;
+  gap: var(--space-14);
 }
 
 .edit-modal__main-fields label {
@@ -218,7 +214,7 @@
   display: flex;
   flex-direction: column;
 
-  gap: 14px;
+  gap: var(--space-14);
 }
 
 .edit-modal__fields > label,
@@ -246,15 +242,12 @@
 .edit-modal__fields textarea {
   width: 100%;
 
-  box-sizing: border-box;
-
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 
   background: var(--surface-secondary);
   color: var(--text-h);
 
-  font-family: inherit;
   font-size: 16px;
 
   transition:
@@ -298,7 +291,7 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
 
-  gap: 8px;
+  gap: var(--space-8);
 }
 
 /* =========================
@@ -309,7 +302,7 @@
   display: flex;
   flex-direction: column;
 
-  gap: 8px;
+  gap: var(--space-8);
 
   margin-top: 18px;
   padding-top: 14px;
@@ -324,11 +317,8 @@
 
   padding: 12px 14px;
 
-  box-sizing: border-box;
+  border-radius: var(--radius-sm);
 
-  border-radius: 8px;
-
-  font-family: inherit;
   font-size: 15px;
   font-weight: 600;
 
@@ -414,13 +404,13 @@
   }
 
   .edit-modal__main-fields {
-    gap: 10px;
+    gap: var(--space-10);
   }
 
   .edit-modal__main-fields label,
   .edit-modal__fields > label,
   .edit-modal__row label {
-    gap: 6px;
+    gap: var(--space-6);
 
     font-size: 11px;
   }
@@ -435,7 +425,7 @@
   }
 
   .edit-modal__row {
-    gap: 6px;
+    gap: var(--space-6);
   }
 }
 
@@ -457,13 +447,13 @@
   }
 
   .edit-modal__layout {
-    gap: 20px;
+    gap: var(--space-20);
   }
 
   .edit-modal__top {
     grid-template-columns: 150px minmax(0, 1fr);
 
-    gap: 20px;
+    gap: var(--space-20);
   }
 
   .edit-modal__cover {
@@ -486,7 +476,7 @@
 
   .edit-modal__main-fields,
   .edit-modal__fields {
-    gap: 14px;
+    gap: var(--space-14);
   }
 
   .edit-modal__main-fields label,
@@ -509,14 +499,14 @@
   }
 
   .edit-modal__row {
-    gap: 12px;
+    gap: var(--space-12);
   }
 
   .edit-modal__actions {
     flex-direction: row;
     justify-content: flex-end;
 
-    gap: 10px;
+    gap: var(--space-10);
 
     margin-top: 22px;
     padding-top: 18px;
@@ -557,7 +547,7 @@
   .edit-modal__top {
     grid-template-columns: 200px minmax(0, 1fr);
 
-    gap: 28px;
+    gap: var(--space-28);
   }
 
   .edit-modal__cover {
@@ -580,7 +570,7 @@
 
   .edit-modal__main-fields,
   .edit-modal__fields {
-    gap: 14px;
+    gap: var(--space-14);
   }
 
   .edit-modal__main-fields label,
