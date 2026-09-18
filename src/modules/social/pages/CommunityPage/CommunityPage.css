@@ -6,7 +6,7 @@
 }
 
 .community-page__header {
-  margin-bottom: 20px;
+  margin-bottom: var(--space-20);
 }
 
 .community-page__header > span {
@@ -41,11 +41,6 @@
 }
 
 /* Prevent community feed from overflowing mobile viewport */
-.community-page,
-.community-page * {
-  box-sizing: border-box;
-}
-
 .community-page {
   min-width: 0;
   overflow-x: hidden;
