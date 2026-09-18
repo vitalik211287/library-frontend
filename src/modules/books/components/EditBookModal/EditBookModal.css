@@ -347,10 +347,10 @@
 .edit-modal__save {
   order: 1;
 
-  border: 1px solid var(--text-h);
+  border: 1px solid var(--accent);
 
-  background: var(--text-h);
-  color: var(--bg);
+  background: var(--accent);
+  color: #ffffff;
 }
 
 .edit-modal__save:hover:not(:disabled) {

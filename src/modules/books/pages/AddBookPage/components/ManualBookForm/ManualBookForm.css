@@ -32,7 +32,7 @@
   transition:
     border-color 0.2s ease,
     box-shadow 0.2s ease,
-    background-color 0.2s ease,
+    filter 0.2s ease,
     color 0.2s ease;
 }
 
@@ -71,7 +71,7 @@
 
   padding: 11px 18px;
 
-  background: #222222;
+  background: var(--accent);
   color: #ffffff;
 
   font-family: inherit;
@@ -81,26 +81,17 @@
   cursor: pointer;
 
   transition:
-    background-color 0.2s ease,
+    filter 0.2s ease,
     color 0.2s ease,
     transform 0.15s ease;
 }
 
 .manual-form button:hover {
-  background: #3a3a3a;
+  filter: brightness(1.08);
 }
 
 .manual-form button:active {
   transform: scale(0.98);
-}
-
-:root.dark .manual-form button {
-  background: #f3f4f6;
-  color: #16171d;
-}
-
-:root.dark .manual-form button:hover {
-  background: #d9dce1;
 }
 
 /* =========================
@@ -144,7 +135,7 @@
   border: none;
   border-radius: 6px;
 
-  background: #222222;
+  background: var(--accent);
   color: #ffffff;
 
   font-family: inherit;
@@ -153,21 +144,12 @@
   cursor: pointer;
 
   transition:
-    background-color 0.2s ease,
+    filter 0.2s ease,
     color 0.2s ease;
 }
 
 .cover-input input[type="file"]::file-selector-button:hover {
-  background: #3a3a3a;
-}
-
-:root.dark .cover-input input[type="file"]::file-selector-button {
-  background: #f3f4f6;
-  color: #16171d;
-}
-
-:root.dark .cover-input input[type="file"]::file-selector-button:hover {
-  background: #d9dce1;
+  filter: brightness(1.08);
 }
 
 @media (max-width: 650px) {

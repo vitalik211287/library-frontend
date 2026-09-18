@@ -22,7 +22,7 @@
 
   padding: 0 52px 0 16px;
 
-  border: 1px solid #000000;
+  border: 1px solid var(--border);
   border-radius: 10px;
 
   background: var(--surface);
@@ -43,7 +43,7 @@
 }
 
 .isbn-search__field input:hover {
-  border-color: #666666;
+  border-color: var(--border-hover);
 }
 
 .isbn-search__field input:focus {
@@ -52,14 +52,6 @@
   border-color: var(--accent);
 
   box-shadow: 0 0 0 3px var(--accent-bg);
-}
-
-:root.dark .isbn-search__field input {
-  border-color: #6b6e7d;
-}
-
-:root.dark .isbn-search__field input:hover {
-  border-color: #8b8e9d;
 }
 
 .isbn-search__button {
