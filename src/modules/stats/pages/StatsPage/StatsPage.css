@@ -6,7 +6,8 @@
   max-width: 1180px;
 
   margin: 0 auto;
-  padding: var(--space-14) var(--space-12) 88px;
+  padding: var(--page-padding-top) var(--page-padding-x)
+    var(--page-padding-bottom);
 
   color: var(--text);
 }
@@ -69,10 +70,6 @@
 ========================= */
 
 @media (min-width: 600px) {
-  .stats-page {
-    padding: var(--space-18) var(--space-18) 92px;
-  }
-
   .stats-card__header {
     margin-bottom: var(--space-14);
   }
@@ -103,9 +100,3 @@
 /* =========================
    DESKTOP
 ========================= */
-
-@media (min-width: 1100px) {
-  .stats-page {
-    padding: var(--space-24) var(--space-24) 42px;
-  }
-}

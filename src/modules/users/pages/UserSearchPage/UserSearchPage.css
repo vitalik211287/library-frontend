@@ -45,11 +45,6 @@
 }
 
 @media (max-width: 390px) {
-  .users-page {
-    padding-right: 10px;
-    padding-left: 10px;
-  }
-
   .users-page__header h1 {
     font-size: 20px;
   }
@@ -66,11 +61,5 @@
 
   .users-page__header p {
     font-size: 14px;
-  }
-}
-
-@media (min-width: 1100px) {
-  .users-page {
-    padding: var(--page-padding-top) 24px var(--page-padding-bottom);
   }
 }

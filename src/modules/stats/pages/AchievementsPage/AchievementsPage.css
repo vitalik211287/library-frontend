@@ -2,7 +2,8 @@
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: var(--space-16);
+  padding: var(--page-padding-top) var(--page-padding-x)
+    var(--page-padding-bottom);
 
   color: var(--text);
 }
@@ -51,10 +52,6 @@
 ========================= */
 
 @media (min-width: 600px) {
-  .achievements-page {
-    padding: 22px;
-  }
-
   .achievements-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
 
@@ -67,10 +64,6 @@
 ========================= */
 
 @media (min-width: 900px) {
-  .achievements-page {
-    padding: var(--space-28);
-  }
-
   .achievements-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
 
