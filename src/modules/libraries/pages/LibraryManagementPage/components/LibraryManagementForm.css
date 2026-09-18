@@ -1,6 +1,6 @@
 .library-management-add {
   display: grid;
-  gap: 10px;
+  gap: var(--space-10);
 }
 
 .library-management-add input {
@@ -8,12 +8,10 @@
   min-height: 46px;
   padding: 0 14px;
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-14);
   outline: none;
   background: var(--surface-secondary);
   color: var(--text);
-  font: inherit;
-  box-sizing: border-box;
 }
 
 .library-management-add input:focus {
@@ -24,12 +22,10 @@
   min-height: 46px;
   padding: 0 18px;
   border: 0;
-  border-radius: 14px;
+  border-radius: var(--radius-14);
   background: var(--accent);
   color: #fff;
-  font: inherit;
   font-weight: 800;
-  cursor: pointer;
 }
 
 .library-management-add button:disabled {

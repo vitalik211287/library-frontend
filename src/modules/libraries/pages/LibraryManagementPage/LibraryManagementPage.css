@@ -3,14 +3,13 @@
   max-width: 980px;
   margin: 0 auto;
   padding: 18px 16px 96px;
-  box-sizing: border-box;
   color: var(--text);
 }
 
 .library-management-page__header {
   display: grid;
-  gap: 18px;
-  margin-bottom: 18px;
+  gap: var(--space-18);
+  margin-bottom: var(--space-18);
 }
 
 .library-management-page__eyebrow {
@@ -28,15 +27,14 @@
 }
 
 .library-management-page__subtitle {
-  margin: 8px 0 0;
+  margin: var(--space-8) 0 0;
   color: var(--text-muted, #9ca3af);
   font-size: 15px;
 }
 
 .library-management-card {
-  margin-top: 14px;
-  padding: 18px;
-  box-sizing: border-box;
+  margin-top: var(--space-14);
+  padding: var(--space-18);
 }
 
 .library-management-card--empty {
@@ -47,8 +45,8 @@
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 16px;
+  gap: var(--space-12);
+  margin-bottom: var(--space-16);
 }
 
 .library-management-card h2 {
@@ -59,7 +57,7 @@
 
 .library-management-card__header p,
 .library-management-card--empty p {
-  margin: 6px 0 0;
+  margin: var(--space-6) 0 0;
   color: var(--text-muted, #9ca3af);
   font-size: 14px;
   line-height: 1.45;
@@ -71,12 +69,10 @@
   min-height: 46px;
   padding: 0 14px;
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-14);
   outline: none;
   background: var(--surface-secondary);
   color: var(--text);
-  font: inherit;
-  box-sizing: border-box;
 }
 
 .library-management-add input:focus,
@@ -88,12 +84,10 @@
   min-height: 46px;
   padding: 0 18px;
   border: 0;
-  border-radius: 14px;
+  border-radius: var(--radius-14);
   background: var(--accent);
   color: #fff;
-  font: inherit;
   font-weight: 800;
-  cursor: pointer;
 }
 
 .library-management-add button:disabled,
@@ -113,12 +107,10 @@
   min-height: 46px;
   padding: 0 18px;
   border: 1px solid rgba(239, 68, 68, 0.55);
-  border-radius: 14px;
+  border-radius: var(--radius-14);
   background: rgba(239, 68, 68, 0.08);
   color: #ef4444;
-  font: inherit;
   font-weight: 800;
-  cursor: pointer;
 }
 
 .library-management-status,
@@ -130,7 +122,7 @@
 }
 
 .library-management-note {
-  margin: 14px 4px 0;
+  margin: var(--space-14) var(--space-4) 0;
 }
 
 @media (min-width: 600px) {
@@ -153,6 +145,6 @@
   }
 
   .library-management-card {
-    padding: 20px;
+    padding: var(--space-20);
   }
 }

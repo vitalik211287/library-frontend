@@ -1,14 +1,14 @@
 .library-members-list {
   display: grid;
-  gap: 10px;
+  gap: var(--space-10);
 }
 
 .library-member {
   display: grid;
-  gap: 14px;
-  padding: 14px;
+  gap: var(--space-14);
+  padding: var(--space-14);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: var(--radius-xl);
   background: var(--surface-secondary);
 }
 
@@ -16,7 +16,7 @@
   display: flex;
   align-items: center;
   min-width: 0;
-  gap: 12px;
+  gap: var(--space-12);
 }
 
 .library-member__avatar {
@@ -26,7 +26,7 @@
   display: grid;
   place-items: center;
   overflow: hidden;
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   background: var(--accent-bg);
   color: var(--accent);
   font-size: 14px;
@@ -49,7 +49,7 @@
   display: flex;
   align-items: center;
   min-width: 0;
-  gap: 8px;
+  gap: var(--space-8);
 }
 
 .library-member__name-row strong {
@@ -62,7 +62,7 @@
 .library-member__you {
   flex: 0 0 auto;
   padding: 3px 7px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: var(--accent-bg);
   color: var(--accent);
   font-size: 11px;
@@ -87,7 +87,7 @@
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-8);
 }
 
 .library-member__actions select {
@@ -95,12 +95,10 @@
   min-height: 46px;
   padding: 0 14px;
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-14);
   outline: none;
   background: var(--surface-secondary);
   color: var(--text);
-  font: inherit;
-  box-sizing: border-box;
 }
 
 .library-member__actions select:focus {
@@ -118,12 +116,10 @@
   min-height: 42px;
   padding: 0 12px;
   border: 1px solid rgba(239, 68, 68, 0.4);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   background: transparent;
   color: #ef4444;
-  font: inherit;
   font-weight: 800;
-  cursor: pointer;
 }
 
 .library-member button:disabled,
