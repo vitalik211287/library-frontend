@@ -12,7 +12,6 @@
   color: var(--text);
 
   font-weight: 600;
-
 }
 
 .catalog-shelf-back:hover {
@@ -57,7 +56,6 @@
   color: #fff;
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
 }
-
 
 /* =========================
    SHELVES VIEW CACHE

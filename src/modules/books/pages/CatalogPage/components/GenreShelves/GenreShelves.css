@@ -3,7 +3,7 @@
 }
 
 .genre-shelves__header {
-  margin-bottom: 14px;
+  margin-bottom: var(--space-14);
 }
 
 .genre-shelves__header h2 {

@@ -8,7 +8,6 @@
   color: var(--text);
 
   text-align: left;
-  cursor: pointer;
 
   transition:
     transform 0.18s ease,
