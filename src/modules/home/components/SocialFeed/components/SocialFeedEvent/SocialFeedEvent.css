@@ -10,10 +10,8 @@
   background: var(--surface-secondary);
   color: inherit;
 
-  font: inherit;
   text-align: left;
 
-  cursor: pointer;
 }
 
 .social-feed-event__heading {

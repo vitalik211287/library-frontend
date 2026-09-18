@@ -24,7 +24,7 @@ const CurrentReading = ({
 
       {!book ? (
         <div
-          className="home-empty-state"
+          className="home-empty-state home-info-box"
           role="button"
           tabIndex={0}
           onClick={onOpenCatalog}

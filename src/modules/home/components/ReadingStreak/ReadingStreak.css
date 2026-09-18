@@ -12,10 +12,8 @@
   border-radius: 11px;
   background: color-mix(in srgb, var(--accent) 7%, transparent);
   color: var(--text);
-  font: inherit;
   font-size: 11px;
   font-weight: 750;
-  cursor: pointer;
 }
 
 .streak-card__share svg {
@@ -180,25 +178,6 @@
     height: 5px;
   }
 }
-/* Shared panel styles previously inherited from HomePage.css */
-
-.streak-card__top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-12);
-
-  margin-bottom: var(--space-18);
-}
-
-.streak-card__top h2 {
-  margin: 0;
-
-  font-size: 18px;
-  line-height: 1.2;
-  font-weight: 850;
-}
-
 @media (min-width: 600px) {
   .streak-card {
     padding: 22px;

@@ -5,13 +5,6 @@
 }
 
 .reading-goal__hero {
-  min-height: 92px;
-  display: flex;
-  align-items: center;
-  gap: 13px;
-  padding: var(--space-14);
-  border: 1px solid var(--border);
-  border-radius: 15px;
   background: var(--surface-secondary);
 }
 

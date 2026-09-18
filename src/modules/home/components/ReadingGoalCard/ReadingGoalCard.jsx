@@ -79,7 +79,7 @@ const ReadingGoalCard = ({
               className="reading-goal__item"
               key={item.type}
             >
-              <div className="reading-goal__hero">
+              <div className="reading-goal__hero home-info-box">
                 <div className="reading-goal__icon home-icon-box">
                   <TargetIcon />
                 </div>
@@ -113,7 +113,7 @@ const ReadingGoalCard = ({
           ))}
         </div>
       ) : (
-        <div className="home-empty-state">
+        <div className="home-empty-state home-info-box">
           <div className="home-empty-state__icon home-icon-box">
             <TargetIcon />
           </div>

@@ -41,7 +41,6 @@
   background: transparent;
   color: inherit;
   text-align: left;
-  cursor: pointer;
 }
 
 .social-feed-card__avatar {
@@ -103,9 +102,7 @@
   border-radius: 15px;
   background: var(--surface-secondary);
   color: inherit;
-  font: inherit;
   text-align: left;
-  cursor: pointer;
 }
 
 .social-feed-card__achievement-main {
@@ -216,9 +213,7 @@
   border-radius: 15px;
   background: var(--surface-secondary);
   color: inherit;
-  font: inherit;
   text-align: left;
-  cursor: pointer;
 }
 
 .social-feed-card__finished-cover {
@@ -292,9 +287,7 @@
   border: 0;
   background: transparent;
   color: var(--text);
-  font: inherit;
   font-size: 11px;
-  cursor: pointer;
 }
 
 .social-feed-card__action + .social-feed-card__action {
@@ -527,12 +520,10 @@
   box-shadow: none;
 
   color: var(--text);
-  font: inherit;
   font-size: 16px;
   line-height: 1;
   letter-spacing: 2px;
 
-  cursor: pointer;
   -webkit-tap-highlight-color: transparent;
 }
 
@@ -565,11 +556,9 @@
   background: transparent;
 
   color: var(--accent);
-  font: inherit;
   font-size: 10px;
   font-weight: 700;
 
-  cursor: pointer;
 }
 
 .social-feed__view-all span {

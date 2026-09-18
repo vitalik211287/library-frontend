@@ -73,18 +73,16 @@
     color-mix(in srgb, var(--accent) 82%, white)
   );
   color: #fff;
-  font: inherit;
   font-size: 14px;
   font-weight: 850;
   box-shadow: 0 10px 24px color-mix(in srgb, var(--accent) 22%, transparent);
-  cursor: pointer;
 }
 
 /* =========================
    EMPTY STATE
 ========================= */
 
-.home-empty-state {
+.home-info-box {
   min-height: 92px;
   display: flex;
   align-items: center;
@@ -92,6 +90,9 @@
   padding: var(--space-14);
   border: 1px solid var(--border);
   border-radius: 15px;
+}
+
+.home-empty-state {
   background: transparent;
 }
 
