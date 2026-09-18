@@ -3,7 +3,7 @@
 
   grid-template-columns: repeat(2, minmax(0, 1fr));
 
-  gap: 14px;
+  gap: var(--space-14);
 
   margin-top: 20px;
   padding-top: 20px;
@@ -15,18 +15,15 @@
 .manual-form textarea {
   width: 100%;
 
-  box-sizing: border-box;
-
   padding: 11px 12px;
 
   border: 1px solid var(--border);
 
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 
   background: var(--surface);
   color: var(--text-h);
 
-  font-family: inherit;
   font-size: 15px;
 
   transition:
@@ -67,18 +64,15 @@
   width: fit-content;
 
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 
   padding: 11px 18px;
 
   background: var(--accent);
   color: #ffffff;
 
-  font-family: inherit;
   font-size: 14px;
   font-weight: 500;
-
-  cursor: pointer;
 
   transition:
     filter 0.2s ease,
@@ -104,7 +98,7 @@
   display: flex;
   flex-direction: column;
 
-  gap: 8px;
+  gap: var(--space-8);
 
   color: var(--text-h);
 }
@@ -114,16 +108,13 @@
 
   padding: 6px;
 
-  box-sizing: border-box;
-
   border: 1px solid var(--border);
 
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 
   background: var(--surface);
   color: var(--text);
 
-  font-family: inherit;
   font-size: 14px;
 }
 
@@ -138,10 +129,7 @@
   background: var(--accent);
   color: #ffffff;
 
-  font-family: inherit;
   font-size: 14px;
-
-  cursor: pointer;
 
   transition:
     filter 0.2s ease,

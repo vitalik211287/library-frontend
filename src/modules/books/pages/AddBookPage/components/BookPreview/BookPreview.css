@@ -3,7 +3,7 @@
 
   grid-template-columns: 220px minmax(0, 1fr);
 
-  gap: 32px;
+  gap: var(--space-32);
 
   align-items: start;
 
@@ -20,7 +20,7 @@
   width: 100%;
   height: auto;
 
-  border-radius: 10px;
+  border-radius: var(--radius-md);
 }
 
 .no-cover {
@@ -33,11 +33,9 @@
 
   padding: 16px;
 
-  box-sizing: border-box;
-
   border: 1px solid var(--border);
 
-  border-radius: 10px;
+  border-radius: var(--radius-md);
 
   background: var(--surface-secondary);
 
@@ -64,7 +62,7 @@
 
   grid-template-columns: repeat(2, minmax(0, 1fr));
 
-  gap: 16px;
+  gap: var(--space-16);
 }
 
 .book-fields label,
@@ -89,19 +87,16 @@
 .description-field textarea {
   width: 100%;
 
-  box-sizing: border-box;
-
   padding: 11px 12px;
 
   border: 1px solid var(--border);
 
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 
   background: var(--surface);
 
   color: var(--text-h);
 
-  font-family: inherit;
   font-size: 15px;
 
   transition:
@@ -148,18 +143,15 @@
 
 .book-actions button {
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 
   padding: 11px 18px;
 
   background: var(--accent);
   color: #ffffff;
 
-  font-family: inherit;
   font-size: 14px;
   font-weight: 500;
-
-  cursor: pointer;
 
   transition:
     filter 0.2s ease,
@@ -179,7 +171,7 @@
   .book-preview {
     grid-template-columns: 190px minmax(0, 1fr);
 
-    gap: 24px;
+    gap: var(--space-24);
   }
 
   .book-preview__cover {
