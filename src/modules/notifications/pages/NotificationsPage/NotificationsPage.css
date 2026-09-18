@@ -1,7 +1,7 @@
 ﻿.notifications-page {
   width: 100%;
   min-height: 100dvh;
-  padding: 18px 14px 90px;
+  padding: 16px 14px 90px;
   box-sizing: border-box;
   background: transparent;
   color: var(--text);
@@ -448,7 +448,6 @@
   margin: 0;
 }
 
-
 .social-notification {
   padding-left: 34px;
 }
@@ -456,9 +455,6 @@
 .activity-notification__top {
   padding-left: 34px;
 }
-
-
-
 
 .notifications-page__actions {
   display: flex;
@@ -481,7 +477,6 @@
   font-weight: 700;
   cursor: pointer;
 }
-
 
 .notifications-page__delete-selected {
   flex-shrink: 0;

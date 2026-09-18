@@ -2,7 +2,7 @@
   width: 100%;
   max-width: 760px;
   margin: 0 auto;
-  padding: 20px 16px 40px;
+  padding: 16px 14px 40px;
 }
 
 .community-page__header {
@@ -19,7 +19,7 @@
 .community-page__header h1 {
   margin: 5px 0 4px;
   color: var(--text-h);
-  font-size: 24px;
+  font-size: 21px;
   line-height: 1.15;
 }
 
@@ -30,16 +30,15 @@
   line-height: 1.5;
 }
 
-@media (max-width: 600px) {
+@media (min-width: 600px) {
   .community-page {
-    padding: 16px 14px 32px;
+    padding: 28px 24px 40px;
   }
 
   .community-page__header h1 {
-    font-size: 21px;
+    font-size: 24px;
   }
 }
-
 
 /* Prevent community feed from overflowing mobile viewport */
 .community-page,
@@ -49,7 +48,6 @@
 
 .community-page {
   min-width: 0;
-  max-width: 100%;
   overflow-x: hidden;
 }
 
