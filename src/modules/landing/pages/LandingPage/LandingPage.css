@@ -6,9 +6,7 @@
   width: 100%;
   min-height: calc(100dvh - 60px);
 
-  padding: 24px 16px;
-
-  box-sizing: border-box;
+  padding: var(--space-24) var(--space-16);
 
   background: transparent;
   color: var(--text);
@@ -23,10 +21,8 @@
 
   padding: 28px 22px;
 
-  box-sizing: border-box;
-
   border: 1px solid var(--border);
-  border-radius: 20px;
+  border-radius: var(--radius-2xl);
 
   background: var(--surface);
 
@@ -40,7 +36,7 @@
 .landing-logo {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-10);
 
   margin-bottom: 44px;
 
@@ -56,7 +52,7 @@
   width: 38px;
   height: 38px;
 
-  border-radius: 10px;
+  border-radius: var(--radius-md);
 
   background: var(--accent-bg);
   color: var(--accent);
@@ -95,7 +91,7 @@
 .landing-content p {
   max-width: 330px;
 
-  margin: 18px 0 0;
+  margin: var(--space-18) 0 0;
 
   color: var(--text-secondary, #8b8b95);
 
@@ -110,7 +106,7 @@
 .landing-actions {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--space-12);
 }
 
 .landing-button {
@@ -121,9 +117,7 @@
   width: 100%;
   min-height: 48px;
 
-  padding: 0 18px;
-
-  box-sizing: border-box;
+  padding: 0 var(--space-18);
 
   border-radius: 11px;
 
@@ -165,7 +159,7 @@
 ========================= */
 
 .landing-footer {
-  margin: 28px 0 0;
+  margin: var(--space-28) 0 0;
 
   color: var(--text-secondary, #8b8b95);
 
