@@ -41,17 +41,15 @@
 .reading-sessions-modal__list {
   display: flex;
   flex-direction: column;
-  gap: 12px;
+  gap: var(--space-12);
 }
 
 .reading-sessions-modal__session {
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: var(--space-10);
 
   padding: 15px;
-
-  box-sizing: border-box;
 }
 
 /* =========================
@@ -62,7 +60,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--space-12);
 }
 
 .reading-sessions-modal__date {
@@ -120,7 +118,7 @@
 .reading-sessions-modal__meta span {
   padding: 5px 9px;
 
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
 
   background: var(--surface-soft);
   color: var(--text-secondary);
@@ -135,7 +133,7 @@
 
 .reading-sessions-modal__actions {
   display: flex;
-  gap: 8px;
+  gap: var(--space-8);
 
   margin-top: 2px;
 }
@@ -153,10 +151,7 @@
   background: transparent;
   color: var(--text);
 
-  font: inherit;
   font-weight: 650;
-
-  cursor: pointer;
 
   transition:
     background 0.16s ease,
@@ -197,7 +192,7 @@
 .reading-sessions-edit__label {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-8);
 
   color: var(--text);
 
@@ -227,15 +222,12 @@
 
   padding: 0 12px;
 
-  box-sizing: border-box;
-
   border: 0;
   outline: 0;
 
   background: transparent;
   color: var(--text);
 
-  font: inherit;
   font-size: 16px;
 }
 
@@ -262,7 +254,7 @@
   display: flex;
   gap: 9px;
 
-  margin-top: 20px;
+  margin-top: var(--space-20);
 }
 
 .reading-sessions-edit__actions button {
@@ -278,10 +270,7 @@
   background: transparent;
   color: var(--text);
 
-  font: inherit;
   font-weight: 700;
-
-  cursor: pointer;
 
   transition:
     background 0.16s ease,

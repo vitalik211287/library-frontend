@@ -6,11 +6,9 @@
   display: flex;
   flex-direction: column;
 
-  gap: 18px;
+  gap: var(--space-18);
 
-  padding: 16px;
-
-  box-sizing: border-box;
+  padding: var(--space-16);
 
   border: 1px solid var(--border);
   border-radius: 16px;
@@ -33,14 +31,14 @@
   display: flex;
   flex-direction: column;
 
-  gap: 12px;
+  gap: var(--space-12);
 }
 
 .reading-modal__setup-heading {
   display: flex;
   align-items: center;
 
-  gap: 10px;
+  gap: var(--space-10);
 }
 
 .reading-modal__setup-number {
@@ -53,7 +51,7 @@
   align-items: center;
   justify-content: center;
 
-  border-radius: 50%;
+  border-radius: var(--radius-round);
 
   background: var(--accent);
   color: #ffffff;
@@ -86,8 +84,6 @@
 
   padding: 3px;
 
-  box-sizing: border-box;
-
   border: 1px solid var(--border);
   border-radius: 12px;
 
@@ -106,11 +102,8 @@
   background: transparent;
   color: var(--text);
 
-  font-family: inherit;
   font-size: 13px;
   font-weight: 600;
-
-  cursor: pointer;
 
   transition:
     background-color 0.2s ease,
@@ -164,15 +157,12 @@
 
   padding: 10px 92px 10px 14px;
 
-  box-sizing: border-box;
-
   border: 1px solid var(--border);
   border-radius: 11px;
 
   background: var(--surface);
   color: var(--text-h);
 
-  font-family: inherit;
   font-size: 16px;
   font-weight: 600;
 
@@ -233,11 +223,9 @@
   align-items: center;
   justify-content: center;
 
-  gap: 8px;
+  gap: var(--space-8);
 
   padding: 11px 14px;
-
-  box-sizing: border-box;
 
   border: 1px solid var(--accent);
   border-radius: 11px;
@@ -245,12 +233,9 @@
   background: var(--accent);
   color: #ffffff;
 
-  font-family: inherit;
   font-size: 14px;
   font-weight: 700;
   line-height: 1;
-
-  cursor: pointer;
 
   box-shadow: 0 8px 22px rgba(181, 107, 255, 0.2);
 
@@ -276,7 +261,7 @@
   align-items: center;
   justify-content: space-between;
 
-  gap: 12px;
+  gap: var(--space-12);
 }
 
 .reading-modal__session-header h3 {
@@ -292,11 +277,11 @@
   display: inline-flex;
   align-items: center;
 
-  gap: 6px;
+  gap: var(--space-6);
 
   padding: 6px 9px;
 
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
 
   background: var(--accent-bg);
   color: var(--accent);
@@ -310,7 +295,7 @@
   width: 7px;
   height: 7px;
 
-  border-radius: 50%;
+  border-radius: var(--radius-round);
 
   background: #45d483;
 }
@@ -384,7 +369,7 @@
   display: flex;
   flex-direction: column;
 
-  gap: 8px;
+  gap: var(--space-8);
 
   padding-top: 14px;
 
@@ -428,7 +413,7 @@
 
   grid-template-columns: repeat(2, minmax(0, 1fr));
 
-  gap: 8px;
+  gap: var(--space-8);
 }
 
 .reading-modal__session-actions button {
@@ -443,16 +428,11 @@
 
   padding: 10px 8px;
 
-  box-sizing: border-box;
-
   border-radius: 10px;
 
-  font-family: inherit;
   font-size: 13px;
   font-weight: 700;
   line-height: 1;
-
-  cursor: pointer;
 
   white-space: nowrap;
 
@@ -564,15 +544,15 @@
   .reading-modal__session-card {
     gap: 15px;
 
-    padding: 12px;
+    padding: var(--space-12);
   }
 
   .reading-modal__session-setup {
-    gap: 18px;
+    gap: var(--space-18);
   }
 
   .reading-modal__setup-heading {
-    gap: 8px;
+    gap: var(--space-8);
   }
 
   .reading-modal__setup-number {
@@ -627,9 +607,9 @@
 
 @media (min-width: 600px) {
   .reading-modal__session-card {
-    gap: 20px;
+    gap: var(--space-20);
 
-    padding: 20px;
+    padding: var(--space-20);
   }
 
   .reading-modal__setup-heading h3 {
@@ -657,7 +637,7 @@
 
 @media (min-width: 900px) {
   .reading-modal__session-card {
-    padding: 24px;
+    padding: var(--space-24);
   }
 
   .reading-modal__timer {
