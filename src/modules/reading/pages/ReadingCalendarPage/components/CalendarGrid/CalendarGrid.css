@@ -8,11 +8,11 @@
 
   grid-template-columns: repeat(7, minmax(0, 1fr));
 
-  gap: 4px;
+  gap: var(--space-4);
 }
 
 .reading-calendar__weekdays {
-  margin-bottom: 6px;
+  margin-bottom: var(--space-6);
 }
 
 .reading-calendar__weekdays span {
@@ -89,7 +89,7 @@
   color: #ffffff;
   background: rgba(0, 0, 0, 0.75);
 
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
 
   font-size: 9px;
   font-weight: 700;
@@ -152,11 +152,11 @@
 @media (min-width: 600px) {
   .reading-calendar__weekdays,
   .reading-calendar__grid {
-    gap: 6px;
+    gap: var(--space-6);
   }
 
   .reading-calendar__weekdays {
-    margin-bottom: 8px;
+    margin-bottom: var(--space-8);
   }
 
   .reading-calendar__weekdays span {
