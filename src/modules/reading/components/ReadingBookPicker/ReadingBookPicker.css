@@ -13,7 +13,7 @@
   padding: 0 14px;
 
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
 
   background: var(--surface);
 }
@@ -81,7 +81,7 @@
   padding: 9px;
 
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-14);
 
   background: var(--surface);
   color: var(--text);
@@ -120,7 +120,7 @@
 
   overflow: hidden;
 
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 
   background: var(--bg);
 

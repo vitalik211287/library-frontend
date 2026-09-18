@@ -14,7 +14,7 @@
   margin: 0 0 14px;
   padding: 10px 12px;
 
-  border-radius: 10px;
+  border-radius: var(--radius-md);
 
   background: rgba(220, 38, 38, 0.12);
   color: #dc2626;
@@ -27,7 +27,7 @@
   padding: 34px 16px;
 
   border: 1px dashed var(--border);
-  border-radius: 16px;
+  border-radius: var(--radius-xl);
 
   color: var(--text-secondary);
 
@@ -146,7 +146,7 @@
   padding: 0 14px;
 
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
 
   background: transparent;
   color: var(--text);
@@ -265,7 +265,7 @@
   padding: 0 14px;
 
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
 
   background: transparent;
   color: var(--text);

@@ -20,7 +20,6 @@
 
   padding-top: calc(58px + env(safe-area-inset-top));
 
-  box-sizing: border-box;
 }
 
 .app-main-layout {
@@ -61,7 +60,6 @@
 
     padding-top: 0;
 
-    box-sizing: border-box;
   }
 
   .app-main-layout {
@@ -93,7 +91,6 @@
 
     padding-right: 24px;
 
-    box-sizing: border-box;
   }
 
   .app-main-layout--with-sidebar .app-main-column {

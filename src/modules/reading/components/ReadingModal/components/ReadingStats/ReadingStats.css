@@ -112,7 +112,7 @@
 
   padding: 9px 12px;
 
-  border-radius: 10px;
+  border-radius: var(--radius-md);
 
   background: var(--surface);
   color: var(--accent);
@@ -296,7 +296,7 @@
   justify-content: center;
 
   border: 1px solid var(--accent);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 
   background: var(--accent-bg);
   color: var(--accent);
