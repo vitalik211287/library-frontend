@@ -3,15 +3,14 @@
   max-width: 1100px;
   margin: 0 auto;
   padding: 24px 16px 40px;
-  box-sizing: border-box;
 }
 
 .admin-users-page__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
-  margin-bottom: 20px;
+  gap: var(--space-16);
+  margin-bottom: var(--space-20);
 }
 
 .admin-users-page__title {
@@ -30,14 +29,14 @@
 .admin-users-page__count {
   min-width: 42px;
   height: 42px;
-  padding: 0 12px;
+  padding: 0 var(--space-12);
 
   display: inline-flex;
   align-items: center;
   justify-content: center;
 
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: var(--surface);
 
   color: var(--text);
@@ -46,14 +45,14 @@
 
 .admin-users-page__message {
   margin: 0;
-  padding: 24px;
+  padding: var(--space-24);
 
   color: var(--text-secondary);
 }
 
 .admin-users-page__list {
   display: grid;
-  gap: 14px;
+  gap: var(--space-14);
 }
 
 .admin-user-card {
@@ -63,9 +62,9 @@
     minmax(300px, 1fr)
     auto;
   align-items: center;
-  gap: 20px;
+  gap: var(--space-20);
 
-  padding: 18px;
+  padding: var(--space-18);
 }
 
 .admin-user-card__main {
@@ -73,7 +72,7 @@
 
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: var(--space-14);
 }
 
 .admin-user-card__avatar {
@@ -88,7 +87,7 @@
   overflow: hidden;
 
   border: 1px solid var(--border);
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   background: transparent;
 
   color: var(--text);
@@ -111,7 +110,7 @@
 
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: var(--space-8);
 }
 
 .admin-user-card__name {
@@ -142,7 +141,7 @@
 
   padding: 3px 7px;
 
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: var(--accent);
 
   color: #ffffff;
@@ -154,7 +153,7 @@
 .admin-user-card__meta {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 12px;
+  gap: var(--space-12);
 }
 
 .admin-user-card__meta-item {
@@ -191,20 +190,17 @@
   display: flex;
   flex-direction: column;
   align-items: flex-end;
-  gap: 6px;
+  gap: var(--space-6);
 }
 
 .admin-user-card__button {
   min-width: 130px;
   min-height: 40px;
-  padding: 0 14px;
+  padding: 0 var(--space-14);
 
   border: 0;
-  border-radius: 10px;
+  border-radius: var(--radius-md);
 
-  cursor: pointer;
-
-  font: inherit;
   font-size: 13px;
   font-weight: 600;
 }
@@ -232,16 +228,14 @@
 .admin-user-card__books-button {
   width: fit-content;
   min-width: 42px;
-  padding: 6px 12px;
+  padding: var(--space-6) var(--space-12);
 
   border: 1px solid var(--accent);
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   background: color-mix(in srgb, var(--accent) 12%, transparent);
 
   color: var(--accent);
-  cursor: pointer;
 
-  font: inherit;
   font-size: 13px;
   font-weight: 700;
 
@@ -303,7 +297,7 @@
 
   display: flex;
   align-items: center;
-  gap: 16px;
+  gap: var(--space-16);
 }
 
 .admin-library__user-avatar {
@@ -317,7 +311,7 @@
 
   overflow: hidden;
 
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   background: #1b1f27;
   border: 1px solid rgba(255, 255, 255, 0.08);
 
@@ -360,7 +354,7 @@
 
 .admin-library__user-info span {
   display: block;
-  margin-top: 8px;
+  margin-top: var(--space-8);
 
   color: #858c9a;
   font-size: 12px;
@@ -371,22 +365,21 @@
 
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 10px;
+  gap: var(--space-10);
 }
 
 .admin-library__stats > div {
   min-width: 0;
   height: 60px;
   padding: 7px 10px;
-  box-sizing: border-box;
 
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 4px;
+  gap: var(--space-4);
 
   border: 1px solid rgba(255, 255, 255, 0.07);
-  border-radius: 14px;
+  border-radius: var(--radius-14);
   background: #181c23;
 }
 
@@ -405,7 +398,7 @@
   padding: 0 22px 16px;
 
   display: flex;
-  gap: 8px;
+  gap: var(--space-8);
 
   overflow-x: auto;
   scrollbar-width: none;
@@ -419,16 +412,14 @@
   flex: 0 0 auto;
 
   min-height: 38px;
-  padding: 0 14px;
+  padding: 0 var(--space-14);
 
   border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: #161a21;
 
   color: #aeb4c1;
-  cursor: pointer;
 
-  font: inherit;
   font-size: 12px;
   font-weight: 600;
 }
@@ -457,18 +448,15 @@
   display: grid;
   grid-template-columns: 54px minmax(0, 1fr) auto;
   align-items: center;
-  gap: 12px;
+  gap: var(--space-12);
 
   border: 1px solid transparent;
   border-bottom-color: rgba(255, 255, 255, 0.07);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   background: transparent;
 
   color: inherit;
   text-align: left;
-  cursor: pointer;
-
-  font: inherit;
 }
 
 .admin-library-book:hover {
@@ -490,7 +478,7 @@
 
   overflow: hidden;
 
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
   background: #20242c;
   border: 1px solid rgba(255, 255, 255, 0.08);
 }
@@ -506,7 +494,7 @@
 
   display: flex;
   flex-direction: column;
-  gap: 4px;
+  gap: var(--space-4);
 }
 
 .admin-library-book__body > strong {
@@ -540,9 +528,9 @@
 }
 
 .admin-library-book__status {
-  padding: 4px 8px;
+  padding: var(--space-4) var(--space-8);
 
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   border: 1px solid rgba(255, 255, 255, 0.09);
   background: #1b2028;
 }
@@ -606,11 +594,10 @@
   justify-content: center;
 
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  border-radius: var(--radius-lg);
   background: #161a21;
 
   color: #e3e6eb;
-  cursor: pointer;
 
   font-size: 26px;
   line-height: 1;
@@ -621,7 +608,7 @@
 
   display: flex;
   align-items: flex-start;
-  gap: 18px;
+  gap: var(--space-18);
 }
 
 .admin-book-history__cover {
@@ -635,7 +622,7 @@
 
   overflow: hidden;
 
-  border-radius: 10px;
+  border-radius: var(--radius-md);
   border: 1px solid rgba(255, 255, 255, 0.09);
   background: #1b1f27;
 }
@@ -668,13 +655,13 @@
 
 .admin-book-history__status {
   width: fit-content;
-  margin-bottom: 10px;
+  margin-bottom: var(--space-10);
   padding: 5px 10px;
 
   display: inline-flex;
 
   border: 1px solid rgba(35, 199, 116, 0.55);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: rgba(35, 199, 116, 0.12);
 
   color: #4be492;
@@ -692,11 +679,11 @@
 .admin-book-history__progress {
   width: min(320px, 100%);
   height: 7px;
-  margin-top: 8px;
+  margin-top: var(--space-8);
 
   overflow: hidden;
 
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: #272c35;
 }
 
@@ -714,23 +701,21 @@
 
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 10px;
+  gap: var(--space-10);
 
   border-top: 1px solid rgba(255, 255, 255, 0.07);
 }
 
 .admin-book-history__tab {
   min-height: 44px;
-  padding: 0 12px;
+  padding: 0 var(--space-12);
 
   border: 1px solid rgba(255, 255, 255, 0.08);
   border-radius: 13px;
   background: #151920;
 
   color: #aeb4c1;
-  cursor: pointer;
 
-  font: inherit;
   font-size: 12px;
   font-weight: 600;
 }
@@ -742,12 +727,12 @@
 }
 
 .admin-book-history__title-row {
-  margin-top: 28px;
+  margin-top: var(--space-28);
 
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 16px;
+  gap: var(--space-16);
 }
 
 .admin-book-history__title-row h3 {
@@ -765,7 +750,7 @@
 /* ===== TIMELINE ===== */
 
 .admin-timeline {
-  margin-top: 18px;
+  margin-top: var(--space-18);
 }
 
 .admin-timeline__item {
@@ -773,7 +758,7 @@
 
   display: grid;
   grid-template-columns: 42px minmax(0, 1fr);
-  gap: 14px;
+  gap: var(--space-14);
 }
 
 .admin-timeline__rail {
@@ -813,7 +798,7 @@
   justify-content: center;
 
   border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 50%;
+  border-radius: var(--radius-round);
   background: #1a1f27;
 
   color: #d8dde6;
@@ -864,7 +849,7 @@
 
 .admin-timeline__content time {
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: var(--space-8);
 
   color: #9097a5;
   font-size: 11px;
@@ -911,7 +896,7 @@
 @media (max-width: 900px) {
   .admin-user-card {
     grid-template-columns: 1fr;
-    gap: 16px;
+    gap: var(--space-16);
   }
 
   .admin-user-card__actions {
@@ -961,8 +946,8 @@
   }
 
   .admin-user-card {
-    padding: 14px;
-    border-radius: 14px;
+    padding: var(--space-14);
+    border-radius: var(--radius-14);
   }
 
   .admin-user-card__meta {
@@ -989,12 +974,12 @@
 
   .admin-library__stats {
     padding: 0 14px 14px;
-    gap: 8px;
+    gap: var(--space-8);
   }
 
   .admin-library__stats > div {
     min-height: 70px;
-    padding: 10px;
+    padding: var(--space-10);
   }
 
   .admin-library__filters {
@@ -1021,7 +1006,7 @@
 
   .admin-book-history__header {
     padding-right: 42px;
-    gap: 14px;
+    gap: var(--space-14);
   }
 
   .admin-book-history__cover {
@@ -1060,14 +1045,12 @@
   .admin-book-history__back {
     display: inline-flex;
     align-items: center;
-    gap: 8px;
-    margin-bottom: 18px;
+    gap: var(--space-8);
+    margin-bottom: var(--space-18);
     padding: 8px 0;
     border: 0;
     background: transparent;
     color: inherit;
-    font: inherit;
-    cursor: pointer;
   }
 }
 /* Mobile admin library polish */
@@ -1084,20 +1067,20 @@
   .admin-library__stats {
     padding-left: 20px;
     padding-right: 20px;
-    gap: 8px;
+    gap: var(--space-8);
   }
 
   .admin-library__stats > div {
     min-height: 66px;
     padding: 9px 10px;
-    border-radius: 12px;
+    border-radius: var(--radius-lg);
   }
 }
 @media (max-width: 600px) {
   .admin-library__filters {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 8px;
+    gap: var(--space-8);
   }
 
   .admin-library__filter {
@@ -1180,7 +1163,7 @@
     z-index: 20;
 
     min-height: 0;
-    padding: 12px;
+    padding: var(--space-12);
 
     pointer-events: none;
   }
@@ -1241,7 +1224,7 @@
     width: calc(100% - 28px);
     min-height: 46px;
     margin: 0 14px 14px;
-    padding: 0 14px;
+    padding: 0 var(--space-14);
 
     display: flex;
     align-items: center;
@@ -1252,10 +1235,8 @@
     background: rgba(157, 103, 245, 0.1);
 
     color: #c7a6ff;
-    font: inherit;
     font-size: 13px;
     font-weight: 700;
-    cursor: pointer;
   }
 
   .admin-library__history-button span:last-child {
