@@ -1,13 +1,11 @@
 ﻿.stats-goals {
-  margin-bottom: 14px;
+  margin-bottom: var(--space-14);
 
-  padding: 18px;
-
-  box-sizing: border-box;
+  padding: var(--space-18);
 }
 
 .stats-goals__header {
-  margin-bottom: 20px;
+  margin-bottom: var(--space-20);
 }
 
 .stats-goals__header h2 {
@@ -29,7 +27,7 @@
   display: flex;
   flex-direction: column;
 
-  gap: 18px;
+  gap: var(--space-18);
 }
 
 .reading-goal {
@@ -42,9 +40,9 @@
   align-items: center;
   justify-content: space-between;
 
-  gap: 12px;
+  gap: var(--space-12);
 
-  margin-bottom: 8px;
+  margin-bottom: var(--space-8);
 }
 
 .reading-goal__top span {
@@ -72,7 +70,7 @@
 
   background: rgba(139, 92, 246, 0.12);
 
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
 }
 
 .reading-goal__bar {
@@ -101,7 +99,7 @@
 
 @media (min-width: 600px) {
   .stats-goals {
-    padding: 20px;
+    padding: var(--space-20);
   }
 }
 
@@ -111,7 +109,7 @@
 
     grid-template-columns: repeat(3, minmax(0, 1fr));
 
-    gap: 24px;
+    gap: var(--space-24);
   }
 }
 
@@ -139,9 +137,9 @@
 }
 
 .reading-goals--clickable {
-  padding: 12px;
+  padding: var(--space-12);
 
-  border-radius: 14px;
+  border-radius: var(--radius-14);
 
   cursor: pointer;
 

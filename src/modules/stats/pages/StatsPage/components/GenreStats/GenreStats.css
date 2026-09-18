@@ -1,14 +1,14 @@
 .genre-list {
   display: flex;
   flex-direction: column;
-  gap: 14px;
+  gap: var(--space-14);
 }
 
 .genre-item__top {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: var(--space-12);
 
   margin-bottom: 7px;
 }
@@ -24,10 +24,7 @@
 .genre-item__top span {
   flex: 0 0 auto;
 
-  color: var(
-    --text-secondary,
-    #8b8b96
-  );
+  color: var(--text-secondary, #8b8b96);
 
   font-size: 11px;
 }
@@ -37,14 +34,9 @@
 
   overflow: hidden;
 
-  background: rgba(
-    139,
-    92,
-    246,
-    0.1
-  );
+  background: rgba(139, 92, 246, 0.1);
 
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
 }
 
 .genre-item__bar {

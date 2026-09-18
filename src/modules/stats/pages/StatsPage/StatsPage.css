@@ -3,23 +3,21 @@
   max-width: 1180px;
 
   margin: 0 auto;
-  padding: 14px 12px 88px;
+  padding: var(--space-14) var(--space-12) 88px;
 
   color: var(--text);
-
-  box-sizing: border-box;
 }
 
 .stats-grid {
   display: grid;
   grid-template-columns: 1fr;
 
-  gap: 10px;
+  gap: var(--space-10);
 }
 
 .stats-card {
   min-width: 0;
-  padding: 14px;
+  padding: var(--space-14);
 }
 
 .stats-card__header {
@@ -27,9 +25,9 @@
   align-items: flex-start;
   justify-content: space-between;
 
-  gap: 8px;
+  gap: var(--space-8);
 
-  margin-bottom: 12px;
+  margin-bottom: var(--space-12);
 }
 
 .stats-card h2 {
@@ -50,7 +48,7 @@
 
 .stats-empty,
 .stats-state {
-  padding: 22px 12px;
+  padding: 22px var(--space-12);
 
   color: var(--text-secondary, #8b8b96);
 
@@ -69,20 +67,15 @@
 
 @media (min-width: 600px) {
   .stats-page {
-    padding: 18px 18px 92px;
+    padding: var(--space-18) var(--space-18) 92px;
   }
 
   .stats-grid {
-    gap: 12px;
-  }
-
-  .stats-card {
-    min-width: 0;
-    padding: 14px;
+    gap: var(--space-12);
   }
 
   .stats-card__header {
-    margin-bottom: 14px;
+    margin-bottom: var(--space-14);
   }
 
   .stats-card h2 {
@@ -114,15 +107,10 @@
 
 @media (min-width: 1100px) {
   .stats-page {
-    padding: 24px 24px 42px;
+    padding: var(--space-24) var(--space-24) 42px;
   }
 
   .stats-grid {
-    gap: 14px;
-  }
-
-  .stats-card {
-    min-width: 0;
-    padding: 14px;
+    gap: var(--space-14);
   }
 }

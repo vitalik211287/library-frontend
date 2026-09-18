@@ -2,9 +2,7 @@
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 16px;
-
-  box-sizing: border-box;
+  padding: var(--space-16);
 
   color: var(--text);
 }
@@ -18,7 +16,7 @@
 
   grid-template-columns: repeat(2, minmax(0, 1fr));
 
-  gap: 12px;
+  gap: var(--space-12);
 }
 
 /* =========================
@@ -26,7 +24,7 @@
 ========================= */
 
 .achievements-state {
-  padding: 36px 20px;
+  padding: 36px var(--space-20);
 
   color: var(--text-secondary);
 
@@ -54,7 +52,7 @@
   .achievements-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
 
-    gap: 16px;
+    gap: var(--space-16);
   }
 }
 
@@ -64,12 +62,12 @@
 
 @media (min-width: 900px) {
   .achievements-page {
-    padding: 28px;
+    padding: var(--space-28);
   }
 
   .achievements-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
 
-    gap: 18px;
+    gap: var(--space-18);
   }
 }

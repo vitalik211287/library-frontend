@@ -1,18 +1,18 @@
 ﻿.stats-summary {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 10px;
+  gap: var(--space-10);
 
-  margin-bottom: 16px;
+  margin-bottom: var(--space-16);
 }
 
 .stats-summary-card {
   min-width: 0;
-  padding: 14px;
+  padding: var(--space-14);
 
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: var(--space-10);
 }
 
 .stats-summary-card__icon {
@@ -55,7 +55,7 @@
 .stats-summary-card span {
   display: block;
 
-  margin-top: 4px;
+  margin-top: var(--space-4);
 
   color: var(--text-secondary, #8b8b96);
 
@@ -70,15 +70,6 @@
 }
 
 @media (min-width: 900px) {
-  .stats-summary-card {
-    min-width: 0;
-    padding: 14px;
-
-    display: flex;
-    align-items: center;
-    gap: 10px;
-  }
-
   .stats-summary-card strong {
     font-size: 24px;
   }
