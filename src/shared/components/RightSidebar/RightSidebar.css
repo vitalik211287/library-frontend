@@ -9,11 +9,9 @@
   display: flex;
   flex-direction: column;
 
-  gap: 16px;
+  gap: var(--space-16);
 
-  padding: 20px 0;
-
-  box-sizing: border-box;
+  padding: var(--space-20) 0;
 }
 
 /* =========================
@@ -23,12 +21,9 @@
 .right-widget {
   width: 100%;
 
-  padding: 16px;
-
-  box-sizing: border-box;
-
+  padding: var(--space-16);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: var(--radius-xl);
 
   background: var(--surface);
 }
@@ -38,9 +33,9 @@
   align-items: center;
   justify-content: space-between;
 
-  gap: 10px;
+  gap: var(--space-10);
 
-  margin-bottom: 14px;
+  margin-bottom: var(--space-14);
 }
 
 .right-widget__title {
@@ -49,7 +44,7 @@
   display: flex;
   align-items: center;
 
-  gap: 8px;
+  gap: var(--space-8);
 }
 
 .right-widget__title svg {
@@ -84,11 +79,8 @@
   align-items: center;
   justify-content: center;
 
-  padding: 0 6px;
-
-  box-sizing: border-box;
-
-  border-radius: 999px;
+  padding: 0 var(--space-6);
+  border-radius: var(--radius-pill);
 
   background: var(--accent-bg);
   color: var(--accent);
@@ -107,7 +99,7 @@
     78px
     minmax(0, 1fr);
 
-  gap: 12px;
+  gap: var(--space-12);
 }
 
 .right-current__cover {
@@ -116,7 +108,7 @@
 
   overflow: hidden;
 
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 
   background: var(--surface-secondary);
 }
@@ -138,7 +130,7 @@
 }
 
 .right-current__content h3 {
-  margin: 1px 0 4px;
+  margin: 1px 0 var(--space-4);
 
   overflow: hidden;
 
@@ -181,7 +173,7 @@
 
   overflow: hidden;
 
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
 
   background: var(--surface-secondary);
 }
@@ -218,10 +210,10 @@
   display: flex;
   align-items: center;
 
-  gap: 4px;
+  gap: var(--space-4);
 
-  margin-top: 8px;
-  padding: 6px 9px;
+  margin-top: var(--space-8);
+  padding: var(--space-6) 9px;
 
   border: 1px solid var(--accent);
   border-radius: 7px;
@@ -259,7 +251,7 @@
   gap: 7px;
 
   margin-top: 13px;
-  padding-top: 12px;
+  padding-top: var(--space-12);
 
   border-top: 1px solid var(--border);
 }
@@ -276,12 +268,12 @@
 
   align-items: center;
 
-  gap: 8px;
+  gap: var(--space-8);
 
   padding: 5px;
 
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-sm);
 
   background: transparent;
   color: inherit;
@@ -323,7 +315,7 @@
 .right-current-mini__content strong {
   display: block;
 
-  margin-bottom: 6px;
+  margin-bottom: var(--space-6);
 
   overflow: hidden;
 
@@ -342,7 +334,7 @@
 
   overflow: hidden;
 
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
 
   background: var(--surface-secondary);
 }
@@ -369,7 +361,7 @@
   display: flex;
   flex-direction: column;
 
-  gap: 8px;
+  gap: var(--space-8);
 }
 
 .right-shelf {
@@ -378,13 +370,10 @@
   display: flex;
   align-items: center;
 
-  gap: 10px;
+  gap: var(--space-10);
 
   padding: 7px 9px;
-
-  box-sizing: border-box;
-
-  border-radius: 10px;
+  border-radius: var(--radius-md);
 
   background: var(--surface-secondary);
 }
@@ -424,7 +413,7 @@
   align-items: center;
   justify-content: space-between;
 
-  gap: 10px;
+  gap: var(--space-10);
 
   flex: 1;
 }
@@ -458,7 +447,7 @@
 
   align-items: center;
 
-  padding: 12px 4px;
+  padding: var(--space-12) var(--space-4);
 
   border-radius: 11px;
 
@@ -493,7 +482,7 @@
 }
 
 .right-widget__note {
-  margin: 10px 2px 0;
+  margin: var(--space-10) 2px 0;
 
   color: var(--text);
 
@@ -509,9 +498,9 @@
   display: flex;
   align-items: center;
 
-  gap: 10px;
+  gap: var(--space-10);
 
-  padding: 10px;
+  padding: var(--space-10);
 
   border-radius: 11px;
 
@@ -584,11 +573,8 @@
   align-items: center;
   justify-content: center;
 
-  padding: 12px;
-
-  box-sizing: border-box;
-
-  border-radius: 10px;
+  padding: var(--space-12);
+  border-radius: var(--radius-md);
 
   background: var(--surface-secondary);
   color: var(--text);
@@ -628,11 +614,11 @@
 
 @media (min-width: 1750px) {
   .right-sidebar {
-    gap: 18px;
+    gap: var(--space-18);
   }
 
   .right-widget {
-    padding: 18px;
+    padding: var(--space-18);
   }
 
   .right-current {
@@ -640,7 +626,7 @@
       86px
       minmax(0, 1fr);
 
-    gap: 14px;
+    gap: var(--space-14);
   }
 
   .right-current__cover {

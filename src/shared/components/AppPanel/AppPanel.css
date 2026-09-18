@@ -1,4 +1,4 @@
-﻿.app-panel {
+.app-panel {
   background: var(--panel-bg);
   border: 1px solid var(--panel-border);
   border-radius: var(--panel-radius);
@@ -6,8 +6,6 @@
 
   backdrop-filter: blur(var(--panel-blur));
   -webkit-backdrop-filter: blur(var(--panel-blur));
-
-  box-sizing: border-box;
 }
 
 .app-panel--secondary {

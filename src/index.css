@@ -20,6 +20,31 @@
 
   --social-bg: rgba(244, 243, 236, 0.5);
 
+  /* SPACING */
+  --space-4: 4px;
+  --space-6: 6px;
+  --space-8: 8px;
+  --space-10: 10px;
+  --space-12: 12px;
+  --space-14: 14px;
+  --space-16: 16px;
+  --space-18: 18px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-28: 28px;
+  --space-32: 32px;
+
+  /* RADII */
+  --radius-sm: 8px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-14: 14px;
+  --radius-xl: 16px;
+  --radius-2xl: 20px;
+  --radius-panel: 22px;
+  --radius-pill: 999px;
+  --radius-round: 50%;
+
   /* LAYOUT */
   --page-padding-x: 12px;
   --page-padding-top: 18px;
@@ -113,6 +138,38 @@
   --panel-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
   --shadow:
     rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+}
+
+/* RESET */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+img {
+  display: block;
+  max-width: 100%;
+}
+
+button,
+input,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
+}
+
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
+
+button:not(:disabled) {
+  cursor: pointer;
 }
 
 /* PAGE */

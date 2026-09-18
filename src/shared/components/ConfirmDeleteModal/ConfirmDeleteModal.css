@@ -7,13 +7,11 @@
 }
 
 .confirm-delete-modal .modal__content {
-  padding: 20px;
+  padding: var(--space-20);
 }
 
 .confirm-delete-modal__content {
   width: 100%;
-
-  box-sizing: border-box;
 }
 
 /* =========================
@@ -27,9 +25,9 @@
   display: grid;
   place-items: center;
 
-  margin: 0 auto 14px;
+  margin: 0 auto var(--space-14);
 
-  border-radius: 50%;
+  border-radius: var(--radius-round);
 
   background: rgba(220, 38, 38, 0.12);
   color: #dc2626;
@@ -52,7 +50,7 @@
 ========================= */
 
 .confirm-delete-modal h3 {
-  margin: 0 0 6px;
+  margin: 0 0 var(--space-6);
 
   color: var(--text-h);
 
@@ -80,16 +78,16 @@
 
   gap: 9px;
 
-  margin-top: 20px;
+  margin-top: var(--space-20);
 }
 
 .confirm-delete-modal__actions button {
   min-height: 44px;
 
-  padding: 10px 12px;
+  padding: var(--space-10) var(--space-12);
 
   border: 1px solid var(--border);
-  border-radius: 10px;
+  border-radius: var(--radius-md);
 
   background: transparent;
   color: var(--text);
@@ -140,14 +138,14 @@
 
 @media (max-width: 390px) {
   .confirm-delete-modal .modal__content {
-    padding: 18px 16px;
+    padding: var(--space-18) var(--space-16);
   }
 
   .confirm-delete-modal__icon {
     width: 48px;
     height: 48px;
 
-    margin-bottom: 12px;
+    margin-bottom: var(--space-12);
   }
 
   .confirm-delete-modal h3 {
@@ -159,6 +157,6 @@
   }
 
   .confirm-delete-modal__actions {
-    margin-top: 18px;
+    margin-top: var(--space-18);
   }
 }
