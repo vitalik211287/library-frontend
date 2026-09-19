@@ -99,7 +99,7 @@ const ReadingGoal = () => {
             </div>
 
             <div className="reading-goal-card__item">
-              <Icon name="bookmark" />
+              <Icon name="pages" />
 
               <div>
                 <strong>

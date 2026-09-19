@@ -1,5 +1,6 @@
 import Icon from "../Icon/Icon.jsx";
 
+export const HomeIcon = () => <Icon name="home" />;
 export const CatalogIcon = () => <Icon name="book" />;
 export const AddIcon = () => <Icon name="add" />;
 export const CalendarIcon = () => <Icon name="calendar" />;

@@ -1,19 +1,10 @@
-const ClockIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <circle cx="12" cy="12" r="9" />
-    <path d="M12 7v5l3 2" />
-  </svg>
-);
+import Icon from "../../Icon/Icon.jsx";
 
-const ActivityWidget = ({
-  currentBooksCount,
-  finishedCount,
-  isLoading,
-}) => (
+const ActivityWidget = ({ currentBooksCount, finishedCount, isLoading }) => (
   <section className="right-widget">
     <div className="right-widget__header">
       <div className="right-widget__title">
-        <ClockIcon />
+        <Icon name="clock" />
         <h2>Активність</h2>
       </div>
     </div>

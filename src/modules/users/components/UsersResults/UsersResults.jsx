@@ -1,15 +1,7 @@
+import Icon from "../../../../shared/components/Icon/Icon.jsx";
 import UserSearchCard from "../UserSearchCard/UserSearchCard.jsx";
 
 import "./UsersResults.css";
-
-const EmptyUsersIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <circle cx="9" cy="8" r="4" />
-    <path d="M2 21a7 7 0 0 1 14 0" />
-    <path d="M17 8h5" />
-    <path d="M19.5 5.5v5" />
-  </svg>
-);
 
 const UsersResults = ({
   query,
@@ -24,7 +16,7 @@ const UsersResults = ({
     return (
       <div className="users-results__state">
         <div className="users-results__state-icon">
-          <EmptyUsersIcon />
+          <Icon name="user-add" />
         </div>
 
         <strong>Знайдіть читача</strong>
@@ -78,4 +70,3 @@ const UsersResults = ({
 };
 
 export default UsersResults;
-

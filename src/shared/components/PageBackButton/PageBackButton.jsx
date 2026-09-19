@@ -1,4 +1,6 @@
-﻿import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
+import Icon from "../Icon/Icon.jsx";
 
 import "./PageBackButton.css";
 
@@ -21,10 +23,7 @@ const PageBackButton = ({ label, to }) => {
       onClick={handleClick}
       aria-label={`Назад: ${label}`}
     >
-      <svg viewBox="0 0 24 24" aria-hidden="true">
-        <path d="M19 12H5" />
-        <path d="m12 19-7-7 7-7" />
-      </svg>
+      <Icon name="arrow-left" />
 
       <span>{label}</span>
     </button>

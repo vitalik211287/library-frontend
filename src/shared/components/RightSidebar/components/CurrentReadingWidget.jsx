@@ -1,26 +1,8 @@
-import {
-  getProgress,
-  getProgressLabel,
-} from "../utils/rightSidebarHelpers.js";
+import Icon from "../../Icon/Icon.jsx";
 
-const ReadingIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M3.5 5.5A2.5 2.5 0 0 1 6 3h4a2 2 0 0 1 2 2v15a2 2 0 0 0-2-2H6a2.5 2.5 0 0 0-2.5 2.5v-15Z" />
-    <path d="M20.5 5.5A2.5 2.5 0 0 0 18 3h-4a2 2 0 0 0-2 2v15a2 2 0 0 1 2-2h4a2.5 2.5 0 0 1 2.5 2.5v-15Z" />
-  </svg>
-);
+import { getProgress, getProgressLabel } from "../utils/rightSidebarHelpers.js";
 
-const ArrowIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="m9 6 6 6-6 6" />
-  </svg>
-);
-
-const CurrentReadingWidget = ({
-  currentBooks,
-  isLoading,
-  onOpenReading,
-}) => {
+const CurrentReadingWidget = ({ currentBooks, isLoading, onOpenReading }) => {
   const mainCurrentBook = currentBooks[0] ?? null;
   const currentProgress = getProgress(mainCurrentBook);
 
@@ -28,7 +10,7 @@ const CurrentReadingWidget = ({
     <section className="right-widget">
       <div className="right-widget__header">
         <div className="right-widget__title">
-          <ReadingIcon />
+          <Icon name="reading" />
           <h2>Зараз читаю</h2>
         </div>
 
@@ -45,10 +27,7 @@ const CurrentReadingWidget = ({
         <div className="right-current">
           <div className="right-current__cover">
             {mainCurrentBook.coverUrl ? (
-              <img
-                src={mainCurrentBook.coverUrl}
-                alt={mainCurrentBook.title}
-              />
+              <img src={mainCurrentBook.coverUrl} alt={mainCurrentBook.title} />
             ) : (
               <div className="right-no-cover">
                 Немає
@@ -79,7 +58,7 @@ const CurrentReadingWidget = ({
               onClick={() => onOpenReading(mainCurrentBook.id)}
             >
               Продовжити
-              <ArrowIcon />
+              <Icon name="chevron-right" />
             </button>
           </div>
         </div>
@@ -112,9 +91,7 @@ const CurrentReadingWidget = ({
                   </div>
                 </div>
 
-                <span className="right-current-mini__percent">
-                  {progress}%
-                </span>
+                <span className="right-current-mini__percent">{progress}%</span>
               </button>
             );
           })}

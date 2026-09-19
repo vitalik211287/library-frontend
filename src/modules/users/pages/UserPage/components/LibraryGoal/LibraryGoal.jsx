@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 import { apiFetch } from "../../../../../../shared/api/apiClient.js";
@@ -8,13 +8,6 @@ import LibraryGoalModal from "../../../../../stats/pages/StatsPage/components/Li
 import "../../../../../stats/components/ReadingGoal/ReadingGoal.css";
 import "./LibraryGoal.css";
 import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
-
-const EditIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="m4 20 4.4-1 9.8-9.8-3.4-3.4L5 15.6 4 20Z" />
-    <path d="m13.8 6.8 3.4 3.4" />
-  </svg>
-);
 
 const LibraryGoal = () => {
   const { activeLibrary, activeLibraryId } = useLibrary();
@@ -90,7 +83,7 @@ const LibraryGoal = () => {
               onClick={() => setIsModalOpen(true)}
               disabled={isLoading}
             >
-              <EditIcon />
+              <Icon name="edit" />
               Змінити
             </button>
           )}
