@@ -2,6 +2,7 @@
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { apiFetch } from "../../../../shared/api/apiClient.js";
+import Icon from "../../../../shared/components/Icon/Icon.jsx";
 
 import { TrophyIcon } from "../HomeIcons.jsx";
 import HomePanel from "../HomePanel/HomePanel.jsx";
@@ -9,31 +10,6 @@ import SocialFeedMenu from "./components/SocialFeedMenu/SocialFeedMenu.jsx";
 import SocialFeedEvent from "./components/SocialFeedEvent/SocialFeedEvent.jsx";
 import SocialBookModal from "./components/SocialBookModal/SocialBookModal.jsx";
 import "./SocialFeed.css";
-
-const ClapIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M8.5 11V5.5a1.5 1.5 0 0 1 3 0V10" />
-    <path d="M11.5 10V4.5a1.5 1.5 0 0 1 3 0V10" />
-    <path d="M14.5 10V6a1.5 1.5 0 0 1 3 0v5" />
-    <path d="M17.5 11V8.5a1.5 1.5 0 0 1 3 0V14c0 4.4-3.1 7-7.5 7h-1.2a7 7 0 0 1-5.4-2.6L3.8 15a1.6 1.6 0 0 1 2.3-2.2L8.5 15V11a1.5 1.5 0 0 1 3 0" />
-  </svg>
-);
-
-const CommentIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M21 15a4 4 0 0 1-4 4H8l-5 3V7a4 4 0 0 1 4-4h10a4 4 0 0 1 4 4z" />
-  </svg>
-);
-
-const ShareIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <circle cx="18" cy="5" r="3" />
-    <circle cx="6" cy="12" r="3" />
-    <circle cx="18" cy="19" r="3" />
-    <path d="m8.6 10.7 6.8-4.4" />
-    <path d="m8.6 13.3 6.8 4.4" />
-  </svg>
-);
 
 const SocialFeed = ({ limit = null, showViewAll = false }) => {
   const navigate = useNavigate();
@@ -277,7 +253,7 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
             }}
           >
             Уся активність
-            <span>›</span>
+            <Icon name="chevron-right" />
           </button>
         )}
       </div>
@@ -333,7 +309,7 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
                     }
                   }}
                 >
-                  •••
+                  <Icon name="more-horizontal" />
                 </button>
               </header>
 
@@ -364,7 +340,7 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
                   aria-label="Підтримати"
                 >
                   <span className="social-feed-card__clap">
-                    <ClapIcon />
+                    <Icon name="clap" />
                   </span>
 
                   <span>{activity.kudosCount ?? 0}</span>
@@ -376,7 +352,7 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
                   aria-label="Коментувати"
                   title="Коментарі додамо наступним кроком"
                 >
-                  <CommentIcon />
+                  <Icon name="comment" />
                   <span>Коментувати</span>
                 </button>
 
@@ -386,7 +362,7 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
                   onClick={() => handleShare(activity)}
                   aria-label="Поділитися"
                 >
-                  <ShareIcon />
+                  <Icon name="share" />
                   <span>Поділитися</span>
                 </button>
               </div>

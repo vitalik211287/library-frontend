@@ -5,12 +5,7 @@ import useAchievements from "../../hooks/useAchievements.js";
 import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 
 import "./AchievementsPreview.css";
-
-const ArrowIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="m9 6 6 6-6 6" />
-  </svg>
-);
+import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
 
 const AchievementsPreview = ({ readingBookId }) => {
   const navigate = useNavigate();
@@ -36,7 +31,7 @@ const AchievementsPreview = ({ readingBookId }) => {
 
         <button type="button" onClick={handleOpenAchievements}>
           Усі
-          <ArrowIcon />
+          <Icon name="chevron-right" />
         </button>
       </div>
 
@@ -63,13 +58,10 @@ const AchievementsPreview = ({ readingBookId }) => {
               onClick={handleOpenAchievements}
             >
               <span className="profile-achievement__medal">
-                {achievement.category === "books" && "📚"}
-
-                {achievement.category === "pages" && "📜"}
-
-                {achievement.category === "time" && "⏱️"}
-
-                {achievement.category === "streak" && "🔥"}
+                {achievement.category === "books" && <Icon name="book" />}
+                {achievement.category === "pages" && <Icon name="pages" />}
+                {achievement.category === "time" && <Icon name="clock" />}
+                {achievement.category === "streak" && <Icon name="flame" />}
               </span>
 
               <span className="profile-achievement__content">
@@ -83,7 +75,9 @@ const AchievementsPreview = ({ readingBookId }) => {
               </span>
 
               {!achievement.unlocked && (
-                <span className="profile-achievement__lock">🔒</span>
+                <span className="profile-achievement__lock">
+                  <Icon name="lock" />
+                </span>
               )}
             </AppPanel>
           ))}

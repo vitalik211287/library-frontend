@@ -1,6 +1,7 @@
 import { BookIcon, TrophyIcon } from "../../../HomeIcons.jsx";
 
 import "./SocialFeedEvent.css";
+import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
 
 const BookPreview = ({ book, label }) => {
   if (!book) {
@@ -33,11 +34,7 @@ const BookPreview = ({ book, label }) => {
   );
 };
 
-const SocialFeedEvent = ({
-  activity,
-  onOpenBook,
-  onOpenAchievement,
-}) => {
+const SocialFeedEvent = ({ activity, onOpenBook, onOpenAchievement }) => {
   if (!activity) {
     return null;
   }
@@ -59,13 +56,12 @@ const SocialFeedEvent = ({
             <strong>Почав читати</strong>
           </div>
 
-          <span className="social-feed-event__arrow">›</span>
+          <span className="social-feed-event__arrow">
+            <Icon name="chevron-right" />
+          </span>
         </div>
 
-        <BookPreview
-          book={activity.book}
-          label="Зараз читає"
-        />
+        <BookPreview book={activity.book} label="Зараз читає" />
       </button>
     );
   }
@@ -87,22 +83,18 @@ const SocialFeedEvent = ({
             <strong>Прочитав книгу</strong>
           </div>
 
-          <span className="social-feed-event__arrow">›</span>
+          <span className="social-feed-event__arrow">
+            <Icon name="chevron-right" />
+          </span>
         </div>
 
-        <BookPreview
-          book={activity.book}
-          label="Прочитана книга"
-        />
+        <BookPreview book={activity.book} label="Прочитана книга" />
       </button>
     );
   }
 
   if (activity.type === "RATING_ADDED") {
-    const rating = Math.max(
-      0,
-      Math.min(Number(activity.rating) || 0, 5),
-    );
+    const rating = Math.max(0, Math.min(Number(activity.rating) || 0, 5));
 
     return (
       <button
@@ -111,9 +103,7 @@ const SocialFeedEvent = ({
         onClick={() => onOpenBook?.(activity.book)}
       >
         <div className="social-feed-event__heading">
-          <span className="social-feed-event__rating-icon">
-            ★
-          </span>
+          <span className="social-feed-event__rating-icon">★</span>
 
           <div>
             <small>Нова оцінка</small>
@@ -126,13 +116,12 @@ const SocialFeedEvent = ({
             </span>
           </div>
 
-          <span className="social-feed-event__arrow">›</span>
+          <span className="social-feed-event__arrow">
+            <Icon name="chevron-right" />
+          </span>
         </div>
 
-        <BookPreview
-          book={activity.book}
-          label="Оцінена книга"
-        />
+        <BookPreview book={activity.book} label="Оцінена книга" />
       </button>
     );
   }
@@ -152,18 +141,16 @@ const SocialFeedEvent = ({
           <div>
             <small>Нове досягнення</small>
 
-            <strong>
-              {activity.achievement?.title || "Досягнення"}
-            </strong>
+            <strong>{activity.achievement?.title || "Досягнення"}</strong>
 
             {activity.achievement?.description && (
-              <p>
-                {activity.achievement.description}
-              </p>
+              <p>{activity.achievement.description}</p>
             )}
           </div>
 
-          <span className="social-feed-event__arrow">›</span>
+          <span className="social-feed-event__arrow">
+            <Icon name="chevron-right" />
+          </span>
         </div>
 
         <BookPreview

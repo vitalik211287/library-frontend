@@ -65,7 +65,23 @@
 
   background: var(--surface-secondary);
 
-  font-size: 21px;
+  color: var(--accent);
+}
+
+.profile-achievement__medal svg {
+  width: 22px;
+  height: 22px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.profile-achievement__medal svg:has(use[href$="#icon-flame"]) {
+  fill: currentColor;
+  stroke: none;
 }
 
 .profile-achievement--locked .profile-achievement__medal {
@@ -104,8 +120,17 @@
 
 .profile-achievement__lock {
   flex-shrink: 0;
+}
 
-  font-size: 12px;
+.profile-achievement__lock svg {
+  width: 14px;
+  height: 14px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 /* =========================
@@ -128,8 +153,11 @@
   .profile-achievement__medal {
     width: 36px;
     height: 36px;
+  }
 
-    font-size: 18px;
+  .profile-achievement__medal svg {
+    width: 20px;
+    height: 20px;
   }
 
   .profile-achievement__content strong {
@@ -140,8 +168,9 @@
     font-size: 9px;
   }
 
-  .profile-achievement__lock {
-    font-size: 11px;
+  .profile-achievement__lock svg {
+    width: 13px;
+    height: 13px;
   }
 }
 
@@ -165,8 +194,11 @@
   .profile-achievement__medal {
     width: 46px;
     height: 46px;
+  }
 
-    font-size: 23px;
+  .profile-achievement__medal svg {
+    width: 24px;
+    height: 24px;
   }
 
   .profile-achievement__content strong {

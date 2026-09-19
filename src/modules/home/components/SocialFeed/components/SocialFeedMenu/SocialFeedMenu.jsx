@@ -1,5 +1,6 @@
 import { ProfileIcon } from "../../../../../../shared/components/AppNavigation/NavigationIcons.jsx";
 import "./SocialFeedMenu.css";
+import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
 
 const SocialFeedMenu = ({
   activity,
@@ -36,8 +37,8 @@ const SocialFeedMenu = ({
           onClick={onOpenProfile}
         >
           <span className="social-feed-menu__item-icon social-feed-menu__item-icon--profile">
-  <ProfileIcon />
-</span>
+            <ProfileIcon />
+          </span>
 
           <span>
             <strong>Перейти до профілю</strong>
@@ -53,18 +54,7 @@ const SocialFeedMenu = ({
             onClick={onToggleNotifications}
           >
             <span className="social-feed-menu__item-icon social-feed-menu__item-icon--notification">
-              {notifyActivity ? (
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" />
-                  <path d="M10 21h4" />
-                </svg>
-              ) : (
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9" />
-                  <path d="M10 21h4" />
-                  <path d="M4 4l16 16" />
-                </svg>
-              )}
+              {notifyActivity ? <Icon name="bell" /> : <Icon name="bell-off" />}
             </span>
 
             <span>
@@ -72,14 +62,14 @@ const SocialFeedMenu = ({
                 {isUpdatingNotifications
                   ? "Зберігаємо..."
                   : notifyActivity
-                  ? "Не сповіщати"
-                  : "Увімкнути сповіщення"}
+                    ? "Не сповіщати"
+                    : "Увімкнути сповіщення"}
               </strong>
 
               <small>
                 {notifyActivity
-                ? "Не отримувати сповіщення від цього користувача"
-                : "Знову отримувати сповіщення від цього користувача"}
+                  ? "Не отримувати сповіщення від цього користувача"
+                  : "Знову отримувати сповіщення від цього користувача"}
               </small>
             </span>
           </button>
@@ -99,9 +89,7 @@ const SocialFeedMenu = ({
                 {isUnfollowing ? "Відписуємося..." : "Відписатися"}
               </strong>
 
-              <small>
-                Більше не бачити активності цього користувача
-              </small>
+              <small>Більше не бачити активності цього користувача</small>
             </span>
           </button>
         )}
