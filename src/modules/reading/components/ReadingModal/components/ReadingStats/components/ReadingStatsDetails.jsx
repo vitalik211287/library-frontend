@@ -23,7 +23,9 @@ const ReadingStatsDetails = ({
       }`}
     >
       <h3 className="reading-modal__stats-title">
-        <span>▥</span>
+        <span aria-hidden="true">
+          <Icon name="stats" />
+        </span>
         Детальна статистика
       </h3>
 

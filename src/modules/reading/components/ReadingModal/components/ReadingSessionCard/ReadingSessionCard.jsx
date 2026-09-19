@@ -134,7 +134,9 @@ const ReadingSessionCard = ({
           onClick={onStart}
           disabled={loading || startProgress === ""}
         >
-          <span className="reading-modal__action-icon">▶</span>
+          <span className="reading-modal__action-icon">
+            <Icon name="play" />
+          </span>
 
           <span className="reading-modal__action-text">
             {loading ? "Запускаємо..." : "Почати читання"}
@@ -238,7 +240,9 @@ const ReadingSessionCard = ({
             onClick={onResume}
             disabled={pauseLoading}
           >
-            <span className="reading-modal__action-icon">▶</span>
+            <span className="reading-modal__action-icon">
+              <Icon name="play" />
+            </span>
 
             <span className="reading-modal__action-text">
               {pauseLoading ? "Продовжуємо..." : "Продовжити"}
@@ -252,7 +256,9 @@ const ReadingSessionCard = ({
           onClick={onFinish}
           disabled={finishing || !canFinish}
         >
-          <span className="reading-modal__action-icon">■</span>
+          <span className="reading-modal__action-icon">
+            <Icon name="stop" />
+          </span>
 
           <span className="reading-modal__action-text">
             {finishing ? "Завершуємо..." : "Завершити"}
