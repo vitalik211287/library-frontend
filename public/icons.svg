@@ -189,4 +189,10 @@
     <circle cx="12" cy="12" r="9" />
     <path d="m8 12 2.5 2.5L16 9" />
   </symbol>
+
+  <symbol id="icon-scanner" viewBox="0 0 24 24">
+    <path d="M4 7V5a1 1 0 0 1 1-1h2M17 4h2a1 1 0 0 1 1 1v2M20 17v2a1 1 0 0 1-1 1h-2M7 20H5a1 1 0 0 1-1-1v-2" />
+    <rect x="7" y="8" width="10" height="8" rx="1" />
+    <path d="M9 10v4M11 10v4M13 10v4M15 10v4" />
+  </symbol>
 </svg>

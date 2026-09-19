@@ -1,6 +1,7 @@
 ﻿import { getStatusLabel } from "../../utils/catalogHelpers.js";
 
 import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
+import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
 import "./BookCard.css";
 
 const BookCard = ({
@@ -40,9 +41,7 @@ const BookCard = ({
             book.isWishlist ? "Прибрати з «Хочу прочитати»" : "Хочу прочитати"
           }
         >
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M6 4.5A1.5 1.5 0 0 1 7.5 3h9A1.5 1.5 0 0 1 18 4.5V21l-6-4-6 4V4.5Z" />
-          </svg>
+          <Icon name="bookmark" />
         </button>
       )}
 

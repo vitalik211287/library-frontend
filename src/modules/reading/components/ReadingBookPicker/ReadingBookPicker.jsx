@@ -1,6 +1,7 @@
 import { useMemo, useState } from "react";
 
 import Modal from "../../../../shared/components/Modal/Modal.jsx";
+import Icon from "../../../../shared/components/Icon/Icon.jsx";
 
 import "./ReadingBookPicker.css";
 
@@ -130,10 +131,7 @@ const ReadingBookPicker = ({
     >
       {!isLoading && books.length > 0 && (
         <label className="reading-book-picker__search">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <circle cx="11" cy="11" r="7" />
-            <path d="m20 20-4-4" />
-          </svg>
+          <Icon name="search" />
 
           <input
             type="search"
