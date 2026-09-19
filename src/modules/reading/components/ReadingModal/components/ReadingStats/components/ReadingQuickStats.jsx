@@ -1,3 +1,4 @@
+import Icon from "../../../../../../../shared/components/Icon/Icon.jsx";
 const ReadingQuickStats = ({
   totalReadingValue,
   progressReadValue,
@@ -12,10 +13,7 @@ const ReadingQuickStats = ({
       <div className="reading-modal__quick-stats">
         <div className="reading-modal__quick-stat">
           <span className="reading-modal__quick-stat-icon">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <circle cx="12" cy="12" r="8" />
-              <path d="M12 8v5l3 2" />
-            </svg>
+            <Icon name="clock" />
           </span>
 
           <strong>{totalReadingValue}</strong>
@@ -24,10 +22,7 @@ const ReadingQuickStats = ({
 
         <div className="reading-modal__quick-stat">
           <span className="reading-modal__quick-stat-icon">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11v16H6.5A2.5 2.5 0 0 0 4 21.5Z" />
-              <path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v16h4.5a2.5 2.5 0 0 1 2.5 2.5Z" />
-            </svg>
+            <Icon name="reading" />
           </span>
 
           <strong>{progressReadValue}</strong>
@@ -36,11 +31,7 @@ const ReadingQuickStats = ({
 
         <div className="reading-modal__quick-stat">
           <span className="reading-modal__quick-stat-icon">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M4 16a8 8 0 1 1 16 0" />
-              <path d="m12 12 4-4" />
-              <circle cx="12" cy="16" r="1" />
-            </svg>
+            <Icon name="speed" />
           </span>
 
           <strong>{speedValue}</strong>
@@ -49,12 +40,7 @@ const ReadingQuickStats = ({
 
         <div className="reading-modal__quick-stat">
           <span className="reading-modal__quick-stat-icon">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <rect x="3" y="5" width="18" height="16" rx="2" />
-              <path d="M8 3v4" />
-              <path d="M16 3v4" />
-              <path d="M3 10h18" />
-            </svg>
+            <Icon name="calendar" />
           </span>
 
           <strong>{sessionsCount}</strong>
@@ -69,11 +55,7 @@ const ReadingQuickStats = ({
         aria-expanded={detailsOpen}
       >
         <span className="reading-modal__stats-toggle-icon">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M5 19V9" />
-            <path d="M12 19V5" />
-            <path d="M19 19v-7" />
-          </svg>
+          <Icon name="stats" />
         </span>
 
         <span>Деталі статистики</span>
@@ -83,9 +65,7 @@ const ReadingQuickStats = ({
             detailsOpen ? "reading-modal__stats-toggle-arrow--open" : ""
           }`}
         >
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="m6 9 6 6 6-6" />
-          </svg>
+          <Icon name="chevron-down" />
         </span>
       </button>
     </div>

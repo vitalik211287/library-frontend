@@ -2,6 +2,7 @@
 
 import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 import "./ReadingSessionCard.css";
+import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
 
 const ReadingSessionCard = ({
   activeSession,
@@ -221,11 +222,7 @@ const ReadingSessionCard = ({
             disabled={pauseLoading}
           >
             <span className="reading-modal__action-icon">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <rect x="6" y="5" width="4" height="14" rx="1" />
-
-                <rect x="14" y="5" width="4" height="14" rx="1" />
-              </svg>
+              <Icon name="pause" />
             </span>
 
             <span className="reading-modal__action-text">

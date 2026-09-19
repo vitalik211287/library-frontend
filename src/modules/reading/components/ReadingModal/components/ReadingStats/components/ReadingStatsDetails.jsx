@@ -1,4 +1,5 @@
 import { formatTime } from "../../../utils/readingModalHelpers.js";
+import Icon from "../../../../../../../shared/components/Icon/Icon.jsx";
 
 const ReadingStatsDetails = ({
   detailsOpen,
@@ -42,24 +43,23 @@ const ReadingStatsDetails = ({
             </span>
 
             <span className="reading-modal__stats-session-icon">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="12" cy="13" r="8" />
-                <path d="M12 9v4l2.5 1.5" />
-                <path d="M9 2h6" />
-                <path d="M12 2v3" />
-              </svg>
+              <Icon name="stopwatch" />
             </span>
           </span>
         </div>
 
         <div className="reading-modal__stats-item">
           <span className="reading-modal__stats-label">Прочитано</span>
-          <span className="reading-modal__stats-value">{progressReadValue}</span>
+          <span className="reading-modal__stats-value">
+            {progressReadValue}
+          </span>
         </div>
 
         <div className="reading-modal__stats-item">
           <span className="reading-modal__stats-label">Загальний час</span>
-          <span className="reading-modal__stats-value">{totalReadingValue}</span>
+          <span className="reading-modal__stats-value">
+            {totalReadingValue}
+          </span>
         </div>
 
         <div className="reading-modal__stats-item">
@@ -76,7 +76,9 @@ const ReadingStatsDetails = ({
 
         <div className="reading-modal__stats-item">
           <span className="reading-modal__stats-label">Орієнтовний час</span>
-          <span className="reading-modal__stats-value">{estimatedTimeValue}</span>
+          <span className="reading-modal__stats-value">
+            {estimatedTimeValue}
+          </span>
         </div>
 
         <button
@@ -91,10 +93,7 @@ const ReadingStatsDetails = ({
             <span className="reading-modal__stats-value">{sessionsCount}</span>
 
             <span className="reading-modal__stats-calendar-icon">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="12" cy="12" r="8" />
-                <path d="M12 8v4l3 2" />
-              </svg>
+              <Icon name="clock" />
             </span>
           </span>
         </button>
@@ -108,10 +107,7 @@ const ReadingStatsDetails = ({
             </span>
 
             <span className="reading-modal__stats-session-icon">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="12" cy="9" r="5" />
-                <path d="m9 14-1 7 4-2 4 2-1-7" />
-              </svg>
+              <Icon name="medal" />
             </span>
           </span>
         </div>
@@ -128,12 +124,7 @@ const ReadingStatsDetails = ({
             <span className="reading-modal__stats-value">Відкрити</span>
 
             <span className="reading-modal__stats-calendar-icon">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <rect x="3" y="5" width="18" height="16" rx="2" />
-                <path d="M16 3v4" />
-                <path d="M8 3v4" />
-                <path d="M3 10h18" />
-              </svg>
+              <Icon name="calendar" />
             </span>
           </span>
         </button>

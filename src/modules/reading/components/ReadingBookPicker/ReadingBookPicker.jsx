@@ -150,7 +150,9 @@ const ReadingBookPicker = ({
           </div>
         ) : books.length === 0 ? (
           <div className="reading-book-picker__empty">
-            <span className="reading-book-picker__empty-icon">📖</span>
+            <span className="reading-book-picker__empty-icon">
+              <Icon name="book" />
+            </span>
 
             <strong>У цій бібліотеці немає книг</strong>
 
@@ -195,7 +197,7 @@ const ReadingBookPicker = ({
                       />
                     ) : (
                       <div className="reading-book-picker__cover-placeholder">
-                        📚
+                        <Icon name="book" />
                       </div>
                     )}
 
@@ -238,7 +240,7 @@ const ReadingBookPicker = ({
                     className="reading-book-picker__arrow"
                     aria-hidden="true"
                   >
-                    ›
+                    <Icon name="chevron-right" />
                   </span>
                 </button>
               );
