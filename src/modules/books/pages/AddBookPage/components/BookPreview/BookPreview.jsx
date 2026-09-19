@@ -9,7 +9,12 @@ const BookPreview = ({ book, setBook, onAddBook }) => {
     <div className="book-preview">
       <div className="book-preview__cover">
         {book.coverUrl ? (
-          <img src={book.coverUrl} alt={book.title} />
+          <img
+            loading="lazy"
+            decoding="async"
+            src={book.coverUrl}
+            alt={book.title}
+          />
         ) : (
           <div className="no-cover">Обкладинки немає</div>
         )}
@@ -135,4 +140,3 @@ const BookPreview = ({ book, setBook, onAddBook }) => {
 };
 
 export default BookPreview;
-

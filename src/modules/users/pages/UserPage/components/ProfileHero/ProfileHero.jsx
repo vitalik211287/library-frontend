@@ -80,7 +80,12 @@ const ProfileHero = () => {
       <div className="profile-hero__identity">
         <div className="profile-hero__avatar">
           {user?.avatarUrl ? (
-            <img src={user.avatarUrl} alt={profileName} />
+            <img
+              loading="lazy"
+              decoding="async"
+              src={user.avatarUrl}
+              alt={profileName}
+            />
           ) : (
             <span>{profileName.charAt(0).toUpperCase()}</span>
           )}

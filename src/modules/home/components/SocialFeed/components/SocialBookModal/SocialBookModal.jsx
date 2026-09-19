@@ -33,7 +33,12 @@ const SocialBookModal = ({ book, onClose, onOpenCatalog }) => {
         <div className="social-book-modal__content">
           <div className="social-book-modal__cover">
             {book.coverUrl ? (
-              <img src={book.coverUrl} alt={book.title || "Книга"} />
+              <img
+                loading="lazy"
+                decoding="async"
+                src={book.coverUrl}
+                alt={book.title || "Книга"}
+              />
             ) : (
               <span>📚</span>
             )}

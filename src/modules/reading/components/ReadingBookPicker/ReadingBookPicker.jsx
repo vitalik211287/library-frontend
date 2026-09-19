@@ -189,7 +189,12 @@ const ReadingBookPicker = ({
                 >
                   <div className="reading-book-picker__cover">
                     {book.coverUrl ? (
-                      <img src={book.coverUrl} alt={book.title} />
+                      <img
+                        loading="lazy"
+                        decoding="async"
+                        src={book.coverUrl}
+                        alt={book.title}
+                      />
                     ) : (
                       <div className="reading-book-picker__cover-placeholder">
                         📚
@@ -248,6 +253,3 @@ const ReadingBookPicker = ({
 };
 
 export default ReadingBookPicker;
-
-
-

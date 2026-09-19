@@ -47,7 +47,13 @@ const BookCard = ({
       )}
 
       {book.coverUrl && (
-        <img className="book-cover" src={book.coverUrl} alt={book.title} />
+        <img
+          loading="lazy"
+          decoding="async"
+          className="book-cover"
+          src={book.coverUrl}
+          alt={book.title}
+        />
       )}
 
       <div className="book-card__content">

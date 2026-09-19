@@ -67,7 +67,12 @@ const ReadingBookInfo = ({
     <AppPanel className="reading-modal__book-card">
       <div className="reading-modal__cover">
         {coverUrl ? (
-          <img src={coverUrl} alt={currentBook.title} />
+          <img
+            loading="lazy"
+            decoding="async"
+            src={coverUrl}
+            alt={currentBook.title}
+          />
         ) : (
           <div className="reading-modal__no-cover">Немає обкладинки</div>
         )}

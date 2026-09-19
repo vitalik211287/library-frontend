@@ -12,6 +12,8 @@ const BookPreview = ({ book, label }) => {
       <div className="social-feed-event__cover">
         {book.coverUrl ? (
           <img
+            loading="lazy"
+            decoding="async"
             src={book.coverUrl}
             alt={book.title}
           />
