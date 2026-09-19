@@ -128,7 +128,7 @@
   cursor: default;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .library-member {
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;

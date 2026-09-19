@@ -120,7 +120,7 @@
   font-size: 12px;
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1440px) {
   .achievements-hero {
     grid-template-columns:
       minmax(0, 1fr)

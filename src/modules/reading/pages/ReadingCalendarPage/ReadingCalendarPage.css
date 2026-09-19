@@ -83,7 +83,7 @@
    VERY SMALL — до 370px
 ========================= */
 
-@media (max-width: 370px) {
+@media (max-width: 374px) {
   .reading-calendar-page {
     padding: var(--space-8);
   }
@@ -97,7 +97,7 @@
    TABLET — 600+
 ========================= */
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .reading-calendar-page {
     padding: var(--space-20);
   }
@@ -121,7 +121,7 @@
    DESKTOP — 900+
 ========================= */
 
-@media (min-width: 900px) {
+@media (min-width: 1440px) {
   .reading-calendar-page {
     padding: var(--space-24);
   }

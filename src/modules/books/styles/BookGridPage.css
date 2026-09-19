@@ -34,7 +34,7 @@
   gap: var(--space-16) var(--space-12);
 }
 
-@media (max-width: 370px) {
+@media (max-width: 374px) {
   :is(.catalog-page, .finished-books-page, .wishlist-page) {
     padding: var(--space-12);
   }
@@ -44,7 +44,7 @@
   }
 }
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   :is(.catalog-page, .finished-books-page, .wishlist-page) {
     padding: var(--space-20);
   }
@@ -65,7 +65,7 @@
   }
 }
 
-@media (min-width: 1100px) {
+@media (min-width: 1440px) {
   :is(.catalog-page, .finished-books-page, .wishlist-page) {
     max-width: 1500px;
     padding: var(--space-32);
@@ -77,13 +77,7 @@
   }
 
   .books-grid {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    gap: var(--space-20);
-  }
-}
-
-@media (min-width: 1300px) {
-  .books-grid {
     grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: var(--space-20);
   }
 }

@@ -883,7 +883,7 @@
 
 /* ===== RESPONSIVE ===== */
 
-@media (max-width: 1100px) {
+@media (max-width: 1439px) {
   .admin-library {
     grid-template-columns: minmax(360px, 0.9fr) minmax(460px, 1.1fr);
   }
@@ -893,7 +893,7 @@
   }
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1439px) {
   .admin-user-card {
     grid-template-columns: 1fr;
     gap: var(--space-16);
@@ -936,7 +936,7 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 767px) {
   .admin-users-page {
     padding: 16px 12px 28px;
   }
@@ -1029,7 +1029,7 @@
   display: none;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1439px) {
   .admin-book-history {
     display: none;
     position: absolute;
@@ -1054,7 +1054,7 @@
   }
 }
 /* Mobile admin library polish */
-@media (max-width: 600px) {
+@media (max-width: 767px) {
   .admin-library-modal .modal__close {
     display: flex;
     z-index: 20;
@@ -1076,7 +1076,7 @@
     border-radius: var(--radius-lg);
   }
 }
-@media (max-width: 600px) {
+@media (max-width: 767px) {
   .admin-library__filters {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -1137,20 +1137,20 @@
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 767px) {
   .admin-library-modal .modal__header {
     min-height: 44px;
     padding: 8px 12px 4px;
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 767px) {
   .admin-library__user {
     padding-top: 10px;
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 767px) {
   .admin-library-modal {
     position: relative;
   }
@@ -1180,7 +1180,7 @@
 }
 
 /* Mobile subscriber books sheet scroll */
-@media (max-width: 900px) {
+@media (max-width: 1439px) {
   .admin-library__sidebar {
     min-height: 0;
     overflow-y: auto;
@@ -1219,7 +1219,7 @@
   display: none;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1439px) {
   .admin-library__history-button {
     width: calc(100% - 28px);
     min-height: 46px;

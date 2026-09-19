@@ -167,19 +167,7 @@
   transform: scale(0.98);
 }
 
-@media (max-width: 800px) {
-  .book-preview {
-    grid-template-columns: 190px minmax(0, 1fr);
-
-    gap: var(--space-24);
-  }
-
-  .book-preview__cover {
-    width: 190px;
-  }
-}
-
-@media (max-width: 650px) {
+@media (max-width: 767px) {
   .book-preview {
     grid-template-columns: 1fr;
   }
@@ -193,8 +181,14 @@
   }
 }
 
-@media (max-width: 420px) {
+@media (min-width: 768px) and (max-width: 1439px) {
+  .book-preview {
+    grid-template-columns: 190px minmax(0, 1fr);
+
+    gap: var(--space-24);
+  }
+
   .book-preview__cover {
-    width: 160px;
+    width: 190px;
   }
 }

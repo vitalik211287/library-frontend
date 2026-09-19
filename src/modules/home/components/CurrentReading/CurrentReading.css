@@ -84,7 +84,7 @@
   color: var(--accent);
   font-size: 12px;
 }
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .current-reading-card__main {
     grid-template-columns: 100px minmax(0, 1fr);
   }

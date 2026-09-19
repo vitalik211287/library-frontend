@@ -51,7 +51,7 @@
    TABLET
 ========================= */
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .achievements-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
 
@@ -63,7 +63,7 @@
    DESKTOP
 ========================= */
 
-@media (min-width: 900px) {
+@media (min-width: 1440px) {
   .achievements-grid {
     grid-template-columns: repeat(4, minmax(0, 1fr));
 

@@ -308,7 +308,7 @@
    DESKTOP
 ========================= */
 
-@media (min-width: 700px) {
+@media (min-width: 768px) {
   .reading-sessions-modal__session {
     padding: 17px;
   }
@@ -328,7 +328,7 @@
    MOBILE
 ========================= */
 
-@media (max-width: 480px) {
+@media (max-width: 767px) {
   .reading-sessions-modal__session {
     padding: 13px;
   }

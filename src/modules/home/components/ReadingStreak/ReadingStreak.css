@@ -137,7 +137,7 @@
   stroke-width: 1.9;
 }
 
-@media (max-width: 370px) {
+@media (max-width: 374px) {
   .streak-card {
     padding: var(--space-16) var(--space-10) 13px;
   }
@@ -178,7 +178,7 @@
     height: 5px;
   }
 }
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .streak-card {
     padding: 22px;
   }

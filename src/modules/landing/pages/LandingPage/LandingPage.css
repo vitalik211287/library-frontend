@@ -171,7 +171,7 @@
    TABLET / DESKTOP
 ========================= */
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .landing-page {
     min-height: 100vh;
 

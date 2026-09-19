@@ -257,7 +257,7 @@
   }
 }
 
-@media (max-width: 390px) {
+@media (max-width: 374px) {
   .public-profile-hero {
     gap: 13px;
     padding: 14px;
@@ -279,7 +279,7 @@
   }
 }
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .public-profile-hero {
     padding: 22px;
   }
@@ -311,7 +311,7 @@
   }
 }
 
-@media (min-width: 1100px) {
+@media (min-width: 1440px) {
   .public-profile-page__container {
     max-width: 920px;
   }
@@ -387,7 +387,7 @@
   font-weight: 700;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .public-profile-achievements {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }

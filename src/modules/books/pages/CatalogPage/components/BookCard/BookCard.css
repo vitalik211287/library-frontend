@@ -283,7 +283,7 @@
    VERY SMALL PHONES
 ========================= */
 
-@media (max-width: 370px) {
+@media (max-width: 374px) {
   .book-card {
     padding: var(--space-8);
   }
@@ -317,7 +317,7 @@
    TABLET — 600+
 ========================= */
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .book-card {
     padding: var(--space-14);
   }

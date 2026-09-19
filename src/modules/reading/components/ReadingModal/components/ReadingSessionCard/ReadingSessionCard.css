@@ -540,7 +540,7 @@
    VERY SMALL PHONES
 ========================= */
 
-@media (max-width: 370px) {
+@media (max-width: 374px) {
   .reading-modal__session-card {
     gap: 15px;
 
@@ -605,7 +605,7 @@
    TABLET
 ========================= */
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .reading-modal__session-card {
     gap: var(--space-20);
 
@@ -635,7 +635,7 @@
    DESKTOP
 ========================= */
 
-@media (min-width: 900px) {
+@media (min-width: 1440px) {
   .reading-modal__session-card {
     padding: var(--space-24);
   }

@@ -63,13 +63,13 @@
   outline-offset: 3px;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .home-panel {
     padding: 22px;
   }
 }
 
-@media (max-width: 430px) {
+@media (max-width: 374px) {
   .home-panel__header {
     align-items: flex-start;
   }

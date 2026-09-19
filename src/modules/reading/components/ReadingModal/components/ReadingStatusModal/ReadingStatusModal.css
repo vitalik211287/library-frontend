@@ -157,7 +157,7 @@
    MOBILE
 ========================= */
 
-@media (max-width: 599px) {
+@media (max-width: 767px) {
   .reading-status-modal {
     max-width: 420px;
 

@@ -319,7 +319,7 @@
    TABLET AND DESKTOP
 ========================= */
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .reading-modal__stats-mobile {
     display: none;
   }
@@ -355,7 +355,7 @@
   }
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1440px) {
   .reading-modal__stats-details {
     padding: 22px;
   }

@@ -126,7 +126,7 @@
   margin: var(--space-14) var(--space-4) 0;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .library-management-danger__button:disabled {
     opacity: 0.55;
     cursor: default;
@@ -136,7 +136,7 @@
   }
 }
 
-@media (min-width: 1100px) {
+@media (min-width: 1440px) {
   .library-management-card {
     padding: var(--space-20);
   }

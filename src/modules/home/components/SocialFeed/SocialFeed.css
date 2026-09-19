@@ -329,7 +329,7 @@
 
 /* Mobile */
 
-@media (max-width: 599px) {
+@media (max-width: 767px) {
   .social-feed__header {
     margin-bottom: var(--space-8);
   }

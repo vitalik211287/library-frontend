@@ -107,7 +107,7 @@
   height: 6px;
 }
 
-@media (max-width: 430px) {
+@media (max-width: 374px) {
   .home-achievement-card {
     padding: var(--space-14);
   }

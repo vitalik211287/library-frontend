@@ -76,7 +76,7 @@
    VERY SMALL — до 370px
 ========================= */
 
-@media (max-width: 370px) {
+@media (max-width: 374px) {
   .reading-calendar__header {
     grid-template-columns:
       32px
@@ -103,7 +103,7 @@
    TABLET — 600+
 ========================= */
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .reading-calendar__header {
     grid-template-columns:
       40px
@@ -134,7 +134,7 @@
    DESKTOP — 900+
 ========================= */
 
-@media (min-width: 900px) {
+@media (min-width: 1440px) {
   .reading-calendar__header {
     margin-bottom: var(--space-16);
   }

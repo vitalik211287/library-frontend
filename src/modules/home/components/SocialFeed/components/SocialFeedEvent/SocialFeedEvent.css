@@ -11,7 +11,6 @@
   color: inherit;
 
   text-align: left;
-
 }
 
 .social-feed-event__heading {
@@ -195,7 +194,7 @@
   font-weight: 600;
 }
 
-@media (min-width: 601px) {
+@media (min-width: 768px) {
   .social-feed-event {
     margin-top: var(--space-12);
   }

@@ -94,7 +94,7 @@
   }
 }
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .genre-shelf {
     padding: var(--space-20);
   }
@@ -109,7 +109,7 @@
   }
 }
 
-@media (max-width: 599px) {
+@media (max-width: 767px) {
   .genre-shelf.app-panel {
     backdrop-filter: none;
     -webkit-backdrop-filter: none;

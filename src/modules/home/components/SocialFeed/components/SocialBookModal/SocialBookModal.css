@@ -53,7 +53,6 @@
   color: var(--text);
   font-size: 25px;
   line-height: 1;
-
 }
 
 .social-book-modal__content {
@@ -140,7 +139,6 @@
 
   font-size: 11px;
   font-weight: 700;
-
 }
 
 .social-book-modal__catalog {
@@ -155,7 +153,7 @@
   color: var(--text-h);
 }
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .social-book-modal__backdrop {
     align-items: center;
   }

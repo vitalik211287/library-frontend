@@ -329,7 +329,7 @@
    MOBILE
 ========================= */
 
-@media (max-width: 599px) {
+@media (max-width: 767px) {
   .reading-book-picker__search {
     margin: 0 16px 12px;
   }

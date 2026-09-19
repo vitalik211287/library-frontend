@@ -194,7 +194,7 @@
    TABLET - 600+
 ========================= */
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .catalog-search__field {
     gap: var(--space-10);
   }
@@ -219,7 +219,7 @@
    DESKTOP - 1025+
 ========================= */
 
-@media (min-width: 1025px) {
+@media (min-width: 1440px) {
   .catalog-scan__button {
     display: none;
   }

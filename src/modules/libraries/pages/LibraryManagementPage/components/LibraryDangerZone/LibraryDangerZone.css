@@ -22,7 +22,7 @@
   cursor: default;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .library-management-danger__button {
     width: auto;
   }

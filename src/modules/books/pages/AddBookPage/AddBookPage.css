@@ -58,18 +58,8 @@
    MOBILE
 ========================= */
 
-@media (max-width: 650px) {
+@media (max-width: 767px) {
   .add-book-page h1 {
     font-size: 28px;
-  }
-}
-
-/* =========================
-   SMALL MOBILE
-========================= */
-
-@media (max-width: 420px) {
-  .add-book-page h1 {
-    font-size: 26px;
   }
 }

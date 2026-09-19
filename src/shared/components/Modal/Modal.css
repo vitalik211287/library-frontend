@@ -150,7 +150,7 @@
    MOBILE
 ========================= */
 
-@media (max-width: 480px) {
+@media (max-width: 767px) {
   .modal-overlay {
     padding: var(--space-12);
   }

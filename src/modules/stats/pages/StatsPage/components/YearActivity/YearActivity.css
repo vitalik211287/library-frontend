@@ -65,7 +65,7 @@
   font-size: 9px;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .stats-month-chart {
     gap: 9px;
   }

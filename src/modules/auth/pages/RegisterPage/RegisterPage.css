@@ -127,7 +127,7 @@
   text-decoration: underline;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .register-page {
     padding-top: 80px;
   }

@@ -95,13 +95,13 @@
   font-size: 10px;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .stats-goals {
     padding: var(--space-20);
   }
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1440px) {
   .reading-goals {
     display: grid;
 

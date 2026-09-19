@@ -141,7 +141,7 @@
   font-size: 9px;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .kudos-sheet {
     margin-bottom: var(--space-24);
     border-bottom: 1px solid var(--border);

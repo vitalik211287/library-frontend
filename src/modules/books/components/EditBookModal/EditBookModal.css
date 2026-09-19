@@ -368,7 +368,7 @@
    VERY SMALL PHONE
 ========================= */
 
-@media (max-width: 370px) {
+@media (max-width: 374px) {
   .edit-modal .modal__header {
     padding: 16px 10px 12px;
   }
@@ -431,7 +431,7 @@
    TABLET
 ========================= */
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .edit-modal {
     max-width: 760px;
   }
@@ -525,7 +525,7 @@
    DESKTOP
 ========================= */
 
-@media (min-width: 900px) {
+@media (min-width: 1440px) {
   .edit-modal {
     max-width: 900px;
   }

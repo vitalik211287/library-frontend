@@ -61,13 +61,13 @@
   line-height: 1.2;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .stats-summary {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1440px) {
   .stats-summary-card strong {
     font-size: 24px;
   }

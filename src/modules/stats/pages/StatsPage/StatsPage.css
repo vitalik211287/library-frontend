@@ -69,7 +69,7 @@
    TABLET
 ========================= */
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .stats-card__header {
     margin-bottom: var(--space-14);
   }
@@ -87,7 +87,7 @@
    DESKTOP GRID
 ========================= */
 
-@media (min-width: 900px) {
+@media (min-width: 1440px) {
   .stats-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }

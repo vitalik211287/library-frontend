@@ -477,7 +477,7 @@
    VERY SMALL PHONES
 ========================= */
 
-@media (max-width: 370px) {
+@media (max-width: 374px) {
   .reading-modal__book-card {
     grid-template-columns: 76px minmax(0, 1fr);
 
@@ -601,7 +601,7 @@
    TABLET
 ========================= */
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .reading-modal__book-card {
     grid-template-columns: 118px minmax(0, 1fr);
 
@@ -717,7 +717,7 @@
    DESKTOP
 ========================= */
 
-@media (min-width: 900px) {
+@media (min-width: 1440px) {
   .reading-modal__book-card {
     grid-template-columns: 138px minmax(0, 1fr);
 

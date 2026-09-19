@@ -126,7 +126,7 @@
    VERY SMALL — до 370px
 ========================= */
 
-@media (max-width: 370px) {
+@media (max-width: 374px) {
   .reading-calendar__weekdays,
   .reading-calendar__grid {
     gap: 3px;
@@ -149,7 +149,7 @@
    TABLET — 600+
 ========================= */
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .reading-calendar__weekdays,
   .reading-calendar__grid {
     gap: var(--space-6);
@@ -182,7 +182,7 @@
    DESKTOP — 900+
 ========================= */
 
-@media (min-width: 900px) {
+@media (min-width: 1440px) {
   .reading-calendar__weekdays,
   .reading-calendar__grid {
     gap: 7px;

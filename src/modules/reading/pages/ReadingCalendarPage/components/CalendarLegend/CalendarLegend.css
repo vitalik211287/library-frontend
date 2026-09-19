@@ -57,7 +57,7 @@
    VERY SMALL — до 370px
 ========================= */
 
-@media (max-width: 370px) {
+@media (max-width: 374px) {
   .legend-dot {
     width: 22px;
     height: 22px;
@@ -72,7 +72,7 @@
    TABLET — 600+
 ========================= */
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .reading-calendar__legend {
     margin-top: var(--space-16);
     padding-top: 12px;
@@ -92,7 +92,7 @@
    DESKTOP — 900+
 ========================= */
 
-@media (min-width: 900px) {
+@media (min-width: 1440px) {
   .reading-calendar__legend {
     margin-top: var(--space-18);
   }

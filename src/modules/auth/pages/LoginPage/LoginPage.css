@@ -180,7 +180,7 @@
    TABLET / DESKTOP
 ========================= */
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .login-page {
     padding-top: 80px;
   }

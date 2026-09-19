@@ -136,7 +136,7 @@
    SMALL MOBILE
 ========================= */
 
-@media (max-width: 390px) {
+@media (max-width: 374px) {
   .confirm-delete-modal .modal__content {
     padding: var(--space-18) var(--space-16);
   }

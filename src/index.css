@@ -78,7 +78,7 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-@media (max-width: 390px) {
+@media (max-width: 374px) {
   :root {
     --narrow-page-padding-x: 10px;
     --page-padding-x: 10px;
@@ -86,7 +86,7 @@
 }
 /* RESPONSIVE LAYOUT */
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   :root {
     --narrow-page-padding-x: 24px;
     --page-padding-x: 24px;
@@ -96,7 +96,7 @@
   }
 }
 
-@media (min-width: 1100px) {
+@media (min-width: 1440px) {
   :root {
     --page-padding-x: 48px;
     --page-padding-top: 34px;
@@ -272,7 +272,7 @@ code {
 
 /* TABLET / MOBILE */
 
-@media (max-width: 1024px) {
+@media (max-width: 767px) {
   :root {
     font-size: 16px;
   }

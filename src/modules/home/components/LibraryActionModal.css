@@ -52,7 +52,6 @@
 
   font-size: 14px;
   font-weight: 800;
-
 }
 
 .library-action-modal__cancel {
@@ -72,7 +71,7 @@
   cursor: default;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .library-action-modal__actions {
     display: flex;
     justify-content: flex-end;

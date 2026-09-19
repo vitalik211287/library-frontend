@@ -379,7 +379,7 @@
   line-height: 1;
 }
 
-@media (min-width: 600px) {
+@media (min-width: 768px) {
   .activity-notification__cover {
     width: 92px;
     height: 132px;

@@ -602,7 +602,7 @@
    HIDE BELOW BIG DESKTOP
 ========================= */
 
-@media (max-width: 1449px) {
+@media (max-width: 1439px) {
   .right-sidebar {
     display: none;
   }
@@ -612,7 +612,7 @@
    BIG DESKTOP
 ========================= */
 
-@media (min-width: 1750px) {
+@media (min-width: 1440px) {
   .right-sidebar {
     gap: var(--space-18);
   }
