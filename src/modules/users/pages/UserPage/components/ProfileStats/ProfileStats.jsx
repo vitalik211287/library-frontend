@@ -1,4 +1,5 @@
-﻿import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
+﻿import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
+import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 import useReadingStreak from "../../hooks/useReadingStreak.js";
 import { FinishedBookIcon } from "../../../../../home/components/HomeIcons.jsx";
 
@@ -18,12 +19,6 @@ const ReadingIcon = () => (
 
     <path d="M7 7h2" />
     <path d="M15 7h2" />
-  </svg>
-);
-
-const StreakIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M13 2s1 4-2 7c-2 2-4 4-4 7a5 5 0 0 0 10 0c0-2-1-4-2-5 0 3-2 4-3 4 1-3-1-5-1-5" />
   </svg>
 );
 
@@ -57,7 +52,7 @@ const ProfileStats = ({ finishedCount, wishlistCount, currentBooksCount }) => {
       </AppPanel>
 
       <AppPanel as="article" variant="secondary" className="profile-stat">
-        <StreakIcon />
+        <Icon name="flame" />
 
         <strong>{isStreakLoading ? "..." : currentStreak}</strong>
 

@@ -198,3 +198,8 @@
     white-space: normal;
   }
 }
+
+.profile-stat > svg {
+  fill: currentColor;
+  stroke: none;
+}

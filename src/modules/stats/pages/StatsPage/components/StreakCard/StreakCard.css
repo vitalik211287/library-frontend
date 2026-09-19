@@ -88,3 +88,8 @@
 
   font-size: 14px;
 }
+
+.streak-main__icon--flame svg {
+  fill: currentColor;
+  stroke: none;
+}

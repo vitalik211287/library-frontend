@@ -1,4 +1,5 @@
-﻿import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
+﻿import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
+import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 
 import "./StreakCard.css";
 
@@ -14,10 +15,8 @@ const StreakCard = ({ streak }) => {
       </div>
 
       <div className="streak-main">
-        <div className="streak-main__icon">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M13 2s1 4-2 7c-2 2-4 4-4 7a5 5 0 0 0 10 0c0-2-1-4-2-5 0 3-2 4-3 4 1-3-1-5-1-5" />
-          </svg>
+        <div className="streak-main__icon streak-main__icon--flame">
+          <Icon name="flame" />
         </div>
 
         <div>
