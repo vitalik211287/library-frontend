@@ -425,20 +425,6 @@
   }
 }
 
-/* =========================
-   DESKTOP — 1025+
-========================= */
-
-@media (min-width: 1025px) {
-  .book-card__reading-info {
-    display: block;
-  }
-
-  .book-card__extra-info {
-    display: block;
-  }
-}
-
 @media (max-width: 767px) {
   .book-card__reading-info {
     margin-top: auto;

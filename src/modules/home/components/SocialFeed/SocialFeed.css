@@ -329,7 +329,7 @@
 
 /* Mobile */
 
-@media (max-width: 600px) {
+@media (max-width: 599px) {
   .social-feed__header {
     margin-bottom: var(--space-8);
   }
@@ -558,7 +558,6 @@
   color: var(--accent);
   font-size: 10px;
   font-weight: 700;
-
 }
 
 .social-feed__view-all span {

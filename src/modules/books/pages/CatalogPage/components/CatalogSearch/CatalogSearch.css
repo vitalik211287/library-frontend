@@ -224,13 +224,3 @@
     display: none;
   }
 }
-
-/* =========================
-   DESKTOP - 1100+
-========================= */
-
-@media (min-width: 1100px) {
-  .catalog-search {
-    margin-bottom: var(--content-gap);
-  }
-}
