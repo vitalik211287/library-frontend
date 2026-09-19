@@ -1,4 +1,5 @@
 import "./SocialBookModal.css";
+import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
 
 const SocialBookModal = ({ book, onClose, onOpenCatalog }) => {
   if (!book) {
@@ -40,7 +41,7 @@ const SocialBookModal = ({ book, onClose, onOpenCatalog }) => {
                 alt={book.title || "Книга"}
               />
             ) : (
-              <span>📚</span>
+              <Icon name="books-stack" />
             )}
           </div>
 

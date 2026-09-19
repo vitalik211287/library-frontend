@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import toast from "react-hot-toast";
 
@@ -12,6 +12,7 @@ import {
 import { useAuth } from "../../../auth/context/AuthContext.jsx";
 import Modal from "../../../../shared/components/Modal/Modal.jsx";
 import AppPanel from "../../../../shared/components/AppPanel/AppPanel.jsx";
+import Icon from "../../../../shared/components/Icon/Icon.jsx";
 
 import "./AdminUsersPage.css";
 
@@ -710,7 +711,9 @@ const AdminUsersPage = () => {
                 }}
               >
                 <span>Історія користувача</span>
-                <span>›</span>
+                <span>
+                  <Icon name="chevron-right" />
+                </span>
               </button>
               <div className="admin-library__filters">
                 {BOOK_FILTERS.map((filter) => (
@@ -751,7 +754,7 @@ const AdminUsersPage = () => {
                             alt={userBook.book?.title || "Книга"}
                           />
                         ) : (
-                          <span>📖</span>
+                          <Icon name="book" />
                         )}
                       </div>
 
@@ -773,7 +776,9 @@ const AdminUsersPage = () => {
                         </div>
                       </div>
 
-                      <span className="admin-library-book__arrow">›</span>
+                      <span className="admin-library-book__arrow">
+                        <Icon name="chevron-right" />
+                      </span>
                     </button>
                   );
                 })}
@@ -805,7 +810,7 @@ const AdminUsersPage = () => {
                           alt={selectedBook.book?.title || "Книга"}
                         />
                       ) : (
-                        <span>📖</span>
+                        <Icon name="book" />
                       )}
                     </div>
 

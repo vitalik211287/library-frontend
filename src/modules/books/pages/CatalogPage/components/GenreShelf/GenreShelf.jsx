@@ -1,4 +1,5 @@
-﻿import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
+import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
+import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
 
 import "./GenreShelf.css";
 
@@ -26,7 +27,7 @@ const GenreShelf = ({ shelf, onSelect }) => {
             {book.coverUrl ? (
               <img src={book.coverUrl} alt="" loading="lazy" />
             ) : (
-              <span aria-hidden="true">📖</span>
+              <Icon name="book" aria-hidden="true" />
             )}
           </div>
         ))}

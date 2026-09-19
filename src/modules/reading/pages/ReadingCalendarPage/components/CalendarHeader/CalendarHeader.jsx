@@ -1,4 +1,5 @@
 import { MONTHS } from "../../utils/readingCalendarHelpers.js";
+import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
 
 import "./CalendarHeader.css";
 
@@ -33,11 +34,10 @@ const CalendarHeader = ({
         onClick={onNextMonth}
         aria-label="Наступний місяць"
       >
-        ›
+        <Icon name="chevron-right" />
       </button>
     </div>
   );
 };
 
 export default CalendarHeader;
-

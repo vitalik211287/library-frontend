@@ -2,8 +2,10 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import PageBackButton from "../../../../shared/components/PageBackButton/PageBackButton.jsx";
 import AppPanel from "../../../../shared/components/AppPanel/AppPanel.jsx";
+import Icon from "../../../../shared/components/Icon/Icon.jsx";
 
 import { apiFetch } from "../../../../shared/api/apiClient.js";
+import { getAchievementIcon } from "../../../stats/pages/AchievementsPage/utils/achievementHelpers.js";
 
 import KudosUsersSheet from "./components/KudosUsersSheet/KudosUsersSheet.jsx";
 
@@ -376,10 +378,7 @@ const PublicUserProfilePage = () => {
                   className="public-profile-achievement"
                 >
                   <span className="public-profile-achievement__medal">
-                    {achievement.category === "books" && "📚"}
-                    {achievement.category === "pages" && "📜"}
-                    {achievement.category === "time" && "⏱️"}
-                    {achievement.category === "streak" && "🔥"}
+                    <Icon name={getAchievementIcon(achievement)} />
                   </span>
 
                   <div className="public-profile-achievement__content">

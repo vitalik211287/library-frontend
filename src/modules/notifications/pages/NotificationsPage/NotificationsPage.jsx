@@ -1,4 +1,5 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import Icon from "../../../../shared/components/Icon/Icon.jsx";
 import { useNavigate } from "react-router-dom";
 import AppPanel from "../../../../shared/components/AppPanel/AppPanel.jsx";
 import PageBackButton from "../../../../shared/components/PageBackButton/PageBackButton.jsx";
@@ -171,7 +172,7 @@ const NotificationsPage = () => {
             {book?.coverUrl ? (
               <img src={book.coverUrl} alt={book.title || "Книга"} />
             ) : (
-              <span>📚</span>
+              <Icon name="books-stack" />
             )}
           </div>
 
@@ -185,7 +186,9 @@ const NotificationsPage = () => {
             {book?.author && <p>{book.author}</p>}
 
             <div className="activity-notification__library">
-              <span className="activity-notification__library-icon">📖</span>
+              <span className="activity-notification__library-icon">
+                <Icon name="book" />
+              </span>
               <span>Домашня бібліотека</span>
             </div>
           </div>
@@ -202,7 +205,7 @@ const NotificationsPage = () => {
           </button>
 
           <span className="activity-notification__arrow" aria-hidden="true">
-            ›
+            <Icon name="chevron-right" />
           </span>
         </div>
       </AppPanel>
