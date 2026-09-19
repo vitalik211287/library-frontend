@@ -1,10 +1,6 @@
-export const CatalogIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11a2 2 0 0 1 2 2v16a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 21.5v-16Z" />
-    <path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v18a2 2 0 0 1 2-2h2.5a2.5 2.5 0 0 1 2.5 2.5v-16Z" />
-  </svg>
-);
+import Icon from "../Icon/Icon";
 
+export const CatalogIcon = () => <Icon name="book" />;
 export const AddIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
     <path d="M12 5v14" />
@@ -51,7 +47,6 @@ export const AchievementsIcon = () => (
     <path d="m10 9 1.3 1.3L14 7.5" />
   </svg>
 );
-
 
 export const CommunityIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -122,4 +117,3 @@ export const navigationIcons = {
   achievements: AchievementsIcon,
   community: CommunityIcon,
 };
-
