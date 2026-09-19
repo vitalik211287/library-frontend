@@ -5,18 +5,7 @@ import { BookIcon } from "../../../../../home/components/HomeIcons.jsx";
 import { getProgress } from "../../utils/readingHelpers.js";
 
 import "./CurrentReading.css";
-
-const ChevronIcon = ({ isOpen }) => (
-  <svg
-    className={`current-books-toggle__icon ${
-      isOpen ? "current-books-toggle__icon--open" : ""
-    }`}
-    viewBox="0 0 24 24"
-    aria-hidden="true"
-  >
-    <path d="m6 9 6 6 6-6" />
-  </svg>
-);
+import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
 
 const CurrentReading = ({
   currentBooks,
@@ -64,7 +53,12 @@ const CurrentReading = ({
           >
             {isCurrentBooksOpen ? "Згорнути" : `Ще ${otherCurrentBooks.length}`}
 
-            <ChevronIcon isOpen={isCurrentBooksOpen} />
+            <Icon
+              name="chevron-down"
+              className={`current-books-toggle__icon ${
+                isCurrentBooksOpen ? "current-books-toggle__icon--open" : ""
+              }`}
+            />
           </button>
         )}
       </div>

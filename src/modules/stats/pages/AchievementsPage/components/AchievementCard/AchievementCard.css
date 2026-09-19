@@ -270,3 +270,36 @@
     font-size: 13px;
   }
 }
+
+/* Shared SVG achievement icons */
+.achievement-medal__icon svg {
+  width: 27px;
+  height: 27px;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.achievement-medal__icon svg:has(use[href$="#icon-flame"]) {
+  fill: currentColor;
+  stroke: none;
+}
+
+/* Achievement icon states */
+.achievement-card--locked .achievement-medal__icon {
+  color: var(--text-secondary);
+  opacity: 0.9;
+}
+
+.achievement-card--unlocked .achievement-medal__icon {
+  color: var(--accent);
+}
+
+.achievement-medal__icon svg:has(use[href$="#icon-flame"]),
+.achievement-medal__icon svg:has(use[href$="#icon-flame-strong"]) {
+  fill: currentColor;
+  stroke: none;
+}

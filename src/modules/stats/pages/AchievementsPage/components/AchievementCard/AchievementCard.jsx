@@ -5,6 +5,7 @@ import {
 } from "../../utils/achievementHelpers.js";
 
 import "./AchievementCard.css";
+import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
 
 const AchievementCard = ({ achievement }) => {
   const icon = getAchievementIcon(achievement);
@@ -28,7 +29,7 @@ const AchievementCard = ({ achievement }) => {
         <div className="achievement-medal">
           <div className="achievement-medal__circle">
             <span className="achievement-medal__icon" aria-hidden="true">
-              {icon}
+              <Icon name={icon} />
             </span>
           </div>
 

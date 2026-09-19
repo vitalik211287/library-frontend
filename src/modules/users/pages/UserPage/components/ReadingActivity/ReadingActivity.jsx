@@ -14,16 +14,6 @@ import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx"
 import "./ReadingActivity.css";
 
 /* =========================
-   ICONS
-========================= */
-
-const ArrowIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="m9 6 6 6-6 6" />
-  </svg>
-);
-
-/* =========================
    COMPONENT
 ========================= */
 
@@ -115,7 +105,7 @@ const ReadingActivity = ({ onDetails }) => {
           onClick={onDetails}
         >
           Детальніше
-          <ArrowIcon />
+          <Icon name="chevron-right" />
         </button>
       </div>
 
@@ -125,13 +115,7 @@ const ReadingActivity = ({ onDetails }) => {
 
       <div className="reading-week">
         <div className="reading-week__title">
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <rect x="3" y="5" width="18" height="16" rx="3" />
-
-            <path d="M8 3v4" />
-            <path d="M16 3v4" />
-            <path d="M3 10h18" />
-          </svg>
+          <Icon name="calendar" />
 
           <span>
             {selectedWeek?.current
@@ -145,11 +129,7 @@ const ReadingActivity = ({ onDetails }) => {
 
           <div className="reading-week__stat">
             <div className="reading-week__icon">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="12" cy="12" r="9" />
-
-                <path d="M12 7v5l3 2" />
-              </svg>
+              <Icon name="clock" />
             </div>
 
             <div className="reading-week__content">
@@ -163,7 +143,7 @@ const ReadingActivity = ({ onDetails }) => {
 
           <div className="reading-week__stat">
             <div className="reading-week__icon">
-              <Icon name="book" />
+              <Icon name="pages" />
             </div>
 
             <div className="reading-week__content">
@@ -177,11 +157,7 @@ const ReadingActivity = ({ onDetails }) => {
 
           <div className="reading-week__stat">
             <div className="reading-week__icon">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M4 17 9 12l4 3 7-8" />
-
-                <path d="M15 7h5v5" />
-              </svg>
+              <Icon name="activity" />
             </div>
 
             <div className="reading-week__content">

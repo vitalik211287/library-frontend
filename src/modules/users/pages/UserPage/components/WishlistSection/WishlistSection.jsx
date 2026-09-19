@@ -4,18 +4,7 @@ import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx"
 import "../ProfileBooks.css";
 
 import "./WishlistSection.css";
-
-const ArrowIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="m9 6 6 6-6 6" />
-  </svg>
-);
-
-const BookmarkIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M6 4.5A1.5 1.5 0 0 1 7.5 3h9A1.5 1.5 0 0 1 18 4.5V21l-6-4-6 4V4.5Z" />
-  </svg>
-);
+import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
 
 const WishlistSection = ({
   books = [],
@@ -60,7 +49,7 @@ const WishlistSection = ({
         {books.length > 0 && (
           <button type="button" onClick={handleOpenAll}>
             Переглянути всі
-            <ArrowIcon />
+            <Icon name="chevron-right" />
           </button>
         )}
       </div>
@@ -107,7 +96,7 @@ const WishlistSection = ({
                   aria-label="Прибрати зі списку бажань"
                   title="Прибрати зі списку бажань"
                 >
-                  <BookmarkIcon />
+                  <Icon name="bookmark" />
                 </button>
               </div>
 

@@ -1,6 +1,7 @@
 ﻿import { useNavigate } from "react-router-dom";
 
 import useAchievements from "../../hooks/useAchievements.js";
+import { getAchievementIcon } from "../../../../../stats/pages/AchievementsPage/utils/achievementHelpers.js";
 
 import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 
@@ -58,10 +59,7 @@ const AchievementsPreview = ({ readingBookId }) => {
               onClick={handleOpenAchievements}
             >
               <span className="profile-achievement__medal">
-                {achievement.category === "books" && <Icon name="book" />}
-                {achievement.category === "pages" && <Icon name="pages" />}
-                {achievement.category === "time" && <Icon name="clock" />}
-                {achievement.category === "streak" && <Icon name="flame" />}
+                <Icon name={getAchievementIcon(achievement)} />
               </span>
 
               <span className="profile-achievement__content">

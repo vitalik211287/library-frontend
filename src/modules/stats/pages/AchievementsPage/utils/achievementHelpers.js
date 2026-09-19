@@ -1,4 +1,4 @@
-export const CATEGORIES = [
+﻿export const CATEGORIES = [
   {
     id: "all",
     label: "Усі",
@@ -22,39 +22,57 @@ export const CATEGORIES = [
 ];
 
 export const getAchievementIcon = (achievement) => {
+  const target = Number(achievement.target) || 0;
+
   if (achievement.category === "books") {
-    if (achievement.target >= 25) {
-      return "🏆";
+    if (target >= 25) {
+      return "trophy";
     }
 
-    if (achievement.target >= 10) {
-      return "📚";
+    if (target >= 10) {
+      return "books-stack";
     }
 
-    return "📖";
+    if (target >= 5) {
+      return "book-single";
+    }
+
+    return "book";
   }
 
   if (achievement.category === "pages") {
-    if (achievement.target >= 10000) {
-      return "👑";
+    if (target >= 10000) {
+      return "crown";
     }
 
-    return "📜";
+    if (target >= 5000) {
+      return "pages-stack";
+    }
+
+    return "pages-single";
   }
 
   if (achievement.category === "time") {
-    if (achievement.target >= 100 * 60 * 60) {
-      return "⌛";
+    if (target >= 100 * 60 * 60) {
+      return "hourglass";
     }
 
-    return "⏱️";
+    if (target >= 50 * 60 * 60) {
+      return "clock";
+    }
+
+    return "stopwatch";
   }
 
   if (achievement.category === "streak") {
-    return "🔥";
+    if (target >= 30) {
+      return "flame-strong";
+    }
+
+    return "flame";
   }
 
-  return "🏅";
+  return "medal";
 };
 
 export const formatNumber = (value) => {
@@ -92,4 +110,3 @@ export const formatAchievementValue = (achievement, value) => {
 
   return formatNumber(value);
 };
-

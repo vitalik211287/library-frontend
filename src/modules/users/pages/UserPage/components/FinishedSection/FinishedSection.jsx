@@ -5,12 +5,7 @@ import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx"
 import "../ProfileBooks.css";
 
 import "./FinishedSection.css";
-
-const ArrowIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="m9 6 6 6-6 6" />
-  </svg>
-);
+import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
 
 const FinishedSection = ({
   books = [],
@@ -48,7 +43,7 @@ const FinishedSection = ({
         {books.length > 0 && (
           <button type="button" onClick={handleOpenAll}>
             Переглянути всі
-            <ArrowIcon />
+            <Icon name="chevron-right" />
           </button>
         )}
       </div>

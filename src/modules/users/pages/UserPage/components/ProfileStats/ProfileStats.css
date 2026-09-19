@@ -199,7 +199,8 @@
   }
 }
 
-.profile-stat__flame {
-  fill: currentColor;
+.profile-stat svg.profile-stat__flame {
+  color: var(--accent);
+  fill: var(--accent);
   stroke: none;
 }
