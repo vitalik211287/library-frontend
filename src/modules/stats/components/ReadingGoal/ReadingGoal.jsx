@@ -11,20 +11,6 @@ import "./ReadingGoal.css";
    ICONS
 ========================= */
 
-const BookmarkIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M6 4.5A1.5 1.5 0 0 1 7.5 3h9A1.5 1.5 0 0 1 18 4.5V21l-6-4-6 4V4.5Z" />
-  </svg>
-);
-
-const EditIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="m4 20 4.4-1 9.8-9.8-3.4-3.4L5 15.6 4 20Z" />
-
-    <path d="m13.8 6.8 3.4 3.4" />
-  </svg>
-);
-
 /* =========================
    COMPONENT
 ========================= */
@@ -86,7 +72,7 @@ const ReadingGoal = () => {
             onClick={() => setIsGoalModalOpen(true)}
             disabled={isGoalLoading}
           >
-            <EditIcon />
+            <Icon name="edit" />
             Змінити
           </button>
         </div>
@@ -113,7 +99,7 @@ const ReadingGoal = () => {
             </div>
 
             <div className="reading-goal-card__item">
-              <BookmarkIcon />
+              <Icon name="bookmark" />
 
               <div>
                 <strong>
@@ -128,11 +114,7 @@ const ReadingGoal = () => {
             </div>
 
             <div className="reading-goal-card__item">
-              <svg viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="12" cy="12" r="9" />
-
-                <path d="M12 7v5l3 2" />
-              </svg>
+              <Icon name="clock" />
 
               <div>
                 <strong>{progressTime}</strong>

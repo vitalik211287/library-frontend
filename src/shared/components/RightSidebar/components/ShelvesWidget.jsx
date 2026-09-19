@@ -1,25 +1,5 @@
 import Icon from "../../Icon/Icon.jsx";
 
-const BookmarkIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M6 4.5A1.5 1.5 0 0 1 7.5 3h9A1.5 1.5 0 0 1 18 4.5V21l-6-4-6 4V4.5Z" />
-  </svg>
-);
-
-const CheckIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <circle cx="12" cy="12" r="9" />
-    <path d="m8 12 2.5 2.5L16 9" />
-  </svg>
-);
-
-const ReadingIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M3.5 5.5A2.5 2.5 0 0 1 6 3h4a2 2 0 0 1 2 2v15a2 2 0 0 0-2-2H6a2.5 2.5 0 0 0-2.5 2.5v-15Z" />
-    <path d="M20.5 5.5A2.5 2.5 0 0 0 18 3h-4a2 2 0 0 0-2 2v15a2 2 0 0 1 2-2h4a2.5 2.5 0 0 1 2.5 2.5v-15Z" />
-  </svg>
-);
-
 const ShelvesWidget = ({
   currentBooksCount,
   wishlistCount,
@@ -37,7 +17,7 @@ const ShelvesWidget = ({
     <div className="right-shelves">
       <div className="right-shelf">
         <div className="right-shelf__icon">
-          <ReadingIcon />
+          <Icon name="reading" />
         </div>
         <div className="right-shelf__content">
           <span>Читаю зараз</span>
@@ -47,7 +27,7 @@ const ShelvesWidget = ({
 
       <div className="right-shelf">
         <div className="right-shelf__icon">
-          <BookmarkIcon />
+          <Icon name="bookmark" />
         </div>
         <div className="right-shelf__content">
           <span>Хочу прочитати</span>
@@ -57,7 +37,7 @@ const ShelvesWidget = ({
 
       <div className="right-shelf">
         <div className="right-shelf__icon">
-          <CheckIcon />
+          <Icon name="check" />
         </div>
         <div className="right-shelf__content">
           <span>Прочитано</span>

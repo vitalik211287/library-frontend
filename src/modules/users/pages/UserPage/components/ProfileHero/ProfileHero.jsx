@@ -3,49 +3,10 @@ import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../../../../auth/context/AuthContext.jsx";
 import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
+import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
 import { apiFetch } from "../../../../../../shared/api/apiClient.js";
 
 import "./ProfileHero.css";
-
-const FollowingIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <circle cx="8" cy="8" r="3.5" />
-    <circle cx="16" cy="8" r="3.5" />
-    <path d="M2.5 20c.6-4 2.8-6 5.5-6s4.9 2 5.5 6" />
-    <path d="M10.5 20c.5-3.2 2.4-5 5.5-5 2.7 0 4.7 1.7 5.5 5" />
-  </svg>
-);
-
-const FollowersIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <circle cx="9" cy="8" r="4" />
-    <path d="M2.5 21c.6-4.5 3-7 6.5-7s5.9 2.5 6.5 7" />
-    <path d="M18 8v6" />
-    <path d="M15 11h6" />
-  </svg>
-);
-
-const FindUsersIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <circle cx="9" cy="8" r="3.5" />
-    <path d="M2.5 20c.7-4 3-6 6.5-6 2 0 3.7.7 4.8 2" />
-    <circle cx="17" cy="16" r="3" />
-    <path d="m19.2 18.2 2.3 2.3" />
-  </svg>
-);
-
-const EditIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="m4 20 4.3-1 10-10-3.3-3.3-10 10L4 20Z" />
-    <path d="m13.8 6.9 3.3 3.3" />
-  </svg>
-);
-
-const ChevronIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="m9 5 7 7-7 7" />
-  </svg>
-);
 
 const ProfileHero = () => {
   const navigate = useNavigate();
@@ -110,7 +71,7 @@ const ProfileHero = () => {
           onClick={() => navigate("/users/following")}
         >
           <span className="profile-hero__social-icon">
-            <FollowingIcon />
+            <Icon name="community" />
           </span>
 
           <span className="profile-hero__social-content">
@@ -119,7 +80,7 @@ const ProfileHero = () => {
           </span>
 
           <span className="profile-hero__chevron">
-            <ChevronIcon />
+            <Icon name="chevron-right" />
           </span>
         </AppPanel>
 
@@ -132,7 +93,7 @@ const ProfileHero = () => {
           onClick={() => navigate("/users/followers")}
         >
           <span className="profile-hero__social-icon">
-            <FollowersIcon />
+            <Icon name="community" />
           </span>
 
           <span className="profile-hero__social-content">
@@ -141,7 +102,7 @@ const ProfileHero = () => {
           </span>
 
           <span className="profile-hero__chevron">
-            <ChevronIcon />
+            <Icon name="chevron-right" />
           </span>
         </AppPanel>
 
@@ -154,7 +115,7 @@ const ProfileHero = () => {
           onClick={() => navigate("/users")}
         >
           <span className="profile-hero__social-icon">
-            <FindUsersIcon />
+            <Icon name="search" />
           </span>
 
           <span className="profile-hero__social-content">
@@ -163,7 +124,7 @@ const ProfileHero = () => {
           </span>
 
           <span className="profile-hero__chevron">
-            <ChevronIcon />
+            <Icon name="chevron-right" />
           </span>
         </AppPanel>
 
@@ -176,7 +137,7 @@ const ProfileHero = () => {
           onClick={() => navigate("/settings")}
         >
           <span className="profile-hero__social-icon">
-            <EditIcon />
+            <Icon name="edit" />
           </span>
 
           <span className="profile-hero__social-content">
@@ -185,7 +146,7 @@ const ProfileHero = () => {
           </span>
 
           <span className="profile-hero__chevron">
-            <ChevronIcon />
+            <Icon name="chevron-right" />
           </span>
         </AppPanel>
       </div>
