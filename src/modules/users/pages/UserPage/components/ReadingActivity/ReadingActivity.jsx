@@ -1,3 +1,4 @@
+import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
 import { useState } from "react";
 
 import useReadingActivity from "../../hooks/useReadingActivity.js";
@@ -15,14 +16,6 @@ import "./ReadingActivity.css";
 /* =========================
    ICONS
 ========================= */
-
-const BookIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11a2 2 0 0 1 2 2v16a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 21.5v-16Z" />
-
-    <path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v18a2 2 0 0 1 2-2h2.5a2.5 2.5 0 0 1 2.5 2.5v-16Z" />
-  </svg>
-);
 
 const ArrowIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -170,7 +163,7 @@ const ReadingActivity = ({ onDetails }) => {
 
           <div className="reading-week__stat">
             <div className="reading-week__icon">
-              <BookIcon />
+              <Icon name="book" />
             </div>
 
             <div className="reading-week__content">

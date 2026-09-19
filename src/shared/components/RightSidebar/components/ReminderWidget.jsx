@@ -1,9 +1,4 @@
-const BookIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11a2 2 0 0 1 2 2v16a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 21.5v-16Z" />
-    <path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v18a2 2 0 0 1 2-2h2.5a2.5 2.5 0 0 1 2.5 2.5v-16Z" />
-  </svg>
-);
+import Icon from "../../Icon/Icon.jsx";
 
 const ClockIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -23,7 +18,7 @@ const ReminderWidget = ({ mainCurrentBook }) => (
 
     <div className="right-reminder">
       <div className="right-reminder__icon">
-        <BookIcon />
+        <Icon name="book" />
       </div>
 
       <div className="right-reminder__content">

@@ -1,3 +1,4 @@
+import Icon from "../../../../shared/components/Icon/Icon.jsx";
 import { useState } from "react";
 
 import { useReadingGoalContext } from "../../context/ReadingGoalContext.jsx";
@@ -9,14 +10,6 @@ import "./ReadingGoal.css";
 /* =========================
    ICONS
 ========================= */
-
-const BookIcon = () => (
-  <svg viewBox="0 0 24 24" aria-hidden="true">
-    <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H11a2 2 0 0 1 2 2v16a2 2 0 0 0-2-2H6.5A2.5 2.5 0 0 0 4 21.5v-16Z" />
-
-    <path d="M20 5.5A2.5 2.5 0 0 0 17.5 3H13v18a2 2 0 0 1 2-2h2.5a2.5 2.5 0 0 1 2.5 2.5v-16Z" />
-  </svg>
-);
 
 const BookmarkIcon = () => (
   <svg viewBox="0 0 24 24" aria-hidden="true">
@@ -51,7 +44,7 @@ const ReadingGoal = () => {
   const goal = readingGoal;
   const progress = readingGoalProgress ?? {};
   const percent = readingGoalPercent ?? {};
-  
+
   const formatMinutes = (minutes) => {
     const totalMinutes = Math.max(0, Math.round(Number(minutes) || 0));
     const hours = Math.floor(totalMinutes / 60);
@@ -78,7 +71,7 @@ const ReadingGoal = () => {
   const timePercent =
     Number(goal?.minutes) > 0
       ? Math.round(
-          ((Number(progress.minutes) || 0) / Number(goal.minutes)) * 10000
+          ((Number(progress.minutes) || 0) / Number(goal.minutes)) * 10000,
         ) / 100
       : 0;
 
@@ -105,7 +98,7 @@ const ReadingGoal = () => {
         ) : (
           <div className="reading-goal-card">
             <div className="reading-goal-card__item">
-              <BookIcon />
+              <Icon name="book" />
 
               <div>
                 <strong>
@@ -113,7 +106,9 @@ const ReadingGoal = () => {
                 </strong>
 
                 <span>книг</span>
-                <span className="reading-goal-card__percent">{percent.books ?? 0}%</span>
+                <span className="reading-goal-card__percent">
+                  {percent.books ?? 0}%
+                </span>
               </div>
             </div>
 
@@ -126,7 +121,9 @@ const ReadingGoal = () => {
                 </strong>
 
                 <span>сторінок</span>
-                <span className="reading-goal-card__percent">{percent.pages ?? 0}%</span>
+                <span className="reading-goal-card__percent">
+                  {percent.pages ?? 0}%
+                </span>
               </div>
             </div>
 
@@ -138,12 +135,12 @@ const ReadingGoal = () => {
               </svg>
 
               <div>
-                <strong>
-                  {progressTime}
-                </strong>
+                <strong>{progressTime}</strong>
 
                 <span>з {goalTime}</span>
-                <span className="reading-goal-card__percent">{timePercent}%</span>
+                <span className="reading-goal-card__percent">
+                  {timePercent}%
+                </span>
               </div>
             </div>
           </div>
@@ -161,4 +158,3 @@ const ReadingGoal = () => {
 };
 
 export default ReadingGoal;
-

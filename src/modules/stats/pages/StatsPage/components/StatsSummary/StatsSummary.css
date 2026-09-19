@@ -72,3 +72,8 @@
     font-size: 24px;
   }
 }
+
+.stats-summary-card__icon--flame svg {
+  fill: currentColor;
+  stroke: none;
+}
