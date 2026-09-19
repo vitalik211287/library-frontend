@@ -74,16 +74,10 @@ const CurrentReading = ({
       ) : error ? (
         <div className="profile-empty">{error}</div>
       ) : !mainCurrentBook ? (
-        <div
-          className="home-empty-state"
-          role="button"
-          tabIndex={0}
+        <button
+          type="button"
+          className="home-empty-state home-empty-state--button"
           onClick={onOpenCatalog}
-          onKeyDown={(event) => {
-            if (event.key === "Enter" || event.key === " ") {
-              onOpenCatalog?.();
-            }
-          }}
         >
           <div className="home-empty-state__icon">
             <BookIcon />
@@ -93,7 +87,7 @@ const CurrentReading = ({
             <strong>Немає активної книги</strong>
             <span>Обери книгу з бібліотеки, щоб продовжити читання.</span>
           </div>
-        </div>
+        </button>
       ) : (
         <>
           <AppPanel as="article" variant="secondary" className="current-book">

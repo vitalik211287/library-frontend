@@ -23,16 +23,10 @@ const CurrentReading = ({
       </div>
 
       {!book ? (
-        <div
-          className="home-empty-state home-info-box"
-          role="button"
-          tabIndex={0}
+        <button
+          type="button"
+          className="home-empty-state home-info-box home-empty-state--button"
           onClick={onOpenCatalog}
-          onKeyDown={(event) => {
-            if (event.key === "Enter" || event.key === " ") {
-              onOpenCatalog?.();
-            }
-          }}
         >
           <div className="home-empty-state__icon home-icon-box">
             <BookIcon />
@@ -43,7 +37,7 @@ const CurrentReading = ({
 
             <span>Обери книгу з бібліотеки, щоб продовжити читання.</span>
           </div>
-        </div>
+        </button>
       ) : (
         <article className="current-reading-card">
           <div className="current-reading-card__main">

@@ -7,23 +7,13 @@ const AchievementCard = ({
   featuredAchievement,
   onOpen,
 }) => {
-  const handleKeyDown = (event) => {
-    if (event.key !== "Enter" && event.key !== " ") {
-      return;
-    }
-
-    event.preventDefault();
-    onOpen();
-  };
-
   return (
     <HomePanel
+      as="button"
+      type="button"
       className="home-achievement-card"
       clickable
-      role="button"
-      tabIndex={0}
       onClick={onOpen}
-      onKeyDown={handleKeyDown}
     >
       <div className="home-achievement-card__inner">
         <div className="home-achievement-card__icon">

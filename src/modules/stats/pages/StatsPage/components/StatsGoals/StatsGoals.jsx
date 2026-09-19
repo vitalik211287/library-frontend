@@ -20,12 +20,11 @@ const StatsGoals = ({ year, goal, onOpen }) => {
 
   return (
     <AppPanel
-      as="section"
+      as="button"
+      type="button"
       className="stats-goals stats-goals--clickable"
-      role="button"
-      tabIndex={0}
+      clickable
       onClick={onOpen}
-      onKeyDown={handleKeyDown}
     >
       <div className="stats-goals__header">
         <div>

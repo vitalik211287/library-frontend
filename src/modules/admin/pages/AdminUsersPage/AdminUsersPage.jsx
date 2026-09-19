@@ -520,7 +520,7 @@ const AdminUsersPage = () => {
 
   if (isLoading) {
     return (
-      <section className="admin-users-page">
+      <main className="admin-users-page">
         <AppPanel
           as="p"
           variant="secondary"
@@ -528,12 +528,12 @@ const AdminUsersPage = () => {
         >
           Завантаження користувачів...
         </AppPanel>
-      </section>
+      </main>
     );
   }
 
   return (
-    <section className="admin-users-page">
+    <main className="admin-users-page">
       <div className="admin-users-page__header">
         <div>
           <h1 className="admin-users-page__title">Адміністрування</h1>
@@ -970,7 +970,7 @@ const AdminUsersPage = () => {
           </div>
         )}
       </Modal>
-    </section>
+    </main>
   );
 };
 

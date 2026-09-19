@@ -38,19 +38,13 @@ const CatalogPage = ({ onOpenReading }) => {
   const linkedBookId = searchParams.get("bookId");
 
   const canEditLibrary =
-    activeLibrary?.role === "OWNER" ||
-    activeLibrary?.role === "ADMIN";
+    activeLibrary?.role === "OWNER" || activeLibrary?.role === "ADMIN";
 
-  const {
-    books,
-    message,
-    wishlistLoadingId,
-    toggleWishlist,
-    updateBook,
-  } = useCatalogBooks();
+  const { books, message, wishlistLoadingId, toggleWishlist, updateBook } =
+    useCatalogBooks();
 
   useEffect(() => {
-    const isMobile = window.matchMedia("(max-width: 600px)").matches;
+    const isMobile = window.matchMedia("(max-width: 767px)").matches;
 
     if (!isMobile) {
       searchInputRef.current?.focus();
@@ -68,10 +62,7 @@ const CatalogPage = ({ onOpenReading }) => {
       updateBook(updatedBook);
     };
 
-    window.addEventListener(
-      "library-book-updated",
-      handleLibraryBookUpdated,
-    );
+    window.addEventListener("library-book-updated", handleLibraryBookUpdated);
 
     return () => {
       window.removeEventListener(
@@ -81,19 +72,14 @@ const CatalogPage = ({ onOpenReading }) => {
     };
   }, [updateBook]);
 
-  const genreShelves = useMemo(
-    () => groupBooksByGenre(books),
-    [books],
-  );
+  const genreShelves = useMemo(() => groupBooksByGenre(books), [books]);
 
   const shelfBooks = useMemo(() => {
     if (!selectedShelf) {
       return books;
     }
 
-    const shelf = genreShelves.find(
-      (item) => item.id === selectedShelf,
-    );
+    const shelf = genreShelves.find((item) => item.id === selectedShelf);
 
     return shelf?.books ?? [];
   }, [books, genreShelves, selectedShelf]);
@@ -181,23 +167,14 @@ const CatalogPage = ({ onOpenReading }) => {
       return;
     }
 
-    onOpenReading?.(
-      book.id,
-      activeLibraryId,
-    );
+    onOpenReading?.(book.id, activeLibraryId);
   };
 
   const showShelves =
-    viewMode === "shelves" &&
-    !selectedShelf &&
-    !search.trim() &&
-    !linkedBookId;
+    viewMode === "shelves" && !selectedShelf && !search.trim() && !linkedBookId;
 
   return (
-    <div
-      ref={catalogTopRef}
-      className="catalog-page"
-    >
+    <main ref={catalogTopRef} className="catalog-page">
       <h1>Каталог бібліотеки</h1>
 
       <p className="books-count">
@@ -206,11 +183,7 @@ const CatalogPage = ({ onOpenReading }) => {
           : `Книг у бібліотеці: ${books.length}`}
       </p>
 
-      {message && (
-        <p className="catalog-message">
-          {message}
-        </p>
-      )}
+      {message && <p className="catalog-message">{message}</p>}
 
       <div className="catalog-view-toggle">
         <button
@@ -220,9 +193,7 @@ const CatalogPage = ({ onOpenReading }) => {
               ? "catalog-view-toggle__button is-active"
               : "catalog-view-toggle__button"
           }
-          onClick={() =>
-            handleViewModeChange("all")
-          }
+          onClick={() => handleViewModeChange("all")}
         >
           Усі книги
         </button>
@@ -234,9 +205,7 @@ const CatalogPage = ({ onOpenReading }) => {
               ? "catalog-view-toggle__button is-active"
               : "catalog-view-toggle__button"
           }
-          onClick={() =>
-            handleViewModeChange("shelves")
-          }
+          onClick={() => handleViewModeChange("shelves")}
         >
           Полички
         </button>
@@ -248,9 +217,7 @@ const CatalogPage = ({ onOpenReading }) => {
         searchInputRef={searchInputRef}
         onSearchChange={setSearch}
         onSearchByChange={setSearchBy}
-        onOpenScanner={() =>
-          setScannerOpen(true)
-        }
+        onOpenScanner={() => setScannerOpen(true)}
       />
 
       <div
@@ -260,10 +227,7 @@ const CatalogPage = ({ onOpenReading }) => {
             : "catalog-shelves-view catalog-shelves-view--hidden"
         }
       >
-        <GenreShelves
-          shelves={genreShelves}
-          onSelect={handleShelfSelect}
-        />
+        <GenreShelves shelves={genreShelves} onSelect={handleShelfSelect} />
       </div>
 
       {!showShelves && (
@@ -302,12 +266,8 @@ const CatalogPage = ({ onOpenReading }) => {
                 book={book}
                 isAuthenticated={isAuthenticated}
                 isAuthLoading={isAuthLoading}
-                wishlistLoadingId={
-                  wishlistLoadingId
-                }
-                onWishlistToggle={
-                  handleWishlistToggle
-                }
+                wishlistLoadingId={wishlistLoadingId}
+                onWishlistToggle={handleWishlistToggle}
                 onEdit={setEditingBook}
                 onRead={handleOpenReading}
                 canEdit={canEditLibrary}
@@ -321,9 +281,7 @@ const CatalogPage = ({ onOpenReading }) => {
         <EditBookModal
           book={editingBook}
           activeLibraryId={activeLibraryId}
-          onClose={() =>
-            setEditingBook(null)
-          }
+          onClose={() => setEditingBook(null)}
           onUpdated={handleBookUpdated}
         />
       )}
@@ -331,12 +289,10 @@ const CatalogPage = ({ onOpenReading }) => {
       {scannerOpen && (
         <BarcodeScanner
           onScan={handleScan}
-          onClose={() =>
-            setScannerOpen(false)
-          }
+          onClose={() => setScannerOpen(false)}
         />
       )}
-    </div>
+    </main>
   );
 };
 

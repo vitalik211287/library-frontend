@@ -21,12 +21,11 @@ const MonthlySummary = ({
 
   return (
     <HomePanel
+      as="button"
+      type="button"
       className="month-panel"
       clickable
-      role="button"
-      tabIndex={0}
       onClick={onOpen}
-      onKeyDown={handleKeyDown}
     >
       <div className="home-panel__header">
         <div>

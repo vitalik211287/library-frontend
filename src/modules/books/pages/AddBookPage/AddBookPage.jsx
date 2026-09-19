@@ -89,7 +89,7 @@ const AddBookPage = () => {
   };
 
   return (
-    <div className="add-book-page">
+    <main className="add-book-page">
       <PageBackButton label="Додати книгу" />
       <h1>Додати книгу</h1>
 
@@ -123,12 +123,8 @@ const AddBookPage = () => {
       {scannerOpen && (
         <BarcodeScanner onScan={handleScan} onClose={handleCloseScanner} />
       )}
-    </div>
+    </main>
   );
 };
 
 export default AddBookPage;
-
-
-
-

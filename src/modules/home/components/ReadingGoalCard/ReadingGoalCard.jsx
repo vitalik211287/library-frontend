@@ -56,13 +56,7 @@ const ReadingGoalCard = ({
   };
 
   return (
-    <HomePanel
-      clickable
-      role="button"
-      tabIndex={0}
-      onClick={onOpen}
-      onKeyDown={handleKeyDown}
-    >
+    <HomePanel as="button" type="button" clickable onClick={onOpen}>
       <div className="home-panel__header">
         <div>
           <span className="home-section__kicker">Прогрес</span>
@@ -75,10 +69,7 @@ const ReadingGoalCard = ({
       {hasReadingGoal && goalProgress?.length ? (
         <div className="reading-goal">
           {goalProgress.map((item) => (
-            <div
-              className="reading-goal__item"
-              key={item.type}
-            >
+            <div className="reading-goal__item" key={item.type}>
               <div className="reading-goal__hero home-info-box">
                 <div className="reading-goal__icon home-icon-box">
                   <TargetIcon />
@@ -94,9 +85,7 @@ const ReadingGoalCard = ({
                   <div className="reading-goal__numbers">
                     <strong>{formatGoalValue(item)}</strong>
 
-                    <span>
-                      / {formatGoalTarget(item)}
-                    </span>
+                    <span>/ {formatGoalTarget(item)}</span>
                   </div>
                 </div>
               </div>
