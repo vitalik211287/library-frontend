@@ -1,4 +1,4 @@
-﻿import { useRef, useState } from "react";
+import { useRef, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -16,6 +16,7 @@ import ChangePasswordModal from "./components/ChangePasswordModal.jsx";
 import ThemeSettingsSection from "./components/ThemeSettingsSection.jsx";
 
 import AppPanel from "../../../../shared/components/AppPanel/AppPanel.jsx";
+import Icon from "../../../../shared/components/Icon/Icon.jsx";
 
 import "./SettingsPage.css";
 
@@ -248,9 +249,7 @@ const SettingsPage = () => {
             onClick={handleBack}
             aria-label="Назад"
           >
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M15 18l-6-6 6-6" />
-            </svg>
+            <Icon name="chevron-left" />
           </button>
 
           <h1>Налаштування</h1>
@@ -266,11 +265,7 @@ const SettingsPage = () => {
               onClick={handleOpenName}
             >
               <span className="settings-page__row-icon">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <circle cx="12" cy="8" r="4" />
-
-                  <path d="M4 21a8 8 0 0 1 16 0" />
-                </svg>
+                <Icon name="profile" />
               </span>
 
               <span className="settings-page__row-content">
@@ -281,16 +276,14 @@ const SettingsPage = () => {
                 </span>
               </span>
 
-              <span className="settings-page__chevron">›</span>
+              <span className="settings-page__chevron">
+                <Icon name="chevron-right" />
+              </span>
             </button>
 
             <div className="settings-page__row">
               <span className="settings-page__row-icon">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <rect x="3" y="5" width="18" height="14" rx="2" />
-
-                  <path d="m3 7 9 6 9-6" />
-                </svg>
+                <Icon name="email" />
               </span>
 
               <span className="settings-page__row-content">
@@ -312,11 +305,7 @@ const SettingsPage = () => {
                 {user?.avatarUrl ? (
                   <img src={user.avatarUrl} alt="Аватар користувача" />
                 ) : (
-                  <svg viewBox="0 0 24 24" aria-hidden="true">
-                    <circle cx="12" cy="8" r="4" />
-
-                    <path d="M4 21a8 8 0 0 1 16 0" />
-                  </svg>
+                  <Icon name="profile" />
                 )}
               </span>
 
@@ -332,7 +321,9 @@ const SettingsPage = () => {
                 </span>
               </span>
 
-              <span className="settings-page__chevron">›</span>
+              <span className="settings-page__chevron">
+                <Icon name="chevron-right" />
+              </span>
             </button>
 
             <input
@@ -355,18 +346,16 @@ const SettingsPage = () => {
               onClick={handleOpenPassword}
             >
               <span className="settings-page__row-icon">
-                <svg viewBox="0 0 24 24" aria-hidden="true">
-                  <rect x="5" y="10" width="14" height="11" rx="2" />
-
-                  <path d="M8 10V7a4 4 0 0 1 8 0v3" />
-                </svg>
+                <Icon name="lock" />
               </span>
 
               <span className="settings-page__row-content">
                 <span className="settings-page__row-title">Змінити пароль</span>
               </span>
 
-              <span className="settings-page__chevron">›</span>
+              <span className="settings-page__chevron">
+                <Icon name="chevron-right" />
+              </span>
             </button>
           </AppPanel>
         </section>
@@ -381,11 +370,7 @@ const SettingsPage = () => {
           className="settings-page__logout"
           onClick={handleLogout}
         >
-          <svg viewBox="0 0 24 24" aria-hidden="true">
-            <path d="M10 17l5-5-5-5" />
-            <path d="M15 12H3" />
-            <path d="M13 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6" />
-          </svg>
+          <Icon name="logout" />
           Вийти з акаунта
         </button>
       </section>

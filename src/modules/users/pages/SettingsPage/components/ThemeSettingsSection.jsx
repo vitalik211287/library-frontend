@@ -1,4 +1,5 @@
 import AppPanel from "../../../../../shared/components/AppPanel/AppPanel.jsx";
+import Icon from "../../../../../shared/components/Icon/Icon.jsx";
 
 import { MoonIcon, SunIcon, SystemIcon } from "./ThemeIcons.jsx";
 
@@ -10,9 +11,7 @@ const ThemeSettingsSection = ({ themeMode, setThemeMode }) => {
       <AppPanel className="settings-page__card settings-page__theme-card">
         <div className="settings-page__theme-header">
           <span className="settings-page__row-icon">
-            <svg viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M12 3a9 9 0 1 0 9 9 7 7 0 0 1-9-9Z" />
-            </svg>
+            <Icon name="moon" />
           </span>
 
           <div className="settings-page__row-content">

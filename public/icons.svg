@@ -326,4 +326,18 @@
     <path d="M17 8h5" />
     <path d="M19.5 5.5v5" />
   </symbol>
+  <symbol id="icon-chevron-left" viewBox="0 0 24 24">
+    <path d="M15 18l-6-6 6-6" />
+  </symbol>
+
+  <symbol id="icon-email" viewBox="0 0 24 24">
+    <rect x="3" y="5" width="18" height="14" rx="2" />
+    <path d="m3 7 9 6 9-6" />
+  </symbol>
+
+  <symbol id="icon-logout" viewBox="0 0 24 24">
+    <path d="M10 17l5-5-5-5" />
+    <path d="M15 12H3" />
+    <path d="M13 3h6a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-6" />
+  </symbol>
 </svg>
