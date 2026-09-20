@@ -71,7 +71,11 @@ const useSwipeNavigation = () => {
     };
 
     const handleTouchStart = (event) => {
-      if (!mediaQuery.matches || event.touches.length !== 1) {
+      if (
+        !mediaQuery.matches ||
+        event.touches.length !== 1 ||
+        document.querySelector(".modal-overlay")
+      ) {
         resetGesture();
         return;
       }
