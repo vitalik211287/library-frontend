@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 
 import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 import { apiFetch } from "../../../../../../shared/api/apiClient.js";
@@ -17,6 +17,7 @@ const LibraryGoal = () => {
   const [goal, setGoal] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isExpanded, setIsExpanded] = useState(false);
   const [refreshKey, setRefreshKey] = useState(0);
 
   const canManage =
@@ -92,18 +93,39 @@ const LibraryGoal = () => {
         {isLoading ? (
           <div className="profile-empty">Завантаження мети...</div>
         ) : (
-          <AppPanel variant="secondary" className="library-goal-card">
-            <div className="library-goal-card__main">
-              <Icon name="book" />
+          <AppPanel
+            variant="secondary"
+            className={`library-goal-card ${
+              isExpanded ? "library-goal-card--expanded" : ""
+            }`}
+          >
+            <button
+              type="button"
+              className="library-goal-card__toggle"
+              onClick={() => setIsExpanded((value) => !value)}
+              aria-expanded={isExpanded}
+            >
+              <div className="library-goal-card__main">
+                <Icon name="book" />
 
-              <div>
-                <strong>
-                  {goal?.progress ?? 0} / {goal?.goal ?? "—"}
-                </strong>
+                <div>
+                  <strong>
+                    {goal?.progress ?? 0} / {goal?.goal ?? "—"}
+                  </strong>
 
-                <span>книг</span>
+                  <span>книг</span>
+                </div>
               </div>
-            </div>
+
+              <span
+                className={`library-goal-card__chevron ${
+                  isExpanded ? "library-goal-card__chevron--open" : ""
+                }`}
+                aria-hidden="true"
+              >
+                ›
+              </span>
+            </button>
 
             <div className="library-goal-card__track">
               <div
@@ -121,6 +143,36 @@ const LibraryGoal = () => {
                 <span>Залишилось {goal.remaining}</span>
               )}
             </div>
+
+            {isExpanded && (
+              <div className="library-goal-card__books">
+                {goal?.books?.length ? (
+                  goal.books.map((book, index) => (
+                    <div
+                      key={`${book.id}-${book.addedAt ?? index}`}
+                      className="library-goal-book"
+                    >
+                      <div className="library-goal-book__cover">
+                        {book.coverUrl ? (
+                          <img src={book.coverUrl} alt="" />
+                        ) : (
+                          <Icon name="book" />
+                        )}
+                      </div>
+
+                      <div className="library-goal-book__info">
+                        <strong>{book.title}</strong>
+                        <span>{book.author || "Автор не вказаний"}</span>
+                      </div>
+                    </div>
+                  ))
+                ) : (
+                  <div className="library-goal-card__empty">
+                    За {year} рік книг ще не додано
+                  </div>
+                )}
+              </div>
+            )}
           </AppPanel>
         )}
       </section>
