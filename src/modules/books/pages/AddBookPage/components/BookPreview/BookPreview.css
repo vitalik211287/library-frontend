@@ -92,7 +92,7 @@
   font-weight: 300;
   line-height: 1;
 
-  transform: translateY(-3px);
+  transform: translateY(5px);
 }
 
 .book-preview__cover-plus:hover {
@@ -253,7 +253,8 @@
   }
 
   .book-preview__cover {
-    width: 180px;
+    width: 220px;
+    max-width: 100%;
   }
 
   .book-fields {
