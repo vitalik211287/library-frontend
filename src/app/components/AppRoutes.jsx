@@ -1,28 +1,75 @@
-﻿import { Navigate, Route, Routes } from "react-router-dom";
+import { lazy, Suspense } from "react";
+import { Navigate, Route, Routes } from "react-router-dom";
+import Loader from "../../shared/components/Loader/Loader.jsx";
 
 import LandingPage from "../../modules/landing/pages/LandingPage/LandingPage.jsx";
 import LoginPage from "../../modules/auth/pages/LoginPage/LoginPage.jsx";
 import RegisterPage from "../../modules/auth/pages/RegisterPage/RegisterPage.jsx";
 
-import HomePage from "../../modules/home/pages/HomePage/HomePage.jsx";
-import CommunityPage from "../../modules/social/pages/CommunityPage/CommunityPage.jsx";
-import CatalogPage from "../../modules/books/pages/CatalogPage/CatalogPage.jsx";
-import AddBookPage from "../../modules/books/pages/AddBookPage/AddBookPage.jsx";
-import ReadingCalendarPage from "../../modules/reading/pages/ReadingCalendarPage/ReadingCalendarPage.jsx";
-import StatsPage from "../../modules/stats/pages/StatsPage/StatsPage.jsx";
-import AchievementsPage from "../../modules/stats/pages/AchievementsPage/AchievementsPage.jsx";
-import UserPage from "../../modules/users/pages/UserPage/UserPage.jsx";
-import WishlistPage from "../../modules/user-books/pages/WishlistPage/WishlistPage.jsx";
-import FinishedBooksPage from "../../modules/user-books/pages/FinishedBooksPage/FinishedBooksPage.jsx";
-import SettingsPage from "../../modules/users/pages/SettingsPage/SettingsPage.jsx";
-import LibraryManagementPage from "../../modules/libraries/pages/LibraryManagementPage/LibraryManagementPage.jsx";
-import UserSearchPage from "../../modules/users/pages/UserSearchPage/UserSearchPage.jsx";
-import FollowingPage from "../../modules/users/pages/FollowingPage/FollowingPage.jsx";
-import FollowersPage from "../../modules/users/pages/FollowersPage/FollowersPage.jsx";
-import NotificationsPage from "../../modules/notifications/pages/NotificationsPage/NotificationsPage.jsx";
-import PublicUserProfilePage from "../../modules/users/pages/PublicUserProfilePage/PublicUserProfilePage.jsx";
-import PublicUserAchievementsPage from "../../modules/users/pages/PublicUserAchievementsPage/PublicUserAchievementsPage.jsx";
-import AdminUsersPage from "../../modules/admin/pages/AdminUsersPage/AdminUsersPage.jsx";
+const HomePage = lazy(
+  () => import("../../modules/home/pages/HomePage/HomePage.jsx"),
+);
+const CommunityPage = lazy(
+  () => import("../../modules/social/pages/CommunityPage/CommunityPage.jsx"),
+);
+const CatalogPage = lazy(
+  () => import("../../modules/books/pages/CatalogPage/CatalogPage.jsx"),
+);
+const AddBookPage = lazy(
+  () => import("../../modules/books/pages/AddBookPage/AddBookPage.jsx"),
+);
+const ReadingCalendarPage = lazy(
+  () =>
+    import("../../modules/reading/pages/ReadingCalendarPage/ReadingCalendarPage.jsx"),
+);
+const StatsPage = lazy(
+  () => import("../../modules/stats/pages/StatsPage/StatsPage.jsx"),
+);
+const AchievementsPage = lazy(
+  () =>
+    import("../../modules/stats/pages/AchievementsPage/AchievementsPage.jsx"),
+);
+const UserPage = lazy(
+  () => import("../../modules/users/pages/UserPage/UserPage.jsx"),
+);
+const WishlistPage = lazy(
+  () => import("../../modules/user-books/pages/WishlistPage/WishlistPage.jsx"),
+);
+const FinishedBooksPage = lazy(
+  () =>
+    import("../../modules/user-books/pages/FinishedBooksPage/FinishedBooksPage.jsx"),
+);
+const SettingsPage = lazy(
+  () => import("../../modules/users/pages/SettingsPage/SettingsPage.jsx"),
+);
+const LibraryManagementPage = lazy(
+  () =>
+    import("../../modules/libraries/pages/LibraryManagementPage/LibraryManagementPage.jsx"),
+);
+const UserSearchPage = lazy(
+  () => import("../../modules/users/pages/UserSearchPage/UserSearchPage.jsx"),
+);
+const FollowingPage = lazy(
+  () => import("../../modules/users/pages/FollowingPage/FollowingPage.jsx"),
+);
+const FollowersPage = lazy(
+  () => import("../../modules/users/pages/FollowersPage/FollowersPage.jsx"),
+);
+const NotificationsPage = lazy(
+  () =>
+    import("../../modules/notifications/pages/NotificationsPage/NotificationsPage.jsx"),
+);
+const PublicUserProfilePage = lazy(
+  () =>
+    import("../../modules/users/pages/PublicUserProfilePage/PublicUserProfilePage.jsx"),
+);
+const PublicUserAchievementsPage = lazy(
+  () =>
+    import("../../modules/users/pages/PublicUserAchievementsPage/PublicUserAchievementsPage.jsx"),
+);
+const AdminUsersPage = lazy(
+  () => import("../../modules/admin/pages/AdminUsersPage/AdminUsersPage.jsx"),
+);
 
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import AdminRoute from "./AdminRoute.jsx";
@@ -56,206 +103,209 @@ export const PublicRoutes = ({ isAuthenticated }) => {
 
 export const PrivateRoutes = ({ onOpenReading }) => {
   return (
-    <Routes>
-      <Route
-        path="/home"
-        element={
-          <ProtectedRoute>
-            <HomePage onOpenReading={onOpenReading} />
-          </ProtectedRoute>
-        }
-      />
+    <Suspense fallback={<Loader text="Завантаження…" />}>
+      `r`n{" "}
+      <Routes>
+        <Route
+          path="/home"
+          element={
+            <ProtectedRoute>
+              <HomePage onOpenReading={onOpenReading} />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/community"
-        element={
-          <ProtectedRoute>
-            <CommunityPage />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/catalog"
-        element={
-          <ProtectedRoute>
-            <CatalogPage onOpenReading={onOpenReading} />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/community"
+          element={
+            <ProtectedRoute>
+              <CommunityPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/catalog"
+          element={
+            <ProtectedRoute>
+              <CatalogPage onOpenReading={onOpenReading} />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/add"
-        element={
-          <ProtectedRoute>
-            <AddBookPage />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/add"
+          element={
+            <ProtectedRoute>
+              <AddBookPage />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/calendar"
-        element={
-          <ProtectedRoute>
-            <ReadingCalendarPage />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/calendar"
+          element={
+            <ProtectedRoute>
+              <ReadingCalendarPage />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/stats"
-        element={
-          <ProtectedRoute>
-            <StatsPage />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/stats"
+          element={
+            <ProtectedRoute>
+              <StatsPage />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/achievements"
-        element={
-          <ProtectedRoute>
-            <AchievementsPage />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/achievements"
+          element={
+            <ProtectedRoute>
+              <AchievementsPage />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/account"
-        element={
-          <ProtectedRoute>
-            <UserPage onOpenReading={onOpenReading} />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/account"
+          element={
+            <ProtectedRoute>
+              <UserPage onOpenReading={onOpenReading} />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/wishlist"
-        element={
-          <ProtectedRoute>
-            <WishlistPage onOpenReading={onOpenReading} />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/wishlist"
+          element={
+            <ProtectedRoute>
+              <WishlistPage onOpenReading={onOpenReading} />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/finished"
-        element={
-          <ProtectedRoute>
-            <FinishedBooksPage onOpenReading={onOpenReading} />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/finished"
+          element={
+            <ProtectedRoute>
+              <FinishedBooksPage onOpenReading={onOpenReading} />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/settings"
-        element={
-          <ProtectedRoute>
-            <SettingsPage />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/settings"
+          element={
+            <ProtectedRoute>
+              <SettingsPage />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/library/manage"
-        element={
-          <ProtectedRoute>
-            <LibraryManagementPage />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/library/manage"
+          element={
+            <ProtectedRoute>
+              <LibraryManagementPage />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/users"
-        element={
-          <ProtectedRoute>
-            <UserSearchPage />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/users"
+          element={
+            <ProtectedRoute>
+              <UserSearchPage />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/users/following"
-        element={
-          <ProtectedRoute>
-            <FollowingPage />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/users/following"
+          element={
+            <ProtectedRoute>
+              <FollowingPage />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/users/followers"
-        element={
-          <ProtectedRoute>
-            <FollowersPage />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/users/:userId/following"
-        element={
-          <ProtectedRoute>
-            <FollowingPage />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/users/followers"
+          element={
+            <ProtectedRoute>
+              <FollowersPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/users/:userId/following"
+          element={
+            <ProtectedRoute>
+              <FollowingPage />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/users/:userId/followers"
-        element={
-          <ProtectedRoute>
-            <FollowersPage />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/users/:userId/followers"
+          element={
+            <ProtectedRoute>
+              <FollowersPage />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/users/:userId/achievements"
-        element={
-          <ProtectedRoute>
-            <PublicUserAchievementsPage />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/users/:userId"
-        element={
-          <ProtectedRoute>
-            <PublicUserProfilePage />
-          </ProtectedRoute>
-        }
-      />
-      <Route
-        path="/notifications"
-        element={
-          <ProtectedRoute>
-            <NotificationsPage />
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/users/:userId/achievements"
+          element={
+            <ProtectedRoute>
+              <PublicUserAchievementsPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/users/:userId"
+          element={
+            <ProtectedRoute>
+              <PublicUserProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/notifications"
+          element={
+            <ProtectedRoute>
+              <NotificationsPage />
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/admin/users"
-        element={
-          <ProtectedRoute>
-            <AdminRoute>
-              <AdminUsersPage />
-            </AdminRoute>
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/admin/users"
+          element={
+            <ProtectedRoute>
+              <AdminRoute>
+                <AdminUsersPage />
+              </AdminRoute>
+            </ProtectedRoute>
+          }
+        />
 
-      <Route
-        path="/admin/users/:userSlug/:userId"
-        element={
-          <ProtectedRoute>
-            <AdminRoute>
-              <AdminUsersPage />
-            </AdminRoute>
-          </ProtectedRoute>
-        }
-      />
+        <Route
+          path="/admin/users/:userSlug/:userId"
+          element={
+            <ProtectedRoute>
+              <AdminRoute>
+                <AdminUsersPage />
+              </AdminRoute>
+            </ProtectedRoute>
+          }
+        />
 
-      <Route path="*" element={<Navigate to="/home" replace />} />
-    </Routes>
+        <Route path="*" element={<Navigate to="/home" replace />} />
+      </Routes>
+    </Suspense>
   );
 };
