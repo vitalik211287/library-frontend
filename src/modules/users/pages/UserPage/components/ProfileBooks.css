@@ -7,6 +7,7 @@
 
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  align-items: stretch;
   gap: var(--space-10);
 
   overflow: visible;
@@ -20,6 +21,10 @@
 
   display: flex;
   flex-direction: column;
+}
+
+.profile-book__meta {
+  margin-top: auto;
 }
 
 /* Mobile / tablet — only 3 books */

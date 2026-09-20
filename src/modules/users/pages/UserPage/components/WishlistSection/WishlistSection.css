@@ -2,7 +2,7 @@
    WISHLIST COVER BUTTON
 ========================= */
 
-.profile-book__open {
+.profile-book__cover > .profile-book__open {
   height: 100%;
 }
 

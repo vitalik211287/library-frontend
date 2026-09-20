@@ -89,22 +89,25 @@ const FinishedSection = ({
                   )}
                 </div>
               </button>
-              <button
-                type="button"
-                className="finished-book__title-button"
-                onClick={() => handleOpenBook(book)}
-              >
-                {book.title}
-              </button>
-              <p>{book.author}</p>
+              <div className="profile-book__meta">
+                <button
+                  type="button"
+                  className="finished-book__title-button"
+                  onClick={() => handleOpenBook(book)}
+                >
+                  {book.title}
+                </button>
 
-              {book.rating ? (
-                <div className="profile-book__rating">
-                  {"★".repeat(
-                    Math.min(5, Math.max(0, Number(book.rating) || 0)),
-                  )}
-                </div>
-              ) : null}
+                <p>{book.author}</p>
+
+                {book.rating ? (
+                  <div className="profile-book__rating">
+                    {"★".repeat(
+                      Math.min(5, Math.max(0, Number(book.rating) || 0)),
+                    )}
+                  </div>
+                ) : null}
+              </div>
             </article>
           ))}
         </div>
