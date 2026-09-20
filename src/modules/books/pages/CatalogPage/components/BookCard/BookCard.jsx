@@ -1,4 +1,6 @@
-﻿import { getStatusLabel } from "../../utils/catalogHelpers.js";
+import { memo } from "react";
+
+import { getStatusLabel } from "../../utils/catalogHelpers.js";
 
 import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
@@ -131,4 +133,4 @@ const BookCard = ({
   );
 };
 
-export default BookCard;
+export default memo(BookCard);

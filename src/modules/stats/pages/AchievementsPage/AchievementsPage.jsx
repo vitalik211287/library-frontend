@@ -1,6 +1,5 @@
 import { useMemo, useState } from "react";
 
-import { useNavigate } from "react-router-dom";
 import PageBackButton from "../../../../shared/components/PageBackButton/PageBackButton.jsx";
 
 import AchievementCard from "./components/AchievementCard/AchievementCard.jsx";
@@ -12,8 +11,6 @@ import useAchievements from "./hooks/useAchievements.js";
 import "./AchievementsPage.css";
 
 const AchievementsPage = () => {
-  const navigate = useNavigate();
-
   const [activeCategory, setActiveCategory] = useState("all");
 
   const { achievements, summary, isLoading, error } = useAchievements();

@@ -35,7 +35,7 @@ const AddBookPage = () => {
 
   const isbnInputRef = useRef(null);
 
-  const { activeLibrary, activeLibraryId } = useLibrary();
+  const { activeLibraryId } = useLibrary();
 
   const focusIsbnInput = useCallback(() => {
     requestAnimationFrame(() => {
@@ -63,7 +63,6 @@ const AddBookPage = () => {
     resetLastSearch,
     focusIsbnInput,
     activeLibraryId,
-    activeLibraryName: activeLibrary?.name ?? "",
   });
 
   const handleSubmit = async (event) => {

@@ -1,4 +1,4 @@
-﻿import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import useAchievements from "../../hooks/useAchievements.js";
 import { getAchievementIcon } from "../../../../../stats/pages/AchievementsPage/utils/achievementHelpers.js";
@@ -8,7 +8,7 @@ import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx"
 import "./AchievementsPreview.css";
 import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
 
-const AchievementsPreview = ({ readingBookId }) => {
+const AchievementsPreview = () => {
   const navigate = useNavigate();
 
   const { previewAchievements, summary, isLoading, error } = useAchievements();

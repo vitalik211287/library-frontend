@@ -4,12 +4,18 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { apiFetch } from "../../../../shared/api/apiClient.js";
 import Icon from "../../../../shared/components/Icon/Icon.jsx";
 
-import { TrophyIcon } from "../HomeIcons.jsx";
 import HomePanel from "../HomePanel/HomePanel.jsx";
 import SocialFeedMenu from "./components/SocialFeedMenu/SocialFeedMenu.jsx";
 import SocialFeedEvent from "./components/SocialFeedEvent/SocialFeedEvent.jsx";
 import SocialBookModal from "./components/SocialBookModal/SocialBookModal.jsx";
 import "./SocialFeed.css";
+
+const activityDateFormatter = new Intl.DateTimeFormat("uk-UA", {
+  day: "2-digit",
+  month: "2-digit",
+  hour: "2-digit",
+  minute: "2-digit",
+});
 
 const SocialFeed = ({ limit = null, showViewAll = false }) => {
   const navigate = useNavigate();
@@ -208,13 +214,7 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
     }
   };
 
-  const formatTime = (value) =>
-    new Intl.DateTimeFormat("uk-UA", {
-      day: "2-digit",
-      month: "2-digit",
-      hour: "2-digit",
-      minute: "2-digit",
-    }).format(new Date(value));
+  const formatTime = (value) => activityDateFormatter.format(new Date(value));
 
   if (isLoading) {
     return (
@@ -276,7 +276,12 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
                 >
                   <div className="social-feed-card__avatar">
                     {activity.user?.avatarUrl ? (
-                      <img src={activity.user.avatarUrl} alt={userName} loading="lazy" decoding="async" />
+                      <img
+                        src={activity.user.avatarUrl}
+                        alt={userName}
+                        loading="lazy"
+                        decoding="async"
+                      />
                     ) : (
                       <span>{userName.charAt(0).toUpperCase()}</span>
                     )}

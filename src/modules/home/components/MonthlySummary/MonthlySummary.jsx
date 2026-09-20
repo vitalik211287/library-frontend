@@ -10,15 +10,6 @@ const MonthlySummary = ({
   formatReadingTime,
   onOpen,
 }) => {
-  const handleKeyDown = (event) => {
-    if (event.key !== "Enter" && event.key !== " ") {
-      return;
-    }
-
-    event.preventDefault();
-    onOpen();
-  };
-
   return (
     <HomePanel
       as="button"

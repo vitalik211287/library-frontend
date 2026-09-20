@@ -11,8 +11,6 @@ import "./BarcodeScanner.css";
 
 import useScannerCameras from "./hooks/useScannerCameras.js";
 import useBarcodeScan from "./hooks/useBarcodeScan.js";
-import useBarcodeScannerEngine from "./hooks/useBarcodeScannerEngine.js";
-import useScannerControls from "./hooks/useScannerControls.js";
 
 const BarcodeScanner = ({
   onScan,

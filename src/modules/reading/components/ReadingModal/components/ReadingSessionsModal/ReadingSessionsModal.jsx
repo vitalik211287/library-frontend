@@ -98,9 +98,6 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
                   ? delta / (durationSeconds / 3600)
                   : 0;
 
-              const sessionTotalPages =
-                totalPages ?? session.book?.pages ?? null;
-
               return (
                 <AppPanel
                   as="article"

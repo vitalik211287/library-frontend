@@ -17,7 +17,6 @@ const useAddBook = ({
   resetLastSearch,
   focusIsbnInput,
   activeLibraryId,
-  activeLibraryName,
 }) => {
   const [isAdding, setIsAdding] = useState(false);
   const { refreshBooks } = useLibraryBooks();

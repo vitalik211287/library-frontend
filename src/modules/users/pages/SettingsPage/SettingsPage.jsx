@@ -10,7 +10,6 @@ import { useTheme } from "../../../../shared/context/ThemeContext.jsx";
 
 import { apiFetch } from "../../../../shared/api/apiClient.js";
 
-import { MoonIcon, SunIcon, SystemIcon } from "./components/ThemeIcons.jsx";
 import ChangeNameModal from "./components/ChangeNameModal.jsx";
 import ChangePasswordModal from "./components/ChangePasswordModal.jsx";
 import ThemeSettingsSection from "./components/ThemeSettingsSection.jsx";

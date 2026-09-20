@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect } from "react";
+import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 import { Toaster } from "react-hot-toast";

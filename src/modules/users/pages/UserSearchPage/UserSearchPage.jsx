@@ -1,5 +1,4 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import PageBackButton from "../../../../shared/components/PageBackButton/PageBackButton.jsx";
 
 import UsersSearch from "../../components/UsersSearch/UsersSearch.jsx";
@@ -10,8 +9,6 @@ import useUserSearch from "../../hooks/useUserSearch.js";
 import "./UserSearchPage.css";
 
 const UserSearchPage = () => {
-  const navigate = useNavigate();
-
   const [query, setQuery] = useState("");
 
   const { users, isLoading, error, updateUserFollowing } = useUserSearch(query);

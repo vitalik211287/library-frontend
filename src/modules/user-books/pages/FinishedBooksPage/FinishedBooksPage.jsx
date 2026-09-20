@@ -23,10 +23,6 @@ const FinishedBooksPage = ({ onOpenReading }) => {
 
   const isAuthenticated = Boolean(user);
 
-  const handleBack = () => {
-    navigate("/account");
-  };
-
   const handleRead = (book) => {
     if (!book?.id) {
       return;

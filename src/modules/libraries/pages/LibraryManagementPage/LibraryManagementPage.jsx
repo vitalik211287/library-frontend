@@ -1,4 +1,4 @@
-﻿import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -12,11 +12,6 @@ import { useLibrary } from "../../context/LibraryContext.jsx";
 import { apiFetch } from "../../../../shared/api/apiClient.js";
 import ConfirmDeleteModal from "../../../../shared/components/ConfirmDeleteModal/ConfirmDeleteModal.jsx";
 import PageBackButton from "../../../../shared/components/PageBackButton/PageBackButton.jsx";
-import {
-  ROLE_OPTIONS,
-  getInitials,
-  getRoleLabel,
-} from "./utils/libraryManagementHelpers.js";
 import LibraryMembersList from "./components/LibraryMembersList/LibraryMembersList.jsx";
 import LibraryRenameForm from "./components/LibraryRenameForm/LibraryRenameForm.jsx";
 import AddLibraryMemberForm from "./components/AddLibraryMemberForm/AddLibraryMemberForm.jsx";

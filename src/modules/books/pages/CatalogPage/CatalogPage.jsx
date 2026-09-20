@@ -1,4 +1,12 @@
-import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
+import {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import EditBookModal from "../../components/EditBookModal/EditBookModal";
@@ -146,31 +154,37 @@ const CatalogPage = ({ onOpenReading }) => {
     setEditingBook(null);
   };
 
-  const handleWishlistToggle = async (book) => {
-    if (isAuthLoading) {
-      return;
-    }
+  const handleWishlistToggle = useCallback(
+    async (book) => {
+      if (isAuthLoading) {
+        return;
+      }
 
-    if (!isAuthenticated) {
-      navigate("/login");
-      return;
-    }
+      if (!isAuthenticated) {
+        navigate("/login");
+        return;
+      }
 
-    await toggleWishlist(book);
-  };
+      await toggleWishlist(book);
+    },
+    [isAuthLoading, isAuthenticated, navigate, toggleWishlist],
+  );
 
-  const handleOpenReading = (book) => {
-    if (isAuthLoading || !book?.id) {
-      return;
-    }
+  const handleOpenReading = useCallback(
+    (book) => {
+      if (isAuthLoading || !book?.id) {
+        return;
+      }
 
-    if (!isAuthenticated) {
-      navigate("/login");
-      return;
-    }
+      if (!isAuthenticated) {
+        navigate("/login");
+        return;
+      }
 
-    onOpenReading?.(book.id, activeLibraryId);
-  };
+      onOpenReading?.(book.id, activeLibraryId);
+    },
+    [activeLibraryId, isAuthLoading, isAuthenticated, navigate, onOpenReading],
+  );
 
   const showShelves =
     viewMode === "shelves" && !selectedShelf && !search.trim() && !linkedBookId;

@@ -46,15 +46,6 @@ const ReadingGoalCard = ({
   goalPercent,
   onOpen,
 }) => {
-  const handleKeyDown = (event) => {
-    if (event.key !== "Enter" && event.key !== " ") {
-      return;
-    }
-
-    event.preventDefault();
-    onOpen();
-  };
-
   return (
     <HomePanel as="button" type="button" clickable onClick={onOpen}>
       <div className="home-panel__header">

@@ -1,4 +1,4 @@
-﻿import GoalProgress from "./GoalProgress.jsx";
+import GoalProgress from "./GoalProgress.jsx";
 import LibraryGoalProgress from "../LibraryGoalProgress/LibraryGoalProgress.jsx";
 
 import { formatGoalMinutes } from "../../utils/statsHelpers.js";
@@ -10,13 +10,6 @@ const StatsGoals = ({ year, goal, onOpen }) => {
   const goals = goal?.goal || {};
   const progress = goal?.progress || {};
   const percent = goal?.percent || {};
-
-  const handleKeyDown = (event) => {
-    if (event.key === "Enter" || event.key === " ") {
-      event.preventDefault();
-      onOpen?.();
-    }
-  };
 
   return (
     <AppPanel
