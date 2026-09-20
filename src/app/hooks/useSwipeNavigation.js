@@ -25,6 +25,7 @@ const isSwipeBlockedTarget = (target) => {
         "[role='dialog']",
         "[data-swipe-ignore]",
         ".modal",
+        ".modal-overlay",
         ".mobile-drawer",
       ].join(","),
     )
