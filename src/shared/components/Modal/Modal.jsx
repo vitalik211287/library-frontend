@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { createPortal } from "react-dom";
 
 import "./Modal.css";
+import useModalHistory from "./useModalHistory.js";
 
 let openModalCount = 0;
 
@@ -51,6 +52,8 @@ const Modal = ({
   closeOnBackdrop = true,
   showHeader = true,
 }) => {
+  useModalHistory(isOpen, onClose);
+
   useEffect(() => {
     if (!isOpen) {
       return undefined;
