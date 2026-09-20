@@ -1,4 +1,4 @@
-﻿.settings-page {
+.settings-page {
   width: 100%;
   min-height: calc(100dvh - 80px);
 
@@ -158,10 +158,20 @@ button.settings-page__row:disabled {
 
 .settings-page__chevron {
   color: var(--text);
+}
 
-  font-size: 28px;
-  font-weight: 300;
-  line-height: 1;
+.settings-page__chevron svg {
+  width: 20px;
+  height: 20px;
+
+  display: block;
+
+  fill: none;
+  stroke: currentColor;
+
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }
 
 /* =========================

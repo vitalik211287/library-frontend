@@ -14,6 +14,7 @@ import { MoonIcon, SunIcon, SystemIcon } from "./components/ThemeIcons.jsx";
 import ChangeNameModal from "./components/ChangeNameModal.jsx";
 import ChangePasswordModal from "./components/ChangePasswordModal.jsx";
 import ThemeSettingsSection from "./components/ThemeSettingsSection.jsx";
+import LogoutModal from "./components/LogoutModal/LogoutModal.jsx";
 
 import AppPanel from "../../../../shared/components/AppPanel/AppPanel.jsx";
 import Icon from "../../../../shared/components/Icon/Icon.jsx";
@@ -32,6 +33,8 @@ const SettingsPage = () => {
   const [isNameOpen, setIsNameOpen] = useState(false);
 
   const [isPasswordOpen, setIsPasswordOpen] = useState(false);
+
+  const [isLogoutOpen, setIsLogoutOpen] = useState(false);
 
   const [name, setName] = useState(user?.name ?? "");
 
@@ -56,6 +59,8 @@ const SettingsPage = () => {
   };
 
   const handleLogout = () => {
+    setIsLogoutOpen(false);
+
     logout();
 
     navigate("/", {
@@ -368,12 +373,20 @@ const SettingsPage = () => {
         <button
           type="button"
           className="settings-page__logout"
-          onClick={handleLogout}
+          onClick={() => setIsLogoutOpen(true)}
         >
           <Icon name="logout" />
           Вийти з акаунта
         </button>
       </section>
+
+      <LogoutModal
+          isOpen={isLogoutOpen}
+          onCancel={() => setIsLogoutOpen(false)}
+          onConfirm={handleLogout}
+        />
+
+
 
       <ChangeNameModal
         isOpen={isNameOpen}
