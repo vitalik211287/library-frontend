@@ -95,7 +95,7 @@
   font-weight: 300;
   line-height: 1;
 
-  transform: translate(-50%, calc(-50% - 5px));
+  transform: translate(-50%, calc(-50% - 3px));
 }
 
 .book-preview__cover-plus:hover {
