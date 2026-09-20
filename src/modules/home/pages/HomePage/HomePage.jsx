@@ -11,6 +11,7 @@ import { useUserBooks } from "../../../user-books/context/UserBooksContext.jsx";
 import { useAchievementsContext } from "../../../stats/context/AchievementsContext.jsx";
 import { useReadingGoalContext } from "../../../stats/context/ReadingGoalContext.jsx";
 import ReadingGoalModal from "../../../stats/components/ReadingGoal/ReadingGoalModal.jsx";
+import Loader from "../../../../shared/components/Loader/Loader.jsx";
 import LibrarySwitcher from "../../components/LibrarySwitcher/LibrarySwitcher.jsx";
 import HomeWelcome from "../../components/HomeWelcome/HomeWelcome.jsx";
 import ReadingStreak from "../../components/ReadingStreak/ReadingStreak.jsx";
@@ -146,7 +147,7 @@ const HomePage = ({ onOpenReading }) => {
   ) {
     return (
       <main className="home-page">
-        <div className="home-section">Завантаження...</div>
+        <Loader text="Завантаження…" />
       </main>
     );
   }
