@@ -27,7 +27,7 @@ const CurrentReadingWidget = ({ currentBooks, isLoading, onOpenReading }) => {
         <div className="right-current">
           <div className="right-current__cover">
             {mainCurrentBook.coverUrl ? (
-              <img src={mainCurrentBook.coverUrl} alt={mainCurrentBook.title} />
+              <img src={mainCurrentBook.coverUrl} alt={mainCurrentBook.title} decoding="async" />
             ) : (
               <div className="right-no-cover">
                 Немає
@@ -78,7 +78,7 @@ const CurrentReadingWidget = ({ currentBooks, isLoading, onOpenReading }) => {
               >
                 <div className="right-current-mini__cover">
                   {book.coverUrl ? (
-                    <img src={book.coverUrl} alt={book.title} />
+                    <img src={book.coverUrl} alt={book.title} loading="lazy" decoding="async" />
                   ) : (
                     <div className="right-no-cover">—</div>
                   )}

@@ -557,7 +557,7 @@ const AdminUsersPage = () => {
               <div className="admin-user-card__main">
                 <div className="admin-user-card__avatar">
                   {user.avatarUrl ? (
-                    <img src={user.avatarUrl} alt={user.name || "Користувач"} />
+                    <img src={user.avatarUrl} alt={user.name || "Користувач"} loading="lazy" decoding="async" />
                   ) : (
                     <span>
                       {(user.name || user.email || "?").charAt(0).toUpperCase()}
@@ -662,6 +662,7 @@ const AdminUsersPage = () => {
                     <img
                       src={selectedUser.avatarUrl}
                       alt={selectedUser.name || "Користувач"}
+                      decoding="async"
                     />
                   ) : (
                     <span>
@@ -752,6 +753,8 @@ const AdminUsersPage = () => {
                           <img
                             src={userBook.book.coverUrl}
                             alt={userBook.book?.title || "Книга"}
+                            loading="lazy"
+                            decoding="async"
                           />
                         ) : (
                           <Icon name="book" />
@@ -808,6 +811,7 @@ const AdminUsersPage = () => {
                         <img
                           src={selectedBook.book.coverUrl}
                           alt={selectedBook.book?.title || "Книга"}
+                          decoding="async"
                         />
                       ) : (
                         <Icon name="book" />

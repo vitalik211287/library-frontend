@@ -47,6 +47,7 @@ const EditBookModal = ({
                   <img
                     src={coverSrc}
                     alt={book.title}
+                    decoding="async"
                   />
                 ) : (
                   <div className="edit-modal__no-cover">

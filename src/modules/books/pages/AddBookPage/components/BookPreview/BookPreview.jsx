@@ -1,23 +1,76 @@
+import { useEffect, useState } from "react";
+
 import "./BookPreview.css";
 
-const BookPreview = ({ book, setBook, onAddBook }) => {
+const BookPreview = ({
+  book,
+  setBook,
+  coverFile,
+  setCoverFile,
+  onAddBook,
+}) => {
+  const [coverPreview, setCoverPreview] = useState(null);
+
+  useEffect(() => {
+    if (!coverFile) {
+      setCoverPreview(null);
+      return;
+    }
+
+    const previewUrl = URL.createObjectURL(coverFile);
+
+    setCoverPreview(previewUrl);
+
+    return () => {
+      URL.revokeObjectURL(previewUrl);
+    };
+  }, [coverFile]);
+
   if (!book) {
     return null;
   }
 
+  const coverSrc = coverPreview || book.coverUrl;
+
+  const handleCoverChange = (event) => {
+    const file = event.target.files?.[0];
+
+    if (!file) {
+      return;
+    }
+
+    setCoverFile(file);
+  };
+
   return (
     <div className="book-preview">
       <div className="book-preview__cover">
-        {book.coverUrl ? (
-          <img
-            loading="lazy"
-            decoding="async"
-            src={book.coverUrl}
-            alt={book.title}
-          />
-        ) : (
-          <div className="no-cover">Обкладинки немає</div>
-        )}
+        <div className="book-preview__cover-wrapper">
+          {coverSrc ? (
+            <img
+              loading="lazy"
+              decoding="async"
+              src={coverSrc}
+              alt={book.title}
+            />
+          ) : (
+            <div className="no-cover">Обкладинки немає</div>
+          )}
+
+          <label
+            className="book-preview__cover-plus"
+            aria-label={coverSrc ? "Змінити обкладинку" : "Додати обкладинку"}
+            title={coverSrc ? "Змінити обкладинку" : "Додати обкладинку"}
+          >
+            <span>+</span>
+
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleCoverChange}
+            />
+          </label>
+        </div>
       </div>
 
       <div className="book-preview__content">

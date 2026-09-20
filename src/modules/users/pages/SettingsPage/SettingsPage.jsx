@@ -303,7 +303,7 @@ const SettingsPage = () => {
             >
               <span className="settings-page__avatar">
                 {user?.avatarUrl ? (
-                  <img src={user.avatarUrl} alt="Аватар користувача" />
+                  <img src={user.avatarUrl} alt="Аватар користувача" decoding="async" />
                 ) : (
                   <Icon name="profile" />
                 )}

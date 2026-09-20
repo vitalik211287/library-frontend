@@ -1,4 +1,4 @@
-﻿import { useEffect } from "react";
+import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import "./KudosUsersSheet.css";
@@ -103,7 +103,7 @@ const KudosUsersSheet = ({
                   >
                     <div className="kudos-user__avatar">
                       {user.avatarUrl ? (
-                        <img src={user.avatarUrl} alt={name} />
+                        <img src={user.avatarUrl} alt={name} loading="lazy" decoding="async" />
                       ) : (
                         <span>{name.charAt(0).toUpperCase()}</span>
                       )}

@@ -47,6 +47,8 @@ const CurrentReading = ({
                   src={book.coverUrl}
                   alt={book.title}
                   className="current-reading-card__cover-image"
+                  loading="lazy"
+                  decoding="async"
                 />
               ) : (
                 <div className="current-reading-card__cover-placeholder">

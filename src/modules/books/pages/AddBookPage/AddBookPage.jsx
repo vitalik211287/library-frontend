@@ -20,6 +20,7 @@ import "./AddBookPage.css";
 const AddBookPage = () => {
   const [isbn, setIsbn] = useState("");
   const [book, setBook] = useState(null);
+  const [coverFile, setCoverFile] = useState(null);
   const [manualMode, setManualMode] = useState(false);
   const [scannerOpen, setScannerOpen] = useState(false);
 
@@ -46,6 +47,8 @@ const AddBookPage = () => {
   const { isAdding, addFoundBook, addManualBook } = useAddBook({
     book,
     setBook,
+    coverFile,
+    setCoverFile,
     setIsbn,
     setManualMode,
     resetLastSearch,
@@ -107,7 +110,13 @@ const AddBookPage = () => {
 
       {isAdding && <Loader text="Додаємо до бібліотеки…" />}
 
-      <BookPreview book={book} setBook={setBook} onAddBook={addFoundBook} />
+      <BookPreview
+        book={book}
+        setBook={setBook}
+        coverFile={coverFile}
+        setCoverFile={setCoverFile}
+        onAddBook={addFoundBook}
+      />
 
       <button
         className="manual-toggle"

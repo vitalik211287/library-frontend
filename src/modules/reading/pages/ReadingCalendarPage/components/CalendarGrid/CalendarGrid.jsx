@@ -80,6 +80,8 @@ const CalendarGrid = ({
                         firstBook?.title ||
                         "Обкладинка книги"
                       }
+                      loading="lazy"
+                      decoding="async"
                     />
                   )}
 

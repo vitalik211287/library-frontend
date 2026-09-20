@@ -276,7 +276,7 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
                 >
                   <div className="social-feed-card__avatar">
                     {activity.user?.avatarUrl ? (
-                      <img src={activity.user.avatarUrl} alt={userName} />
+                      <img src={activity.user.avatarUrl} alt={userName} loading="lazy" decoding="async" />
                     ) : (
                       <span>{userName.charAt(0).toUpperCase()}</span>
                     )}

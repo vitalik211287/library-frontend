@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 
 import { apiFetch } from "../../../../shared/api/apiClient.js";
 
@@ -35,7 +35,7 @@ const UserSearchCard = ({ user, onFollowingChange }) => {
     <article className="user-search-card">
       <div className="user-search-card__avatar">
         {user.avatarUrl ? (
-          <img src={user.avatarUrl} alt={profileName} />
+          <img src={user.avatarUrl} alt={profileName} loading="lazy" decoding="async" />
         ) : (
           <span>{profileName.charAt(0).toUpperCase()}</span>
         )}

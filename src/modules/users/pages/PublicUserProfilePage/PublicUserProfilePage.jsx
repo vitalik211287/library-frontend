@@ -30,7 +30,7 @@ const BookCover = ({ book }) => {
   const title = book?.title || "Книга";
 
   if (book?.coverUrl) {
-    return <img src={book.coverUrl} alt={title} />;
+    return <img src={book.coverUrl} alt={title} loading="lazy" decoding="async" />;
   }
 
   return <span>{title.charAt(0).toUpperCase()}</span>;
@@ -280,7 +280,7 @@ const PublicUserProfilePage = () => {
         <AppPanel as="section" className="public-profile-hero">
           <div className="public-profile-hero__avatar">
             {profile.avatarUrl ? (
-              <img src={profile.avatarUrl} alt={profileName} />
+              <img src={profile.avatarUrl} alt={profileName} decoding="async" />
             ) : (
               <span>{profileName.charAt(0).toUpperCase()}</span>
             )}

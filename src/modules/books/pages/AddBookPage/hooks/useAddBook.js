@@ -10,6 +10,8 @@ import { createBookData, normalizeIsbn } from "../utils/bookHelpers.js";
 const useAddBook = ({
   book,
   setBook,
+  coverFile,
+  setCoverFile,
   setIsbn,
   setManualMode,
   resetLastSearch,
@@ -25,6 +27,7 @@ const useAddBook = ({
 
     setIsbn("");
     setBook(null);
+    setCoverFile(null);
 
     focusIsbnInput();
   };
@@ -58,12 +61,28 @@ const useAddBook = ({
 
     const bookData = createBookData(book);
 
+    let requestBody = bookData;
+
+    if (coverFile) {
+      const formData = new FormData();
+
+      Object.entries(bookData).forEach(([key, value]) => {
+        if (value !== undefined && value !== null && value !== "") {
+          formData.append(key, String(value));
+        }
+      });
+
+      formData.append("cover", coverFile);
+
+      requestBody = formData;
+    }
+
     setIsAdding(true);
 
     try {
       await apiFetch(`/api/libraries/${activeLibraryId}/books`, {
         method: "POST",
-        body: bookData,
+        body: requestBody,
       });
 
       await refreshBooks();
@@ -177,8 +196,3 @@ const useAddBook = ({
 };
 
 export default useAddBook;
-
-
-
-
-

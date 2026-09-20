@@ -79,7 +79,7 @@ const FinishedSection = ({
               >
                 <div className="profile-book__cover">
                   {book.coverUrl ? (
-                    <img src={book.coverUrl} alt={book.title} />
+                    <img src={book.coverUrl} alt={book.title} loading="lazy" decoding="async" />
                   ) : (
                     <div className="book-no-cover">
                       Немає

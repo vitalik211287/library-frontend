@@ -25,7 +25,7 @@ const GenreShelf = ({ shelf, onSelect }) => {
         {previewBooks.map((book) => (
           <div key={book.id} className="genre-shelf__cover">
             {book.coverUrl ? (
-              <img src={book.coverUrl} alt="" loading="lazy" />
+              <img src={book.coverUrl} alt="" loading="lazy" decoding="async" />
             ) : (
               <Icon name="book" aria-hidden="true" />
             )}

@@ -1,4 +1,4 @@
-﻿import LibraryManagementPanel from "../LibraryManagementPanel.jsx";
+import LibraryManagementPanel from "../LibraryManagementPanel.jsx";
 
 import "./LibraryMembersList.css";
 
@@ -54,7 +54,7 @@ const LibraryMembersList = ({
                 <div className="library-member__identity">
                   <div className="library-member__avatar">
                     {member.user?.avatarUrl ? (
-                      <img src={member.user.avatarUrl} alt="" />
+                      <img src={member.user.avatarUrl} alt="" loading="lazy" decoding="async" />
                     ) : (
                       <span>{getInitials(member)}</span>
                     )}

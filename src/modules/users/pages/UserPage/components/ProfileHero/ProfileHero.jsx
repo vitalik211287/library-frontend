@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../../../../auth/context/AuthContext.jsx";
@@ -42,7 +42,6 @@ const ProfileHero = () => {
         <div className="profile-hero__avatar">
           {user?.avatarUrl ? (
             <img
-              loading="lazy"
               decoding="async"
               src={user.avatarUrl}
               alt={profileName}

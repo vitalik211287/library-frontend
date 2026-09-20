@@ -77,7 +77,7 @@ const MobileNavigation = ({
               aria-label="Відкрити профіль"
             >
               {user?.avatarUrl ? (
-                <img src={user.avatarUrl} alt={user?.name || "Профіль"} />
+                <img src={user.avatarUrl} alt={user?.name || "Профіль"} decoding="async" />
               ) : (
                 <span>{(user?.name || "К").charAt(0).toUpperCase()}</span>
               )}

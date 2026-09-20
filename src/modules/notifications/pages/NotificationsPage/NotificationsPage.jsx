@@ -149,7 +149,7 @@ const NotificationsPage = () => {
           <div className="activity-notification__actor">
             <div className="activity-notification__avatar">
               {notification.actor?.avatarUrl ? (
-                <img src={notification.actor.avatarUrl} alt={actorName} />
+                <img src={notification.actor.avatarUrl} alt={actorName} loading="lazy" decoding="async" />
               ) : (
                 <span>{actorName.charAt(0).toUpperCase()}</span>
               )}
@@ -170,7 +170,7 @@ const NotificationsPage = () => {
         <div className="activity-notification__book">
           <div className="activity-notification__cover">
             {book?.coverUrl ? (
-              <img src={book.coverUrl} alt={book.title || "Книга"} />
+              <img src={book.coverUrl} alt={book.title || "Книга"} loading="lazy" decoding="async" />
             ) : (
               <Icon name="books-stack" />
             )}
@@ -326,7 +326,7 @@ const NotificationsPage = () => {
         )}
         <div className="social-notification__avatar">
           {notification.actor?.avatarUrl ? (
-            <img src={notification.actor.avatarUrl} alt={actorName} />
+            <img src={notification.actor.avatarUrl} alt={actorName} loading="lazy" decoding="async" />
           ) : (
             <span>{actorName.charAt(0).toUpperCase()}</span>
           )}

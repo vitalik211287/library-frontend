@@ -134,7 +134,7 @@ const FollowersPage = () => {
                   >
                     <div className="follower-card__avatar">
                       {user.avatarUrl ? (
-                        <img src={user.avatarUrl} alt={profileName} />
+                        <img src={user.avatarUrl} alt={profileName} loading="lazy" decoding="async" />
                       ) : (
                         <span>{profileName.charAt(0).toUpperCase()}</span>
                       )}

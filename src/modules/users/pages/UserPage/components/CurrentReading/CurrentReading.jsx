@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 import { BookIcon } from "../../../../../home/components/HomeIcons.jsx";
 
@@ -90,6 +90,7 @@ const CurrentReading = ({
                 <img
                   src={mainCurrentBook.coverUrl}
                   alt={mainCurrentBook.title}
+                  decoding="async"
                 />
               ) : (
                 <div className="book-no-cover">
@@ -165,7 +166,7 @@ const CurrentReading = ({
                     >
                       <div className="current-books-dropdown__cover">
                         {book.coverUrl ? (
-                          <img src={book.coverUrl} alt={book.title} />
+                          <img src={book.coverUrl} alt={book.title} loading="lazy" decoding="async" />
                         ) : (
                           <div className="book-no-cover">
                             Немає
