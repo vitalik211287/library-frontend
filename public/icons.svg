@@ -1,5 +1,5 @@
 ﻿<svg xmlns="http://www.w3.org/2000/svg">
-  <symbol id="icon-book" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+  <symbol id="icon-book" viewBox="0 0 24 24" fill="none" stroke="var(--accent)">
     <path d="M3.5 5.5h6.2c1.3 0 2.3 1 2.3 2.3V20c-.7-1-1.6-1.5-2.8-1.5H3.5v-13Z" />
     <path d="M12 7.8c0-1.3 1-2.3 2.3-2.3h6.2v13h-5.7c-1.2 0-2.1.5-2.8 1.5V7.8Z" />
   </symbol>
@@ -185,7 +185,7 @@
     <circle cx="12" cy="16" r="1" />
   </symbol>
 
-  <symbol id="icon-stopwatch" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+  <symbol id="icon-stopwatch" viewBox="0 0 24 24" fill="none" stroke="var(--accent)">
     <circle cx="12" cy="13" r="8" />
     <path d="M12 9v4l2.5 1.5" />
     <path d="M9 2h6" />
