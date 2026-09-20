@@ -1,4 +1,5 @@
 import Modal from "../../../../shared/components/Modal/Modal.jsx";
+import CoverUploadButton from "../CoverUploadButton/CoverUploadButton.jsx";
 
 import useEditBookForm from "./hooks/useEditBookForm.js";
 
@@ -55,19 +56,11 @@ const EditBookModal = ({
                   </div>
                 )}
 
-                <label
+                <CoverUploadButton
                   className="edit-modal__cover-plus"
-                  aria-label="Змінити обкладинку"
-                  title="Змінити обкладинку"
-                >
-                  <span>+</span>
-
-                  <input
-                    type="file"
-                    accept="image/*"
-                    onChange={handleCoverChange}
-                  />
-                </label>
+                  onChange={handleCoverChange}
+                  label="Змінити обкладинку"
+                />
               </div>
             </div>
 

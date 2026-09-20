@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import CoverUploadButton from "../../../../components/CoverUploadButton/CoverUploadButton.jsx";
 
 import "./BookPreview.css";
 
@@ -56,20 +57,11 @@ const BookPreview = ({
           ) : (
             <div className="no-cover">Обкладинки немає</div>
           )}
-
-          <label
+          <CoverUploadButton
             className="book-preview__cover-plus"
-            aria-label={coverSrc ? "Змінити обкладинку" : "Додати обкладинку"}
-            title={coverSrc ? "Змінити обкладинку" : "Додати обкладинку"}
-          >
-            <span>+</span>
-
-            <input
-              type="file"
-              accept="image/*"
-              onChange={handleCoverChange}
-            />
-          </label>
+            onChange={handleCoverChange}
+            label={coverSrc ? "Змінити обкладинку" : "Додати обкладинку"}
+          />
         </div>
       </div>
 
