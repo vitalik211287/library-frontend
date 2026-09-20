@@ -65,7 +65,7 @@
 
   padding: 0;
 
-  transform: translate(-50%, -50%);
+  transform: translate(-50%, calc(-50% - 5px));
 
   border: 1px solid rgba(255, 255, 255, 0.8);
   border-radius: var(--radius-round);
@@ -83,7 +83,10 @@
 }
 
 .book-preview__cover-plus span {
-  display: block;
+  position: absolute;
+
+  top: 50%;
+  left: 50%;
 
   margin: 0;
   padding: 0;
@@ -92,7 +95,7 @@
   font-weight: 300;
   line-height: 1;
 
-  transform: translateY(5px);
+  transform: translate(-50%, calc(-50% - 5px));
 }
 
 .book-preview__cover-plus:hover {
