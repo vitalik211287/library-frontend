@@ -93,6 +93,7 @@ const LoginPage = () => {
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             autoComplete="email"
+            required
           />
         </label>
 
@@ -103,6 +104,7 @@ const LoginPage = () => {
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             autoComplete="current-password"
+            required
           />
         </label>
 

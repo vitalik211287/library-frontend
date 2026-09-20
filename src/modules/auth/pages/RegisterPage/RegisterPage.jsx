@@ -80,6 +80,7 @@ const RegisterPage = () => {
             value={name}
             onChange={(event) => setName(event.target.value)}
             autoComplete="name"
+            required
           />
         </label>
 
@@ -90,6 +91,7 @@ const RegisterPage = () => {
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             autoComplete="email"
+            required
           />
         </label>
 
@@ -100,6 +102,8 @@ const RegisterPage = () => {
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             autoComplete="new-password"
+            minLength={6}
+            required
           />
         </label>
 
