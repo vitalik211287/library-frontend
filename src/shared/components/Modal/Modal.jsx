@@ -58,22 +58,6 @@ const Modal = ({
 
     lockBodyScroll();
 
-    let closedByHistory = false;
-
-    window.history.pushState(
-      {
-        ...window.history.state,
-        __modalOpen: true,
-      },
-      "",
-      window.location.href,
-    );
-
-    const handlePopState = () => {
-      closedByHistory = true;
-      onClose();
-    };
-
     const handleKeyDown = (event) => {
       if (event.key === "Escape" && closeOnEscape) {
         onClose();
@@ -81,17 +65,11 @@ const Modal = ({
     };
 
     window.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("popstate", handlePopState);
 
     return () => {
       unlockBodyScroll();
 
       window.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("popstate", handlePopState);
-
-      if (!closedByHistory && window.history.state?.__modalOpen) {
-        window.history.back();
-      }
     };
   }, [isOpen, onClose, closeOnEscape]);
 
