@@ -8,7 +8,7 @@ import "./App.css";
 import { PrivateRoutes, PublicRoutes } from "./components/AppRoutes.jsx";
 import useMobileMenu from "./hooks/useMobileMenu.js";
 import useReadingRouter from "./hooks/useReadingRouter.js";
-import useSwipeNavigation from "./hooks/useSwipeNavigation.js";
+// TEMP: useSwipeNavigation disabled for iPad swipe test
 
 import RightSidebar from "../shared/components/RightSidebar/RightSidebar.jsx";
 import ReadingModal from "../modules/reading/components/ReadingModal/ReadingModal.jsx";
@@ -36,7 +36,7 @@ const App = () => {
 
   const location = useLocation();
 
-  useSwipeNavigation();
+  // TEMP: useSwipeNavigation();
 
   useEffect(() => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
