@@ -11,6 +11,7 @@ import useReadingRouter from "./hooks/useReadingRouter.js";
 import useSwipeNavigation from "./hooks/useSwipeNavigation.js";
 
 import RightSidebar from "../shared/components/RightSidebar/RightSidebar.jsx";
+import Loader from "../shared/components/Loader/Loader.jsx";
 import ReadingModal from "../modules/reading/components/ReadingModal/ReadingModal.jsx";
 import ReadingBookPicker from "../modules/reading/components/ReadingBookPicker/ReadingBookPicker.jsx";
 
@@ -30,7 +31,6 @@ import { useTheme } from "../shared/context/ThemeContext.jsx";
 
 const App = () => {
   const { user, isAuthenticated, isAuthLoading } = useAuth();
-
 
   const { themeMode, setThemeMode } = useTheme();
 
@@ -79,10 +79,8 @@ const App = () => {
   };
 
   if (isAuthLoading) {
-    return null;
+    return <Loader text="Завантаження…" />;
   }
-
-
 
   /* =========================
      PUBLIC ROUTES
@@ -171,8 +169,3 @@ const App = () => {
 };
 
 export default App;
-
-
-
-
-

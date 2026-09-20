@@ -104,7 +104,6 @@ export const PublicRoutes = ({ isAuthenticated }) => {
 export const PrivateRoutes = ({ onOpenReading }) => {
   return (
     <Suspense fallback={<Loader text="Завантаження…" />}>
-      `r`n{" "}
       <Routes>
         <Route
           path="/home"

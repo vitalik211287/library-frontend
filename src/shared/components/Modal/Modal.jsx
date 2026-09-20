@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
 import "./Modal.css";
@@ -9,10 +9,18 @@ let openModalCount = 0;
 let originalBodyOverflow = "";
 let originalBodyPaddingRight = "";
 
+const focusableSelector = [
+  "a[href]",
+  "button:not([disabled])",
+  "input:not([disabled])",
+  "select:not([disabled])",
+  "textarea:not([disabled])",
+  '[tabindex]:not([tabindex="-1"])',
+].join(",");
+
 const lockBodyScroll = () => {
   if (openModalCount === 0) {
     originalBodyOverflow = document.body.style.overflow;
-
     originalBodyPaddingRight = document.body.style.paddingRight;
 
     const scrollbarWidth =
@@ -36,7 +44,6 @@ const unlockBodyScroll = () => {
   }
 
   document.body.style.overflow = originalBodyOverflow;
-
   document.body.style.paddingRight = originalBodyPaddingRight;
 };
 
@@ -52,6 +59,8 @@ const Modal = ({
   closeOnBackdrop = true,
   showHeader = true,
 }) => {
+  const modalRef = useRef(null);
+
   useModalHistory(isOpen, onClose);
 
   useEffect(() => {
@@ -59,11 +68,54 @@ const Modal = ({
       return undefined;
     }
 
+    const previouslyFocusedElement = document.activeElement;
+
     lockBodyScroll();
+
+    const modalElement = modalRef.current;
+    const focusableElements = modalElement
+      ? Array.from(modalElement.querySelectorAll(focusableSelector))
+      : [];
+
+    const firstFocusableElement = focusableElements[0];
+
+    if (firstFocusableElement) {
+      firstFocusableElement.focus();
+    } else {
+      modalElement?.focus();
+    }
 
     const handleKeyDown = (event) => {
       if (event.key === "Escape" && closeOnEscape) {
+        event.preventDefault();
         onClose();
+        return;
+      }
+
+      if (event.key !== "Tab" || !modalElement) {
+        return;
+      }
+
+      const currentFocusableElements = Array.from(
+        modalElement.querySelectorAll(focusableSelector),
+      );
+
+      if (currentFocusableElements.length === 0) {
+        event.preventDefault();
+        modalElement.focus();
+        return;
+      }
+
+      const firstElement = currentFocusableElements[0];
+      const lastElement =
+        currentFocusableElements[currentFocusableElements.length - 1];
+
+      if (event.shiftKey && document.activeElement === firstElement) {
+        event.preventDefault();
+        lastElement.focus();
+      } else if (!event.shiftKey && document.activeElement === lastElement) {
+        event.preventDefault();
+        firstElement.focus();
       }
     };
 
@@ -73,6 +125,13 @@ const Modal = ({
       unlockBodyScroll();
 
       window.removeEventListener("keydown", handleKeyDown);
+
+      if (
+        previouslyFocusedElement instanceof HTMLElement &&
+        document.contains(previouslyFocusedElement)
+      ) {
+        previouslyFocusedElement.focus();
+      }
     };
   }, [isOpen, onClose, closeOnEscape]);
 
@@ -95,10 +154,12 @@ const Modal = ({
       role="presentation"
     >
       <section
+        ref={modalRef}
         className={`modal ${className}`}
         role="dialog"
         aria-modal="true"
         aria-labelledby={title ? "modal-title" : undefined}
+        tabIndex={-1}
         onMouseDown={(event) => event.stopPropagation()}
       >
         {showHeader && (
@@ -134,4 +195,3 @@ const Modal = ({
 };
 
 export default Modal;
-
