@@ -142,6 +142,13 @@
   --shadow:
     rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
 }
+@media (min-width: 1440px) {
+  :root.dark {
+    --app-background:
+      linear-gradient(rgba(10, 13, 22, 0.15), rgba(10, 13, 22, 0.25)),
+      url("/images/library-dark-bg.jpg") center top / cover fixed;
+  }
+}
 
 /* RESET */
 
