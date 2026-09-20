@@ -1,4 +1,4 @@
-﻿import { useEffect } from "react";
+import { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 
 import { swipeNavigationPaths } from "../../shared/components/AppNavigation/navigationItems.js";
@@ -102,6 +102,7 @@ const useSwipeNavigation = () => {
 
     const handleTouchEnd = (event) => {
       if (
+        document.querySelector(".modal-overlay") ||
         blocked ||
         startX === null ||
         startY === null ||
