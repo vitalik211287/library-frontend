@@ -1,8 +1,10 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { lazy, Suspense, useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import EditBookModal from "../../components/EditBookModal/EditBookModal";
-import BarcodeScanner from "../../components/BarcodeScanner/BarcodeScanner";
+const BarcodeScanner = lazy(
+  () => import("../../components/BarcodeScanner/BarcodeScanner"),
+);
 
 import { useAuth } from "../../../auth/context/AuthContext.jsx";
 import { useLibrary } from "../../../libraries/context/LibraryContext.jsx";
@@ -287,10 +289,12 @@ const CatalogPage = ({ onOpenReading }) => {
       )}
 
       {scannerOpen && (
-        <BarcodeScanner
-          onScan={handleScan}
-          onClose={() => setScannerOpen(false)}
-        />
+        <Suspense fallback={null}>
+          <BarcodeScanner
+            onScan={handleScan}
+            onClose={() => setScannerOpen(false)}
+          />
+        </Suspense>
       )}
     </main>
   );

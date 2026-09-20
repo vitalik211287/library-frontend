@@ -1,9 +1,18 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  lazy,
+  Suspense,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 import toast from "react-hot-toast";
 import PageBackButton from "../../../../shared/components/PageBackButton/PageBackButton.jsx";
 import Loader from "../../../../shared/components/Loader/Loader.jsx";
 
-import BarcodeScanner from "../../components/BarcodeScanner/BarcodeScanner.jsx";
+const BarcodeScanner = lazy(
+  () => import("../../components/BarcodeScanner/BarcodeScanner.jsx"),
+);
 import { useLibrary } from "../../../libraries/context/LibraryContext.jsx";
 
 import IsbnSearch from "./components/IsbnSearch/IsbnSearch.jsx";
@@ -137,7 +146,9 @@ const AddBookPage = () => {
       )}
 
       {scannerOpen && (
-        <BarcodeScanner onScan={handleScan} onClose={handleCloseScanner} />
+        <Suspense fallback={null}>
+          <BarcodeScanner onScan={handleScan} onClose={handleCloseScanner} />
+        </Suspense>
       )}
     </main>
   );
