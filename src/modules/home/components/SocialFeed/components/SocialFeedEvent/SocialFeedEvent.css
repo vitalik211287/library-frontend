@@ -78,10 +78,18 @@
 }
 
 .social-feed-event__arrow {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
   margin-left: auto;
 
   color: var(--accent);
-  font-size: 20px;
+}
+
+.social-feed-event__arrow svg {
+  display: block;
+  width: 20px;
+  height: 20px;
 }
 
 .social-feed-event__book {
