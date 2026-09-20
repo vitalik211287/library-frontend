@@ -64,6 +64,7 @@ const AddBookPage = () => {
       return;
     }
 
+    setCoverFile(null);
     await lookupBook(isbn);
   };
 
@@ -84,6 +85,7 @@ const AddBookPage = () => {
 
     setScannerOpen(false);
     setIsbn(cleanIsbn);
+    setCoverFile(null);
     await lookupBook(cleanIsbn);
   };
 
