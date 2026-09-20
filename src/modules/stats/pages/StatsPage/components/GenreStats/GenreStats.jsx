@@ -13,7 +13,7 @@ const GenreStats = ({ genres = [] }) => {
   }, [genres]);
 
   return (
-    <AppPanel className="stats-card">
+    <AppPanel as="section" className="stats-card">
       <div className="stats-card__header">
         <div>
           <h2>Жанри</h2>

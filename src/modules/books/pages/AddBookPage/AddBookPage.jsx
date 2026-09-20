@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import toast from "react-hot-toast";
 import PageBackButton from "../../../../shared/components/PageBackButton/PageBackButton.jsx";
+import Loader from "../../../../shared/components/Loader/Loader.jsx";
 
 import BarcodeScanner from "../../components/BarcodeScanner/BarcodeScanner.jsx";
 import { useLibrary } from "../../../libraries/context/LibraryContext.jsx";
@@ -42,7 +43,7 @@ const AddBookPage = () => {
     focusIsbnInput,
   });
 
-  const { addFoundBook, addManualBook } = useAddBook({
+  const { isAdding, addFoundBook, addManualBook } = useAddBook({
     book,
     setBook,
     setIsbn,
@@ -101,6 +102,10 @@ const AddBookPage = () => {
         onSubmit={handleSubmit}
         onOpenScanner={() => setScannerOpen(true)}
       />
+
+      {isSearching && <Loader text="Шукаємо книгу…" />}
+
+      {isAdding && <Loader text="Додаємо до бібліотеки…" />}
 
       <BookPreview book={book} setBook={setBook} onAddBook={addFoundBook} />
 

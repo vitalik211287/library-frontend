@@ -1,0 +1,161 @@
+.loader {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-12);
+
+  min-height: 120px;
+
+  color: var(--text);
+}
+
+.loader--overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+
+  min-height: 100%;
+
+  background: var(--panel-bg);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+.loader__book {
+  position: relative;
+
+  width: 64px;
+  height: 42px;
+
+  perspective: 180px;
+}
+
+.loader__cover,
+.loader__page {
+  position: absolute;
+  top: 0;
+
+  width: 32px;
+  height: 42px;
+
+  transform-origin: left center;
+
+  border-radius: var(--radius-sm);
+}
+
+.loader__cover {
+  border: 1px solid var(--accent-border);
+  background: var(--accent-bg);
+}
+
+.loader__cover--left {
+  left: 0;
+
+  transform-origin: right center;
+  border-radius: var(--radius-sm) 2px 2px var(--radius-sm);
+}
+
+.loader__cover--right {
+  left: 32px;
+
+  border-radius: 2px var(--radius-sm) var(--radius-sm) 2px;
+}
+
+.loader__page {
+  left: 32px;
+
+  border: 1px solid var(--accent-border);
+  border-left: 0;
+
+  background: var(--surface);
+
+  border-radius: 1px var(--radius-sm) var(--radius-sm) 1px;
+
+  animation: loader-page-turn 1.8s ease-in-out infinite;
+}
+
+.loader__page--1 {
+  animation-delay: 0s;
+}
+
+.loader__page--2 {
+  animation-delay: 0.3s;
+}
+
+.loader__page--3 {
+  animation-delay: 0.6s;
+}
+
+.loader__spine {
+  position: absolute;
+  top: 2px;
+  bottom: 2px;
+  left: 31px;
+  z-index: 5;
+
+  width: 2px;
+
+  border-radius: var(--radius-pill);
+
+  background: var(--accent);
+}
+
+.loader__text {
+  font-size: 14px;
+  line-height: 1.4;
+
+  color: var(--text);
+
+  animation: loader-text-pulse 1.8s ease-in-out infinite;
+}
+
+/* Sizes */
+
+.loader--small .loader__book {
+  transform: scale(0.7);
+}
+
+.loader--small {
+  min-height: 72px;
+}
+
+.loader--large .loader__book {
+  transform: scale(1.25);
+}
+
+.loader--large {
+  min-height: 160px;
+}
+
+/* Animations */
+
+@keyframes loader-page-turn {
+  0%,
+  15% {
+    transform: rotateY(0deg);
+  }
+
+  45%,
+  100% {
+    transform: rotateY(-180deg);
+  }
+}
+
+@keyframes loader-text-pulse {
+  0%,
+  100% {
+    opacity: 0.55;
+  }
+
+  50% {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader__page,
+  .loader__text {
+    animation: none;
+  }
+}

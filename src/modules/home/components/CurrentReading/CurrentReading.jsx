@@ -11,7 +11,7 @@ const CurrentReading = ({
   onOpenCatalog,
 }) => {
   return (
-    <HomePanel className="current-reading-section">
+    <HomePanel as="section" className="current-reading-section">
       <div className="home-panel__header">
         <div>
           <span className="home-section__kicker">Зараз читаю</span>

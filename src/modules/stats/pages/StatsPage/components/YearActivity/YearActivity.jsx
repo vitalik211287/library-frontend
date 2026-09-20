@@ -15,7 +15,7 @@ const YearActivity = ({ months = [] }) => {
   }, [months]);
 
   return (
-    <AppPanel className="stats-card stats-card--activity">
+    <AppPanel as="section" className="stats-card stats-card--activity">
       <div className="stats-card__header">
         <div>
           <h2>Активність за рік</h2>

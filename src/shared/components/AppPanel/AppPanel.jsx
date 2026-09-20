@@ -1,7 +1,7 @@
 ﻿import "./AppPanel.css";
 
 const AppPanel = ({
-  as: Component = "section",
+  as: Component = "div",
   children,
   className = "",
   variant = "primary",

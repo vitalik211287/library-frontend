@@ -84,7 +84,7 @@ const ReadingActivity = ({ onDetails }) => {
   ========================= */
 
   return (
-    <AppPanel className="reading-chart-card">
+    <AppPanel as="section" className="reading-chart-card">
       <div className="reading-chart-card__header">
         <div>
           <h2>Активність читання</h2>

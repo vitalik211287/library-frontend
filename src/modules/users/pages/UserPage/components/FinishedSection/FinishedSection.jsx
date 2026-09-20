@@ -36,7 +36,7 @@ const FinishedSection = ({
   };
 
   return (
-    <AppPanel className="profile-section profile-section--books">
+    <AppPanel as="section" className="profile-section profile-section--books">
       <div className="profile-section__header">
         <h2>Прочитано</h2>
 

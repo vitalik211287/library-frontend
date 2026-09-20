@@ -1,4 +1,4 @@
-﻿import { useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -73,7 +73,7 @@ const ReadingCalendarPage = () => {
 
   return (
     <main className="reading-calendar-page">
-      <AppPanel className="reading-calendar">
+      <AppPanel as="section" className="reading-calendar">
         <button
           type="button"
           className="reading-calendar__close"

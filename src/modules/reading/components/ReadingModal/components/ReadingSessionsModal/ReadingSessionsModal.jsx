@@ -1,4 +1,4 @@
-﻿import Modal from "../../../../../../shared/components/Modal/Modal.jsx";
+import Modal from "../../../../../../shared/components/Modal/Modal.jsx";
 import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 import ConfirmDeleteModal from "../../../../../../shared/components/ConfirmDeleteModal/ConfirmDeleteModal.jsx";
 
@@ -103,6 +103,7 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
 
               return (
                 <AppPanel
+                  as="article"
                   key={session.id}
                   variant="secondary"
                   className="reading-sessions-modal__session"

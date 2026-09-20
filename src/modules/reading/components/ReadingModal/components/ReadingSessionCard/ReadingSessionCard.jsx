@@ -1,4 +1,4 @@
-﻿import { formatTime } from "../../utils/readingModalHelpers.js";
+import { formatTime } from "../../utils/readingModalHelpers.js";
 
 import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 import "./ReadingSessionCard.css";
@@ -43,7 +43,7 @@ const ReadingSessionCard = ({
 
   if (!activeSession) {
     return (
-      <AppPanel className="reading-modal__session-card">
+      <AppPanel as="section" className="reading-modal__session-card">
         <div className="reading-modal__session-setup">
           <div className="reading-modal__setup-section">
             <div className="reading-modal__setup-heading">
@@ -147,7 +147,7 @@ const ReadingSessionCard = ({
   }
 
   return (
-    <AppPanel className="reading-modal__session-card">
+    <AppPanel as="section" className="reading-modal__session-card">
       <div className="reading-modal__session-header">
         <h3>Сесія читання</h3>
 

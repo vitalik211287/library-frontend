@@ -3,7 +3,7 @@ import "./AuthorsStats.css";
 
 const AuthorsStats = ({ authors = [] }) => {
   return (
-    <AppPanel className="stats-card">
+    <AppPanel as="section" className="stats-card">
       <div className="stats-card__header">
         <div>
           <h2>Улюблені автори</h2>

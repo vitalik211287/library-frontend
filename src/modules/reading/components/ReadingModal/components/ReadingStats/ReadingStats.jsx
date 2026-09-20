@@ -1,4 +1,4 @@
-﻿import { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { formatDuration } from "../../utils/readingModalHelpers.js";
@@ -81,7 +81,11 @@ const ReadingStats = ({
   );
 
   return (
-    <AppPanel variant="secondary" className="reading-modal__stats-section">
+    <AppPanel
+      as="section"
+      variant="secondary"
+      className="reading-modal__stats-section"
+    >
       <ReadingQuickStats
         totalReadingValue={formatDuration(totalReadingSeconds)}
         progressReadValue={progressReadValue}

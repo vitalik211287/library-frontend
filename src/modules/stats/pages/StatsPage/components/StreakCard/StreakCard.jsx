@@ -5,7 +5,7 @@ import "./StreakCard.css";
 
 const StreakCard = ({ streak }) => {
   return (
-    <AppPanel className="stats-card stats-card--streak">
+    <AppPanel as="section" className="stats-card stats-card--streak">
       <div className="stats-card__header">
         <div>
           <h2>Серія читання</h2>

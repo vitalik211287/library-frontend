@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { apiFetch } from "../../../../shared/api/apiClient.js";
@@ -263,6 +263,7 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
 
           return (
             <HomePanel
+              as="article"
               id={`activity-${activity.id}`}
               key={activity.id}
               className="social-feed-card"
