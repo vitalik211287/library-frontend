@@ -413,6 +413,10 @@
   line-height: 1.35;
 }
 .notification-delete {
+  position: absolute;
+  right: 28px;
+  top: 50%;
+  transform: translateY(-50%);
   flex: 0 0 auto;
   width: 32px;
   height: 32px;
@@ -481,4 +485,8 @@
 
 .notifications-page__state--empty {
   min-height: 110px;
+}
+
+.activity-notification__book-content h2 {
+  max-width: calc(100% - 48px);
 }
