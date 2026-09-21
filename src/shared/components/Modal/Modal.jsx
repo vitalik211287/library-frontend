@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useId, useRef } from "react";
 import { createPortal } from "react-dom";
 
 import "./Modal.css";
@@ -58,8 +58,10 @@ const Modal = ({
   closeOnEscape = true,
   closeOnBackdrop = true,
   showHeader = true,
+  ariaLabel,
 }) => {
   const modalRef = useRef(null);
+  const titleId = useId();
 
   useOverlayBack(isOpen, onClose);
 
@@ -158,7 +160,8 @@ const Modal = ({
         className={`modal ${className}`}
         role="dialog"
         aria-modal="true"
-        aria-labelledby={title ? "modal-title" : undefined}
+        aria-labelledby={showHeader && title ? titleId : undefined}
+        aria-label={!showHeader ? ariaLabel : undefined}
         tabIndex={-1}
         onMouseDown={(event) => event.stopPropagation()}
       >
@@ -168,7 +171,7 @@ const Modal = ({
               {eyebrow && <span className="modal__eyebrow">{eyebrow}</span>}
 
               {title && (
-                <h2 id="modal-title" className="modal__title">
+                <h2 id={titleId} className="modal__title">
                   {title}
                 </h2>
               )}

@@ -10,6 +10,7 @@ const LogoutModal = ({ isOpen, onConfirm, onCancel }) => {
       onClose={onCancel}
       className="logout-modal"
       showHeader={false}
+      ariaLabel="Вийти з акаунта?"
     >
       <div className="logout-modal__content">
         <div className="logout-modal__icon">

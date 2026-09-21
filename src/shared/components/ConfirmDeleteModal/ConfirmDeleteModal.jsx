@@ -29,6 +29,7 @@ const ConfirmDeleteModal = ({
       closeOnEscape={!isLoading}
       closeOnBackdrop={!isLoading}
       showHeader={false}
+      ariaLabel={title}
     >
       <div className="confirm-delete-modal__content">
         <div className="confirm-delete-modal__icon">
