@@ -1,4 +1,4 @@
-﻿/* =========================
+/* =========================
    WEEKDAYS
 ========================= */
 
@@ -204,8 +204,8 @@
 .calendar-day__number--today {
   position: relative;
   z-index: 0;
-  color: #ffffff;
-  font-weight: 700;
+  color: var(--text);
+  font-weight: 600;
 }
 
 .calendar-day__number--today::before {
@@ -220,6 +220,7 @@
   left: 50%;
   transform: translate(-50%, -50%);
 
+  border: 1px solid var(--accent);
   border-radius: 50%;
-  background: var(--accent);
+  background: transparent;
 }
