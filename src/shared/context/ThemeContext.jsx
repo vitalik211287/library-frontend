@@ -2,6 +2,7 @@ import {
   createContext,
   useContext,
   useEffect,
+  useMemo,
   useState,
 } from "react";
 
@@ -85,12 +86,17 @@ export const ThemeProvider = ({
     };
   }, [themeMode]);
 
+  const value = useMemo(
+    () => ({
+      themeMode,
+      setThemeMode,
+    }),
+    [themeMode],
+  );
+
   return (
     <ThemeContext.Provider
-      value={{
-        themeMode,
-        setThemeMode,
-      }}
+      value={value}
     >
       {children}
     </ThemeContext.Provider>
