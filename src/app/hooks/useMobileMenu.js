@@ -1,11 +1,7 @@
 import { useEffect, useState } from "react";
 
-const useMobileMenu = (pathname) => {
+const useMobileMenu = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-
-  useEffect(() => {
-    setIsMobileMenuOpen(false);
-  }, [pathname]);
 
   useEffect(() => {
     if (!isMobileMenuOpen) {

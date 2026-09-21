@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import PageBackButton from "../../../../shared/components/PageBackButton/PageBackButton.jsx";
 
 import BookCard from "../../../books/pages/CatalogPage/components/BookCard/BookCard.jsx";
@@ -10,8 +9,6 @@ import "../../../books/styles/BookGridPage.css";
 import "./FinishedBooksPage.css";
 
 const FinishedBooksPage = ({ onOpenReading }) => {
-  const navigate = useNavigate();
-
   const { user, isAuthLoading } = useAuth();
 
   const {

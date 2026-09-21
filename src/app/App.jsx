@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+﻿import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 import { Toaster } from "react-hot-toast";
@@ -42,9 +42,7 @@ const App = () => {
     window.scrollTo({ top: 0, left: 0, behavior: "auto" });
   }, [location.pathname]);
 
-  const { isMobileMenuOpen, openMobileMenu, closeMobileMenu } = useMobileMenu(
-    location.pathname,
-  );
+  const { isMobileMenuOpen, openMobileMenu, closeMobileMenu } = useMobileMenu();
 
   const {
     readingBook,

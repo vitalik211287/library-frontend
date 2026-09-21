@@ -1,14 +1,21 @@
-﻿import LibraryManagementPanel from "../LibraryManagementPanel.jsx";
+import { useState } from "react";
+
+import LibraryManagementPanel from "../LibraryManagementPanel.jsx";
 
 import "../LibraryManagementForm.css";
 
 const LibraryRenameForm = ({
-  libraryName,
   activeLibraryName,
   isRenamingLibrary,
-  onLibraryNameChange,
   onSubmit,
 }) => {
+  const [libraryName, setLibraryName] = useState(
+    () => activeLibraryName ?? "",
+  );
+
+  const handleSubmit = (event) => {
+    onSubmit(event, libraryName);
+  };
   return (
     <LibraryManagementPanel>
       <div className="library-management-card__header">
@@ -19,11 +26,11 @@ const LibraryRenameForm = ({
         </div>
       </div>
 
-      <form className="library-management-add" onSubmit={onSubmit}>
+      <form className="library-management-add" onSubmit={handleSubmit}>
         <input
           type="text"
           value={libraryName}
-          onChange={(event) => onLibraryNameChange(event.target.value)}
+          onChange={(event) => setLibraryName(event.target.value)}
           placeholder="Назва бібліотеки"
           disabled={isRenamingLibrary}
           required

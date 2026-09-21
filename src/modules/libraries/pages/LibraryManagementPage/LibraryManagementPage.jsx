@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { useNavigate } from "react-router-dom";
 
@@ -34,30 +34,18 @@ const LibraryManagementPage = () => {
   } = useLibrary();
 
   const [members, setMembers] = useState([]);
-
   const [memberEmail, setMemberEmail] = useState("");
 
-  const [libraryName, setLibraryName] = useState("");
-
   const [isLoading, setIsLoading] = useState(true);
-
   const [isAddingMember, setIsAddingMember] = useState(false);
-
   const [isRenamingLibrary, setIsRenamingLibrary] = useState(false);
-
   const [isDeletingLibrary, setIsDeletingLibrary] = useState(false);
 
   const [updatingMemberId, setUpdatingMemberId] = useState("");
-
   const [removingMemberId, setRemovingMemberId] = useState("");
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-
   const [memberToRemove, setMemberToRemove] = useState(null);
-
-  useEffect(() => {
-    setLibraryName(activeLibrary?.name ?? "");
-  }, [activeLibrary?.id, activeLibrary?.name]);
 
   const currentMembership = useMemo(
     () =>
@@ -71,17 +59,8 @@ const LibraryManagementPage = () => {
 
   const isOwner = currentMembership?.role === "OWNER";
 
-  const loadMembers = async () => {
-    if (!activeLibraryId) {
-      setMembers([]);
-      setIsLoading(false);
-
-      return;
-    }
-
+  const loadMembers = useCallback(async () => {
     try {
-      setIsLoading(true);
-
       const data = await apiFetch(`/api/libraries/${activeLibraryId}/members`);
 
       setMembers(Array.isArray(data) ? data : []);
@@ -96,29 +75,30 @@ const LibraryManagementPage = () => {
     } finally {
       setIsLoading(false);
     }
-  };
+  }, [activeLibraryId]);
 
   useEffect(() => {
-    if (isLibrariesLoading) {
+    if (isLibrariesLoading || !activeLibraryId) {
       return;
     }
 
+    // Завантажуємо учасників при зміні активної бібліотеки.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadMembers();
-  }, [activeLibraryId, isLibrariesLoading]);
+  }, [activeLibraryId, isLibrariesLoading, loadMembers]);
 
-  const handleRenameLibrary = async (event) => {
+  const handleRenameLibrary = async (event, nextLibraryName) => {
     event.preventDefault();
 
     if (!activeLibraryId) {
       toast.error("Бібліотеку не вибрано");
-
       return;
     }
 
     try {
       setIsRenamingLibrary(true);
 
-      await renameLibrary(activeLibraryId, libraryName);
+      await renameLibrary(activeLibraryId, nextLibraryName);
 
       await refreshLibraries();
 
@@ -175,7 +155,6 @@ const LibraryManagementPage = () => {
 
     if (!activeLibraryId) {
       toast.error("Бібліотеку не вибрано");
-
       return;
     }
 
@@ -315,10 +294,9 @@ const LibraryManagementPage = () => {
 
       {canManage && (
         <LibraryRenameForm
-          libraryName={libraryName}
+          key={activeLibraryId}
           activeLibraryName={activeLibrary?.name}
           isRenamingLibrary={isRenamingLibrary}
-          onLibraryNameChange={setLibraryName}
           onSubmit={handleRenameLibrary}
         />
       )}
@@ -343,6 +321,7 @@ const LibraryManagementPage = () => {
         onRoleChange={handleRoleChange}
         onRemoveMemberRequest={handleRemoveMemberRequest}
       />
+
       {isOwner && (
         <LibraryDangerZone
           isDeletingLibrary={isDeletingLibrary}
@@ -356,6 +335,7 @@ const LibraryManagementPage = () => {
           або адміністратор бібліотеки.
         </p>
       )}
+
       <ConfirmDeleteModal
         isOpen={Boolean(memberToRemove)}
         title="Видалити учасника?"

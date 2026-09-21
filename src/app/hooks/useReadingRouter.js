@@ -146,6 +146,9 @@ const useReadingRouter = ({ closeMobileMenu }) => {
     activeLibraryId,
     isAuthenticated,
     isAuthLoading,
+    navigate,
+    searchParams,
+    setSearchParams,
   ]);
 
   const handleOpenReadingBook = (bookId, libraryId = null) => {

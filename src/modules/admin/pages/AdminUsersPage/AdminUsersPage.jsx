@@ -242,8 +242,6 @@ const AdminUsersPage = () => {
 
   useEffect(() => {
     if (!userId) {
-      setSelectedUser(null);
-      setSelectedBookId(null);
       return;
     }
 
@@ -277,6 +275,12 @@ const AdminUsersPage = () => {
   };
 
   const handleCloseUserDetails = () => {
+    setSelectedUser(null);
+    setSelectedBookId(null);
+    setBookFilter("ALL");
+    setActivityFilter("ALL");
+    setIsUserHistoryOpen(false);
+
     navigate("/admin/users");
   };
 
