@@ -11,7 +11,7 @@ const BookCard = ({
   variant = "default",
   isAuthenticated,
   isAuthLoading,
-  wishlistLoadingId,
+  isWishlistLoading = false,
   canEdit,
   showWishlist = true,
   onWishlistToggle,
@@ -33,7 +33,7 @@ const BookCard = ({
             book.isWishlist ? "book-card__wishlist--active" : ""
           }`}
           onClick={() => onWishlistToggle(book)}
-          disabled={wishlistLoadingId === book.id}
+          disabled={isWishlistLoading}
           aria-label={
             book.isWishlist
               ? "Прибрати з хочу прочитати"

@@ -282,7 +282,7 @@ const CatalogPage = ({ onOpenReading }) => {
                 book={book}
                 isAuthenticated={isAuthenticated}
                 isAuthLoading={isAuthLoading}
-                wishlistLoadingId={wishlistLoadingId}
+                isWishlistLoading={wishlistLoadingId === book.id}
                 onWishlistToggle={handleWishlistToggle}
                 onEdit={setEditingBook}
                 onRead={handleOpenReading}
