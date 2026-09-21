@@ -32,14 +32,9 @@ const BookPreview = ({
       return;
     }
 
-    setCoverPreview((currentPreview) => {
-      if (currentPreview) {
-        URL.revokeObjectURL(currentPreview);
-      }
+    const previewUrl = URL.createObjectURL(file);
 
-      return URL.createObjectURL(file);
-    });
-
+    setCoverPreview(previewUrl);
     setCoverFile(file);
   };
 
