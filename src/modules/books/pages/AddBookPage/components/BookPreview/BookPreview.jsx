@@ -1,4 +1,4 @@
-import { useEffect, useMemo } from "react";
+import { useEffect, useState } from "react";
 import CoverUploadButton from "../../../../components/CoverUploadButton/CoverUploadButton.jsx";
 
 import "./BookPreview.css";
@@ -6,14 +6,10 @@ import "./BookPreview.css";
 const BookPreview = ({
   book,
   setBook,
-  coverFile,
   setCoverFile,
   onAddBook,
 }) => {
-  const coverPreview = useMemo(
-    () => (coverFile ? URL.createObjectURL(coverFile) : null),
-    [coverFile],
-  );
+  const [coverPreview, setCoverPreview] = useState(null);
 
   useEffect(() => {
     return () => {
@@ -35,6 +31,14 @@ const BookPreview = ({
     if (!file) {
       return;
     }
+
+    setCoverPreview((currentPreview) => {
+      if (currentPreview) {
+        URL.revokeObjectURL(currentPreview);
+      }
+
+      return URL.createObjectURL(file);
+    });
 
     setCoverFile(file);
   };

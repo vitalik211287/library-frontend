@@ -123,7 +123,6 @@ const AddBookPage = () => {
       <BookPreview
         book={book}
         setBook={setBook}
-        coverFile={coverFile}
         setCoverFile={setCoverFile}
         onAddBook={addFoundBook}
       />
