@@ -2,6 +2,7 @@ import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
 import "./Modal.css";
+import useOverlayBack from "../../hooks/useOverlayBack.js";
 
 let openModalCount = 0;
 
@@ -59,6 +60,8 @@ const Modal = ({
   showHeader = true,
 }) => {
   const modalRef = useRef(null);
+
+  useOverlayBack(isOpen, onClose);
 
   useEffect(() => {
     if (!isOpen) {
