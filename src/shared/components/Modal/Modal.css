@@ -119,8 +119,10 @@
     transform 0.16s ease;
 }
 
-.modal__close:hover {
-  color: var(--text);
+@media (hover: hover) and (pointer: fine) {
+  .modal__close:hover {
+    color: var(--text);
+  }
 }
 
 .modal__close:active {
