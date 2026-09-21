@@ -1,4 +1,4 @@
-.reading-calendar__header {
+﻿.reading-calendar__header {
   display: grid;
   grid-template-columns:
     36px
@@ -142,4 +142,52 @@
   .reading-calendar__title h1 {
     font-size: 24px;
   }
+}
+
+/* Month navigation */
+.reading-calendar__header {
+  grid-template-columns: 24px auto 24px;
+  justify-content: center;
+  column-gap: 6px;
+}
+
+.reading-calendar__month-button {
+  width: 24px;
+  height: 34px;
+  color: var(--accent);
+}
+
+.reading-calendar__month-button svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.reading-calendar__month-icon--previous {
+  transform: rotate(180deg);
+}
+
+@media (max-width: 374px) {
+  .reading-calendar__header {
+    grid-template-columns: 24px auto 24px;
+    column-gap: 6px;
+  }
+
+  .reading-calendar__month-button {
+    width: 24px;
+    height: 30px;
+  }
+}
+
+.reading-calendar__month-button {
+  transform: translateY(-7px);
+}
+
+.reading-calendar__month-button:active {
+  transform: translateY(-7px) scale(0.94);
 }

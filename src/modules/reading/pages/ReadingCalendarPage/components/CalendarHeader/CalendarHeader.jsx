@@ -1,4 +1,4 @@
-import { MONTHS } from "../../utils/readingCalendarHelpers.js";
+﻿import { MONTHS } from "../../utils/readingCalendarHelpers.js";
 import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
 
 import "./CalendarHeader.css";
@@ -17,7 +17,7 @@ const CalendarHeader = ({
         onClick={onPreviousMonth}
         aria-label="Попередній місяць"
       >
-        ‹
+        <Icon name="chevron-right" className="reading-calendar__month-icon--previous" />
       </button>
 
       <div className="reading-calendar__title">

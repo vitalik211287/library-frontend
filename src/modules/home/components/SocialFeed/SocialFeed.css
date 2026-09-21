@@ -1,4 +1,4 @@
-.social-feed {
+﻿.social-feed {
   width: 100%;
 }
 
@@ -86,7 +86,7 @@
 
 .social-feed-card__more {
   flex: 0 0 auto;
-  color: var(--text);
+  color: var(--accent);
   font-size: 17px;
   letter-spacing: 2px;
 }
@@ -519,7 +519,7 @@
   background: transparent !important;
   box-shadow: none;
 
-  color: var(--text);
+  color: var(--accent);
   font-size: 16px;
   line-height: 1;
   letter-spacing: 2px;
@@ -588,4 +588,10 @@
 .social-feed-card__user,
 .social-feed-card__user-info {
   min-width: 0;
+}
+
+.social-feed-card__more svg {
+  color: var(--accent);
+  fill: var(--accent);
+  stroke: var(--accent);
 }

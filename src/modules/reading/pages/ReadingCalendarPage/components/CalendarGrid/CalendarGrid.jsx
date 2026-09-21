@@ -1,4 +1,4 @@
-import {
+﻿import {
   API_URL,
 } from "../../../../../../shared/api/apiClient.js";
 
@@ -12,6 +12,8 @@ import "./CalendarGrid.css";
 const CalendarGrid = ({
   days,
   readingByDay,
+  year,
+  month,
 }) => {
   return (
     <>
@@ -49,6 +51,10 @@ const CalendarGrid = ({
               readingByDay.get(
                 day,
               );
+            const isToday =
+              day === new Date().getDate() &&
+              month === new Date().getMonth() + 1 &&
+              year === new Date().getFullYear();
 
             const firstBook =
               readingDay
@@ -99,7 +105,7 @@ const CalendarGrid = ({
                   )}
                 </div>
 
-                <span className="calendar-day__number">
+                <span className={`calendar-day__number${isToday ? " calendar-day__number--today" : ""}`}>
                   {day}
                 </span>
               </div>
@@ -112,5 +118,3 @@ const CalendarGrid = ({
 };
 
 export default CalendarGrid;
-
-

@@ -2,7 +2,6 @@ import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 
 import "./Modal.css";
-import useModalHistory from "./useModalHistory.js";
 
 let openModalCount = 0;
 
@@ -60,8 +59,6 @@ const Modal = ({
   showHeader = true,
 }) => {
   const modalRef = useRef(null);
-
-  useModalHistory(isOpen, onClose);
 
   useEffect(() => {
     if (!isOpen) {

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+﻿import { useMemo, useState } from "react";
 
 import { useLocation, useNavigate } from "react-router-dom";
 
@@ -96,7 +96,7 @@ const ReadingCalendarPage = () => {
         ) : error ? (
           <p className="reading-calendar__message">{error}</p>
         ) : (
-          <CalendarGrid days={days} readingByDay={readingByDay} />
+          <CalendarGrid days={days} readingByDay={readingByDay} year={year} month={month} />
         )}
 
         <CalendarLegend />
