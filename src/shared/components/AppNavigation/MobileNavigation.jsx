@@ -4,6 +4,7 @@ import { NavLink } from "react-router-dom";
 
 import { mainNavigationItems } from "./navigationItems.js";
 import { useNotifications } from "../../../modules/notifications/context/NotificationsContext.jsx";
+import useOverlayBack from "../../hooks/useOverlayBack.js";
 
 import {
   BellIcon,
@@ -27,6 +28,8 @@ const MobileNavigation = ({
   themeMode,
   onThemeChange,
 }) => {
+  useOverlayBack(isOpen, onClose);
+
   const accountPath = isAuthenticated ? "/account" : "/login";
 
   const { unreadCount } = useNotifications();

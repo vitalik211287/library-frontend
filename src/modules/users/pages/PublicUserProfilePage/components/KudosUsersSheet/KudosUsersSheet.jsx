@@ -2,6 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 import "./KudosUsersSheet.css";
+import useOverlayBack from "../../../../../../shared/hooks/useOverlayBack.js";
 
 const KudosUsersSheet = ({
   isOpen,
@@ -11,6 +12,8 @@ const KudosUsersSheet = ({
   onClose,
 }) => {
   const navigate = useNavigate();
+
+  useOverlayBack(isOpen, onClose);
 
   useEffect(() => {
     if (!isOpen) {

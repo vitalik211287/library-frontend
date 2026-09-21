@@ -11,12 +11,15 @@ import "./BarcodeScanner.css";
 
 import useScannerCameras from "./hooks/useScannerCameras.js";
 import useBarcodeScan from "./hooks/useBarcodeScan.js";
+import useOverlayBack from "../../../../shared/hooks/useOverlayBack.js";
 
 const BarcodeScanner = ({
   onScan,
   onClose,
 }) => {
 
+
+  useOverlayBack(true, onClose);
 
   const [
     isScanned,
