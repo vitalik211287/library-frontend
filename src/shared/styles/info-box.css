@@ -1,0 +1,57 @@
+/* =========================
+   SHARED INFO BOX
+========================= */
+
+.home-info-box {
+  min-height: 92px;
+  display: flex;
+  align-items: center;
+  gap: 13px;
+  padding: var(--space-14);
+  border: 1px solid var(--border);
+  border-radius: 15px;
+}
+
+.home-empty-state {
+  background: transparent;
+}
+
+.home-empty-state > div:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.home-empty-state strong {
+  font-size: 13px;
+}
+
+.home-empty-state span {
+  color: var(--text-secondary);
+  font-size: 11px;
+  line-height: 1.4;
+}
+
+.home-icon-box {
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  flex: 0 0 44px;
+
+  border: 1px solid color-mix(in srgb, var(--accent) 55%, var(--border));
+  border-radius: 13px;
+
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+  color: var(--accent);
+}
+
+.home-icon-box svg {
+  width: 25px;
+  height: 25px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}

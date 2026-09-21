@@ -41,7 +41,7 @@ const CurrentReading = ({
   };
 
   return (
-    <section className="profile-section">
+    <AppPanel as="section" className="profile-section profile-section--books">
       <div className="profile-section__header">
         <h2>Зараз читаю</h2>
 
@@ -70,10 +70,10 @@ const CurrentReading = ({
       ) : !mainCurrentBook ? (
         <button
           type="button"
-          className="home-empty-state home-empty-state--button"
+          className="home-empty-state home-info-box home-empty-state--button"
           onClick={onOpenCatalog}
         >
-          <div className="home-empty-state__icon">
+          <div className="home-empty-state__icon home-icon-box">
             <BookIcon />
           </div>
 
@@ -214,7 +214,7 @@ const CurrentReading = ({
           )}
         </>
       )}
-    </section>
+    </AppPanel>
   );
 };
 
