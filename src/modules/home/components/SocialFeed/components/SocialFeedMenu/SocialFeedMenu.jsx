@@ -1,6 +1,7 @@
 import { ProfileIcon } from "../../../../../../shared/components/AppNavigation/NavigationIcons.jsx";
 import "./SocialFeedMenu.css";
 import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
+import useOverlayBack from "../../../../../../shared/hooks/useOverlayBack.js";
 
 const SocialFeedMenu = ({
   activity,
@@ -12,6 +13,8 @@ const SocialFeedMenu = ({
   onToggleNotifications,
   onUnfollow,
 }) => {
+  useOverlayBack(Boolean(activity), onClose);
+
   if (!activity) {
     return null;
   }
