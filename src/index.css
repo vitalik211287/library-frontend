@@ -109,7 +109,7 @@
 
 :root.dark {
   --app-background:
-    linear-gradient(rgba(10, 13, 22, 0.15), rgba(10, 13, 22, 0.25)),
+    linear-gradient(rgba(10, 13, 22, 0.28), rgba(10, 13, 22, 0.38)),
     url("/images/library-dark-bg-high.jpg") center top / cover fixed;
   color-scheme: dark;
 
@@ -145,7 +145,7 @@
 @media (min-width: 1440px) {
   :root.dark {
     --app-background:
-      linear-gradient(rgba(10, 13, 22, 0.15), rgba(10, 13, 22, 0.25)),
+      linear-gradient(rgba(10, 13, 22, 0.28), rgba(10, 13, 22, 0.38)),
       url("/images/library-dark-bg.jpg") center top / cover fixed;
   }
 }
