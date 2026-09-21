@@ -14,6 +14,7 @@ const ChangeNameModal = ({
       onClose={onClose}
       className="settings-page__modal"
       showHeader={false}
+      ariaLabel="Змінити ім’я"
     >
       <form onSubmit={onSubmit}>
         <h2>Змінити ім&apos;я</h2>

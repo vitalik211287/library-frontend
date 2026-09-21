@@ -114,6 +114,7 @@ const DesktopNavigation = ({
             className={themeMode === "system" ? "active" : ""}
             onClick={() => onThemeChange("system")}
             title="Системна тема"
+            aria-label="Системна тема"
           >
             <SystemIcon />
           </button>
@@ -123,6 +124,7 @@ const DesktopNavigation = ({
             className={themeMode === "light" ? "active" : ""}
             onClick={() => onThemeChange("light")}
             title="Світла тема"
+            aria-label="Світла тема"
           >
             <SunIcon />
           </button>
@@ -132,6 +134,7 @@ const DesktopNavigation = ({
             className={themeMode === "dark" ? "active" : ""}
             onClick={() => onThemeChange("dark")}
             title="Темна тема"
+            aria-label="Темна тема"
           >
             <MoonIcon />
           </button>

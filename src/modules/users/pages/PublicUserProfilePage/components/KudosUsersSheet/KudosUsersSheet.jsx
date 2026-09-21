@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 
 import "./KudosUsersSheet.css";
@@ -12,6 +12,7 @@ const KudosUsersSheet = ({
   onClose,
 }) => {
   const navigate = useNavigate();
+  const dialogRef = useRef(null);
 
   useOverlayBack(isOpen, onClose);
 
@@ -19,6 +20,8 @@ const KudosUsersSheet = ({
     if (!isOpen) {
       return;
     }
+
+    dialogRef.current?.focus();
 
     const handleKeyDown = (event) => {
       if (event.key === "Escape") {
@@ -44,10 +47,12 @@ const KudosUsersSheet = ({
       onClick={onClose}
     >
       <section
+        ref={dialogRef}
         className="kudos-sheet"
         role="dialog"
         aria-modal="true"
         aria-label="Kudos"
+        tabIndex={-1}
         onClick={(event) => event.stopPropagation()}
       >
         <div className="kudos-sheet__handle" />

@@ -18,6 +18,7 @@ const ChangePasswordModal = ({
       onClose={onClose}
       className="settings-page__modal"
       showHeader={false}
+      ariaLabel="Змінити пароль"
     >
       <form onSubmit={onSubmit}>
         <h2>Змінити пароль</h2>

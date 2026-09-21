@@ -1,4 +1,6 @@
 import {
+  useEffect,
+  useId,
   useRef,
   useState,
 } from "react";
@@ -20,6 +22,13 @@ const BarcodeScanner = ({
 
 
   useOverlayBack(true, onClose);
+
+  const modalRef = useRef(null);
+  const titleId = useId();
+
+  useEffect(() => {
+    modalRef.current?.focus();
+  }, []);
 
   const [
     isScanned,
@@ -202,7 +211,12 @@ const BarcodeScanner = ({
       }
     >
       <div
+        ref={modalRef}
         className="scanner-modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        tabIndex={-1}
         onClick={(
           event,
         ) => {
@@ -220,7 +234,7 @@ const BarcodeScanner = ({
           ×
         </button>
 
-        <h2>
+        <h2 id={titleId}>
           Сканувати ISBN
         </h2>
 
