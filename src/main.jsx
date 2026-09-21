@@ -1,6 +1,7 @@
-﻿import { StrictMode } from "react";
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
+import { registerSW } from "virtual:pwa-register";
 
 import "./index.css";
 
@@ -17,6 +18,13 @@ import { ReadingStatsProvider } from "./modules/stats/context/ReadingStatsContex
 import { ReadingActivityProvider } from "./modules/reading/context/ReadingActivityContext.jsx";
 import { AchievementsProvider } from "./modules/stats/context/AchievementsContext.jsx";
 import { NotificationsProvider } from "./modules/notifications/context/NotificationsContext.jsx";
+
+registerSW({
+  immediate: true,
+  onNeedRefresh() {
+    window.location.reload();
+  },
+});
 
 createRoot(document.getElementById("root")).render(
   <StrictMode>
