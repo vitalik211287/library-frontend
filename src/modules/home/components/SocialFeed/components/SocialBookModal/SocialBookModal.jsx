@@ -1,7 +1,10 @@
 import "./SocialBookModal.css";
 import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
+import useOverlayBack from "../../../../../../shared/hooks/useOverlayBack.js";
 
 const SocialBookModal = ({ book, onClose, onOpenCatalog }) => {
+  useOverlayBack(Boolean(book), onClose);
+
   if (!book) {
     return null;
   }
