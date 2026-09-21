@@ -1,4 +1,4 @@
-﻿import {
+import {
   createContext,
   useCallback,
   useContext,
@@ -287,6 +287,8 @@ export const UserBooksProvider = ({ children }) => {
     }
 
     if (!isAuthenticated) {
+      // Очищаємо книги попереднього користувача після виходу.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       resetUserBooks();
 
       return;

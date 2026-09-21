@@ -3,6 +3,7 @@ import "./AppNavigation.css";
 import { NavLink } from "react-router-dom";
 
 import { mainNavigationItems } from "./navigationItems.js";
+import { navigationIcons } from "./navigationIcons.js";
 import { useNotifications } from "../../../modules/notifications/context/NotificationsContext.jsx";
 import useOverlayBack from "../../hooks/useOverlayBack.js";
 
@@ -14,7 +15,6 @@ import {
   SettingsIcon,
   SunIcon,
   SystemIcon,
-  navigationIcons,
 } from "./NavigationIcons.jsx";
 
 const MobileNavigation = ({

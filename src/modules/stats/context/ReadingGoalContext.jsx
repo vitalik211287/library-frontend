@@ -162,6 +162,8 @@ const ReadingGoalProvider = ({ children }) => {
 
       requestsInFlightRef.current.clear();
 
+      // Очищаємо дані цілі читання попереднього користувача після виходу.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setGoalDataByYear({});
       setLoadingByYear({});
       setErrorByYear({});

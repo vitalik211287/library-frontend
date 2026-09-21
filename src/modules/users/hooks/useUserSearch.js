@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { apiFetch } from "../../../shared/api/apiClient.js";
 
@@ -13,10 +13,6 @@ const useUserSearch = (query) => {
 
   useEffect(() => {
     if (normalizedQuery.length < 2) {
-      setUsers([]);
-      setError(null);
-      setIsLoading(false);
-
       return undefined;
     }
 
@@ -67,10 +63,12 @@ const useUserSearch = (query) => {
     );
   };
 
+  const hasSearchQuery = normalizedQuery.length >= 2;
+
   return {
-    users,
-    isLoading,
-    error,
+    users: hasSearchQuery ? users : [],
+    isLoading: hasSearchQuery ? isLoading : false,
+    error: hasSearchQuery ? error : null,
     updateUserFollowing,
   };
 };

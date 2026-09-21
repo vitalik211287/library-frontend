@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import { apiFetch } from "../../../../../../../shared/api/apiClient.js";
 
@@ -14,7 +14,7 @@ const useReadingSessions = ({ bookId, totalPages, onChanged }) => {
   const [deletingSession, setDeletingSession] = useState(null);
   const [deleting, setDeleting] = useState(false);
 
-  const loadSessions = async () => {
+  const loadSessions = useCallback(async () => {
     try {
       setLoading(true);
       setMessage("");
@@ -37,11 +37,13 @@ const useReadingSessions = ({ bookId, totalPages, onChanged }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [bookId]);
 
   useEffect(() => {
+    // Завантажуємо історію сесій при зміні книги.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadSessions();
-  }, [bookId]);
+  }, [loadSessions]);
 
   const getSessionBookId = (session) => bookId ?? session?.bookId;
 

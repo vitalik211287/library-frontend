@@ -14,13 +14,3 @@ export const SettingsIcon = () => <Icon name="settings" />;
 export const SystemIcon = () => <Icon name="system" />;
 export const SunIcon = () => <Icon name="sun" />;
 export const MoonIcon = () => <Icon name="moon" />;
-
-export const navigationIcons = {
-  catalog: CatalogIcon,
-  add: AddIcon,
-  calendar: CalendarIcon,
-  reader: ReaderIcon,
-  stats: StatsIcon,
-  achievements: AchievementsIcon,
-  community: CommunityIcon,
-};

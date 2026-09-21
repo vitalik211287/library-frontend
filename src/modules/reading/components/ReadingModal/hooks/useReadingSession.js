@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { finishReadingSession, getActiveReadingSession, getReadingStats, pauseReadingSession, resumeReadingSession, startReadingSession, updateUserBook } from "../api/readingSessionApi.js";
 import { validateEndProgress as validateEndProgressValue, validateStartProgress as validateStartProgressValue } from "./utils/readingSessionValidation.js";
@@ -56,6 +56,8 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
   const isPercentMode = sessionProgressMode === PROGRESS_MODES.PERCENT;
 
   useEffect(() => {
+    // Синхронізуємо локальний стан, коли модалка отримує оновлену книгу.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setCurrentBook(book);
 
     const nextProgressMode = book.progressMode ?? PROGRESS_MODES.PAGES;
@@ -107,7 +109,7 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
     progressMode,
   ]);
 
-  const fetchReadingStats = async () => {
+  const fetchReadingStats = useCallback(async () => {
     try {
       const data = await getReadingStats(book.id);
 
@@ -115,9 +117,9 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
     } catch (error) {
       console.error("Помилка отримання статистики:", error);
     }
-  };
+  }, [book.id]);
 
-  const fetchActiveSession = async () => {
+  const fetchActiveSession = useCallback(async () => {
     try {
       const data = await getActiveReadingSession(book.id);
 
@@ -147,7 +149,7 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
     } catch (error) {
       console.error("Помилка отримання активної сесії:", error);
     }
-  };
+  }, [book.id]);
 
   const changeProgressMode = (mode) => {
     if (activeSession) {
@@ -481,8 +483,10 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
   // При відкритті книги отримуємо канонічний
   // час активної сесії з бекенда.
   useEffect(() => {
+    // Завантажуємо активну сесію при відкритті або зміні книги.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchActiveSession();
-  }, [book.id]);
+  }, [fetchActiveSession]);
 
   // Телефон/PWA може призупинити JavaScript,
   // коли екран заблокований. Після повернення
@@ -499,7 +503,7 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
     return () => {
       document.removeEventListener("visibilitychange", handleVisibilityChange);
     };
-  }, [book.id]);
+  }, [fetchActiveSession]);
 
   // Додаткова синхронізація для PWA/мобільних
   // браузерів, коли window знову отримує фокус.
@@ -513,11 +517,13 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
     return () => {
       window.removeEventListener("focus", handleFocus);
     };
-  }, [book.id]);
+  }, [fetchActiveSession]);
 
   useEffect(() => {
+    // Завантажуємо статистику при відкритті або зміні книги.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     fetchReadingStats();
-  }, [book.id]);
+  }, [fetchReadingStats]);
 
   return {
     activeSession,

@@ -89,6 +89,8 @@ const AchievementsProvider = ({ children }) => {
     }
 
     if (!isAuthenticated) {
+      // Очищаємо дані досягнень попереднього користувача після виходу.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setAchievements([]);
       setSummary(EMPTY_SUMMARY);
       setAchievementsError("");

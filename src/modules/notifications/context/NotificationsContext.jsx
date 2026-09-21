@@ -153,6 +153,8 @@ const NotificationsProvider = ({ children }) => {
     }
 
     if (!isAuthenticated) {
+      // Очищаємо дані попереднього користувача після виходу.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setNotifications([]);
       setUnreadCount(0);
       setNotificationsError("");

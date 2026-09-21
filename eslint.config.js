@@ -38,4 +38,10 @@ export default defineConfig([
       "react/prop-types": "off",
     },
   },
+  {
+    files: ["**/context/*.jsx"],
+    rules: {
+      "react-refresh/only-export-components": "off",
+    },
+  },
 ]);

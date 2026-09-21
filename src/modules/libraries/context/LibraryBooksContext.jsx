@@ -67,6 +67,8 @@ export const LibraryBooksProvider = ({ children }) => {
       return;
     }
 
+    // Синхронізуємо книги з активною бібліотекою.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     refreshBooks();
   }, [isAuthLoading, isLibrariesLoading, refreshBooks]);
 
