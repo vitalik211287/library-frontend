@@ -111,6 +111,7 @@
   line-height: 1;
 
   cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 
   transition:
     color 0.16s ease,
