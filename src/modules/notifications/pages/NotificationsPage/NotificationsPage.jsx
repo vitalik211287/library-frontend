@@ -114,6 +114,10 @@ const NotificationsPage = () => {
   };
 
   const handleNotificationKeyDown = (event, notification) => {
+    if (event.target !== event.currentTarget) {
+      return;
+    }
+
     if (event.key !== "Enter" && event.key !== " ") {
       return;
     }
