@@ -113,6 +113,21 @@ const NotificationsPage = () => {
     await deleteNotifications([notificationId]);
   };
 
+  const handleNotificationKeyDown = (event, notification) => {
+    if (event.key !== "Enter" && event.key !== " ") {
+      return;
+    }
+
+    event.preventDefault();
+
+    if (isSelectionMode) {
+      toggleNotificationSelection(notification.id);
+      return;
+    }
+
+    handleOpenNotification(notification);
+  };
+
   const renderLibraryBookNotification = (notification) => {
     const actorName = notification.actor?.name || "Користувач";
     const book = notification.book;
@@ -123,7 +138,9 @@ const NotificationsPage = () => {
         variant="secondary"
         clickable
         key={notification.id}
-        type="button"
+        role="button"
+        tabIndex={0}
+        onKeyDown={(event) => handleNotificationKeyDown(event, notification)}
         className={
           notification.isRead
             ? `activity-notification${isSelectionMode ? " activity-notification--selecting" : ""}`
@@ -302,7 +319,9 @@ const NotificationsPage = () => {
         variant="secondary"
         clickable
         key={notification.id}
-        type="button"
+        role="button"
+        tabIndex={0}
+        onKeyDown={(event) => handleNotificationKeyDown(event, notification)}
         className={
           notification.isRead
             ? `social-notification${isSelectionMode ? " social-notification--selecting" : ""}`
