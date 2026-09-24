@@ -63,7 +63,7 @@
 .author-item__content span {
   margin-top: 3px;
 
-  color: var(--text-secondary, #8b8b96);
+  color: var(--text-secondary);
 
   font-size: 11px;
 }

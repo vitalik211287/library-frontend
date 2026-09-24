@@ -35,7 +35,7 @@
 .genre-shelf__count {
   flex-shrink: 0;
 
-  color: var(--text-secondary, #a7a7b5);
+  color: var(--text-secondary);
 
   font-size: 14px;
   font-weight: 700;

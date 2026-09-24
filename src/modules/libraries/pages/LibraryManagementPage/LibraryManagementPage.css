@@ -34,7 +34,7 @@
 
 .library-management-page__subtitle {
   margin: var(--space-8) 0 0;
-  color: var(--text-muted, #9ca3af);
+  color: var(--text-muted);
   font-size: 15px;
 }
 
@@ -59,7 +59,7 @@
 .library-management-card__header p,
 .library-management-card--empty p {
   margin: var(--space-6) 0 0;
-  color: var(--text-muted, #9ca3af);
+  color: var(--text-muted);
   font-size: 14px;
   line-height: 1.45;
 }
@@ -117,7 +117,7 @@
 .library-management-status,
 .library-management-note {
   margin: 0;
-  color: var(--text-muted, #9ca3af);
+  color: var(--text-muted);
   font-size: 14px;
   line-height: 1.5;
 }

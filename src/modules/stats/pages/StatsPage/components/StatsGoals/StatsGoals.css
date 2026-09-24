@@ -1,4 +1,4 @@
-﻿.stats-goals {
+.stats-goals {
   padding: var(--space-18);
 }
 
@@ -16,7 +16,7 @@
 .stats-goals__header p {
   margin: 5px 0 0;
 
-  color: var(--text-secondary, #8b8b96);
+  color: var(--text-secondary);
 
   font-size: 12px;
 }
@@ -90,7 +90,7 @@
 }
 
 .reading-goal__bottom span {
-  color: var(--text-secondary, #8b8b96);
+  color: var(--text-secondary);
 
   font-size: 10px;
 }

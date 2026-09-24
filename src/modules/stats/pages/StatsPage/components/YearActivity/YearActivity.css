@@ -30,7 +30,7 @@
 
   overflow: hidden;
 
-  color: var(--text-secondary, #8b8b96);
+  color: var(--text-secondary);
 
   font-size: 9px;
 }
@@ -60,7 +60,7 @@
 .stats-month span {
   align-self: end;
 
-  color: var(--text-secondary, #8b8b96);
+  color: var(--text-secondary);
 
   font-size: 9px;
 }

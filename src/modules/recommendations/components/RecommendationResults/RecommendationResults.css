@@ -1,4 +1,4 @@
-﻿.recommendation-results {
+.recommendation-results {
   margin-top: var(--space-18);
 }
 
@@ -30,7 +30,7 @@
 .recommendation-results__count {
   flex-shrink: 0;
   font-size: 11px;
-  color: var(--text-secondary, #94a3b8);
+  color: var(--text-secondary);
 }
 
 .recommendation-results__books {
@@ -100,7 +100,7 @@
   overflow: hidden;
   font-size: 11px;
   line-height: 1.3;
-  color: var(--text-secondary, #94a3b8);
+  color: var(--text-secondary);
   text-overflow: ellipsis;
   white-space: nowrap;
 }

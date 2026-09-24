@@ -49,7 +49,7 @@
 
   margin-top: var(--space-4);
 
-  color: var(--text-secondary, #8b8b96);
+  color: var(--text-secondary);
 
   font-size: 12px;
 }
@@ -78,7 +78,7 @@
 }
 
 .streak-details span {
-  color: var(--text-secondary, #8b8b96);
+  color: var(--text-secondary);
 
   font-size: 11px;
 }

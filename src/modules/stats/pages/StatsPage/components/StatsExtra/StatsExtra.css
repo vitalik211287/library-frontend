@@ -1,4 +1,4 @@
-﻿.stats-extra {
+.stats-extra {
   display: grid;
 
   grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -30,7 +30,7 @@
 }
 
 .stats-extra span {
-  color: var(--text-secondary, #8b8b96);
+  color: var(--text-secondary);
 
   font-size: 10px;
 }
