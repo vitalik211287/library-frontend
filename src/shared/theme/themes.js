@@ -2,6 +2,7 @@ export const THEME_MODES = {
   SYSTEM: "system",
   LIGHT: "light",
   DARK: "dark",
+  HALLOWEEN: "halloween",
 };
 
 export const THEME_OPTIONS = [
@@ -18,6 +19,11 @@ export const THEME_OPTIONS = [
   {
     id: THEME_MODES.DARK,
     label: "Темна",
+    icon: "moon",
+  },
+  {
+    id: THEME_MODES.HALLOWEEN,
+    label: "Halloween",
     icon: "moon",
   },
 ];

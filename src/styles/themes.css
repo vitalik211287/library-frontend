@@ -102,6 +102,68 @@
   --shadow:
     rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
 }
+/* HALLOWEEN THEME */
+
+:root[data-theme="halloween"] {
+  --app-background:
+    linear-gradient(rgba(7, 10, 18, 0.2), rgba(7, 10, 18, 0.3)),
+    url("/images/themes/halloween/Heloween_mob.jpg") center top / cover fixed;
+  color-scheme: dark;
+
+  --text: #d8cbd7;
+  --text-h: #fff3df;
+  --text-secondary: var(--text);
+  --text-muted: #aa9baa;
+  --text-on-accent: #1a0d05;
+
+  --bg: #120d15;
+  --surface: #1d1520;
+  --surface-secondary: #281b2b;
+
+  --border: #59445d;
+  --border-hover: #9a684c;
+
+  --code-bg: #211724;
+
+  --accent: #ff8a1f;
+  --accent-strong: #e96800;
+  --accent-soft: #ffad5c;
+  --accent-bg: rgba(255, 138, 31, 0.14);
+  --accent-border: rgba(255, 138, 31, 0.55);
+
+  --danger: #e5484d;
+  --danger-bg: rgba(229, 72, 77, 0.14);
+  --danger-border: rgba(229, 72, 77, 0.58);
+  --danger-border-soft: rgba(229, 72, 77, 0.4);
+  --text-on-danger: #ffffff;
+
+  --overlay-bg: rgba(5, 2, 8, 0.72);
+
+  --shadow-subtle: 0 4px 18px rgba(0, 0, 0, 0.18);
+  --shadow-card: 0 6px 18px rgba(0, 0, 0, 0.32);
+  --shadow-floating: 0 12px 30px rgba(0, 0, 0, 0.38);
+  --shadow-modal: 0 24px 70px rgba(0, 0, 0, 0.55);
+
+  --social-bg: rgba(38, 22, 41, 0.58);
+
+  --panel-bg: rgba(29, 19, 32, 0.82);
+  --panel-bg-secondary: rgba(42, 27, 45, 0.86);
+  --panel-border: rgba(255, 171, 92, 0.2);
+  --panel-border-hover: var(--accent-border);
+  --panel-shadow: 0 12px 34px rgba(0, 0, 0, 0.34);
+  --shadow:
+    rgba(0, 0, 0, 0.48) 0 10px 15px -3px,
+    rgba(0, 0, 0, 0.32) 0 4px 6px -2px;
+}
+
+@media (min-width: 768px) {
+  :root[data-theme="halloween"] {
+    --app-background:
+      linear-gradient(rgba(7, 10, 18, 0.2), rgba(7, 10, 18, 0.3)),
+      url("/images/themes/halloween/Heloween_desk.jpg") center top / cover fixed;
+  }
+}
+
 @media (min-width: 1440px) {
   :root[data-theme="dark"] {
     --app-background:
