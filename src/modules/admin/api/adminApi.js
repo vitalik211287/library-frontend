@@ -27,3 +27,22 @@ export const unblockAdminUser = async (userId) => {
 
   return data?.user ?? null;
 };
+
+export const getGlobalTheme = async () => {
+  const data = await apiFetch("/api/settings/theme", {
+    auth: false,
+  });
+
+  return data?.globalTheme ?? "DEFAULT";
+};
+
+export const updateGlobalTheme = async (globalTheme) => {
+  const data = await apiFetch("/api/admin/settings/theme", {
+    method: "PATCH",
+    body: {
+      globalTheme,
+    },
+  });
+
+  return data?.globalTheme ?? "DEFAULT";
+};

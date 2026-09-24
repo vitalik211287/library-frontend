@@ -71,6 +71,11 @@ const AdminUsersPage = lazy(
   () => import("../../modules/admin/pages/AdminUsersPage/AdminUsersPage.jsx"),
 );
 
+const AdminSettingsPage = lazy(
+  () =>
+    import("../../modules/admin/pages/AdminSettingsPage/AdminSettingsPage.jsx"),
+);
+
 import ProtectedRoute from "./ProtectedRoute.jsx";
 import AdminRoute from "./AdminRoute.jsx";
 
@@ -280,7 +285,16 @@ export const PrivateRoutes = ({ onOpenReading }) => {
             </ProtectedRoute>
           }
         />
-
+        <Route
+          path="/admin/settings"
+          element={
+            <ProtectedRoute>
+              <AdminRoute>
+                <AdminSettingsPage />
+              </AdminRoute>
+            </ProtectedRoute>
+          }
+        />
         <Route
           path="/admin/users"
           element={

@@ -14,6 +14,8 @@ import Modal from "../../../../shared/components/Modal/Modal.jsx";
 import AppPanel from "../../../../shared/components/AppPanel/AppPanel.jsx";
 import Icon from "../../../../shared/components/Icon/Icon.jsx";
 
+import AdminNavigation from "../../components/AdminNavigation/AdminNavigation.jsx";
+
 import "./AdminUsersPage.css";
 
 const STATUS_LABELS = {
@@ -539,6 +541,8 @@ const AdminUsersPage = () => {
 
   return (
     <main className="admin-users-page">
+      <AdminNavigation />
+
       <div className="admin-users-page__header">
         <div>
           <h1 className="admin-users-page__title">Адміністрування</h1>

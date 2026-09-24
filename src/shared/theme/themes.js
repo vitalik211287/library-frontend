@@ -25,6 +25,7 @@ export const THEME_OPTIONS = [
 export const GLOBAL_THEME_MODES = {
   DEFAULT: "default",
   HALLOWEEN: "halloween",
+  CYBERPUNK: "cyberpunk",
 };
 
 export const GLOBAL_THEME_OPTIONS = [
@@ -35,6 +36,10 @@ export const GLOBAL_THEME_OPTIONS = [
   {
     id: GLOBAL_THEME_MODES.HALLOWEEN,
     label: "Halloween",
+  },
+  {
+    id: GLOBAL_THEME_MODES.CYBERPUNK,
+    label: "Cyberpunk",
   },
 ];
 
