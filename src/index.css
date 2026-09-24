@@ -25,6 +25,13 @@
   --danger-bg: rgba(220, 38, 38, 0.12);
   --text-on-danger: #ffffff;
 
+  --overlay-bg: rgba(0, 0, 0, 0.58);
+
+  --shadow-subtle: 0 4px 18px rgba(0, 0, 0, 0.06);
+  --shadow-card: 0 6px 16px rgba(0, 0, 0, 0.18);
+  --shadow-floating: 0 12px 28px rgba(0, 0, 0, 0.2);
+  --shadow-modal: 0 24px 70px rgba(0, 0, 0, 0.38);
+
   --social-bg: rgba(244, 243, 236, 0.5);
 
   /* SPACING */
@@ -142,6 +149,13 @@
   --danger: #dc2626;
   --danger-bg: rgba(220, 38, 38, 0.12);
   --text-on-danger: #ffffff;
+
+  --overlay-bg: rgba(0, 0, 0, 0.58);
+
+  --shadow-subtle: 0 4px 18px rgba(0, 0, 0, 0.06);
+  --shadow-card: 0 6px 16px rgba(0, 0, 0, 0.18);
+  --shadow-floating: 0 12px 28px rgba(0, 0, 0, 0.2);
+  --shadow-modal: 0 24px 70px rgba(0, 0, 0, 0.38);
 
   --social-bg: rgba(47, 48, 58, 0.5);
 

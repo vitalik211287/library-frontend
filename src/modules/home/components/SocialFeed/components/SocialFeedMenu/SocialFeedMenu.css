@@ -4,7 +4,7 @@
   z-index: 2200;
   display: flex;
   align-items: flex-end;
-  background: rgba(0, 0, 0, 0.58);
+  background: var(--overlay-bg);
 }
 
 .social-feed-menu {

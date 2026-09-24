@@ -54,7 +54,7 @@
 .catalog-view-toggle__button.is-active {
   background: var(--accent);
   color: var(--text-on-accent);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+  box-shadow: var(--shadow-card);
 }
 
 /* =========================
