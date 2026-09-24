@@ -49,11 +49,7 @@ export const ThemeProvider = ({
           mediaQuery.matches
         );
 
-      document.documentElement
-        .classList.toggle(
-          "dark",
-          isDark,
-        );
+      document.documentElement.dataset.theme = isDark ? "dark" : "light";
 
       localStorage.setItem(
         "theme",
