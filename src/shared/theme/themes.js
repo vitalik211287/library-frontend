@@ -2,7 +2,6 @@ export const THEME_MODES = {
   SYSTEM: "system",
   LIGHT: "light",
   DARK: "dark",
-  HALLOWEEN: "halloween",
 };
 
 export const THEME_OPTIONS = [
@@ -21,15 +20,29 @@ export const THEME_OPTIONS = [
     label: "Темна",
     icon: "moon",
   },
+];
+
+export const GLOBAL_THEME_MODES = {
+  DEFAULT: "default",
+  HALLOWEEN: "halloween",
+};
+
+export const GLOBAL_THEME_OPTIONS = [
   {
-    id: THEME_MODES.HALLOWEEN,
+    id: GLOBAL_THEME_MODES.DEFAULT,
+    label: "Звичайна",
+  },
+  {
+    id: GLOBAL_THEME_MODES.HALLOWEEN,
     label: "Halloween",
-    icon: "moon",
   },
 ];
 
 export const isThemeMode = (value) =>
   THEME_OPTIONS.some((theme) => theme.id === value);
+
+export const isGlobalThemeMode = (value) =>
+  GLOBAL_THEME_OPTIONS.some((theme) => theme.id === value);
 
 export const resolveTheme = (themeMode, prefersDark = false) => {
   if (themeMode === THEME_MODES.SYSTEM) {
