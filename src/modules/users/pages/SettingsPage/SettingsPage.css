@@ -316,11 +316,11 @@ button.settings-page__row:disabled {
 
   padding: 12px 18px;
 
-  border: 1px solid rgba(255, 70, 70, 0.35);
+  border: 1px solid color-mix(in srgb, var(--danger) 35%, transparent);
   border-radius: var(--radius-14);
 
-  background: rgba(255, 70, 70, 0.09);
-  color: #ff5757;
+  background: color-mix(in srgb, var(--danger) 9%, transparent);
+  color: var(--danger);
 
   font-size: 15px;
   font-weight: 600;
@@ -331,7 +331,7 @@ button.settings-page__row:disabled {
 }
 
 .settings-page__logout:hover {
-  background: rgba(255, 70, 70, 0.15);
+  background: color-mix(in srgb, var(--danger) 15%, transparent);
 }
 
 .settings-page__logout:active {

@@ -68,7 +68,7 @@
 
 .social-feed-menu__item--danger strong,
 .social-feed-menu__item--danger .social-feed-menu__item-icon {
-  color: #ff646d;
+  color: var(--danger);
 }
 
 .social-feed-menu__cancel {

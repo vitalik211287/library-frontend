@@ -394,9 +394,9 @@
 
   border-radius: var(--radius-sm);
 
-  background: rgba(255, 86, 86, 0.08);
+  background: color-mix(in srgb, var(--danger) 8%, transparent);
 
-  color: #ff7373;
+  color: var(--danger);
 
   font-size: 11px;
   line-height: 1.35;
