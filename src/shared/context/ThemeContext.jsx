@@ -1,10 +1,4 @@
-import {
-  createContext,
-  useContext,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, useContext, useEffect, useMemo, useState } from "react";
 
 import { apiFetch } from "../api/apiClient.js";
 import {
@@ -29,9 +23,7 @@ const getInitialTheme = () => {
 
 export const ThemeProvider = ({ children }) => {
   const [themeMode, setThemeMode] = useState(getInitialTheme);
-  const [globalTheme, setGlobalTheme] = useState(
-    GLOBAL_THEME_MODES.DEFAULT,
-  );
+  const [globalTheme, setGlobalTheme] = useState(GLOBAL_THEME_MODES.DEFAULT);
 
   useEffect(() => {
     let isActive = true;
@@ -42,13 +34,9 @@ export const ThemeProvider = ({ children }) => {
           auth: false,
         });
 
-        const nextGlobalTheme =
-          data?.globalTheme?.toLowerCase();
+        const nextGlobalTheme = data?.globalTheme?.toLowerCase();
 
-        if (
-          isActive &&
-          isGlobalThemeMode(nextGlobalTheme)
-        ) {
+        if (isActive && isGlobalThemeMode(nextGlobalTheme)) {
           setGlobalTheme(nextGlobalTheme);
         }
       } catch (error) {
@@ -64,15 +52,10 @@ export const ThemeProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia(
-      "(prefers-color-scheme: dark)",
-    );
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     const applyTheme = () => {
-      const personalTheme = resolveTheme(
-        themeMode,
-        mediaQuery.matches,
-      );
+      const personalTheme = resolveTheme(themeMode, mediaQuery.matches);
 
       const resolvedTheme =
         globalTheme === GLOBAL_THEME_MODES.DEFAULT
@@ -107,14 +90,13 @@ export const ThemeProvider = ({ children }) => {
       themeMode,
       setThemeMode,
       globalTheme,
+      setGlobalTheme,
     }),
     [themeMode, globalTheme],
   );
 
   return (
-    <ThemeContext.Provider value={value}>
-      {children}
-    </ThemeContext.Provider>
+    <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
   );
 };
 
