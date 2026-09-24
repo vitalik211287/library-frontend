@@ -23,6 +23,8 @@
 
   --danger: #dc2626;
   --danger-bg: rgba(220, 38, 38, 0.12);
+  --danger-border: rgba(220, 38, 38, 0.55);
+  --danger-border-soft: rgba(220, 38, 38, 0.4);
   --text-on-danger: #ffffff;
 
   --overlay-bg: rgba(0, 0, 0, 0.58);
@@ -148,6 +150,8 @@
 
   --danger: #dc2626;
   --danger-bg: rgba(220, 38, 38, 0.12);
+  --danger-border: rgba(220, 38, 38, 0.55);
+  --danger-border-soft: rgba(220, 38, 38, 0.4);
   --text-on-danger: #ffffff;
 
   --overlay-bg: rgba(0, 0, 0, 0.58);

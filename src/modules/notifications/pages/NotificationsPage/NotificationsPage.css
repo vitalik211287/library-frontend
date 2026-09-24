@@ -1,4 +1,4 @@
-﻿.notifications-page {
+.notifications-page {
   width: 100%;
   min-height: 100dvh;
   padding: var(--page-padding-top) var(--page-padding-x)
@@ -475,10 +475,10 @@
 .notifications-page__delete-selected {
   flex-shrink: 0;
   padding: 7px 10px;
-  border: 1px solid #ef4444;
+  border: 1px solid var(--danger);
   border-radius: 9px;
   background: var(--surface);
-  color: #ef4444;
+  color: var(--danger);
   font-size: 10px;
   font-weight: 700;
 }

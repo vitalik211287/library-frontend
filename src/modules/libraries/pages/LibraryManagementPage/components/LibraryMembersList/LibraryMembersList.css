@@ -115,10 +115,10 @@
 .library-member__remove {
   min-height: 42px;
   padding: 0 12px;
-  border: 1px solid rgba(239, 68, 68, 0.4);
+  border: 1px solid var(--danger-border-soft);
   border-radius: var(--radius-lg);
   background: transparent;
-  color: #ef4444;
+  color: var(--danger);
   font-weight: 800;
 }
 

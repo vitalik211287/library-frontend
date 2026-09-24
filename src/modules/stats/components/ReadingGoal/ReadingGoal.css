@@ -143,11 +143,11 @@
 .goal-modal__error {
   padding: 9px var(--space-10);
 
-  border: 1px solid rgba(239, 68, 68, 0.25);
+  border: 1px solid color-mix(in srgb, var(--danger) 25%, transparent);
   border-radius: var(--radius-sm);
 
-  background: rgba(239, 68, 68, 0.1);
-  color: #ef4444;
+  background: var(--danger-bg);
+  color: var(--danger);
 
   font-size: 12px;
   line-height: 1.35;

@@ -1,19 +1,19 @@
 .library-management-danger {
-  border-color: rgba(239, 68, 68, 0.4);
+  border-color: var(--danger-border-soft);
 }
 
 .library-management-danger h2 {
-  color: #ef4444;
+  color: var(--danger);
 }
 
 .library-management-danger__button {
   width: 100%;
   min-height: 46px;
   padding: 0 18px;
-  border: 1px solid rgba(239, 68, 68, 0.55);
+  border: 1px solid var(--danger-border);
   border-radius: var(--radius-14);
-  background: rgba(239, 68, 68, 0.08);
-  color: #ef4444;
+  background: color-mix(in srgb, var(--danger) 8%, transparent);
+  color: var(--danger);
   font-weight: 800;
 }
 
