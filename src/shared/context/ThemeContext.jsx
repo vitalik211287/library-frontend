@@ -6,6 +6,12 @@ import {
   useState,
 } from "react";
 
+import {
+  THEME_MODES,
+  isThemeMode,
+  resolveTheme,
+} from "../theme/themes.js";
+
 const ThemeContext =
   createContext(null);
 
@@ -13,15 +19,11 @@ const getInitialTheme = () => {
   const savedTheme =
     localStorage.getItem("theme");
 
-  if (
-    savedTheme === "light" ||
-    savedTheme === "dark" ||
-    savedTheme === "system"
-  ) {
+  if (isThemeMode(savedTheme)) {
     return savedTheme;
   }
 
-  return "system";
+  return THEME_MODES.SYSTEM;
 };
 
 export const ThemeProvider = ({
@@ -41,15 +43,14 @@ export const ThemeProvider = ({
       );
 
     const applyTheme = () => {
-      const isDark =
-        themeMode === "dark" ||
-        (
-          themeMode ===
-            "system" &&
-          mediaQuery.matches
+      const resolvedTheme =
+        resolveTheme(
+          themeMode,
+          mediaQuery.matches,
         );
 
-      document.documentElement.dataset.theme = isDark ? "dark" : "light";
+      document.documentElement.dataset.theme =
+        resolvedTheme;
 
       localStorage.setItem(
         "theme",
@@ -62,8 +63,7 @@ export const ThemeProvider = ({
     const handleSystemChange =
       () => {
         if (
-          themeMode ===
-          "system"
+          themeMode === THEME_MODES.SYSTEM
         ) {
           applyTheme();
         }
