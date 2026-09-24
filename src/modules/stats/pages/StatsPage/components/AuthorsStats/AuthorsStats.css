@@ -14,7 +14,7 @@
 
   padding-bottom: var(--space-12);
 
-  border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.08));
+  border-bottom: 1px solid var(--border);
 }
 
 .author-item:last-child {
@@ -32,9 +32,9 @@
   display: grid;
   place-items: center;
 
-  color: #a78bfa;
+  color: var(--accent-soft);
 
-  background: rgba(139, 92, 246, 0.12);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
 
   border-radius: 9px;
 

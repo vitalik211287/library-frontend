@@ -32,7 +32,7 @@
 
   overflow: hidden;
 
-  background: rgba(139, 92, 246, 0.1);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
 
   border-radius: var(--radius-pill);
 }
@@ -40,7 +40,7 @@
 .genre-item__bar {
   height: 100%;
 
-  background: #8b5cf6;
+  background: var(--accent);
 
   border-radius: inherit;
 }

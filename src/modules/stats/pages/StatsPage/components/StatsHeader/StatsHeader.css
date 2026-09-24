@@ -12,7 +12,7 @@
 .stats-eyebrow {
   margin: 0 0 5px;
 
-  color: #8b5cf6;
+  color: var(--accent);
 
   font-size: 11px;
   font-weight: 800;
@@ -72,7 +72,7 @@
 
   background: var(--bg);
 
-  border: 1px solid var(--border, rgba(255, 255, 255, 0.12));
+  border: 1px solid var(--border);
 
   border-radius: 9px;
 

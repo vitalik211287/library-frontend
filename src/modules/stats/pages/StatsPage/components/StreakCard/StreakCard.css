@@ -6,7 +6,7 @@
 
   padding: var(--space-16);
 
-  background: rgba(139, 92, 246, 0.1);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
 
   border-radius: var(--radius-xl);
 }
@@ -18,9 +18,9 @@
   display: grid;
   place-items: center;
 
-  color: #a78bfa;
+  color: var(--accent-soft);
 
-  background: rgba(139, 92, 246, 0.15);
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
 
   border-radius: 15px;
 }

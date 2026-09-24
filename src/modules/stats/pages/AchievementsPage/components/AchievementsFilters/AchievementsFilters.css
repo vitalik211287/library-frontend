@@ -1,4 +1,4 @@
-﻿.achievements-filters {
+.achievements-filters {
   display: grid;
   grid-template-columns: repeat(5, minmax(0, 1fr));
 
@@ -32,15 +32,15 @@
 }
 
 .achievements-filter:hover {
-  border-color: rgba(139, 92, 246, 0.55);
+  border-color: color-mix(in srgb, var(--accent) 55%, transparent);
 
   transform: translateY(-1px);
 }
 
 .achievements-filter--active {
-  color: #ffffff;
+  color: var(--text-on-accent);
 
-  background: linear-gradient(135deg, #7c3aed, #9333ea);
+  background: linear-gradient(135deg, var(--accent-strong), color-mix(in srgb, var(--accent-strong) 82%, black));
 
   border-color: transparent;
 }

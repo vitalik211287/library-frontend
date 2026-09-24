@@ -50,7 +50,7 @@
   padding-right: 28px;
   background: color-mix(in srgb, var(--accent) 9%, transparent);
   border-color: var(--accent);
-  box-shadow: 0 6px 18px rgba(176, 112, 255, 0.12);
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--accent) 12%, transparent);
 }
 
 .stats-extra__item--button::after {

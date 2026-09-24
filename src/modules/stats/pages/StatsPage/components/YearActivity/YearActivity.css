@@ -50,7 +50,7 @@
 
   min-height: 3px;
 
-  background: linear-gradient(180deg, #a78bfa 0%, #7c3aed 100%);
+  background: linear-gradient(180deg, var(--accent-soft) 0%, var(--accent-strong) 100%);
 
   border-radius: 7px 7px 3px 3px;
 
