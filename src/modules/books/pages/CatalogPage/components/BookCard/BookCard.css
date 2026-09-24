@@ -174,7 +174,7 @@
 
   border-color: var(--accent);
 
-  box-shadow: 0 6px 18px rgba(176, 112, 255, 0.18);
+  box-shadow: 0 6px 18px color-mix(in srgb, var(--accent) 18%, transparent);
 }
 
 .book-card__button--read:hover {

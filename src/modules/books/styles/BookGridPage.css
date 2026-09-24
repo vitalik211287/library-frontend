@@ -23,8 +23,8 @@
   margin-bottom: var(--content-gap);
   padding: var(--space-12) var(--space-14);
   border-radius: var(--radius-sm);
-  background: var(--error-bg, #fff1f1);
-  color: var(--error-text, #b42318);
+  background: var(--danger-bg);
+  color: var(--danger);
   font-size: 14px;
 }
 

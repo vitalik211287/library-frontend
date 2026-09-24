@@ -237,7 +237,7 @@
   font-weight: 700;
   line-height: 1;
 
-  box-shadow: 0 8px 22px rgba(181, 107, 255, 0.2);
+  box-shadow: 0 8px 22px color-mix(in srgb, var(--accent) 20%, transparent);
 
   transition:
     transform 0.15s ease,
@@ -323,7 +323,7 @@
 
   font-variant-numeric: tabular-nums;
 
-  text-shadow: 0 0 20px rgba(181, 107, 255, 0.18);
+  text-shadow: 0 0 20px color-mix(in srgb, var(--accent) 18%, transparent);
 }
 
 .reading-modal__timer-caption {

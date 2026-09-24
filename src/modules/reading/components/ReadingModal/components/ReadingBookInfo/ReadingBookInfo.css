@@ -1,4 +1,4 @@
-﻿/* =========================
+/* =========================
    BOOK CARD
 ========================= */
 
@@ -52,7 +52,7 @@
 
   box-shadow:
     0 8px 20px rgba(0, 0, 0, 0.34),
-    0 0 16px rgba(181, 107, 255, 0.08);
+    0 0 16px color-mix(in srgb, var(--accent) 8%, transparent);
 }
 
 .reading-modal__no-cover {
@@ -309,7 +309,7 @@
     var(--border) var(--reading-progress-angle) 360deg
   );
 
-  box-shadow: 0 0 16px rgba(181, 107, 255, 0.1);
+  box-shadow: 0 0 16px color-mix(in srgb, var(--accent) 10%, transparent);
 }
 
 .reading-modal__progress-ring::before {

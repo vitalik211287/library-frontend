@@ -9,7 +9,7 @@
 
   box-shadow:
     0 24px 70px rgba(0, 0, 0, 0.5),
-    0 0 30px rgba(181, 107, 255, 0.08);
+    0 0 30px color-mix(in srgb, var(--accent) 8%, transparent);
 }
 
 .reading-modal .modal__content {

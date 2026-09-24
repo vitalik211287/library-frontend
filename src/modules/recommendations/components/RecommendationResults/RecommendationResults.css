@@ -24,7 +24,7 @@
   margin: 0;
   font-size: 17px;
   line-height: 1.2;
-  color: var(--text-primary, #f8fafc);
+  color: var(--text-h);
 }
 
 .recommendation-results__count {
@@ -91,7 +91,7 @@
   overflow: hidden;
   font-size: 13px;
   line-height: 1.25;
-  color: var(--text-primary, #f8fafc);
+  color: var(--text-h);
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 2;
 }
