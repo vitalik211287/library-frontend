@@ -18,6 +18,8 @@
   --code-bg: #f4f3ec;
 
   --accent: #aa3bff;
+  --accent-strong: #7c3aed;
+  --accent-soft: #a855f7;
   --accent-bg: rgba(170, 59, 255, 0.1);
   --accent-border: rgba(170, 59, 255, 0.5);
 
@@ -145,6 +147,8 @@
   --code-bg: #1f2028;
 
   --accent: #c084fc;
+  --accent-strong: #7c3aed;
+  --accent-soft: #a855f7;
   --accent-bg: rgba(192, 132, 252, 0.15);
   --accent-border: rgba(192, 132, 252, 0.5);
 

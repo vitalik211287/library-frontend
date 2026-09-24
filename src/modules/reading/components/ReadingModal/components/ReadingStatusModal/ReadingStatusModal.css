@@ -21,10 +21,10 @@
 
   padding: 12px 14px;
 
-  border: 1px solid rgba(168, 85, 247, 0.35);
+  border: 1px solid color-mix(in srgb, var(--accent-soft) 35%, transparent);
   border-radius: var(--radius-lg);
 
-  background: rgba(168, 85, 247, 0.1);
+  background: color-mix(in srgb, var(--accent-soft) 10%, transparent);
 
   color: var(--text);
 

@@ -289,13 +289,13 @@
 .reading-sessions-edit__actions .reading-sessions-edit__save {
   border-color: transparent;
 
-  background: #7c3aed;
-  color: #ffffff;
+  background: var(--accent-strong);
+  color: var(--text-on-accent);
 }
 
 .reading-sessions-edit__actions
   .reading-sessions-edit__save:hover:not(:disabled) {
-  background: #6d28d9;
+  background: color-mix(in srgb, var(--accent-strong) 88%, black);
 }
 
 .reading-sessions-edit__actions button:disabled {
