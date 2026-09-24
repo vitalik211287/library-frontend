@@ -8,14 +8,17 @@ export const THEME_OPTIONS = [
   {
     id: THEME_MODES.SYSTEM,
     label: "Системна",
+    icon: "system",
   },
   {
     id: THEME_MODES.LIGHT,
     label: "Світла",
+    icon: "sun",
   },
   {
     id: THEME_MODES.DARK,
     label: "Темна",
+    icon: "moon",
   },
 ];
 

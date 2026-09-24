@@ -1,7 +1,8 @@
 import AppPanel from "../../../../../shared/components/AppPanel/AppPanel.jsx";
 import Icon from "../../../../../shared/components/Icon/Icon.jsx";
 
-import { MoonIcon, SunIcon, SystemIcon } from "./ThemeIcons.jsx";
+import { THEME_OPTIONS } from "../../../../../shared/theme/themes.js";
+
 
 const ThemeSettingsSection = ({ themeMode, setThemeMode }) => {
   return (
@@ -18,53 +19,28 @@ const ThemeSettingsSection = ({ themeMode, setThemeMode }) => {
             <span className="settings-page__row-title">Тема</span>
 
             <span className="settings-page__row-value">
-              {themeMode === "system"
-                ? "Системна"
-                : themeMode === "light"
-                  ? "Світла"
-                  : "Темна"}
+              {THEME_OPTIONS.find((theme) => theme.id === themeMode)?.label}
             </span>
           </div>
         </div>
 
         <div className="settings-page__theme-options">
-          <button
-            type="button"
-            className={`settings-page__theme-option ${
-              themeMode === "system"
-                ? "settings-page__theme-option--active"
-                : ""
-            }`}
-            onClick={() => setThemeMode("system")}
-          >
-            <SystemIcon />
+          {THEME_OPTIONS.map((theme) => (
+            <button
+              key={theme.id}
+              type="button"
+              className={`settings-page__theme-option ${
+                themeMode === theme.id
+                  ? "settings-page__theme-option--active"
+                  : ""
+              }`}
+              onClick={() => setThemeMode(theme.id)}
+            >
+              <Icon name={theme.icon} />
 
-            <span>Системна</span>
-          </button>
-
-          <button
-            type="button"
-            className={`settings-page__theme-option ${
-              themeMode === "light" ? "settings-page__theme-option--active" : ""
-            }`}
-            onClick={() => setThemeMode("light")}
-          >
-            <SunIcon />
-
-            <span>Світла</span>
-          </button>
-
-          <button
-            type="button"
-            className={`settings-page__theme-option ${
-              themeMode === "dark" ? "settings-page__theme-option--active" : ""
-            }`}
-            onClick={() => setThemeMode("dark")}
-          >
-            <MoonIcon />
-
-            <span>Темна</span>
-          </button>
+              <span>{theme.label}</span>
+            </button>
+          ))}
         </div>
       </AppPanel>
     </section>
