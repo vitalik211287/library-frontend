@@ -144,7 +144,7 @@
 .social-book-modal__catalog {
   border: 1px solid var(--accent);
   background: var(--accent);
-  color: #fff;
+  color: var(--text-on-accent);
 }
 
 .social-book-modal__cancel {

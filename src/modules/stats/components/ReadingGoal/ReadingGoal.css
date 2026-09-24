@@ -198,7 +198,7 @@
   border: 1px solid transparent;
 
   background: var(--accent);
-  color: #ffffff;
+  color: var(--text-on-accent);
 }
 
 .goal-modal__save:hover:not(:disabled) {

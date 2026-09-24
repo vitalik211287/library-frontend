@@ -53,7 +53,7 @@
 
 .catalog-view-toggle__button.is-active {
   background: var(--accent);
-  color: #fff;
+  color: var(--text-on-accent);
   box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
 }
 

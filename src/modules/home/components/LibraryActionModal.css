@@ -30,7 +30,7 @@
 }
 
 .library-action-modal__field input::placeholder {
-  color: var(--text-muted, #9ca3af);
+  color: var(--text-muted);
 }
 
 .library-action-modal__field input:focus {
@@ -63,7 +63,7 @@
 .library-action-modal__submit {
   border: 0;
   background: var(--accent);
-  color: #fff;
+  color: var(--text-on-accent);
 }
 
 .library-action-modal__actions button:disabled {

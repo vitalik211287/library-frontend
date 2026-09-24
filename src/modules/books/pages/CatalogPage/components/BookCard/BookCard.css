@@ -1,4 +1,4 @@
-﻿.book-card {
+.book-card {
   position: relative;
 
   min-width: 0;
@@ -170,7 +170,7 @@
   order: 1;
 
   background: var(--accent);
-  color: #ffffff;
+  color: var(--text-on-accent);
 
   border-color: var(--accent);
 
@@ -523,7 +523,7 @@
   border-radius: var(--radius-sm);
 
   background: var(--accent);
-  color: #fff;
+  color: var(--text-on-accent);
 
   font-size: 12px;
   font-weight: 700;

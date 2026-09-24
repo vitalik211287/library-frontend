@@ -1,4 +1,4 @@
-﻿/* =========================
+/* =========================
    SESSIONS MODAL
 ========================= */
 
@@ -16,8 +16,8 @@
 
   border-radius: var(--radius-md);
 
-  background: rgba(220, 38, 38, 0.12);
-  color: #dc2626;
+  background: var(--danger-bg);
+  color: var(--danger);
 
   font-size: 14px;
   line-height: 1.4;
@@ -174,7 +174,7 @@
 }
 
 .reading-sessions-modal__actions .reading-sessions-modal__delete {
-  color: #dc2626;
+  color: var(--danger);
 }
 
 /* =========================

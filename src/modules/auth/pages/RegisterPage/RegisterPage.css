@@ -1,4 +1,4 @@
-﻿.register-page {
+.register-page {
   width: 100%;
   max-width: 480px;
 
@@ -80,7 +80,7 @@
   margin-top: 4px;
   padding: var(--space-10) var(--space-18);
 
-  color: #ffffff;
+  color: var(--text-on-accent);
   background: var(--accent);
 
   border: none;

@@ -268,7 +268,7 @@
   border: 1px solid var(--accent);
 
   background: var(--accent);
-  color: #ffffff;
+  color: var(--text-on-accent);
 }
 
 .edit-modal__save:hover:not(:disabled) {

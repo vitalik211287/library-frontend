@@ -445,7 +445,7 @@ button.settings-page__row:disabled {
   border: 1px solid var(--accent);
 
   background: var(--accent);
-  color: #ffffff;
+  color: var(--text-on-accent);
 }
 
 /* =========================

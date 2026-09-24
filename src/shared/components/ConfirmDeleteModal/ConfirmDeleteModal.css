@@ -29,8 +29,8 @@
 
   border-radius: var(--radius-round);
 
-  background: rgba(220, 38, 38, 0.12);
-  color: #dc2626;
+  background: var(--danger-bg);
+  color: var(--danger);
 }
 
 .confirm-delete-modal__icon svg {
@@ -115,8 +115,8 @@
 .confirm-delete-modal__actions .confirm-delete-modal__confirm {
   border-color: transparent;
 
-  background: #dc2626;
-  color: #ffffff;
+  background: var(--danger);
+  color: var(--text-on-danger);
 }
 
 .confirm-delete-modal__actions

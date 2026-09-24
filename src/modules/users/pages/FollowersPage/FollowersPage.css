@@ -189,7 +189,7 @@
   border: 1px solid transparent;
 
   background: var(--accent);
-  color: #ffffff;
+  color: var(--text-on-accent);
 }
 
 .follower-card__follow:hover {

@@ -24,7 +24,7 @@
   border: 0;
   border-radius: var(--radius-14);
   background: var(--accent);
-  color: #fff;
+  color: var(--text-on-accent);
   font-weight: 800;
 }
 

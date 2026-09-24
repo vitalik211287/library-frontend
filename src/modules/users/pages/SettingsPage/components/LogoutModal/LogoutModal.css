@@ -104,7 +104,7 @@
   border-color: transparent;
 
   background: var(--accent);
-  color: #ffffff;
+  color: var(--text-on-accent);
 }
 
 .logout-modal__actions .logout-modal__confirm:hover {

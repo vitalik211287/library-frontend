@@ -159,7 +159,7 @@
   padding: 11px 18px;
 
   background: var(--accent);
-  color: #ffffff;
+  color: var(--text-on-accent);
 
   font-size: 14px;
   font-weight: 500;

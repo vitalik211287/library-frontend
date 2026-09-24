@@ -1,4 +1,4 @@
-﻿.landing-page {
+.landing-page {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -136,7 +136,7 @@
 
 .landing-button--primary {
   background: var(--accent);
-  color: #ffffff;
+  color: var(--text-on-accent);
 }
 
 .landing-button--primary:hover {

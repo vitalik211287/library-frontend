@@ -72,7 +72,7 @@
     var(--accent),
     color-mix(in srgb, var(--accent) 82%, white)
   );
-  color: #fff;
+  color: var(--text-on-accent);
   font-size: 14px;
   font-weight: 850;
   box-shadow: 0 10px 24px color-mix(in srgb, var(--accent) 22%, transparent);
