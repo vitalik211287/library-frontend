@@ -471,3 +471,17 @@
     0 0 5px rgba(255, 61, 191, 0.5),
     0 0 10px rgba(53, 231, 255, 0.3);
 }
+
+/* Cyberpunk cyan navigation and section labels */
+:root[data-theme="cyberpunk"] .home-welcome__eyebrow,
+:root[data-theme="cyberpunk"] .stats-eyebrow,
+:root[data-theme="cyberpunk"] .page-back-button {
+  color: var(--neon-cyan);
+  text-shadow:
+    0 0 6px rgba(53, 231, 255, 0.62),
+    0 0 12px rgba(53, 231, 255, 0.28);
+}
+
+:root[data-theme="cyberpunk"] .page-back-button svg {
+  filter: drop-shadow(0 0 5px rgba(53, 231, 255, 0.65));
+}
