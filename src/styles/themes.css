@@ -1,4 +1,4 @@
-/* LIGHT THEME */
+﻿/* LIGHT THEME */
 
 :root {
   --app-background: var(--bg);
@@ -47,6 +47,74 @@
   --panel-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
   --shadow:
     rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+}
+
+/* Cyberpunk mobile navigation */
+@media (max-width: 767px) {
+  :root[data-theme="cyberpunk"] .mobile-bottom-nav {
+    border-top: 0;
+
+    background:
+      linear-gradient(var(--surface), var(--surface)) padding-box,
+      var(--accent-gradient) border-box;
+
+    border-top: 2px solid transparent;
+
+    box-shadow:
+      0 -8px 30px rgba(0, 0, 0, 0.42),
+      0 -2px 10px rgba(168, 85, 247, 0.2);
+  }
+
+  :root[data-theme="cyberpunk"] .mobile-bottom-nav__item.active {
+    text-shadow: 0 0 8px currentColor;
+  }
+
+  :root[data-theme="cyberpunk"] .mobile-bottom-nav__item.active svg {
+    filter: drop-shadow(0 0 5px currentColor);
+  }
+
+  :root[data-theme="cyberpunk"]
+    .mobile-bottom-nav__item:nth-child(1).active {
+    color: var(--nav-home);
+  }
+
+  :root[data-theme="cyberpunk"]
+    .mobile-bottom-nav__item:nth-child(2).active {
+    color: var(--nav-catalog);
+  }
+
+  :root[data-theme="cyberpunk"]
+    .mobile-bottom-nav__item:nth-child(3).active {
+    color: var(--nav-add);
+  }
+
+  :root[data-theme="cyberpunk"]
+    .mobile-bottom-nav__item:nth-child(4).active {
+    color: var(--nav-stats);
+  }
+
+  :root[data-theme="cyberpunk"]
+    .mobile-bottom-nav__item:nth-child(5).active {
+    color: var(--nav-profile);
+  }
+
+  :root[data-theme="cyberpunk"] .mobile-bottom-nav__add-button {
+    border-color: rgba(53, 231, 255, 0.8);
+
+    background: linear-gradient(
+      135deg,
+      var(--neon-pink) 0%,
+      var(--neon-violet) 42%,
+      var(--neon-cyan) 100%
+    );
+
+    color: #001318;
+
+    box-shadow:
+      0 0 8px rgba(255, 61, 191, 0.55),
+      0 0 16px rgba(168, 85, 247, 0.42),
+      0 0 24px rgba(53, 231, 255, 0.34);
+  }
 }
 
 /* DARK THEME */
@@ -185,6 +253,11 @@
   --neon-pink: #ff3dbf;
   --neon-cyan: #35e7ff;
   --neon-violet: #a855f7;
+  --nav-home: var(--neon-pink);
+  --nav-catalog: #d85cff;
+  --nav-add: #8b7cff;
+  --nav-stats: #4bbcff;
+  --nav-profile: var(--neon-cyan);
   --accent-gradient: linear-gradient(90deg, var(--neon-pink) 0%, var(--neon-violet) 48%, var(--neon-cyan) 100%);
 
   --neon-pink-bg: rgba(255, 61, 191, 0.1);
@@ -325,8 +398,6 @@
 }
 
 
-:root[data-theme="cyberpunk"] .mobile-bottom-nav__item.active svg { filter: drop-shadow(0 0 3px rgba(255, 61, 191, 0.95)) drop-shadow(0 0 7px rgba(255, 61, 191, 0.7)) drop-shadow(0 0 12px rgba(255, 61, 191, 0.4)); }
-:root[data-theme="cyberpunk"] .mobile-bottom-nav__item.active > span:last-child { text-shadow: 0 0 5px rgba(255, 61, 191, 0.75), 0 0 10px rgba(255, 61, 191, 0.4); }
 
 /* Cyberpunk reading goal color rhythm */
 :root[data-theme="cyberpunk"] .reading-goal__item:nth-child(even) .reading-goal__icon {
