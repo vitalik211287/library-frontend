@@ -146,7 +146,7 @@ const HomePage = ({ onOpenReading }) => {
     isAchievementsLoading
   ) {
     return (
-      <main className="home-page">
+      <main className="home-page home-page--loading">
         <Loader text="Завантаження…" />
       </main>
     );

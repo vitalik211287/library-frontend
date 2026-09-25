@@ -88,3 +88,10 @@
     padding-bottom: var(--space-24);
   }
 }
+
+.home-page--loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100dvh - 58px - 72px);
+}

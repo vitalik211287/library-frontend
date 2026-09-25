@@ -1,4 +1,4 @@
-﻿import { useEffect } from "react";
+import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 import { Toaster } from "react-hot-toast";
@@ -11,7 +11,6 @@ import useReadingRouter from "./hooks/useReadingRouter.js";
 import useSwipeNavigation from "./hooks/useSwipeNavigation.js";
 
 import RightSidebar from "../shared/components/RightSidebar/RightSidebar.jsx";
-import Loader from "../shared/components/Loader/Loader.jsx";
 import ReadingModal from "../modules/reading/components/ReadingModal/ReadingModal.jsx";
 import ReadingBookPicker from "../modules/reading/components/ReadingBookPicker/ReadingBookPicker.jsx";
 
@@ -77,7 +76,7 @@ const App = () => {
   };
 
   if (isAuthLoading) {
-    return <Loader text="Завантаження…" />;
+    return null;
   }
 
   /* =========================

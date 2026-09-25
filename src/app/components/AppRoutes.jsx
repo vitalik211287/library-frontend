@@ -1,6 +1,5 @@
-import { lazy, Suspense } from "react";
+﻿import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
-import Loader from "../../shared/components/Loader/Loader.jsx";
 
 import LandingPage from "../../modules/landing/pages/LandingPage/LandingPage.jsx";
 import LoginPage from "../../modules/auth/pages/LoginPage/LoginPage.jsx";
@@ -108,7 +107,7 @@ export const PublicRoutes = ({ isAuthenticated }) => {
 
 export const PrivateRoutes = ({ onOpenReading }) => {
   return (
-    <Suspense fallback={<Loader text="Завантаження…" />}>
+    <Suspense fallback={null}>
       <Routes>
         <Route
           path="/home"
@@ -322,3 +321,4 @@ export const PrivateRoutes = ({ onOpenReading }) => {
     </Suspense>
   );
 };
+

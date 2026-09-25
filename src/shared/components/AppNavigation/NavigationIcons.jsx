@@ -13,7 +13,23 @@ export const ReaderIcon = () => <Icon name="reading" />;
 export const StatsIcon = () => <Icon name="stats" />;
 export const AchievementsIcon = () => <Icon name="achievements" />;
 export const CommunityIcon = () => <Icon name="community" />;
-export const BellIcon = () => <Icon name="bell" />;
+export const BellIcon = () => (
+  <svg className="navigation-bell-icon" viewBox="0 0 24 24" aria-hidden="true">
+    <path
+      className="navigation-bell-icon__highlight"
+      d="M8.4 5.1c-.8 1-.9 2.1-.9 3.4"
+    />
+    <path
+      className="navigation-bell-icon__body"
+      d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 9h18c0-2-3-2-3-9"
+    />
+    <path
+      className="navigation-bell-icon__highlight"
+      d="M15.6 5.1c.8 1 .9 2.1 .9 3.4"
+    />
+    <path className="navigation-bell-icon__clapper" d="M10 21h4" />
+  </svg>
+);
 export const ProfileIcon = () => <Icon name="profile" />;
 export const SettingsIcon = () => <Icon name="settings" />;
 export const SystemIcon = () => <Icon name="system" />;

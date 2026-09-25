@@ -24,6 +24,7 @@ const getInitialTheme = () => {
 export const ThemeProvider = ({ children }) => {
   const [themeMode, setThemeMode] = useState(getInitialTheme);
   const [globalTheme, setGlobalTheme] = useState(GLOBAL_THEME_MODES.DEFAULT);
+  const [isGlobalThemeLoading, setIsGlobalThemeLoading] = useState(true);
 
   useEffect(() => {
     let isActive = true;
@@ -41,6 +42,10 @@ export const ThemeProvider = ({ children }) => {
         }
       } catch (error) {
         console.error("Failed to load global theme:", error);
+      } finally {
+        if (isActive) {
+          setIsGlobalThemeLoading(false);
+        }
       }
     };
 
@@ -52,6 +57,10 @@ export const ThemeProvider = ({ children }) => {
   }, []);
 
   useEffect(() => {
+    if (isGlobalThemeLoading) {
+      return;
+    }
+
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     const applyTheme = () => {
@@ -83,7 +92,7 @@ export const ThemeProvider = ({ children }) => {
     return () => {
       mediaQuery.removeEventListener("change", handleSystemChange);
     };
-  }, [themeMode, globalTheme]);
+  }, [themeMode, globalTheme, isGlobalThemeLoading]);
 
   const value = useMemo(
     () => ({
@@ -94,6 +103,10 @@ export const ThemeProvider = ({ children }) => {
     }),
     [themeMode, globalTheme],
   );
+
+  if (isGlobalThemeLoading) {
+    return null;
+  }
 
   return (
     <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
