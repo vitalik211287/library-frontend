@@ -1,4 +1,4 @@
-﻿/* LIGHT THEME */
+/* LIGHT THEME */
 
 :root {
   --app-background: var(--bg);
@@ -575,4 +575,3 @@
     0 0 6px rgba(53, 231, 255, 0.65),
     0 0 12px rgba(53, 231, 255, 0.28);
 }
-

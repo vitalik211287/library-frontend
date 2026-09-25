@@ -1,4 +1,4 @@
-﻿import { lazy, Suspense } from "react";
+import { lazy, Suspense } from "react";
 import { Navigate, Route, Routes } from "react-router-dom";
 
 import LandingPage from "../../modules/landing/pages/LandingPage/LandingPage.jsx";
@@ -321,4 +321,3 @@ export const PrivateRoutes = ({ onOpenReading }) => {
     </Suspense>
   );
 };
-
