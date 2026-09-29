@@ -64,14 +64,15 @@ export const ThemeProvider = ({ children }) => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     const applyTheme = () => {
-      const personalTheme = resolveTheme(themeMode, mediaQuery.matches);
+      const colorScheme = resolveTheme(themeMode, mediaQuery.matches);
 
-      const resolvedTheme =
+      const activeTheme =
         globalTheme === GLOBAL_THEME_MODES.DEFAULT
-          ? personalTheme
+          ? GLOBAL_THEME_MODES.DEFAULT
           : globalTheme;
 
-      document.documentElement.dataset.theme = resolvedTheme;
+      document.documentElement.dataset.theme = activeTheme;
+      document.documentElement.dataset.colorScheme = colorScheme;
 
       localStorage.setItem("theme", themeMode);
     };
@@ -79,10 +80,7 @@ export const ThemeProvider = ({ children }) => {
     applyTheme();
 
     const handleSystemChange = () => {
-      if (
-        themeMode === THEME_MODES.SYSTEM &&
-        globalTheme === GLOBAL_THEME_MODES.DEFAULT
-      ) {
+      if (themeMode === THEME_MODES.SYSTEM) {
         applyTheme();
       }
     };
