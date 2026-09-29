@@ -193,3 +193,32 @@
     font-size: 15px;
   }
 }
+
+/* Cyberpunk Light — glass ISBN controls */
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .isbn-search__field input,
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .isbn-scan__button {
+  background: rgba(255, 250, 253, 0.30);
+  border-color: rgba(139, 77, 232, 0.24);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  box-shadow:
+    0 4px 14px rgba(75, 35, 110, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.42);
+}
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .isbn-search__field input:hover,
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .isbn-scan__button:hover {
+  background: rgba(255, 250, 253, 0.42);
+  border-color: rgba(139, 77, 232, 0.38);
+}
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .isbn-search__field input:focus {
+  background: rgba(255, 250, 253, 0.42);
+  border-color: var(--accent);
+
+  box-shadow:
+    0 0 0 3px var(--accent-bg),
+    inset 0 1px 0 rgba(255, 255, 255, 0.48);
+}

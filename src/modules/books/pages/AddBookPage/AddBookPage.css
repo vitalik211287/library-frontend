@@ -63,3 +63,75 @@
     font-size: 28px;
   }
 }
+
+/* =========================
+   MANUAL ADD BUTTON
+========================= */
+
+.manual-toggle {
+  position: relative;
+
+  width: auto;
+  min-height: 48px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+
+  padding: 10px 16px;
+
+  border: 1px solid var(--panel-border);
+  border-radius: var(--radius-md);
+
+  background: var(--panel-bg-secondary);
+  color: var(--text-h);
+
+  box-shadow: var(--panel-shadow);
+
+  backdrop-filter: blur(var(--panel-blur));
+  -webkit-backdrop-filter: blur(var(--panel-blur));
+}
+
+.manual-toggle__icon {
+  display: grid;
+  place-items: center;
+  color: var(--accent);
+}
+
+.manual-toggle__icon svg {
+  width: 22px;
+  height: 22px;
+  fill: none;
+  stroke: currentColor;
+}
+
+.manual-toggle__label {
+  white-space: nowrap;
+}
+
+.manual-toggle__arrow {
+  color: var(--accent);
+  font-size: 18px;
+  line-height: 1;
+}
+
+.manual-toggle__corner {
+  display: none;
+}
+
+.manual-toggle:hover {
+  border-color: var(--panel-border-hover);
+  background: var(--panel-bg);
+  filter: none;
+}
+
+.add-book-page__panel {
+  padding: var(--space-20);
+}
+
+@media (max-width: 767px) {
+  .add-book-page__panel {
+    padding: var(--space-16);
+  }
+}

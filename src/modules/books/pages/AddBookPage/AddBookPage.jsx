@@ -9,6 +9,7 @@ import {
 import toast from "react-hot-toast";
 import PageBackButton from "../../../../shared/components/PageBackButton/PageBackButton.jsx";
 import Icon from "../../../../shared/components/Icon/Icon.jsx";
+import AppPanel from "../../../../shared/components/AppPanel/AppPanel.jsx";
 import Loader from "../../../../shared/components/Loader/Loader.jsx";
 
 const BarcodeScanner = lazy(
@@ -106,7 +107,8 @@ const AddBookPage = () => {
   return (
     <main className="add-book-page">
       <PageBackButton label="Додати книгу" />
-      <h1>Додати книгу</h1>
+      <AppPanel className="add-book-page__panel">
+        <h1>Додати книгу</h1>
 
       <IsbnSearch
         isbn={isbn}
@@ -158,6 +160,8 @@ const AddBookPage = () => {
           onSubmit={addManualBook}
         />
       )}
+
+      </AppPanel>
 
       {scannerOpen && (
         <Suspense fallback={null}>
