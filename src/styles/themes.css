@@ -1,4 +1,4 @@
-﻿/* LIGHT THEME */
+/* LIGHT THEME */
 
 :root {
   --app-background: var(--bg);
@@ -222,7 +222,7 @@
 
 :root[data-theme="cyberpunk"][data-color-scheme="light"] {
   --app-background:
-    linear-gradient(rgba(255, 250, 255, 0.12), rgba(245, 242, 255, 0.22)),
+    linear-gradient(rgba(255, 255, 255, 0.30), rgba(255, 255, 255, 0.30)),
     url("/images/themes/cyberpunk/cyberpunk_white-mob.jpg") center top / cover
       fixed;
 
@@ -280,9 +280,14 @@
   --success: #168a70;
   --success-soft: rgba(22, 138, 112, 0.1);
 
-  --panel-bg: rgba(255, 250, 255, 0.78);
-  --panel-secondary: rgba(248, 241, 252, 0.82);
+  --panel-bg: rgba(238, 220, 248, 0.35);
+  --panel-bg-secondary: rgba(248, 241, 252, 0.82);
   --panel-border: rgba(116, 87, 142, 0.2);
+
+  --page-header-bg: rgba(245, 239, 249, 0.42);
+  --page-header-border: rgba(116, 87, 142, 0.20);
+  --page-header-shadow: 0 6px 20px rgba(75, 50, 95, 0.10);
+  --page-header-blur: 10px;
 
   --overlay-bg: rgba(31, 18, 43, 0.32);
 
@@ -724,24 +729,6 @@
   isolation: isolate;
 }
 
-:root[data-theme="cyberpunk"][data-color-scheme="light"] .home-welcome::before {
-  content: "";
-  position: absolute;
-  z-index: -1;
-
-  inset: -18px -28px -20px -22px;
-
-  background: radial-gradient(
-    ellipse at left center,
-    rgba(255, 255, 255, 0.88) 0%,
-    rgba(255, 250, 255, 0.7) 42%,
-    rgba(255, 255, 255, 0) 76%
-  );
-
-  filter: blur(7px);
-  pointer-events: none;
-}
-
 :root[data-theme="cyberpunk"][data-color-scheme="light"] .home-welcome h1 {
   color: #171020;
   text-shadow:
@@ -754,23 +741,6 @@
   text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
 }
 
-
-/* Cyberpunk light — labels placed directly over the background */
-
-:root[data-theme="cyberpunk"][data-color-scheme="light"] .home-welcome {
-  width: fit-content;
-  max-width: 100%;
-  padding: 10px 14px;
-
-  background: rgba(255, 255, 255, 0.86);
-  border: 1px solid rgba(255, 255, 255, 0.65);
-  border-radius: 12px;
-
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-
-  box-shadow: 0 4px 16px rgba(48, 28, 65, 0.12);
-}
 
 :root[data-theme="cyberpunk"][data-color-scheme="light"]
   .social-feed__header h2 {
@@ -1371,3 +1341,31 @@
   }
 }
 
+
+
+/* Cyberpunk Light — shared page header glass */
+:root[data-theme="cyberpunk"][data-color-scheme="light"] :is(
+  .home-welcome,
+  .stats-header,
+  .catalog-page__header,
+  .profile-hero,
+  .community-page__header,
+  .notifications-page__header,
+  .settings-page__header,
+  .users-page__header,
+  .followers-page__header,
+  .following-page__header,
+  .admin-users-page__header,
+  .admin-settings__header
+) {
+  padding: 14px 16px;
+
+  background: var(--page-header-bg);
+  border: 1px solid var(--page-header-border);
+  border-radius: 16px;
+
+  backdrop-filter: blur(var(--page-header-blur));
+  -webkit-backdrop-filter: blur(var(--page-header-blur));
+
+  box-shadow: var(--page-header-shadow);
+}

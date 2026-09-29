@@ -95,3 +95,17 @@
   justify-content: center;
   min-height: calc(100dvh - 58px - 72px);
 }
+
+/* Cyberpunk Light — glass surfaces inside Home only */
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .home-page {
+  --surface: rgba(255, 250, 253, 0.62);
+  --surface-secondary: rgba(245, 239, 249, 0.58);
+}
+
+/* Cyberpunk Light — glass Social Feed title */
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .social-feed__header h2 {
+  background: rgba(245, 239, 249, 0.58);
+  border: 1px solid rgba(116, 87, 142, 0.20);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}

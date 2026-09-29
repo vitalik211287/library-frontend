@@ -87,3 +87,17 @@
     font-size: 34px;
   }
 }
+
+/* Cyberpunk Light — Stats header glass */
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .stats-header {
+  padding: 14px 16px;
+
+  background: rgba(245, 239, 249, 0.42);
+  border: 1px solid rgba(116, 87, 142, 0.20);
+  border-radius: 16px;
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  box-shadow: 0 6px 20px rgba(75, 50, 95, 0.10);
+}

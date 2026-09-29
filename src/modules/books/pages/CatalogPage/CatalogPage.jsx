@@ -191,13 +191,15 @@ const CatalogPage = ({ onOpenReading }) => {
 
   return (
     <main ref={catalogTopRef} className="catalog-page">
-      <h1>Каталог бібліотеки</h1>
+      <header className="catalog-page__header">
+        <h1>Каталог бібліотеки</h1>
 
       <p className="books-count">
         {activeLibrary
           ? `${activeLibrary.name}: ${books.length} книг`
           : `Книг у бібліотеці: ${books.length}`}
       </p>
+      </header>
 
       {message && <p className="catalog-message">{message}</p>}
 

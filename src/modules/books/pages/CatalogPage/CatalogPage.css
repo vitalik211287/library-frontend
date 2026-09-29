@@ -64,3 +64,20 @@
 .catalog-shelves-view--hidden {
   display: none;
 }
+
+/* Cyberpunk Light — compact catalog glass header */
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .catalog-page__header {
+  width: 100%;
+  max-width: 100%;
+  margin: 12px 0 14px;
+  box-sizing: border-box;
+  padding: 10px 14px;
+}
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .catalog-page__header h1 {
+  margin: 0 0 5px;
+}
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .catalog-page__header .books-count {
+  margin: 0;
+}
