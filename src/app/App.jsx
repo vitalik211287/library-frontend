@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+﻿import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 import { Toaster } from "react-hot-toast";
@@ -99,6 +99,11 @@ const App = () => {
 
   return (
     <div className="app-shell">
+      <div className="halloween-leaves" aria-hidden="true">
+        <span className="halloween-leaf halloween-leaf--1">🍂</span>
+        <span className="halloween-leaf halloween-leaf--2">🍁</span>
+        <span className="halloween-leaf halloween-leaf--3">🍂</span>
+      </div>
       <MobileNavigation
         user={user}
         isAuthenticated={isAuthenticated}

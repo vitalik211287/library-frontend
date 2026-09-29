@@ -1,4 +1,4 @@
-/* LIGHT THEME */
+﻿/* LIGHT THEME */
 
 :root {
   --app-background: var(--bg);
@@ -188,11 +188,11 @@
 
   --code-bg: #211724;
 
-  --accent: #ff8a1f;
-  --accent-strong: #e96800;
-  --accent-soft: #ffad5c;
-  --accent-bg: rgba(255, 138, 31, 0.14);
-  --accent-border: rgba(255, 138, 31, 0.55);
+  --accent: #ff5a0a;
+  --accent-strong: #ff3200;
+  --accent-soft: #ff9a32;
+  --accent-bg: rgba(255, 76, 10, 0.16);
+  --accent-border: rgba(255, 74, 12, 0.82);
 
   --danger: #e5484d;
   --danger-bg: rgba(229, 72, 77, 0.14);
@@ -659,9 +659,6 @@
 }
 
 :root[data-theme="cyberpunk"] .mobile-header__notifications-badge {
-  top: 1px;
-  right: 0;
-
   background: var(--neon-pink);
   color: #ffffff;
   border: 1px solid var(--neon-cyan);
@@ -790,4 +787,587 @@
   box-shadow: 0 3px 12px rgba(48, 28, 65, 0.12);
 
   color: #241047;
+}/* =========================================================
+   HALLOWEEN — ATMOSPHERIC MOTION
+   ========================================================= */
+
+/* М'яке живе світіння панелей */
+:root[data-theme="halloween"] {
+  --halloween-glow: rgba(255, 138, 31, 0.32);
 }
+
+:root[data-theme="halloween"] .mobile-bottom-nav,
+:root[data-theme="halloween"] .mobile-header {
+  box-shadow:
+    0 0 24px rgba(0, 0, 0, 0.45),
+    0 0 14px rgba(255, 138, 31, 0.08);
+}
+
+/* Активна іконка — легке помаранчеве світіння */
+:root[data-theme="halloween"] .mobile-bottom-nav__item.active {
+  color: var(--accent);
+
+  text-shadow:
+    0 0 6px rgba(255, 138, 31, 0.55),
+    0 0 14px rgba(255, 138, 31, 0.22);
+}
+
+:root[data-theme="halloween"] .mobile-bottom-nav__item.active svg {
+  filter:
+    drop-shadow(0 0 4px rgba(255, 138, 31, 0.65))
+    drop-shadow(0 0 9px rgba(255, 92, 0, 0.28));
+
+  animation: halloween-icon-flicker 5s ease-in-out infinite;
+}
+
+/* Центральна кнопка "Додати" */
+:root[data-theme="halloween"] .mobile-bottom-nav__add-button {
+  border-color: rgba(255, 138, 31, 0.9);
+
+  background:
+    radial-gradient(
+      circle at 50% 42%,
+      rgba(255, 174, 75, 0.2),
+      rgba(255, 92, 0, 0.08) 60%,
+      transparent 72%
+    ),
+    var(--surface);
+
+  color: var(--accent);
+
+  box-shadow:
+    0 0 7px rgba(255, 138, 31, 0.6),
+    0 0 17px rgba(255, 92, 0, 0.34),
+    0 0 28px rgba(255, 92, 0, 0.12);
+
+  animation: halloween-pumpkin-breathe 3.8s ease-in-out infinite;
+
+  will-change: transform, filter;
+}
+
+/* Дзвіночок */
+:root[data-theme="halloween"] .mobile-header__notifications {
+  color: var(--accent);
+}
+
+:root[data-theme="halloween"] .mobile-header__notifications svg {
+  filter:
+    drop-shadow(0 0 4px rgba(255, 138, 31, 0.6))
+    drop-shadow(0 0 10px rgba(255, 92, 0, 0.22));
+}
+
+/* Логотип книги */
+:root[data-theme="halloween"] .mobile-header__brand svg,
+:root[data-theme="halloween"] .app-shell-brand svg {
+  stroke: var(--accent);
+
+  filter:
+    drop-shadow(0 0 4px rgba(255, 138, 31, 0.62))
+    drop-shadow(0 0 10px rgba(255, 92, 0, 0.2));
+}
+
+/* Кнопки/акценти при hover — для desktop */
+@media (hover: hover) {
+  :root[data-theme="halloween"] button:hover,
+  :root[data-theme="halloween"] a:hover {
+    transition:
+      filter 180ms ease,
+      text-shadow 180ms ease,
+      box-shadow 180ms ease;
+  }
+
+  :root[data-theme="halloween"] .mobile-bottom-nav__add-button:hover {
+    filter: brightness(1.12);
+  }
+}
+
+/* Дихання центральної кнопки */
+@keyframes halloween-pumpkin-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+
+    filter: brightness(1);
+  }
+
+  50% {
+    transform: scale(1.045);
+
+    filter: brightness(1.14);
+  }
+}
+
+/* Дуже легке нерегулярне мерехтіння */
+@keyframes halloween-icon-flicker {
+  0%,
+  18%,
+  22%,
+  62%,
+  66%,
+  100% {
+    opacity: 1;
+  }
+
+  20% {
+    opacity: 0.82;
+  }
+
+  64% {
+    opacity: 0.9;
+  }
+}
+
+/* Не анімуємо для користувачів,
+   які вимкнули motion у системі */
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme="halloween"] .mobile-bottom-nav__add-button,
+  :root[data-theme="halloween"] .mobile-bottom-nav__item.active svg {
+    animation: none;
+  }
+}
+
+/* =========================================================
+   HALLOWEEN — PUMPKIN ADD ICON
+   ========================================================= */
+
+/* а замовчуванням pumpkin прихований */
+.mobile-bottom-nav__add-button svg + svg {
+  display: none;
+}
+
+/* Halloween: прибираємо стандартну круглу кнопку */
+:root[data-theme="halloween"] .mobile-bottom-nav__add-button {
+  width: 64px;
+  height: 58px;
+  min-width: 64px;
+  min-height: 58px;
+  flex: 0 0 64px;
+
+  border: 0;
+  border-radius: 0;
+
+  background: transparent;
+  box-shadow: none;
+
+  color: #ff7a17;
+
+  animation: halloween-pumpkin-breathe 3.8s ease-in-out infinite;
+}
+
+/* Ховаємо стандартний + */
+:root[data-theme="halloween"]
+  .mobile-bottom-nav__add-button
+  svg:first-child {
+  display: none;
+}
+
+/* оказуємо pumpkin зі спрайта */
+:root[data-theme="halloween"]
+  .mobile-bottom-nav__add-button
+  svg:last-child {
+  width: 64px;
+  height: 64px;
+
+  display: block;
+
+  overflow: visible;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  filter:
+    drop-shadow(0 0 2px rgba(255, 166, 61, 0.95))
+    drop-shadow(0 0 6px rgba(255, 92, 0, 0.72))
+    drop-shadow(0 0 13px rgba(255, 68, 0, 0.38));
+}
+
+
+/* Halloween pumpkin icon — reference proportions */
+
+:root[data-theme="halloween"] .mobile-bottom-nav__add-button {
+  width: 70px;
+  height: 60px;
+  min-width: 70px;
+  min-height: 60px;
+  flex-basis: 70px;
+}
+
+:root[data-theme="halloween"]
+  .mobile-bottom-nav__add-button
+  svg:last-child {
+  width: 74px;
+  height: 66px;
+
+  stroke-width: 2.3;
+
+  transform: translateY(-1px);
+
+  filter:
+    drop-shadow(0 0 2px #ffad45)
+    drop-shadow(0 0 5px rgba(255, 112, 20, 0.95))
+    drop-shadow(0 0 11px rgba(255, 68, 0, 0.62))
+    drop-shadow(0 0 18px rgba(255, 55, 0, 0.28));
+}
+
+
+/* Halloween add — reference sizing */
+:root[data-theme="halloween"] .mobile-bottom-nav__add-button {
+  width: 68px;
+  height: 62px;
+  min-width: 68px;
+  min-height: 62px;
+  flex-basis: 68px;
+}
+
+:root[data-theme="halloween"]
+  .mobile-bottom-nav__add-button
+  svg:last-child {
+  width: 72px;
+  height: 68px;
+
+  stroke-width: 2.1;
+
+  transform: translateY(-3px);
+}
+
+
+
+/* =========================================================
+   HALLOWEEN — FIRE BORDERS
+   ========================================================= */
+
+:root[data-theme="halloween"] {
+  --halloween-fire: #ff5a0a;
+  --halloween-fire-hot: #ff8a22;
+  --halloween-fire-deep: #ff2f00;
+
+  --panel-border: rgba(255, 74, 12, 0.72);
+  --panel-border-hover: rgba(255, 112, 24, 0.95);
+}
+
+:root[data-theme="halloween"] .home-card,
+:root[data-theme="halloween"] .dashboard-card {
+  border-color: var(--panel-border);
+
+  box-shadow:
+    0 0 2px rgba(255, 151, 55, 0.42),
+    0 0 9px rgba(255, 76, 10, 0.16),
+    0 8px 24px rgba(0, 0, 0, 0.34);
+}
+
+
+/* Halloween pumpkin — fire palette */
+:root[data-theme="halloween"] .mobile-bottom-nav__add-button {
+  color: #ff5a0a;
+}
+
+:root[data-theme="halloween"]
+  .mobile-bottom-nav__add-button
+  svg:last-child {
+  stroke: currentColor;
+
+  filter:
+    drop-shadow(0 0 2px rgba(255, 170, 70, 1))
+    drop-shadow(0 0 5px rgba(255, 90, 10, 0.95))
+    drop-shadow(0 0 11px rgba(255, 48, 0, 0.68))
+    drop-shadow(0 0 19px rgba(255, 35, 0, 0.32));
+}
+
+
+
+/* =========================================================
+   HALLOWEEN — BELL FIRE GLOW
+   ========================================================= */
+
+
+
+
+/* =========================================================
+   HALLOWEEN — BELL FIRE GLOW
+   ========================================================= */
+
+:root[data-theme="halloween"]
+  .mobile-header__notifications
+  .navigation-bell-icon__body,
+:root[data-theme="halloween"]
+  .mobile-header__notifications
+  .navigation-bell-icon__clapper {
+  stroke: #ff5a0a;
+
+  filter:
+    drop-shadow(0 0 2px rgba(255, 170, 70, 1))
+    drop-shadow(0 0 5px rgba(255, 90, 10, 0.95))
+    drop-shadow(0 0 9px rgba(255, 48, 0, 0.65));
+}
+
+:root[data-theme="halloween"]
+  .mobile-header__notifications
+  .navigation-bell-icon__highlight {
+  fill: none;
+  stroke: #ffb14a;
+  stroke-width: 1.15;
+  stroke-linecap: round;
+
+  filter:
+    drop-shadow(0 0 2px rgba(255, 190, 90, 1))
+    drop-shadow(0 0 5px rgba(255, 76, 0, 0.9));
+}
+
+/* огняне світіння badge */
+:root[data-theme="halloween"]
+  .mobile-header__notifications-badge {
+  background: #ff4b0a;
+  color: #ffffff;
+  border: 1px solid #ff9a32;
+
+  box-shadow:
+    0 0 4px rgba(255, 150, 50, 0.9),
+    0 0 9px rgba(255, 65, 0, 0.55);
+}
+
+
+
+/* =========================================================
+   HALLOWEEN — BELL FIRE GLOW
+   ========================================================= */
+
+:root[data-theme="halloween"]
+  .mobile-header__notifications
+  .navigation-bell-icon__body,
+:root[data-theme="halloween"]
+  .mobile-header__notifications
+  .navigation-bell-icon__clapper {
+  stroke: #ff5a0a;
+
+  filter:
+    drop-shadow(0 0 2px rgba(255, 170, 70, 0.95))
+    drop-shadow(0 0 5px rgba(255, 90, 10, 0.75));
+}
+
+:root[data-theme="halloween"]
+  .mobile-header__notifications
+  .navigation-bell-icon__highlight {
+  fill: none;
+  stroke: #ffb14a;
+  stroke-width: 1.15;
+  stroke-linecap: round;
+
+  filter:
+    drop-shadow(0 0 2px rgba(255, 180, 70, 0.95))
+    drop-shadow(0 0 4px rgba(255, 76, 0, 0.7));
+}
+
+
+/* Halloween bell — allow glow outside SVG bounds */
+:root[data-theme="halloween"] .mobile-header__notifications,
+:root[data-theme="halloween"] .navigation-bell-icon {
+  overflow: visible;
+}
+
+
+/* =========================================================
+   HALLOWEEN — MOVING FOG
+   ========================================================= */
+
+:root[data-theme="halloween"] .app-shell {
+  position: relative;
+  isolation: isolate;
+}
+
+:root[data-theme="halloween"] .app-shell::before {
+  content: "";
+
+  position: fixed;
+  inset: -15% -35%;
+  z-index: 20;
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      ellipse 55% 12% at 15% 30%,
+      rgba(210, 220, 225, 0.48) 0%,
+      rgba(170, 180, 190, 0.28) 35%,
+      transparent 72%
+    ),
+    radial-gradient(
+      ellipse 65% 15% at 75% 58%,
+      rgba(220, 225, 230, 0.43) 0%,
+      rgba(175, 185, 195, 0.25) 40%,
+      transparent 75%
+    ),
+    radial-gradient(
+      ellipse 60% 13% at 35% 82%,
+      rgba(195, 205, 215, 0.39) 0%,
+      rgba(165, 175, 185, 0.21) 42%,
+      transparent 76%
+    );
+
+  filter: blur(14px);
+
+  will-change: transform, opacity;
+
+  animation: halloween-fog-drift 24s ease-in-out infinite alternate;
+}
+
+@keyframes halloween-fog-drift {
+  0% {
+    transform: translate3d(-12%, 0, 0) scale(1);
+    opacity: 0.65;
+  }
+
+  50% {
+    transform: translate3d(0, -1%, 0) scale(1.025);
+    opacity: 0.85;
+  }
+
+  100% {
+    transform: translate3d(12%, 1%, 0) scale(1.04);
+    opacity: 0.72;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme="halloween"] .app-shell::before {
+    animation: none;
+  }
+}
+
+
+/* =========================================================
+   HALLOWEEN — FALLING LEAVES
+   ========================================================= */
+
+.halloween-leaves {
+  display: none;
+}
+
+:root[data-theme="halloween"] .halloween-leaves {
+  position: fixed;
+  inset: 0;
+  z-index: 21;
+
+  display: block;
+
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.halloween-leaf {
+  position: absolute;
+  top: -50px;
+
+  display: block;
+
+  line-height: 1;
+
+  opacity: 0;
+
+  will-change: transform, opacity;
+}
+
+/* аленький листок */
+.halloween-leaf--1 {
+  left: 14%;
+  font-size: 17px;
+
+  animation: halloween-leaf-1 13s linear infinite;
+}
+
+/* Середній */
+.halloween-leaf--2 {
+  left: 58%;
+  font-size: 20px;
+
+  animation: halloween-leaf-2 17s linear 5s infinite;
+}
+
+/* ідкісний третій */
+.halloween-leaf--3 {
+  left: 82%;
+  font-size: 15px;
+
+  animation: halloween-leaf-3 21s linear 11s infinite;
+}
+
+@keyframes halloween-leaf-1 {
+  0% {
+    transform: translate3d(0, -40px, 0) rotate(0deg);
+    opacity: 0;
+  }
+
+  8% {
+    opacity: 0.75;
+  }
+
+  45% {
+    transform: translate3d(45px, 45vh, 0) rotate(170deg);
+  }
+
+  85% {
+    opacity: 0.65;
+  }
+
+  100% {
+    transform: translate3d(-20px, 110vh, 0) rotate(420deg);
+    opacity: 0;
+  }
+}
+
+@keyframes halloween-leaf-2 {
+  0% {
+    transform: translate3d(0, -40px, 0) rotate(20deg);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 0.7;
+  }
+
+  50% {
+    transform: translate3d(-55px, 52vh, 0) rotate(-190deg);
+  }
+
+  88% {
+    opacity: 0.6;
+  }
+
+  100% {
+    transform: translate3d(30px, 110vh, 0) rotate(-460deg);
+    opacity: 0;
+  }
+}
+
+@keyframes halloween-leaf-3 {
+  0% {
+    transform: translate3d(0, -40px, 0) rotate(0deg);
+    opacity: 0;
+  }
+
+  12% {
+    opacity: 0.65;
+  }
+
+  48% {
+    transform: translate3d(35px, 48vh, 0) rotate(210deg);
+  }
+
+  88% {
+    opacity: 0.55;
+  }
+
+  100% {
+    transform: translate3d(-45px, 110vh, 0) rotate(520deg);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme="halloween"] .halloween-leaves {
+    display: none;
+  }
+}
+
