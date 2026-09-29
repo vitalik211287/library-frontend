@@ -1,0 +1,591 @@
+﻿/* CYBERPUNK LIGHT THEME */
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"] {
+  --app-background:
+    linear-gradient(rgba(255, 255, 255, 0.30), rgba(255, 255, 255, 0.30)),
+    url("/images/themes/cyberpunk/cyberpunk_white-mob.jpg") center top / cover
+      fixed;
+
+  color-scheme: light;
+
+  --text: #35205f;
+  --text-h: hsl(272, 79%, 49%);
+  --text-muted: #5b4775;
+  --text-secondary: var(--text);
+
+  --bg: #faf7fc;
+  --surface: #fffafd;
+  --surface-secondary: #f5eff9;
+
+  --border: rgba(116, 87, 142, 0.24);
+  --border-hover: rgba(168, 85, 247, 0.58);
+
+  --neon-pink: #e72fae;
+  --neon-cyan: #00aeca;
+  --neon-violet: #8b4de8;
+
+  --accent: var(--neon-violet);
+  --accent-hover: #7434d5;
+  --accent-soft: rgba(139, 77, 232, 0.1);
+
+  --nav-home: var(--neon-pink);
+  --nav-catalog: var(--neon-cyan);
+  --nav-add: var(--neon-violet);
+  --nav-stats: #258dcc;
+  --nav-profile: var(--neon-cyan);
+
+  --accent-gradient: linear-gradient(
+    90deg,
+    var(--neon-pink) 0%,
+    var(--neon-violet) 48%,
+    var(--neon-cyan) 100%
+  );
+
+  --neon-pink-bg: rgba(231, 47, 174, 0.08);
+  --neon-cyan-bg: rgba(0, 174, 202, 0.08);
+
+  --neon-cyan-glow:
+    0 0 6px rgba(0, 174, 202, 0.28), 0 0 14px rgba(0, 174, 202, 0.12);
+
+  --neon-pink-glow:
+    0 0 6px rgba(231, 47, 174, 0.28), 0 0 14px rgba(231, 47, 174, 0.12);
+
+  --neon-panel-glow:
+    0 10px 28px rgba(67, 45, 87, 0.12), 0 0 8px rgba(0, 174, 202, 0.12);
+
+  --danger: #d72d77;
+  --danger-hover: #b92362;
+  --danger-soft: rgba(215, 45, 119, 0.08);
+
+  --success: #168a70;
+  --success-soft: rgba(22, 138, 112, 0.1);
+
+  --panel-bg: rgba(238, 220, 248, 0.35);
+  --panel-bg-secondary: rgba(255, 250, 253, 0.34);
+  --panel-border: rgba(116, 87, 142, 0.2);
+  --icon-box-bg: rgba(139, 77, 232, 0.10);
+
+  --page-header-bg: rgba(245, 239, 249, 0.42);
+  --page-header-border: rgba(116, 87, 142, 0.20);
+  --page-header-shadow: 0 6px 20px rgba(75, 50, 95, 0.10);
+  --page-header-blur: 10px;
+
+  --overlay-bg: rgba(31, 18, 43, 0.32);
+
+  --shadow-subtle: 0 4px 18px rgba(75, 50, 95, 0.1);
+  --shadow-card: 0 6px 22px rgba(75, 50, 95, 0.14);
+  --shadow-floating: 0 12px 34px rgba(75, 50, 95, 0.18);
+  --shadow-modal: 0 24px 70px rgba(45, 27, 61, 0.25);
+}
+
+:root[data-theme="cyberpunk"][data-color-scheme="dark"] {
+  --app-background:
+    linear-gradient(rgba(2, 7, 16, 0.34), rgba(3, 5, 14, 0.48)),
+    url("/images/themes/cyberpunk/cyberpunk-mob.jpg") center top / cover fixed;
+  color-scheme: dark;
+
+  --text: #c8d8e8;
+  --text-h: #f4fbff;
+  --text-secondary: var(--text);
+  --text-muted: #8296ad;
+  --text-on-accent: #001318;
+
+  --bg: #030711;
+  --surface: #08111d;
+  --surface-secondary: #0d1928;
+
+  --border: rgba(53, 231, 255, 0.34);
+  --border-hover: var(--neon-cyan);
+
+  --code-bg: #07101c;
+
+  --accent: #ff3dbf;
+  --accent-strong: #e91aa8;
+  --accent-soft: #ff8bdd;
+  --accent-bg: rgba(255, 61, 191, 0.14);
+  --accent-border: rgba(255, 61, 191, 0.58);
+
+  --neon-pink: #ff3dbf;
+  --neon-cyan: #35e7ff;
+  --neon-violet: #a855f7;
+  --nav-home: var(--neon-pink);
+  --nav-catalog: #d85cff;
+  --nav-add: #8b7cff;
+  --nav-stats: #4bbcff;
+  --nav-profile: var(--neon-cyan);
+  --accent-gradient: linear-gradient(
+    90deg,
+    var(--neon-pink) 0%,
+    var(--neon-violet) 48%,
+    var(--neon-cyan) 100%
+  );
+
+  --neon-pink-bg: rgba(255, 61, 191, 0.1);
+  --neon-cyan-bg: rgba(53, 231, 255, 0.09);
+
+  --neon-gradient: linear-gradient(
+    90deg,
+    var(--neon-pink) 0%,
+    var(--neon-violet) 48%,
+    var(--neon-cyan) 100%
+  );
+
+  --neon-cyan-glow:
+    0 0 6px rgba(53, 231, 255, 0.42), 0 0 16px rgba(53, 231, 255, 0.18);
+
+  --neon-pink-glow:
+    0 0 6px rgba(255, 61, 191, 0.42), 0 0 16px rgba(255, 61, 191, 0.18);
+
+  --neon-panel-glow:
+    0 12px 34px rgba(0, 0, 0, 0.46), 0 0 8px rgba(53, 231, 255, 0.32),
+    0 0 20px rgba(53, 231, 255, 0.16);
+
+  --danger: #ff3fa4;
+  --danger-bg: rgba(255, 63, 164, 0.13);
+  --danger-border: rgba(255, 63, 164, 0.58);
+  --danger-border-soft: rgba(255, 63, 164, 0.4);
+  --text-on-danger: #ffffff;
+
+  --overlay-bg: rgba(1, 4, 12, 0.78);
+
+  --shadow-subtle: 0 4px 18px rgba(53, 231, 255, 0.12);
+  --shadow-card:
+    0 6px 22px rgba(0, 0, 0, 0.42), 0 0 10px rgba(53, 231, 255, 0.14);
+  --shadow-floating: 0 12px 34px rgba(0, 0, 0, 0.52);
+  --shadow-modal: 0 24px 70px rgba(0, 0, 0, 0.68);
+
+  --social-bg: rgba(5, 16, 29, 0.68);
+
+  --panel-bg: rgba(4, 13, 24, 0.84);
+  --panel-bg-secondary: rgba(8, 22, 37, 0.88);
+  --panel-border: rgba(53, 231, 255, 0.72);
+  --panel-border-hover: var(--accent-border);
+  --panel-shadow: var(--neon-panel-glow);
+  --shadow:
+    rgba(0, 0, 0, 0.55) 0 10px 15px -3px,
+    rgba(0, 229, 255, 0.08) 0 4px 12px -2px;
+}
+
+/* Cyberpunk profile social color rhythm */
+:root[data-theme="cyberpunk"]
+  .profile-hero__social-item:nth-child(odd)
+  .profile-hero__social-icon {
+  color: var(--neon-cyan);
+  filter: drop-shadow(0 0 5px rgba(53, 231, 255, 0.7));
+}
+
+:root[data-theme="cyberpunk"]
+  .profile-hero__social-item:nth-child(odd)
+  .profile-hero__social-content
+  strong {
+  color: var(--neon-pink);
+  text-shadow: 0 0 7px rgba(255, 61, 191, 0.5);
+}
+
+:root[data-theme="cyberpunk"]
+  .profile-hero__social-item:nth-child(even)
+  .profile-hero__social-icon {
+  color: var(--neon-pink);
+  filter: drop-shadow(0 0 5px rgba(255, 61, 191, 0.7));
+}
+
+:root[data-theme="cyberpunk"]
+  .profile-hero__social-item:nth-child(even)
+  .profile-hero__social-content
+  strong {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 7px rgba(53, 231, 255, 0.5);
+}
+
+/* Cyberpunk library goal */
+:root[data-theme="cyberpunk"] .library-goal-card__main > svg {
+  stroke: var(--neon-pink);
+  filter: drop-shadow(0 0 5px rgba(255, 61, 191, 0.7));
+}
+
+:root[data-theme="cyberpunk"] .library-goal-card__main strong {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 7px rgba(53, 231, 255, 0.5);
+}
+
+:root[data-theme="cyberpunk"] .library-goal-card__track {
+  background: rgba(53, 231, 255, 0.08);
+  box-shadow: inset 0 0 7px rgba(53, 231, 255, 0.16);
+}
+
+:root[data-theme="cyberpunk"] .library-goal-card__bar {
+  background: var(--accent-gradient);
+  box-shadow:
+    0 0 6px rgba(255, 61, 191, 0.55),
+    0 0 12px rgba(53, 231, 255, 0.38);
+}
+
+:root[data-theme="cyberpunk"]
+  .profile-section--library-goal
+  .profile-section__header
+  button {
+  color: var(--neon-pink);
+  text-shadow: 0 0 6px rgba(255, 61, 191, 0.4);
+}
+
+@media (min-width: 768px) {
+  :root[data-theme="halloween"] {
+    --app-background:
+      linear-gradient(rgba(7, 10, 18, 0.2), rgba(7, 10, 18, 0.3)),
+      url("/images/themes/halloween/Heloween_desk.jpg") center top / cover fixed;
+  }
+  :root[data-theme="cyberpunk"][data-color-scheme="dark"] {
+    --app-background:
+      linear-gradient(rgba(2, 7, 16, 0.3), rgba(3, 5, 14, 0.44)),
+      url("/images/themes/cyberpunk/cyberpunk-desk.jpg") center top / cover
+        fixed;
+  }
+}
+
+@media (min-width: 1440px) {
+  :root[data-theme="default"][data-color-scheme="dark"] {
+    --app-background:
+      linear-gradient(rgba(10, 13, 22, 0.28), rgba(10, 13, 22, 0.38)),
+      url("/images/library-dark-bg.jpg") center top / cover fixed;
+  }
+}
+/* Cyberpunk neon accents */
+:root[data-theme="cyberpunk"] .home-progress__bar {
+  background: var(--accent-gradient);
+  box-shadow:
+    0 0 8px rgba(53, 231, 255, 0.35),
+    0 0 10px rgba(255, 61, 191, 0.28);
+}
+
+/* Cyberpunk reading goal color rhythm */
+:root[data-theme="cyberpunk"]
+  .reading-goal__item:nth-child(even)
+  .reading-goal__icon {
+  color: var(--neon-cyan);
+  border-color: rgba(53, 231, 255, 0.72);
+  background: rgba(53, 231, 255, 0.08);
+  box-shadow:
+    0 0 6px rgba(53, 231, 255, 0.42),
+    0 0 14px rgba(53, 231, 255, 0.18);
+}
+
+:root[data-theme="cyberpunk"]
+  .reading-goal__item:nth-child(even)
+  .reading-goal__row
+  > strong,
+:root[data-theme="cyberpunk"]
+  .reading-goal__item:nth-child(even)
+  .reading-goal__numbers
+  strong {
+  color: var(--neon-cyan);
+  text-shadow:
+    0 0 6px rgba(53, 231, 255, 0.62),
+    0 0 12px rgba(53, 231, 255, 0.28);
+}
+
+:root[data-theme="cyberpunk"]
+  .reading-goal__item:nth-child(odd)
+  .reading-goal__icon {
+  color: var(--neon-pink);
+  border-color: rgba(255, 61, 191, 0.72);
+  background: rgba(255, 61, 191, 0.08);
+  box-shadow:
+    0 0 6px rgba(255, 61, 191, 0.42),
+    0 0 14px rgba(255, 61, 191, 0.18);
+}
+
+:root[data-theme="cyberpunk"]
+  .reading-goal__item:nth-child(odd)
+  .reading-goal__row
+  > strong,
+:root[data-theme="cyberpunk"]
+  .reading-goal__item:nth-child(odd)
+  .reading-goal__numbers
+  strong {
+  color: var(--neon-pink);
+  text-shadow:
+    0 0 6px rgba(255, 61, 191, 0.62),
+    0 0 12px rgba(255, 61, 191, 0.28);
+}
+:root[data-theme="cyberpunk"] .stats-goals .reading-goal__bar {
+  background: linear-gradient(
+    90deg,
+    var(--neon-pink) 0%,
+    var(--neon-violet) 48%,
+    var(--neon-cyan) 100%
+  );
+  box-shadow:
+    0 0 5px rgba(255, 61, 191, 0.55),
+    0 0 10px rgba(53, 231, 255, 0.38);
+}
+:root[data-theme="cyberpunk"] .stats-goals .reading-goal__track {
+  background: rgba(53, 231, 255, 0.08);
+  box-shadow: inset 0 0 6px rgba(53, 231, 255, 0.12);
+}
+:root[data-theme="cyberpunk"] .stats-summary-card__icon {
+  color: var(--neon-pink);
+  background: rgba(255, 61, 191, 0.1);
+  filter: drop-shadow(0 0 5px rgba(255, 61, 191, 0.55));
+}
+:root[data-theme="cyberpunk"] .stats-summary-card:nth-child(2) strong,
+:root[data-theme="cyberpunk"] .stats-summary-card:nth-child(3) strong {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 7px rgba(53, 231, 255, 0.42);
+}
+:root[data-theme="cyberpunk"] .stats-summary-card:nth-child(1) strong,
+:root[data-theme="cyberpunk"] .stats-summary-card:nth-child(4) strong {
+  color: var(--neon-pink);
+  text-shadow: 0 0 7px rgba(255, 61, 191, 0.42);
+}
+
+/* Cyberpunk stats: contrasting icon and value colors */
+:root[data-theme="cyberpunk"]
+  .stats-summary-card:nth-child(1)
+  .stats-summary-card__icon,
+:root[data-theme="cyberpunk"]
+  .stats-summary-card:nth-child(4)
+  .stats-summary-card__icon {
+  color: var(--neon-cyan);
+  background: rgba(53, 231, 255, 0.09);
+  box-shadow:
+    0 0 7px rgba(53, 231, 255, 0.4),
+    0 0 16px rgba(53, 231, 255, 0.18);
+}
+
+:root[data-theme="cyberpunk"]
+  .stats-summary-card:nth-child(2)
+  .stats-summary-card__icon,
+:root[data-theme="cyberpunk"]
+  .stats-summary-card:nth-child(3)
+  .stats-summary-card__icon {
+  color: var(--neon-pink);
+  background: rgba(255, 61, 191, 0.09);
+  box-shadow:
+    0 0 7px rgba(255, 61, 191, 0.35),
+    0 0 16px rgba(255, 61, 191, 0.16);
+}
+
+:root[data-theme="cyberpunk"]
+  .stats-summary-card:nth-child(1)
+  .stats-summary-card__icon
+  svg,
+:root[data-theme="cyberpunk"]
+  .stats-summary-card:nth-child(4)
+  .stats-summary-card__icon
+  svg {
+  filter: drop-shadow(0 0 4px rgba(53, 231, 255, 0.8));
+}
+
+:root[data-theme="cyberpunk"]
+  .stats-summary-card:nth-child(2)
+  .stats-summary-card__icon
+  svg,
+:root[data-theme="cyberpunk"]
+  .stats-summary-card:nth-child(3)
+  .stats-summary-card__icon
+  svg {
+  filter: drop-shadow(0 0 4px rgba(255, 61, 191, 0.75));
+}
+
+/* Cyberpunk genre progress */
+:root[data-theme="cyberpunk"] .genre-item__bar {
+  background: linear-gradient(
+    90deg,
+    var(--neon-pink) 0%,
+    var(--neon-violet) 48%,
+    var(--neon-cyan) 100%
+  );
+  box-shadow:
+    0 0 5px rgba(255, 61, 191, 0.5),
+    0 0 10px rgba(53, 231, 255, 0.3);
+}
+
+/* Cyberpunk cyan navigation and section labels */
+:root[data-theme="cyberpunk"] .home-welcome__eyebrow,
+:root[data-theme="cyberpunk"] .stats-eyebrow,
+:root[data-theme="cyberpunk"] .page-back-button {
+  color: var(--neon-cyan);
+  text-shadow:
+    0 0 6px rgba(53, 231, 255, 0.62),
+    0 0 12px rgba(53, 231, 255, 0.28);
+}
+
+:root[data-theme="cyberpunk"] .page-back-button svg {
+  filter: drop-shadow(0 0 5px rgba(53, 231, 255, 0.65));
+}
+/* Cyberpunk notification bell */
+:root[data-theme="cyberpunk"] .mobile-header__notifications {
+  color: var(--neon-pink);
+}
+
+:root[data-theme="cyberpunk"] .mobile-header__notifications svg {
+  filter: drop-shadow(0 0 3px rgba(255, 61, 191, 0.95))
+    drop-shadow(2px -1px 5px rgba(53, 231, 255, 0.75))
+    drop-shadow(-1px 1px 9px rgba(255, 61, 191, 0.48));
+}
+
+:root[data-theme="cyberpunk"]
+  .mobile-header__notifications
+  .navigation-bell-icon__body,
+:root[data-theme="cyberpunk"]
+  .mobile-header__notifications
+  .navigation-bell-icon__clapper {
+  stroke: var(--neon-pink);
+}
+
+:root[data-theme="cyberpunk"]
+  .mobile-header__notifications
+  .navigation-bell-icon__highlight {
+  fill: none;
+  stroke: var(--neon-cyan);
+  stroke-width: 1.15;
+  stroke-linecap: round;
+  stroke-dasharray: 3 2;
+  filter: drop-shadow(0 0 3px rgba(53, 231, 255, 0.95));
+}
+
+:root[data-theme="cyberpunk"] .mobile-header__notifications-badge {
+  background: var(--neon-pink);
+  color: #ffffff;
+  border: 1px solid var(--neon-cyan);
+
+  box-shadow:
+    0 0 5px rgba(255, 61, 191, 0.85),
+    0 0 9px rgba(53, 231, 255, 0.5);
+}
+/* Cyberpunk brand neon */
+:root[data-theme="cyberpunk"] .mobile-header__brand svg,
+:root[data-theme="cyberpunk"] .app-brand svg {
+  stroke: var(--neon-pink);
+
+  filter: drop-shadow(0 0 3px rgba(255, 61, 191, 0.95))
+    drop-shadow(2px -1px 5px rgba(53, 231, 255, 0.65))
+    drop-shadow(0 0 9px rgba(255, 61, 191, 0.35));
+}
+
+/* Cyberpunk loader */
+:root[data-theme="cyberpunk"] .loader__book {
+  filter: drop-shadow(0 0 6px rgba(255, 61, 191, 0.5))
+    drop-shadow(0 0 12px rgba(53, 231, 255, 0.3));
+}
+
+:root[data-theme="cyberpunk"] .loader__cover {
+  border-color: var(--neon-pink);
+  background: rgba(255, 61, 191, 0.12);
+
+  box-shadow:
+    0 0 5px rgba(255, 61, 191, 0.65),
+    0 0 10px rgba(53, 231, 255, 0.18);
+}
+
+:root[data-theme="cyberpunk"] .loader__page {
+  border-color: var(--neon-cyan);
+  background: rgba(4, 13, 24, 0.92);
+
+  box-shadow:
+    0 0 4px rgba(53, 231, 255, 0.65),
+    0 0 9px rgba(53, 231, 255, 0.25);
+}
+
+:root[data-theme="cyberpunk"] .loader__spine {
+  background: var(--neon-pink);
+
+  box-shadow:
+    0 0 5px rgba(255, 61, 191, 0.9),
+    0 0 9px rgba(53, 231, 255, 0.45);
+}
+
+:root[data-theme="cyberpunk"] .loader__text {
+  color: var(--neon-cyan);
+
+  text-shadow:
+    0 0 6px rgba(53, 231, 255, 0.65),
+    0 0 12px rgba(53, 231, 255, 0.28);
+}
+
+/* Cyberpunk light: home welcome readability */
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .home-welcome {
+  position: relative;
+  isolation: isolate;
+}
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .home-welcome h1 {
+  color: #171020;
+  text-shadow:
+    0 1px 2px rgba(255, 255, 255, 0.95),
+    0 0 12px rgba(255, 255, 255, 0.7);
+}
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .home-welcome p {
+  color: #514a63;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
+}
+
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"]
+  .social-feed__header h2 {
+  width: fit-content;
+  padding: 5px 9px;
+
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 8px;
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  box-shadow: 0 3px 12px rgba(48, 28, 65, 0.12);
+
+  color: #241047;
+}/* =========================================================
+   HALLOWEEN вЂ” ATMOSPHERIC MOTION
+   ========================================================= */
+
+
+/* Cyberpunk Light вЂ” shared page header glass */
+:root[data-theme="cyberpunk"][data-color-scheme="light"] :is(
+  .home-welcome,
+  .stats-header,
+  .catalog-page__header,
+  .profile-hero,
+  .community-page__header,
+  .notifications-page__header,
+  .settings-page__header,
+  .users-page__header,
+  .followers-page__header,
+  .following-page__header,
+  .admin-users-page__header,
+  .admin-settings__header
+) {
+  padding: 14px 16px;
+
+  background: var(--page-header-bg);
+  border: 1px solid var(--page-header-border);
+  border-radius: 16px;
+
+  backdrop-filter: blur(var(--page-header-blur));
+  -webkit-backdrop-filter: blur(var(--page-header-blur));
+
+  box-shadow: var(--page-header-shadow);
+}
+
+
+
+/* Cyberpunk Light вЂ” neon line under glass mobile header */
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .mobile-header::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  height: 2px;
+  background: var(--accent-gradient);
+
+  box-shadow:
+    0 0 6px rgba(231, 47, 174, 0.35),
+    0 0 8px rgba(0, 174, 202, 0.25);
+
+  pointer-events: none;
+}

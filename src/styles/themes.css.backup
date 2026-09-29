@@ -1,0 +1,1392 @@
+/* LIGHT THEME */
+
+:root {
+  --app-background: var(--bg);
+  color-scheme: light;
+
+  --text: #6b6375;
+  --text-h: #08060d;
+  --text-secondary: var(--text);
+  --text-muted: var(--text);
+  --text-on-accent: #ffffff;
+
+  --bg: #ffffff;
+  --surface: #ffffff;
+  --surface-secondary: #f7f7f7;
+
+  --border: #b8b8b8;
+  --border-hover: #777777;
+
+  --code-bg: #f4f3ec;
+
+  --accent: #aa3bff;
+  --accent-strong: #7c3aed;
+  --accent-soft: #a855f7;
+  --accent-bg: rgba(170, 59, 255, 0.1);
+  --accent-border: rgba(170, 59, 255, 0.5);
+
+  --danger: #dc2626;
+  --danger-bg: rgba(220, 38, 38, 0.12);
+  --danger-border: rgba(220, 38, 38, 0.55);
+  --danger-border-soft: rgba(220, 38, 38, 0.4);
+  --text-on-danger: #ffffff;
+
+  --overlay-bg: rgba(0, 0, 0, 0.58);
+
+  --shadow-subtle: 0 4px 18px rgba(0, 0, 0, 0.06);
+  --shadow-card: 0 6px 16px rgba(0, 0, 0, 0.18);
+  --shadow-floating: 0 12px 28px rgba(0, 0, 0, 0.2);
+  --shadow-modal: 0 24px 70px rgba(0, 0, 0, 0.38);
+
+  --social-bg: rgba(244, 243, 236, 0.5);
+
+  --panel-bg: rgba(255, 255, 255, 0.88);
+  --panel-bg-secondary: rgba(247, 247, 247, 0.92);
+  --panel-border: rgba(80, 70, 90, 0.22);
+  --panel-border-hover: var(--accent-border);
+  --panel-shadow: 0 12px 32px rgba(0, 0, 0, 0.1);
+  --shadow:
+    rgba(0, 0, 0, 0.1) 0 10px 15px -3px, rgba(0, 0, 0, 0.05) 0 4px 6px -2px;
+}
+
+/* Cyberpunk mobile navigation */
+@media (max-width: 767px) {
+  :root[data-theme="cyberpunk"] .mobile-bottom-nav {
+    border-top: 0;
+
+    background:
+      linear-gradient(var(--surface), var(--surface)) padding-box,
+      var(--accent-gradient) border-box;
+
+    border-top: 2px solid transparent;
+
+    box-shadow:
+      0 -8px 30px rgba(0, 0, 0, 0.42),
+      0 -2px 10px rgba(168, 85, 247, 0.2);
+  }
+
+  :root[data-theme="cyberpunk"] .mobile-bottom-nav__item.active {
+    text-shadow: 0 0 8px currentColor;
+  }
+
+  :root[data-theme="cyberpunk"] .mobile-bottom-nav__item.active svg {
+    filter: drop-shadow(0 0 5px currentColor);
+  }
+
+  :root[data-theme="cyberpunk"] .mobile-bottom-nav__item:nth-child(1).active {
+    color: var(--nav-home);
+  }
+
+  :root[data-theme="cyberpunk"] .mobile-bottom-nav__item:nth-child(2).active {
+    color: var(--nav-catalog);
+  }
+
+  :root[data-theme="cyberpunk"] .mobile-bottom-nav__item:nth-child(3).active {
+    color: var(--nav-add);
+  }
+
+  :root[data-theme="cyberpunk"] .mobile-bottom-nav__item:nth-child(4).active {
+    color: var(--nav-stats);
+  }
+
+  :root[data-theme="cyberpunk"] .mobile-bottom-nav__item:nth-child(5).active {
+    color: var(--nav-profile);
+  }
+
+  :root[data-theme="cyberpunk"] .mobile-bottom-nav__add-button {
+    border-color: rgba(53, 231, 255, 0.8);
+
+    background: linear-gradient(
+      135deg,
+      var(--neon-pink) 0%,
+      var(--neon-violet) 42%,
+      var(--neon-cyan) 100%
+    );
+
+    color: #001318;
+
+    box-shadow:
+      0 0 8px rgba(255, 61, 191, 0.55),
+      0 0 16px rgba(168, 85, 247, 0.42),
+      0 0 24px rgba(53, 231, 255, 0.34);
+  }
+}
+
+/* DARK THEME */
+
+:root[data-theme="default"][data-color-scheme="dark"] {
+  --app-background:
+    linear-gradient(rgba(10, 13, 22, 0.28), rgba(10, 13, 22, 0.38)),
+    url("/images/library-dark-bg-high.jpg") center top / cover fixed;
+  color-scheme: dark;
+
+  --text: #b6bbc5;
+  --text-h: #f3f4f6;
+  --text-secondary: var(--text);
+  --text-muted: var(--text);
+  --text-on-accent: #ffffff;
+
+  --bg: #16171d;
+  --surface: #1f2028;
+  --surface-secondary: #272832;
+
+  --border: #4b4d59;
+  --border-hover: #777a8a;
+
+  --code-bg: #1f2028;
+
+  --accent: #c084fc;
+  --accent-strong: #7c3aed;
+  --accent-soft: #a855f7;
+  --accent-bg: rgba(192, 132, 252, 0.15);
+  --accent-border: rgba(192, 132, 252, 0.5);
+
+  --danger: #dc2626;
+  --danger-bg: rgba(220, 38, 38, 0.12);
+  --danger-border: rgba(220, 38, 38, 0.55);
+  --danger-border-soft: rgba(220, 38, 38, 0.4);
+  --text-on-danger: #ffffff;
+
+  --overlay-bg: rgba(0, 0, 0, 0.58);
+
+  --shadow-subtle: 0 4px 18px rgba(0, 0, 0, 0.06);
+  --shadow-card: 0 6px 16px rgba(0, 0, 0, 0.18);
+  --shadow-floating: 0 12px 28px rgba(0, 0, 0, 0.2);
+  --shadow-modal: 0 24px 70px rgba(0, 0, 0, 0.38);
+
+  --social-bg: rgba(47, 48, 58, 0.5);
+
+  /* APP PANELS */
+  --panel-bg: rgba(27, 28, 37, 0.65);
+  --panel-bg-secondary: rgba(39, 40, 50, 0.72);
+  --panel-border: rgba(255, 255, 255, 0.16);
+  --panel-border-hover: var(--accent-border);
+  --panel-shadow: 0 12px 32px rgba(0, 0, 0, 0.22);
+  --shadow:
+    rgba(0, 0, 0, 0.4) 0 10px 15px -3px, rgba(0, 0, 0, 0.25) 0 4px 6px -2px;
+}
+/* HALLOWEEN THEME */
+
+:root[data-theme="halloween"] {
+  --app-background:
+    linear-gradient(rgba(7, 10, 18, 0.2), rgba(7, 10, 18, 0.3)),
+    url("/images/themes/halloween/Heloween_mob.jpg") center top / cover fixed;
+  color-scheme: dark;
+
+  --text: #d8cbd7;
+  --text-h: #fff3df;
+  --text-secondary: var(--text);
+  --text-muted: #aa9baa;
+  --text-on-accent: #1a0d05;
+
+  --bg: #120d15;
+  --surface: #1d1520;
+  --surface-secondary: #281b2b;
+
+  --border: #59445d;
+  --border-hover: #9a684c;
+
+  --code-bg: #211724;
+
+  --accent: #ff5a0a;
+  --accent-strong: #ff3200;
+  --accent-soft: #ff9a32;
+  --accent-bg: rgba(255, 76, 10, 0.16);
+  --accent-border: rgba(255, 74, 12, 0.82);
+
+  --danger: #e5484d;
+  --danger-bg: rgba(229, 72, 77, 0.14);
+  --danger-border: rgba(229, 72, 77, 0.58);
+  --danger-border-soft: rgba(229, 72, 77, 0.4);
+  --text-on-danger: #ffffff;
+
+  --overlay-bg: rgba(5, 2, 8, 0.72);
+
+  --shadow-subtle: 0 4px 18px rgba(0, 0, 0, 0.18);
+  --shadow-card: 0 6px 18px rgba(0, 0, 0, 0.32);
+  --shadow-floating: 0 12px 30px rgba(0, 0, 0, 0.38);
+  --shadow-modal: 0 24px 70px rgba(0, 0, 0, 0.55);
+
+  --social-bg: rgba(38, 22, 41, 0.58);
+
+  --panel-bg: rgba(29, 19, 32, 0.82);
+  --panel-bg-secondary: rgba(42, 27, 45, 0.86);
+  --panel-border: rgba(255, 171, 92, 0.2);
+  --panel-border-hover: var(--accent-border);
+  --panel-shadow: 0 12px 34px rgba(0, 0, 0, 0.34);
+  --shadow:
+    rgba(0, 0, 0, 0.48) 0 10px 15px -3px, rgba(0, 0, 0, 0.32) 0 4px 6px -2px;
+}
+
+/* CYBERPUNK LIGHT THEME */
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"] {
+  --app-background:
+    linear-gradient(rgba(255, 255, 255, 0.30), rgba(255, 255, 255, 0.30)),
+    url("/images/themes/cyberpunk/cyberpunk_white-mob.jpg") center top / cover
+      fixed;
+
+  color-scheme: light;
+
+  --text: #35205f;
+  --text-h: hsl(272, 79%, 49%);
+  --text-muted: #5b4775;
+  --text-secondary: var(--text);
+
+  --bg: #faf7fc;
+  --surface: #fffafd;
+  --surface-secondary: #f5eff9;
+
+  --border: rgba(116, 87, 142, 0.24);
+  --border-hover: rgba(168, 85, 247, 0.58);
+
+  --neon-pink: #e72fae;
+  --neon-cyan: #00aeca;
+  --neon-violet: #8b4de8;
+
+  --accent: var(--neon-violet);
+  --accent-hover: #7434d5;
+  --accent-soft: rgba(139, 77, 232, 0.1);
+
+  --nav-home: var(--neon-pink);
+  --nav-catalog: var(--neon-cyan);
+  --nav-add: var(--neon-violet);
+  --nav-stats: #258dcc;
+  --nav-profile: var(--neon-cyan);
+
+  --accent-gradient: linear-gradient(
+    90deg,
+    var(--neon-pink) 0%,
+    var(--neon-violet) 48%,
+    var(--neon-cyan) 100%
+  );
+
+  --neon-pink-bg: rgba(231, 47, 174, 0.08);
+  --neon-cyan-bg: rgba(0, 174, 202, 0.08);
+
+  --neon-cyan-glow:
+    0 0 6px rgba(0, 174, 202, 0.28), 0 0 14px rgba(0, 174, 202, 0.12);
+
+  --neon-pink-glow:
+    0 0 6px rgba(231, 47, 174, 0.28), 0 0 14px rgba(231, 47, 174, 0.12);
+
+  --neon-panel-glow:
+    0 10px 28px rgba(67, 45, 87, 0.12), 0 0 8px rgba(0, 174, 202, 0.12);
+
+  --danger: #d72d77;
+  --danger-hover: #b92362;
+  --danger-soft: rgba(215, 45, 119, 0.08);
+
+  --success: #168a70;
+  --success-soft: rgba(22, 138, 112, 0.1);
+
+  --panel-bg: rgba(238, 220, 248, 0.35);
+  --panel-bg-secondary: rgba(255, 250, 253, 0.34);
+  --panel-border: rgba(116, 87, 142, 0.2);
+  --icon-box-bg: rgba(139, 77, 232, 0.10);
+
+  --page-header-bg: rgba(245, 239, 249, 0.42);
+  --page-header-border: rgba(116, 87, 142, 0.20);
+  --page-header-shadow: 0 6px 20px rgba(75, 50, 95, 0.10);
+  --page-header-blur: 10px;
+
+  --overlay-bg: rgba(31, 18, 43, 0.32);
+
+  --shadow-subtle: 0 4px 18px rgba(75, 50, 95, 0.1);
+  --shadow-card: 0 6px 22px rgba(75, 50, 95, 0.14);
+  --shadow-floating: 0 12px 34px rgba(75, 50, 95, 0.18);
+  --shadow-modal: 0 24px 70px rgba(45, 27, 61, 0.25);
+}
+
+:root[data-theme="cyberpunk"][data-color-scheme="dark"] {
+  --app-background:
+    linear-gradient(rgba(2, 7, 16, 0.34), rgba(3, 5, 14, 0.48)),
+    url("/images/themes/cyberpunk/cyberpunk-mob.jpg") center top / cover fixed;
+  color-scheme: dark;
+
+  --text: #c8d8e8;
+  --text-h: #f4fbff;
+  --text-secondary: var(--text);
+  --text-muted: #8296ad;
+  --text-on-accent: #001318;
+
+  --bg: #030711;
+  --surface: #08111d;
+  --surface-secondary: #0d1928;
+
+  --border: rgba(53, 231, 255, 0.34);
+  --border-hover: var(--neon-cyan);
+
+  --code-bg: #07101c;
+
+  --accent: #ff3dbf;
+  --accent-strong: #e91aa8;
+  --accent-soft: #ff8bdd;
+  --accent-bg: rgba(255, 61, 191, 0.14);
+  --accent-border: rgba(255, 61, 191, 0.58);
+
+  --neon-pink: #ff3dbf;
+  --neon-cyan: #35e7ff;
+  --neon-violet: #a855f7;
+  --nav-home: var(--neon-pink);
+  --nav-catalog: #d85cff;
+  --nav-add: #8b7cff;
+  --nav-stats: #4bbcff;
+  --nav-profile: var(--neon-cyan);
+  --accent-gradient: linear-gradient(
+    90deg,
+    var(--neon-pink) 0%,
+    var(--neon-violet) 48%,
+    var(--neon-cyan) 100%
+  );
+
+  --neon-pink-bg: rgba(255, 61, 191, 0.1);
+  --neon-cyan-bg: rgba(53, 231, 255, 0.09);
+
+  --neon-gradient: linear-gradient(
+    90deg,
+    var(--neon-pink) 0%,
+    var(--neon-violet) 48%,
+    var(--neon-cyan) 100%
+  );
+
+  --neon-cyan-glow:
+    0 0 6px rgba(53, 231, 255, 0.42), 0 0 16px rgba(53, 231, 255, 0.18);
+
+  --neon-pink-glow:
+    0 0 6px rgba(255, 61, 191, 0.42), 0 0 16px rgba(255, 61, 191, 0.18);
+
+  --neon-panel-glow:
+    0 12px 34px rgba(0, 0, 0, 0.46), 0 0 8px rgba(53, 231, 255, 0.32),
+    0 0 20px rgba(53, 231, 255, 0.16);
+
+  --danger: #ff3fa4;
+  --danger-bg: rgba(255, 63, 164, 0.13);
+  --danger-border: rgba(255, 63, 164, 0.58);
+  --danger-border-soft: rgba(255, 63, 164, 0.4);
+  --text-on-danger: #ffffff;
+
+  --overlay-bg: rgba(1, 4, 12, 0.78);
+
+  --shadow-subtle: 0 4px 18px rgba(53, 231, 255, 0.12);
+  --shadow-card:
+    0 6px 22px rgba(0, 0, 0, 0.42), 0 0 10px rgba(53, 231, 255, 0.14);
+  --shadow-floating: 0 12px 34px rgba(0, 0, 0, 0.52);
+  --shadow-modal: 0 24px 70px rgba(0, 0, 0, 0.68);
+
+  --social-bg: rgba(5, 16, 29, 0.68);
+
+  --panel-bg: rgba(4, 13, 24, 0.84);
+  --panel-bg-secondary: rgba(8, 22, 37, 0.88);
+  --panel-border: rgba(53, 231, 255, 0.72);
+  --panel-border-hover: var(--accent-border);
+  --panel-shadow: var(--neon-panel-glow);
+  --shadow:
+    rgba(0, 0, 0, 0.55) 0 10px 15px -3px,
+    rgba(0, 229, 255, 0.08) 0 4px 12px -2px;
+}
+
+/* Cyberpunk profile social color rhythm */
+:root[data-theme="cyberpunk"]
+  .profile-hero__social-item:nth-child(odd)
+  .profile-hero__social-icon {
+  color: var(--neon-cyan);
+  filter: drop-shadow(0 0 5px rgba(53, 231, 255, 0.7));
+}
+
+:root[data-theme="cyberpunk"]
+  .profile-hero__social-item:nth-child(odd)
+  .profile-hero__social-content
+  strong {
+  color: var(--neon-pink);
+  text-shadow: 0 0 7px rgba(255, 61, 191, 0.5);
+}
+
+:root[data-theme="cyberpunk"]
+  .profile-hero__social-item:nth-child(even)
+  .profile-hero__social-icon {
+  color: var(--neon-pink);
+  filter: drop-shadow(0 0 5px rgba(255, 61, 191, 0.7));
+}
+
+:root[data-theme="cyberpunk"]
+  .profile-hero__social-item:nth-child(even)
+  .profile-hero__social-content
+  strong {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 7px rgba(53, 231, 255, 0.5);
+}
+
+/* Cyberpunk library goal */
+:root[data-theme="cyberpunk"] .library-goal-card__main > svg {
+  stroke: var(--neon-pink);
+  filter: drop-shadow(0 0 5px rgba(255, 61, 191, 0.7));
+}
+
+:root[data-theme="cyberpunk"] .library-goal-card__main strong {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 7px rgba(53, 231, 255, 0.5);
+}
+
+:root[data-theme="cyberpunk"] .library-goal-card__track {
+  background: rgba(53, 231, 255, 0.08);
+  box-shadow: inset 0 0 7px rgba(53, 231, 255, 0.16);
+}
+
+:root[data-theme="cyberpunk"] .library-goal-card__bar {
+  background: var(--accent-gradient);
+  box-shadow:
+    0 0 6px rgba(255, 61, 191, 0.55),
+    0 0 12px rgba(53, 231, 255, 0.38);
+}
+
+:root[data-theme="cyberpunk"]
+  .profile-section--library-goal
+  .profile-section__header
+  button {
+  color: var(--neon-pink);
+  text-shadow: 0 0 6px rgba(255, 61, 191, 0.4);
+}
+
+@media (min-width: 768px) {
+  :root[data-theme="halloween"] {
+    --app-background:
+      linear-gradient(rgba(7, 10, 18, 0.2), rgba(7, 10, 18, 0.3)),
+      url("/images/themes/halloween/Heloween_desk.jpg") center top / cover fixed;
+  }
+  :root[data-theme="cyberpunk"][data-color-scheme="dark"] {
+    --app-background:
+      linear-gradient(rgba(2, 7, 16, 0.3), rgba(3, 5, 14, 0.44)),
+      url("/images/themes/cyberpunk/cyberpunk-desk.jpg") center top / cover
+        fixed;
+  }
+}
+
+@media (min-width: 1440px) {
+  :root[data-theme="default"][data-color-scheme="dark"] {
+    --app-background:
+      linear-gradient(rgba(10, 13, 22, 0.28), rgba(10, 13, 22, 0.38)),
+      url("/images/library-dark-bg.jpg") center top / cover fixed;
+  }
+}
+/* Cyberpunk neon accents */
+:root[data-theme="cyberpunk"] .home-progress__bar {
+  background: var(--accent-gradient);
+  box-shadow:
+    0 0 8px rgba(53, 231, 255, 0.35),
+    0 0 10px rgba(255, 61, 191, 0.28);
+}
+
+/* Cyberpunk reading goal color rhythm */
+:root[data-theme="cyberpunk"]
+  .reading-goal__item:nth-child(even)
+  .reading-goal__icon {
+  color: var(--neon-cyan);
+  border-color: rgba(53, 231, 255, 0.72);
+  background: rgba(53, 231, 255, 0.08);
+  box-shadow:
+    0 0 6px rgba(53, 231, 255, 0.42),
+    0 0 14px rgba(53, 231, 255, 0.18);
+}
+
+:root[data-theme="cyberpunk"]
+  .reading-goal__item:nth-child(even)
+  .reading-goal__row
+  > strong,
+:root[data-theme="cyberpunk"]
+  .reading-goal__item:nth-child(even)
+  .reading-goal__numbers
+  strong {
+  color: var(--neon-cyan);
+  text-shadow:
+    0 0 6px rgba(53, 231, 255, 0.62),
+    0 0 12px rgba(53, 231, 255, 0.28);
+}
+
+:root[data-theme="cyberpunk"]
+  .reading-goal__item:nth-child(odd)
+  .reading-goal__icon {
+  color: var(--neon-pink);
+  border-color: rgba(255, 61, 191, 0.72);
+  background: rgba(255, 61, 191, 0.08);
+  box-shadow:
+    0 0 6px rgba(255, 61, 191, 0.42),
+    0 0 14px rgba(255, 61, 191, 0.18);
+}
+
+:root[data-theme="cyberpunk"]
+  .reading-goal__item:nth-child(odd)
+  .reading-goal__row
+  > strong,
+:root[data-theme="cyberpunk"]
+  .reading-goal__item:nth-child(odd)
+  .reading-goal__numbers
+  strong {
+  color: var(--neon-pink);
+  text-shadow:
+    0 0 6px rgba(255, 61, 191, 0.62),
+    0 0 12px rgba(255, 61, 191, 0.28);
+}
+:root[data-theme="cyberpunk"] .stats-goals .reading-goal__bar {
+  background: linear-gradient(
+    90deg,
+    var(--neon-pink) 0%,
+    var(--neon-violet) 48%,
+    var(--neon-cyan) 100%
+  );
+  box-shadow:
+    0 0 5px rgba(255, 61, 191, 0.55),
+    0 0 10px rgba(53, 231, 255, 0.38);
+}
+:root[data-theme="cyberpunk"] .stats-goals .reading-goal__track {
+  background: rgba(53, 231, 255, 0.08);
+  box-shadow: inset 0 0 6px rgba(53, 231, 255, 0.12);
+}
+:root[data-theme="cyberpunk"] .stats-summary-card__icon {
+  color: var(--neon-pink);
+  background: rgba(255, 61, 191, 0.1);
+  filter: drop-shadow(0 0 5px rgba(255, 61, 191, 0.55));
+}
+:root[data-theme="cyberpunk"] .stats-summary-card:nth-child(2) strong,
+:root[data-theme="cyberpunk"] .stats-summary-card:nth-child(3) strong {
+  color: var(--neon-cyan);
+  text-shadow: 0 0 7px rgba(53, 231, 255, 0.42);
+}
+:root[data-theme="cyberpunk"] .stats-summary-card:nth-child(1) strong,
+:root[data-theme="cyberpunk"] .stats-summary-card:nth-child(4) strong {
+  color: var(--neon-pink);
+  text-shadow: 0 0 7px rgba(255, 61, 191, 0.42);
+}
+
+/* Cyberpunk stats: contrasting icon and value colors */
+:root[data-theme="cyberpunk"]
+  .stats-summary-card:nth-child(1)
+  .stats-summary-card__icon,
+:root[data-theme="cyberpunk"]
+  .stats-summary-card:nth-child(4)
+  .stats-summary-card__icon {
+  color: var(--neon-cyan);
+  background: rgba(53, 231, 255, 0.09);
+  box-shadow:
+    0 0 7px rgba(53, 231, 255, 0.4),
+    0 0 16px rgba(53, 231, 255, 0.18);
+}
+
+:root[data-theme="cyberpunk"]
+  .stats-summary-card:nth-child(2)
+  .stats-summary-card__icon,
+:root[data-theme="cyberpunk"]
+  .stats-summary-card:nth-child(3)
+  .stats-summary-card__icon {
+  color: var(--neon-pink);
+  background: rgba(255, 61, 191, 0.09);
+  box-shadow:
+    0 0 7px rgba(255, 61, 191, 0.35),
+    0 0 16px rgba(255, 61, 191, 0.16);
+}
+
+:root[data-theme="cyberpunk"]
+  .stats-summary-card:nth-child(1)
+  .stats-summary-card__icon
+  svg,
+:root[data-theme="cyberpunk"]
+  .stats-summary-card:nth-child(4)
+  .stats-summary-card__icon
+  svg {
+  filter: drop-shadow(0 0 4px rgba(53, 231, 255, 0.8));
+}
+
+:root[data-theme="cyberpunk"]
+  .stats-summary-card:nth-child(2)
+  .stats-summary-card__icon
+  svg,
+:root[data-theme="cyberpunk"]
+  .stats-summary-card:nth-child(3)
+  .stats-summary-card__icon
+  svg {
+  filter: drop-shadow(0 0 4px rgba(255, 61, 191, 0.75));
+}
+
+/* Cyberpunk genre progress */
+:root[data-theme="cyberpunk"] .genre-item__bar {
+  background: linear-gradient(
+    90deg,
+    var(--neon-pink) 0%,
+    var(--neon-violet) 48%,
+    var(--neon-cyan) 100%
+  );
+  box-shadow:
+    0 0 5px rgba(255, 61, 191, 0.5),
+    0 0 10px rgba(53, 231, 255, 0.3);
+}
+
+/* Cyberpunk cyan navigation and section labels */
+:root[data-theme="cyberpunk"] .home-welcome__eyebrow,
+:root[data-theme="cyberpunk"] .stats-eyebrow,
+:root[data-theme="cyberpunk"] .page-back-button {
+  color: var(--neon-cyan);
+  text-shadow:
+    0 0 6px rgba(53, 231, 255, 0.62),
+    0 0 12px rgba(53, 231, 255, 0.28);
+}
+
+:root[data-theme="cyberpunk"] .page-back-button svg {
+  filter: drop-shadow(0 0 5px rgba(53, 231, 255, 0.65));
+}
+/* Cyberpunk notification bell */
+:root[data-theme="cyberpunk"] .mobile-header__notifications {
+  color: var(--neon-pink);
+}
+
+:root[data-theme="cyberpunk"] .mobile-header__notifications svg {
+  filter: drop-shadow(0 0 3px rgba(255, 61, 191, 0.95))
+    drop-shadow(2px -1px 5px rgba(53, 231, 255, 0.75))
+    drop-shadow(-1px 1px 9px rgba(255, 61, 191, 0.48));
+}
+
+:root[data-theme="cyberpunk"]
+  .mobile-header__notifications
+  .navigation-bell-icon__body,
+:root[data-theme="cyberpunk"]
+  .mobile-header__notifications
+  .navigation-bell-icon__clapper {
+  stroke: var(--neon-pink);
+}
+
+:root[data-theme="cyberpunk"]
+  .mobile-header__notifications
+  .navigation-bell-icon__highlight {
+  fill: none;
+  stroke: var(--neon-cyan);
+  stroke-width: 1.15;
+  stroke-linecap: round;
+  stroke-dasharray: 3 2;
+  filter: drop-shadow(0 0 3px rgba(53, 231, 255, 0.95));
+}
+
+:root[data-theme="cyberpunk"] .mobile-header__notifications-badge {
+  background: var(--neon-pink);
+  color: #ffffff;
+  border: 1px solid var(--neon-cyan);
+
+  box-shadow:
+    0 0 5px rgba(255, 61, 191, 0.85),
+    0 0 9px rgba(53, 231, 255, 0.5);
+}
+/* Cyberpunk brand neon */
+:root[data-theme="cyberpunk"] .mobile-header__brand svg,
+:root[data-theme="cyberpunk"] .app-brand svg {
+  stroke: var(--neon-pink);
+
+  filter: drop-shadow(0 0 3px rgba(255, 61, 191, 0.95))
+    drop-shadow(2px -1px 5px rgba(53, 231, 255, 0.65))
+    drop-shadow(0 0 9px rgba(255, 61, 191, 0.35));
+}
+
+/* Cyberpunk loader */
+:root[data-theme="cyberpunk"] .loader__book {
+  filter: drop-shadow(0 0 6px rgba(255, 61, 191, 0.5))
+    drop-shadow(0 0 12px rgba(53, 231, 255, 0.3));
+}
+
+:root[data-theme="cyberpunk"] .loader__cover {
+  border-color: var(--neon-pink);
+  background: rgba(255, 61, 191, 0.12);
+
+  box-shadow:
+    0 0 5px rgba(255, 61, 191, 0.65),
+    0 0 10px rgba(53, 231, 255, 0.18);
+}
+
+:root[data-theme="cyberpunk"] .loader__page {
+  border-color: var(--neon-cyan);
+  background: rgba(4, 13, 24, 0.92);
+
+  box-shadow:
+    0 0 4px rgba(53, 231, 255, 0.65),
+    0 0 9px rgba(53, 231, 255, 0.25);
+}
+
+:root[data-theme="cyberpunk"] .loader__spine {
+  background: var(--neon-pink);
+
+  box-shadow:
+    0 0 5px rgba(255, 61, 191, 0.9),
+    0 0 9px rgba(53, 231, 255, 0.45);
+}
+
+:root[data-theme="cyberpunk"] .loader__text {
+  color: var(--neon-cyan);
+
+  text-shadow:
+    0 0 6px rgba(53, 231, 255, 0.65),
+    0 0 12px rgba(53, 231, 255, 0.28);
+}
+
+/* Cyberpunk light: home welcome readability */
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .home-welcome {
+  position: relative;
+  isolation: isolate;
+}
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .home-welcome h1 {
+  color: #171020;
+  text-shadow:
+    0 1px 2px rgba(255, 255, 255, 0.95),
+    0 0 12px rgba(255, 255, 255, 0.7);
+}
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .home-welcome p {
+  color: #514a63;
+  text-shadow: 0 1px 3px rgba(255, 255, 255, 0.9);
+}
+
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"]
+  .social-feed__header h2 {
+  width: fit-content;
+  padding: 5px 9px;
+
+  background: rgba(255, 255, 255, 0.86);
+  border: 1px solid rgba(255, 255, 255, 0.65);
+  border-radius: 8px;
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  box-shadow: 0 3px 12px rgba(48, 28, 65, 0.12);
+
+  color: #241047;
+}/* =========================================================
+   HALLOWEEN — ATMOSPHERIC MOTION
+   ========================================================= */
+
+/* М'яке живе світіння панелей */
+:root[data-theme="halloween"] {
+  --halloween-glow: rgba(255, 138, 31, 0.32);
+}
+
+:root[data-theme="halloween"] .mobile-bottom-nav,
+:root[data-theme="halloween"] .mobile-header {
+  box-shadow:
+    0 0 24px rgba(0, 0, 0, 0.45),
+    0 0 14px rgba(255, 138, 31, 0.08);
+}
+
+/* Активна іконка — легке помаранчеве світіння */
+:root[data-theme="halloween"] .mobile-bottom-nav__item.active {
+  color: var(--accent);
+
+  text-shadow:
+    0 0 6px rgba(255, 138, 31, 0.55),
+    0 0 14px rgba(255, 138, 31, 0.22);
+}
+
+:root[data-theme="halloween"] .mobile-bottom-nav__item.active svg {
+  filter:
+    drop-shadow(0 0 4px rgba(255, 138, 31, 0.65))
+    drop-shadow(0 0 9px rgba(255, 92, 0, 0.28));
+
+  animation: halloween-icon-flicker 5s ease-in-out infinite;
+}
+
+/* Центральна кнопка "Додати" */
+:root[data-theme="halloween"] .mobile-bottom-nav__add-button {
+  border-color: rgba(255, 138, 31, 0.9);
+
+  background:
+    radial-gradient(
+      circle at 50% 42%,
+      rgba(255, 174, 75, 0.2),
+      rgba(255, 92, 0, 0.08) 60%,
+      transparent 72%
+    ),
+    var(--surface);
+
+  color: var(--accent);
+
+  box-shadow:
+    0 0 7px rgba(255, 138, 31, 0.6),
+    0 0 17px rgba(255, 92, 0, 0.34),
+    0 0 28px rgba(255, 92, 0, 0.12);
+
+  animation: halloween-pumpkin-breathe 3.8s ease-in-out infinite;
+
+  will-change: transform, filter;
+}
+
+/* Дзвіночок */
+:root[data-theme="halloween"] .mobile-header__notifications {
+  color: var(--accent);
+}
+
+:root[data-theme="halloween"] .mobile-header__notifications svg {
+  filter:
+    drop-shadow(0 0 4px rgba(255, 138, 31, 0.6))
+    drop-shadow(0 0 10px rgba(255, 92, 0, 0.22));
+}
+
+/* Логотип книги */
+:root[data-theme="halloween"] .mobile-header__brand svg,
+:root[data-theme="halloween"] .app-shell-brand svg {
+  stroke: var(--accent);
+
+  filter:
+    drop-shadow(0 0 4px rgba(255, 138, 31, 0.62))
+    drop-shadow(0 0 10px rgba(255, 92, 0, 0.2));
+}
+
+/* Кнопки/акценти при hover — для desktop */
+@media (hover: hover) {
+  :root[data-theme="halloween"] button:hover,
+  :root[data-theme="halloween"] a:hover {
+    transition:
+      filter 180ms ease,
+      text-shadow 180ms ease,
+      box-shadow 180ms ease;
+  }
+
+  :root[data-theme="halloween"] .mobile-bottom-nav__add-button:hover {
+    filter: brightness(1.12);
+  }
+}
+
+/* Дихання центральної кнопки */
+@keyframes halloween-pumpkin-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+
+    filter: brightness(1);
+  }
+
+  50% {
+    transform: scale(1.045);
+
+    filter: brightness(1.14);
+  }
+}
+
+/* Дуже легке нерегулярне мерехтіння */
+@keyframes halloween-icon-flicker {
+  0%,
+  18%,
+  22%,
+  62%,
+  66%,
+  100% {
+    opacity: 1;
+  }
+
+  20% {
+    opacity: 0.82;
+  }
+
+  64% {
+    opacity: 0.9;
+  }
+}
+
+/* Не анімуємо для користувачів,
+   які вимкнули motion у системі */
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme="halloween"] .mobile-bottom-nav__add-button,
+  :root[data-theme="halloween"] .mobile-bottom-nav__item.active svg {
+    animation: none;
+  }
+}
+
+/* =========================================================
+   HALLOWEEN — PUMPKIN ADD ICON
+   ========================================================= */
+
+/* а замовчуванням pumpkin прихований */
+.mobile-bottom-nav__add-button svg + svg {
+  display: none;
+}
+
+/* Halloween: прибираємо стандартну круглу кнопку */
+:root[data-theme="halloween"] .mobile-bottom-nav__add-button {
+  width: 64px;
+  height: 58px;
+  min-width: 64px;
+  min-height: 58px;
+  flex: 0 0 64px;
+
+  border: 0;
+  border-radius: 0;
+
+  background: transparent;
+  box-shadow: none;
+
+  color: #ff7a17;
+
+  animation: halloween-pumpkin-breathe 3.8s ease-in-out infinite;
+}
+
+/* Ховаємо стандартний + */
+:root[data-theme="halloween"]
+  .mobile-bottom-nav__add-button
+  svg:first-child {
+  display: none;
+}
+
+/* оказуємо pumpkin зі спрайта */
+:root[data-theme="halloween"]
+  .mobile-bottom-nav__add-button
+  svg:last-child {
+  width: 64px;
+  height: 64px;
+
+  display: block;
+
+  overflow: visible;
+
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+
+  filter:
+    drop-shadow(0 0 2px rgba(255, 166, 61, 0.95))
+    drop-shadow(0 0 6px rgba(255, 92, 0, 0.72))
+    drop-shadow(0 0 13px rgba(255, 68, 0, 0.38));
+}
+
+
+/* Halloween pumpkin icon — reference proportions */
+
+:root[data-theme="halloween"] .mobile-bottom-nav__add-button {
+  width: 70px;
+  height: 60px;
+  min-width: 70px;
+  min-height: 60px;
+  flex-basis: 70px;
+}
+
+:root[data-theme="halloween"]
+  .mobile-bottom-nav__add-button
+  svg:last-child {
+  width: 74px;
+  height: 66px;
+
+  stroke-width: 2.3;
+
+  transform: translateY(-1px);
+
+  filter:
+    drop-shadow(0 0 2px #ffad45)
+    drop-shadow(0 0 5px rgba(255, 112, 20, 0.95))
+    drop-shadow(0 0 11px rgba(255, 68, 0, 0.62))
+    drop-shadow(0 0 18px rgba(255, 55, 0, 0.28));
+}
+
+
+/* Halloween add — reference sizing */
+:root[data-theme="halloween"] .mobile-bottom-nav__add-button {
+  width: 68px;
+  height: 62px;
+  min-width: 68px;
+  min-height: 62px;
+  flex-basis: 68px;
+}
+
+:root[data-theme="halloween"]
+  .mobile-bottom-nav__add-button
+  svg:last-child {
+  width: 72px;
+  height: 68px;
+
+  stroke-width: 2.1;
+
+  transform: translateY(-3px);
+}
+
+
+
+/* =========================================================
+   HALLOWEEN — FIRE BORDERS
+   ========================================================= */
+
+:root[data-theme="halloween"] {
+  --halloween-fire: #ff5a0a;
+  --halloween-fire-hot: #ff8a22;
+  --halloween-fire-deep: #ff2f00;
+
+  --panel-border: rgba(255, 74, 12, 0.72);
+  --panel-border-hover: rgba(255, 112, 24, 0.95);
+}
+
+:root[data-theme="halloween"] .home-card,
+:root[data-theme="halloween"] .dashboard-card {
+  border-color: var(--panel-border);
+
+  box-shadow:
+    0 0 2px rgba(255, 151, 55, 0.42),
+    0 0 9px rgba(255, 76, 10, 0.16),
+    0 8px 24px rgba(0, 0, 0, 0.34);
+}
+
+
+/* Halloween pumpkin — fire palette */
+:root[data-theme="halloween"] .mobile-bottom-nav__add-button {
+  color: #ff5a0a;
+}
+
+:root[data-theme="halloween"]
+  .mobile-bottom-nav__add-button
+  svg:last-child {
+  stroke: currentColor;
+
+  filter:
+    drop-shadow(0 0 2px rgba(255, 170, 70, 1))
+    drop-shadow(0 0 5px rgba(255, 90, 10, 0.95))
+    drop-shadow(0 0 11px rgba(255, 48, 0, 0.68))
+    drop-shadow(0 0 19px rgba(255, 35, 0, 0.32));
+}
+
+
+
+/* =========================================================
+   HALLOWEEN — BELL FIRE GLOW
+   ========================================================= */
+
+
+
+
+/* =========================================================
+   HALLOWEEN — BELL FIRE GLOW
+   ========================================================= */
+
+:root[data-theme="halloween"]
+  .mobile-header__notifications
+  .navigation-bell-icon__body,
+:root[data-theme="halloween"]
+  .mobile-header__notifications
+  .navigation-bell-icon__clapper {
+  stroke: #ff5a0a;
+
+  filter:
+    drop-shadow(0 0 2px rgba(255, 170, 70, 1))
+    drop-shadow(0 0 5px rgba(255, 90, 10, 0.95))
+    drop-shadow(0 0 9px rgba(255, 48, 0, 0.65));
+}
+
+:root[data-theme="halloween"]
+  .mobile-header__notifications
+  .navigation-bell-icon__highlight {
+  fill: none;
+  stroke: #ffb14a;
+  stroke-width: 1.15;
+  stroke-linecap: round;
+
+  filter:
+    drop-shadow(0 0 2px rgba(255, 190, 90, 1))
+    drop-shadow(0 0 5px rgba(255, 76, 0, 0.9));
+}
+
+/* огняне світіння badge */
+:root[data-theme="halloween"]
+  .mobile-header__notifications-badge {
+  background: #ff4b0a;
+  color: #ffffff;
+  border: 1px solid #ff9a32;
+
+  box-shadow:
+    0 0 4px rgba(255, 150, 50, 0.9),
+    0 0 9px rgba(255, 65, 0, 0.55);
+}
+
+
+
+/* =========================================================
+   HALLOWEEN — BELL FIRE GLOW
+   ========================================================= */
+
+:root[data-theme="halloween"]
+  .mobile-header__notifications
+  .navigation-bell-icon__body,
+:root[data-theme="halloween"]
+  .mobile-header__notifications
+  .navigation-bell-icon__clapper {
+  stroke: #ff5a0a;
+
+  filter:
+    drop-shadow(0 0 2px rgba(255, 170, 70, 0.95))
+    drop-shadow(0 0 5px rgba(255, 90, 10, 0.75));
+}
+
+:root[data-theme="halloween"]
+  .mobile-header__notifications
+  .navigation-bell-icon__highlight {
+  fill: none;
+  stroke: #ffb14a;
+  stroke-width: 1.15;
+  stroke-linecap: round;
+
+  filter:
+    drop-shadow(0 0 2px rgba(255, 180, 70, 0.95))
+    drop-shadow(0 0 4px rgba(255, 76, 0, 0.7));
+}
+
+
+/* Halloween bell — allow glow outside SVG bounds */
+:root[data-theme="halloween"] .mobile-header__notifications,
+:root[data-theme="halloween"] .navigation-bell-icon {
+  overflow: visible;
+}
+
+
+/* =========================================================
+   HALLOWEEN — MOVING FOG
+   ========================================================= */
+
+:root[data-theme="halloween"] .app-shell {
+  position: relative;
+  isolation: isolate;
+}
+
+:root[data-theme="halloween"] .app-shell::before {
+  content: "";
+
+  position: fixed;
+  inset: -15% -35%;
+  z-index: 20;
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      ellipse 55% 12% at 15% 30%,
+      rgba(210, 220, 225, 0.48) 0%,
+      rgba(170, 180, 190, 0.28) 35%,
+      transparent 72%
+    ),
+    radial-gradient(
+      ellipse 65% 15% at 75% 58%,
+      rgba(220, 225, 230, 0.43) 0%,
+      rgba(175, 185, 195, 0.25) 40%,
+      transparent 75%
+    ),
+    radial-gradient(
+      ellipse 60% 13% at 35% 82%,
+      rgba(195, 205, 215, 0.39) 0%,
+      rgba(165, 175, 185, 0.21) 42%,
+      transparent 76%
+    );
+
+  filter: blur(14px);
+
+  will-change: transform, opacity;
+
+  animation: halloween-fog-drift 24s ease-in-out infinite alternate;
+}
+
+@keyframes halloween-fog-drift {
+  0% {
+    transform: translate3d(-12%, 0, 0) scale(1);
+    opacity: 0.65;
+  }
+
+  50% {
+    transform: translate3d(0, -1%, 0) scale(1.025);
+    opacity: 0.85;
+  }
+
+  100% {
+    transform: translate3d(12%, 1%, 0) scale(1.04);
+    opacity: 0.72;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme="halloween"] .app-shell::before {
+    animation: none;
+  }
+}
+
+
+/* =========================================================
+   HALLOWEEN — FALLING LEAVES
+   ========================================================= */
+
+.halloween-leaves {
+  display: none;
+}
+
+:root[data-theme="halloween"] .halloween-leaves {
+  position: fixed;
+  inset: 0;
+  z-index: 21;
+
+  display: block;
+
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.halloween-leaf {
+  position: absolute;
+  top: -50px;
+
+  display: block;
+
+  line-height: 1;
+
+  opacity: 0;
+
+  will-change: transform, opacity;
+}
+
+/* аленький листок */
+.halloween-leaf--1 {
+  left: 14%;
+  font-size: 17px;
+
+  animation: halloween-leaf-1 13s linear infinite;
+}
+
+/* Середній */
+.halloween-leaf--2 {
+  left: 58%;
+  font-size: 20px;
+
+  animation: halloween-leaf-2 17s linear 5s infinite;
+}
+
+/* ідкісний третій */
+.halloween-leaf--3 {
+  left: 82%;
+  font-size: 15px;
+
+  animation: halloween-leaf-3 21s linear 11s infinite;
+}
+
+@keyframes halloween-leaf-1 {
+  0% {
+    transform: translate3d(0, -40px, 0) rotate(0deg);
+    opacity: 0;
+  }
+
+  8% {
+    opacity: 0.75;
+  }
+
+  45% {
+    transform: translate3d(45px, 45vh, 0) rotate(170deg);
+  }
+
+  85% {
+    opacity: 0.65;
+  }
+
+  100% {
+    transform: translate3d(-20px, 110vh, 0) rotate(420deg);
+    opacity: 0;
+  }
+}
+
+@keyframes halloween-leaf-2 {
+  0% {
+    transform: translate3d(0, -40px, 0) rotate(20deg);
+    opacity: 0;
+  }
+
+  10% {
+    opacity: 0.7;
+  }
+
+  50% {
+    transform: translate3d(-55px, 52vh, 0) rotate(-190deg);
+  }
+
+  88% {
+    opacity: 0.6;
+  }
+
+  100% {
+    transform: translate3d(30px, 110vh, 0) rotate(-460deg);
+    opacity: 0;
+  }
+}
+
+@keyframes halloween-leaf-3 {
+  0% {
+    transform: translate3d(0, -40px, 0) rotate(0deg);
+    opacity: 0;
+  }
+
+  12% {
+    opacity: 0.65;
+  }
+
+  48% {
+    transform: translate3d(35px, 48vh, 0) rotate(210deg);
+  }
+
+  88% {
+    opacity: 0.55;
+  }
+
+  100% {
+    transform: translate3d(-45px, 110vh, 0) rotate(520deg);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root[data-theme="halloween"] .halloween-leaves {
+    display: none;
+  }
+}
+
+
+
+/* Cyberpunk Light — shared page header glass */
+:root[data-theme="cyberpunk"][data-color-scheme="light"] :is(
+  .home-welcome,
+  .stats-header,
+  .catalog-page__header,
+  .profile-hero,
+  .community-page__header,
+  .notifications-page__header,
+  .settings-page__header,
+  .users-page__header,
+  .followers-page__header,
+  .following-page__header,
+  .admin-users-page__header,
+  .admin-settings__header
+) {
+  padding: 14px 16px;
+
+  background: var(--page-header-bg);
+  border: 1px solid var(--page-header-border);
+  border-radius: 16px;
+
+  backdrop-filter: blur(var(--page-header-blur));
+  -webkit-backdrop-filter: blur(var(--page-header-blur));
+
+  box-shadow: var(--page-header-shadow);
+}
+
+
+
+/* Cyberpunk Light — neon line under glass mobile header */
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .mobile-header::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+
+  height: 2px;
+  background: var(--accent-gradient);
+
+  box-shadow:
+    0 0 6px rgba(231, 47, 174, 0.35),
+    0 0 8px rgba(0, 174, 202, 0.25);
+
+  pointer-events: none;
+}
