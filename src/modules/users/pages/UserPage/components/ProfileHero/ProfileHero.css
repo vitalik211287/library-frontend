@@ -1,4 +1,4 @@
-﻿/* =========================
+/* =========================
    PROFILE HERO
 ========================= */
 
@@ -421,5 +421,25 @@
     margin: 0;
 
     font-size: 14px;
+  }
+}
+
+/* Cyberpunk Light — glass profile social actions */
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .profile-hero__social-item {
+  background: rgba(255, 250, 253, 0.12);
+  border: 1px solid rgba(139, 77, 232, 0.20);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  box-shadow:
+    0 6px 18px rgba(75, 35, 110, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.50);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  :root[data-theme="cyberpunk"][data-color-scheme="light"] .profile-hero__social-item:hover {
+    background: rgba(255, 250, 253, 0.46);
+    border-color: rgba(139, 77, 232, 0.38);
   }
 }

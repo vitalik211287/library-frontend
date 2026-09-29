@@ -42,7 +42,7 @@
   border: 1px solid color-mix(in srgb, var(--accent) 55%, var(--border));
   border-radius: 13px;
 
-  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+  background: var(--icon-box-bg, color-mix(in srgb, var(--accent) 8%, var(--surface)));
   color: var(--accent);
 }
 

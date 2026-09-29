@@ -3,7 +3,13 @@
 }
 
 .genre-shelves__header {
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  border-radius: 20px;
+
   margin-bottom: var(--space-14);
+  padding: 0 16px;
 }
 
 .genre-shelves__header h2 {
@@ -30,4 +36,8 @@
   .genre-shelves__grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
+}
+
+.genre-shelves__header.app-panel {
+  border-radius: 8px;
 }

@@ -131,3 +131,54 @@
     0 -8px 28px rgba(75, 35, 110, 0.10),
     inset 0 1px 0 rgba(255, 255, 255, 0.55);
 }
+/* Cyberpunk Light — neon border above glass bottom navigation */
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .mobile-bottom-nav::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  border-radius: 18px 18px 0 0;
+  padding: 2px;
+
+  background: var(--accent-gradient);
+
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+
+  pointer-events: none;
+}
+/* Cyberpunk Light — neon border above glass bottom navigation */
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .mobile-bottom-nav::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+
+  border-radius: 18px 18px 0 0;
+  padding: 2px;
+
+  background: var(--accent-gradient);
+
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+
+  pointer-events: none;
+}
+/* Cyberpunk Light — rounded glass bottom navigation */
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .mobile-bottom-nav {
+  border-radius: 18px 18px 0 0;
+  overflow: visible;
+}

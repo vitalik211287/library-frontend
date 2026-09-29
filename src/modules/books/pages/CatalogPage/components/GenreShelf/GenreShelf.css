@@ -115,3 +115,12 @@
     -webkit-backdrop-filter: none;
   }
 }
+
+/* Cyberpunk Light — readable glass shelf */
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .genre-shelf.app-panel {
+  background: rgba(248, 241, 252, 0.40);
+  border-color: rgba(139, 77, 232, 0.20);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}

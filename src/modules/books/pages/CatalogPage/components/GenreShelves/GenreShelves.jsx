@@ -1,4 +1,5 @@
 import GenreShelf from "../GenreShelf/GenreShelf.jsx";
+import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 
 import "./GenreShelves.css";
 
@@ -12,9 +13,9 @@ const GenreShelves = ({
 
   return (
     <section className="genre-shelves">
-      <div className="genre-shelves__header">
+      <AppPanel className="genre-shelves__header">
         <h2>Полички</h2>
-      </div>
+      </AppPanel>
 
       <div className="genre-shelves__grid">
         {shelves.map((shelf) => (

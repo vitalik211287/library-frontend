@@ -227,3 +227,30 @@
     font-size: 12px;
   }
 }
+
+/* Keep achievement icons consistent when locked */
+.profile-achievement--locked .profile-achievement__medal {
+  opacity: 1;
+  filter: none;
+  color: var(--accent);
+}
+
+.profile-achievement--locked .profile-achievement__medal svg {
+  opacity: 1;
+}
+/* Cyberpunk Light — glass achievement cards */
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .profile-achievement {
+  background: rgba(255, 250, 253, 0.34);
+  border: 1px solid rgba(139, 77, 232, 0.20);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  box-shadow:
+    0 6px 18px rgba(75, 35, 110, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.50);
+}
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .profile-achievement--unlocked {
+  border-color: rgba(139, 77, 232, 0.34);
+}
