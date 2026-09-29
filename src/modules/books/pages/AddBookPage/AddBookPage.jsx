@@ -121,13 +121,12 @@ const AddBookPage = () => {
 
       {isSearching && <Loader text="Шукаємо книгу…" />}
 
-      {isAdding && <Loader text="Додаємо до бібліотеки…" />}
-
       <BookPreview
         book={book}
         setBook={setBook}
         setCoverFile={setCoverFile}
         onAddBook={addFoundBook}
+        isAdding={isAdding}
       />
 
       <button

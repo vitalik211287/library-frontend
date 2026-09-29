@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import CoverUploadButton from "../../../../components/CoverUploadButton/CoverUploadButton.jsx";
+import Loader from "../../../../../../shared/components/Loader/Loader.jsx";
 
 import "./BookPreview.css";
 
@@ -8,6 +9,7 @@ const BookPreview = ({
   setBook,
   setCoverFile,
   onAddBook,
+  isAdding,
 }) => {
   const [coverPreview, setCoverPreview] = useState(null);
 
@@ -170,9 +172,13 @@ const BookPreview = ({
         </label>
 
         <div className="book-actions">
-          <button type="button" onClick={onAddBook}>
-            Додати в бібліотеку
-          </button>
+          {isAdding ? (
+            <Loader text="Додаємо до бібліотеки…" />
+          ) : (
+            <button type="button" onClick={onAddBook}>
+              Додати в бібліотеку
+            </button>
+          )}
         </div>
       </div>
     </div>
