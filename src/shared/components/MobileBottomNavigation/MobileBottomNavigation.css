@@ -117,3 +117,17 @@
     margin-top: 3px;
   }
 }
+
+/* Cyberpunk Light — glass bottom navigation */
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .mobile-bottom-nav {
+  background: rgba(255, 250, 253, 0.52);
+
+  border-top: 1px solid rgba(139, 77, 232, 0.28);
+
+  backdrop-filter: blur(16px) saturate(135%);
+  -webkit-backdrop-filter: blur(16px) saturate(135%);
+
+  box-shadow:
+    0 -8px 28px rgba(75, 35, 110, 0.10),
+    inset 0 1px 0 rgba(255, 255, 255, 0.55);
+}

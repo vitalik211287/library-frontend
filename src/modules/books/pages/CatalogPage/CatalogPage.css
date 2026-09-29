@@ -81,3 +81,29 @@
 :root[data-theme="cyberpunk"][data-color-scheme="light"] .catalog-page__header .books-count {
   margin: 0;
 }
+
+/* Cyberpunk Light — glass catalog controls */
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .catalog-view-toggle {
+  background: rgba(245, 239, 249, 0.48);
+  border: 1px solid rgba(116, 87, 142, 0.20);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"]
+  .catalog-view-toggle__button:not(.is-active) {
+  background: rgba(255, 250, 253, 0.28);
+}
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"]
+  .catalog-search__input input,
+:root[data-theme="cyberpunk"][data-color-scheme="light"]
+  .catalog-search select {
+  background: rgba(245, 239, 249, 0.48);
+  border-color: rgba(116, 87, 142, 0.20);
+
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+
+  box-shadow: 0 4px 14px rgba(75, 50, 95, 0.08);
+}

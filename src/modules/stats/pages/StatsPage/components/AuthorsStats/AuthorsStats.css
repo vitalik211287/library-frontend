@@ -32,9 +32,10 @@
   display: grid;
   place-items: center;
 
-  color: var(--accent-soft);
+  color: var(--accent);
 
-  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  background: color-mix(in srgb, var(--accent) 28%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
 
   border-radius: 9px;
 

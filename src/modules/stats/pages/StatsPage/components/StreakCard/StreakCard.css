@@ -93,3 +93,44 @@
   fill: currentColor;
   stroke: none;
 }
+
+/* Cyberpunk Light — streak card contrast */
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .streak-main {
+  background: rgba(255, 250, 253, 0.32);
+  border: 1px solid rgba(116, 87, 142, 0.16);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .streak-main strong {
+  color: #35205f;
+}
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .streak-main span {
+  color: var(--text);
+}
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .streak-main__icon {
+  background: rgba(139, 77, 232, 0.16);
+  color: var(--accent);
+}
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .streak-main__icon--flame svg {
+  color: var(--accent);
+  opacity: 1;
+}
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .streak-details > div {
+  background: rgba(255, 250, 253, 0.52);
+  border: 1px solid rgba(116, 87, 142, 0.16);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .streak-details span {
+  color: var(--text-muted);
+}
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .streak-details strong {
+  color: var(--text);
+}
