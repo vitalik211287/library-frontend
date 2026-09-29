@@ -8,6 +8,7 @@ import {
 } from "react";
 import toast from "react-hot-toast";
 import PageBackButton from "../../../../shared/components/PageBackButton/PageBackButton.jsx";
+import Icon from "../../../../shared/components/Icon/Icon.jsx";
 import Loader from "../../../../shared/components/Loader/Loader.jsx";
 
 const BarcodeScanner = lazy(
@@ -132,7 +133,22 @@ const AddBookPage = () => {
         type="button"
         onClick={() => setManualMode((current) => !current)}
       >
-        {manualMode ? "Закрити ручне додавання" : "Додати вручну"}
+        <span className="manual-toggle__corner manual-toggle__corner--tl" />
+        <span className="manual-toggle__corner manual-toggle__corner--tr" />
+        <span className="manual-toggle__corner manual-toggle__corner--bl" />
+        <span className="manual-toggle__corner manual-toggle__corner--br" />
+
+        <span className="manual-toggle__icon" aria-hidden="true">
+          <Icon name="book" />
+        </span>
+
+        <span className="manual-toggle__label">
+          {manualMode ? "Закрити ручне додавання" : "Додати вручну"}
+        </span>
+
+        <span className="manual-toggle__arrow" aria-hidden="true">
+          →
+        </span>
       </button>
 
       {manualMode && (
