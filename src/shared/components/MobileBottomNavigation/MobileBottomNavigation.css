@@ -182,3 +182,26 @@
   border-radius: 18px 18px 0 0;
   overflow: visible;
 }
+/* Cyberpunk Light — hide neon line behind Add button */
+:root[data-theme="cyberpunk"][data-color-scheme="light"]
+  .mobile-bottom-nav__item--add {
+  position: relative;
+}
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"]
+  .mobile-bottom-nav__item--add::before {
+  content: "";
+  position: absolute;
+
+  top: 17px;
+  left: 50%;
+
+  width: 66px;
+  height: 4px;
+
+  transform: translateX(-50%);
+
+  background: rgba(255, 250, 253, 0.52);
+
+  z-index: -1;
+}
