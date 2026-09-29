@@ -1,5 +1,6 @@
 ﻿const ICON_VIEWBOXES = {
   "book-finished": "0 0 32 32",
+  "pumpkin-add": "0 0 64 64",
 };
 
 const Icon = ({
@@ -18,8 +19,15 @@ const Icon = ({
     aria-label={ariaLabel}
     {...props}
   >
-    <use href={`/icons.svg#icon-${name}`} />
+    <use href={`/icons.svg?v=6#icon-${name}`} />
   </svg>
 );
 
 export default Icon;
+
+
+
+
+
+
+

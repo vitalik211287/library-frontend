@@ -1,4 +1,4 @@
-/* =========================
+﻿/* =========================
    MOBILE HEADER
 ========================= */
 
@@ -823,8 +823,8 @@
 
 .mobile-header__notifications-badge {
   position: absolute;
-  top: -1px;
-  right: -5px;
+  top: 1px;
+  right: 0;
 
   min-width: 18px;
   height: 18px;
@@ -833,6 +833,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
   border-radius: var(--radius-pill);
 
   background: var(--accent);
@@ -844,3 +845,5 @@
 
   pointer-events: none;
 }
+
+

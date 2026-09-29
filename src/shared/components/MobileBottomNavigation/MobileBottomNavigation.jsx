@@ -1,7 +1,8 @@
-import { NavLink } from "react-router-dom";
+﻿import { NavLink } from "react-router-dom";
 
 import {
   AddIcon,
+  PumpkinAddIcon,
   CatalogIcon,
   ProfileIcon,
   StatsIcon,
@@ -30,6 +31,7 @@ const MobileBottomNavigation = () => {
       >
         <span className="mobile-bottom-nav__add-button">
           <AddIcon />
+          <PumpkinAddIcon />
         </span>
         <span>Додати</span>
       </NavLink>
@@ -48,3 +50,4 @@ const MobileBottomNavigation = () => {
 };
 
 export default MobileBottomNavigation;
+

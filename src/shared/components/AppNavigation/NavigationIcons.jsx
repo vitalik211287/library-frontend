@@ -1,4 +1,4 @@
-import Icon from "../Icon/Icon.jsx";
+﻿import Icon from "../Icon/Icon.jsx";
 
 export const HomeIcon = () => <Icon name="home" />;
 export const CatalogIcon = () => (
@@ -8,6 +8,7 @@ export const CatalogIcon = () => (
   </svg>
 );
 export const AddIcon = () => <Icon name="add" />;
+export const PumpkinAddIcon = () => <Icon name="pumpkin-add" />;
 export const CalendarIcon = () => <Icon name="calendar" />;
 export const ReaderIcon = () => <Icon name="reading" />;
 export const StatsIcon = () => <Icon name="stats" />;
@@ -35,3 +36,4 @@ export const SettingsIcon = () => <Icon name="settings" />;
 export const SystemIcon = () => <Icon name="system" />;
 export const SunIcon = () => <Icon name="sun" />;
 export const MoonIcon = () => <Icon name="moon" />;
+
