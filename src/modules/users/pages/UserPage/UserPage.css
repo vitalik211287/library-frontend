@@ -1,4 +1,4 @@
-﻿/* =========================
+/* =========================
    PAGE
 ========================= */
 
@@ -140,5 +140,92 @@
 @media (min-width: 768px) {
   .profile-section--books {
     padding: var(--space-18);
+  }
+}
+
+/* Cyberpunk Light — keep profile section titles inside the glass surface */
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .profile-section--goal,
+:root[data-theme="cyberpunk"][data-color-scheme="light"] .profile-section--library-goal {
+  padding: var(--space-14);
+
+  border: 1px solid rgba(139, 77, 232, 0.20);
+  border-radius: var(--panel-radius);
+
+  background: rgba(248, 241, 252, 0.38);
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  box-shadow:
+    0 8px 22px rgba(75, 35, 110, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.50);
+}
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"]
+  .profile-section--goal .profile-section__header,
+:root[data-theme="cyberpunk"][data-color-scheme="light"]
+  .profile-section--library-goal .profile-section__header {
+  margin-bottom: var(--space-14);
+}
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"]
+  .profile-section--goal .reading-goal-card,
+:root[data-theme="cyberpunk"][data-color-scheme="light"]
+  .profile-section--library-goal .library-goal-card {
+  border: 0;
+  border-radius: 0;
+
+  background: transparent;
+
+  box-shadow: none;
+
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"]
+  .profile-section--goal .reading-goal-card {
+  padding: 0;
+}
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"]
+  .profile-section--library-goal .library-goal-card {
+  padding: 0;
+}
+
+@media (min-width: 768px) {
+  :root[data-theme="cyberpunk"][data-color-scheme="light"] .profile-section--goal,
+  :root[data-theme="cyberpunk"][data-color-scheme="light"] .profile-section--library-goal {
+    padding: var(--space-16);
+  }
+}
+
+/* Cyberpunk Light — achievements section glass container */
+:root[data-theme="cyberpunk"][data-color-scheme="light"]
+  .profile-section--achievements {
+  padding: var(--space-14);
+
+  border: 1px solid rgba(139, 77, 232, 0.20);
+  border-radius: var(--panel-radius);
+
+  background: rgba(248, 241, 252, 0.38);
+
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+
+  box-shadow:
+    0 8px 22px rgba(75, 35, 110, 0.07),
+    inset 0 1px 0 rgba(255, 255, 255, 0.50);
+}
+
+:root[data-theme="cyberpunk"][data-color-scheme="light"]
+  .profile-section--achievements .profile-section__header {
+  margin-bottom: var(--space-14);
+}
+
+@media (min-width: 768px) {
+  :root[data-theme="cyberpunk"][data-color-scheme="light"]
+    .profile-section--achievements {
+    padding: var(--space-16);
   }
 }

@@ -519,7 +519,8 @@ const ReadingActivityChart = ({
 
       <div className="reading-chart__periods">
         {monthMarkers.map((marker) => {
-          const left = (getX(marker.index) / width) * 100;
+          const rawLeft = (getX(marker.index) / width) * 100;
+          const left = Math.max(8, Math.min(92, rawLeft));
 
           return (
             <span

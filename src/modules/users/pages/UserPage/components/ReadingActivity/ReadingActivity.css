@@ -371,8 +371,8 @@
 
   border-radius: 7px;
 
-  background: var(--surface);
-  color: var(--text-h);
+  background: transparent;
+  color: var(--accent);
 
   font-size: 15px;
   font-weight: 800;
@@ -660,8 +660,8 @@
 
   padding: 0 4px;
 
-  background: var(--surface);
-  color: var(--text-h);
+  background: transparent;
+  color: var(--accent);
 
   font-size: 15px;
   font-weight: 800;
@@ -752,4 +752,10 @@
   .reading-chart__selection-dot {
     transition: none;
   }
+}
+
+/* Month marker must not cover the chart dot */
+.reading-chart__period::before {
+  top: -8px;
+  height: 5px;
 }
