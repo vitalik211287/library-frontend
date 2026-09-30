@@ -6,6 +6,9 @@ import Icon from "../../../../shared/components/Icon/Icon.jsx";
 
 import SocialFeedMenu from "./components/SocialFeedMenu/SocialFeedMenu.jsx";
 import SocialFeedCard from "./components/SocialFeedCard/SocialFeedCard.jsx";
+import SocialPostCard from "./components/SocialPostCard/SocialPostCard.jsx";
+import SocialPostComposer from "./components/SocialPostComposer/SocialPostComposer.jsx";
+import SocialPostThreadModal from "./components/SocialPostThreadModal/SocialPostThreadModal.jsx";
 import SocialBookModal from "./components/SocialBookModal/SocialBookModal.jsx";
 import "./SocialFeed.css";
 
@@ -20,6 +23,7 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const linkedActivityId = searchParams.get("activityId");
+  const linkedPostId = searchParams.get("postId");
 
   const [activities, setActivities] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -87,6 +91,57 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
     if (book?.id) {
       setSelectedBook(book);
     }
+  }, []);
+
+  const handleOpenThread = useCallback(
+    (post) => {
+      if (!post?.id) {
+        return;
+      }
+
+      const params = new URLSearchParams(searchParams);
+      params.set("postId", post.id);
+
+      navigate(`/community?${params.toString()}`);
+    },
+    [navigate, searchParams],
+  );
+
+  const handleCloseThread = useCallback(() => {
+    const params = new URLSearchParams(searchParams);
+    params.delete("postId");
+
+    const query = params.toString();
+
+    navigate(query ? `/community?${query}` : "/community");
+  }, [navigate, searchParams]);
+
+  const handlePostCreated = useCallback((post) => {
+    const feedPost = {
+      kind: "post",
+      id: post.id,
+      text: post.text,
+      createdAt: post.createdAt,
+      updatedAt: post.updatedAt,
+      user: post.author,
+      book: post.book,
+      repliesCount: post._count?.replies ?? 0,
+      isOwnPost: true,
+    };
+
+    setActivities((current) => [feedPost, ...current]);
+  }, []);
+  const handleReplyCreated = useCallback((postId) => {
+    setActivities((current) =>
+      current.map((item) =>
+        item.kind === "post" && item.id === postId
+          ? {
+              ...item,
+              repliesCount: (item.repliesCount ?? 0) + 1,
+            }
+          : item,
+      ),
+    );
   }, []);
 
   const handleOpenAchievement = useCallback(
@@ -261,10 +316,6 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
     );
   }
 
-  if (!activities.length) {
-    return null;
-  }
-
   const displayedActivities =
     limit === null ? activities : activities.slice(0, limit);
 
@@ -294,23 +345,48 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
           </button>
         )}
       </div>
+      <SocialPostComposer onPostCreated={handlePostCreated} />
+
       <div className="social-feed__list">
-        {displayedActivities.map((activity) => (
-          <SocialFeedCard
-            key={activity.id}
-            activity={activity}
-            formattedTime={activityDateFormatter.format(
-              new Date(activity.createdAt),
-            )}
-            onOpenProfile={handleOpenProfile}
-            onOpenMenu={handleOpenMenu}
-            onOpenBook={handleOpenBook}
-            onOpenAchievement={handleOpenAchievement}
-            onKudos={handleKudos}
-            onShare={handleShare}
-          />
-        ))}
+        {displayedActivities.map((item) => {
+          const formattedTime = activityDateFormatter.format(
+            new Date(item.createdAt),
+          );
+
+          if (item.kind === "post") {
+            return (
+              <SocialPostCard
+                key={`post-${item.id}`}
+                post={item}
+                formattedTime={formattedTime}
+                onOpenProfile={handleOpenProfile}
+                onOpenThread={handleOpenThread}
+                onOpenBook={handleOpenBook}
+              />
+            );
+          }
+
+          return (
+            <SocialFeedCard
+              key={`activity-${item.id}`}
+              activity={item}
+              formattedTime={formattedTime}
+              onOpenProfile={handleOpenProfile}
+              onOpenMenu={handleOpenMenu}
+              onOpenBook={handleOpenBook}
+              onOpenAchievement={handleOpenAchievement}
+              onKudos={handleKudos}
+              onShare={handleShare}
+            />
+          );
+        })}
       </div>
+      <SocialPostThreadModal
+        postId={linkedPostId}
+        onClose={handleCloseThread}
+        onOpenProfile={handleOpenProfile}
+        onReplyCreated={handleReplyCreated}
+      />
       <SocialBookModal
         book={selectedBook}
         onClose={() => setSelectedBook(null)}

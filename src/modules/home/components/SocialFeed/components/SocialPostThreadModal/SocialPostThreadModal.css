@@ -1,0 +1,260 @@
+.social-post-thread__backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+
+  padding: var(--space-16);
+  background: var(--overlay-bg);
+}
+
+.social-post-thread {
+  width: 100%;
+  max-width: 430px;
+  max-height: min(720px, 85vh);
+
+  display: flex;
+  flex-direction: column;
+
+  overflow: hidden;
+
+  border: 1px solid var(--border);
+  border-radius: 22px 22px 16px 16px;
+
+  background: var(--surface);
+  color: var(--text);
+}
+
+.social-post-thread__handle {
+  width: 42px;
+  height: 4px;
+
+  flex: 0 0 auto;
+
+  margin: 10px auto 0;
+
+  border-radius: var(--radius-pill);
+  background: var(--border);
+}
+
+.social-post-thread__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: var(--space-14) var(--space-16);
+  border-bottom: 1px solid var(--border);
+}
+
+.social-post-thread__header h2 {
+  margin: 0;
+
+  color: var(--text-h);
+  font-size: 17px;
+}
+
+.social-post-thread__close {
+  width: 32px;
+  height: 32px;
+
+  display: grid;
+  place-items: center;
+
+  padding: 0;
+  border: 0;
+  background: transparent;
+
+  color: var(--text);
+  font-size: 25px;
+  line-height: 1;
+}
+
+.social-post-thread__body {
+  min-height: 0;
+  flex: 1;
+
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.social-post-thread__root {
+  padding: var(--space-16);
+
+  border-bottom: 1px solid var(--border);
+}
+
+.social-post-thread__author {
+  padding: 0;
+  border: 0;
+  background: transparent;
+
+  color: var(--text-h);
+  text-align: left;
+}
+
+.social-post-thread__author strong {
+  font-size: 13px;
+}
+
+.social-post-thread__root p,
+.social-post-thread__reply p {
+  margin: var(--space-8) 0 0;
+
+  color: var(--text-h);
+  font-size: 13px;
+  line-height: 1.5;
+
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.social-post-thread__replies {
+  display: flex;
+  flex-direction: column;
+}
+
+.social-post-thread__reply {
+  position: relative;
+
+  padding: var(--space-14) var(--space-16) var(--space-14) 34px;
+
+  border-bottom: 1px solid var(--border);
+}
+
+.social-post-thread__reply::before {
+  content: "";
+
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 49px;
+
+  width: 1px;
+
+  background: var(--border);
+}
+
+.social-post-thread__status,
+.social-post-thread__empty {
+  margin: 0;
+  padding: var(--space-20) var(--space-16);
+
+  color: var(--text);
+  font-size: 12px;
+  text-align: center;
+}
+
+.social-post-thread__composer {
+  flex: 0 0 auto;
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: end;
+  gap: var(--space-8);
+
+  padding: var(--space-12) var(--space-16);
+
+  border-top: 1px solid var(--border);
+  background: var(--surface);
+}
+
+.social-post-thread__composer textarea {
+  width: 100%;
+  min-height: 42px;
+  max-height: 120px;
+
+  resize: none;
+
+  padding: 10px 12px;
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  outline: none;
+
+  background: var(--surface-secondary);
+  color: var(--text-h);
+
+  font: inherit;
+  font-size: 12px;
+  line-height: 1.4;
+}
+
+.social-post-thread__composer textarea:focus {
+  border-color: var(--accent);
+}
+
+.social-post-thread__composer textarea::placeholder {
+  color: var(--text);
+}
+
+.social-post-thread__composer button {
+  min-height: 42px;
+
+  padding: 0 14px;
+
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-md);
+
+  background: var(--accent);
+  color: var(--text-on-accent);
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.social-post-thread__composer button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+@media (min-width: 768px) {
+  .social-post-thread__backdrop {
+    align-items: center;
+  }
+
+  .social-post-thread {
+    border-radius: var(--radius-2xl);
+  }
+}
+
+.social-post-thread__message {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-10);
+}
+
+.social-post-thread__avatar {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+  position: relative;
+  z-index: 1;
+  display: grid;
+  place-items: center;
+
+  padding: 0;
+  overflow: hidden;
+
+  border: 1px solid var(--border);
+  border-radius: 50%;
+
+  background: var(--surface-secondary);
+  color: var(--accent);
+
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.social-post-thread__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.social-post-thread__message-content {
+  min-width: 0;
+  flex: 1;
+}

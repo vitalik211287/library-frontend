@@ -1,0 +1,76 @@
+.social-post-composer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+
+  margin-bottom: var(--space-16);
+  padding: var(--space-14);
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius-xl);
+
+  background: var(--surface);
+}
+
+.social-post-composer textarea {
+  width: 100%;
+  min-height: 72px;
+
+  resize: vertical;
+
+  padding: 0;
+  border: 0;
+  outline: none;
+
+  background: transparent;
+  color: var(--text-h);
+
+  font: inherit;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.social-post-composer textarea::placeholder {
+  color: var(--text);
+}
+
+.social-post-composer__footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-12);
+
+  padding-top: var(--space-10);
+  border-top: 1px solid var(--border);
+}
+
+.social-post-composer__footer span {
+  color: var(--text);
+  font-size: 11px;
+}
+
+.social-post-composer__footer button {
+  min-height: 36px;
+  padding: 0 16px;
+
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-md);
+
+  background: var(--accent);
+  color: var(--text-on-accent);
+
+  font-size: 11px;
+  font-weight: 700;
+}
+
+.social-post-composer__footer button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}
+
+.social-post-composer__error {
+  margin: 0;
+
+  color: var(--danger, #d9534f);
+  font-size: 11px;
+}

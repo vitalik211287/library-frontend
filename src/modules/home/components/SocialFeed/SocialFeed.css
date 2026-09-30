@@ -595,3 +595,18 @@
   fill: var(--accent);
   stroke: var(--accent);
 }
+
+/* Social post */
+
+.social-post-card__content {
+  padding: var(--space-12) 14px;
+  color: var(--text-h);
+}
+
+.social-post-card__content p {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
