@@ -1,4 +1,4 @@
-﻿import { memo } from "react";
+import { memo } from "react";
 
 import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
 import HomePanel from "../../../HomePanel/HomePanel.jsx";
@@ -9,6 +9,7 @@ const SocialPostCard = ({
   onOpenProfile,
   onOpenThread,
   onOpenBook,
+  onKudos,
 }) => {
   const userName = post.user?.name || "\u041a\u043e\u0440\u0438\u0441\u0442\u0443\u0432\u0430\u0447";
 
@@ -73,12 +74,13 @@ const SocialPostCard = ({
       <div className="social-feed-card__actions">
         <button
           type="button"
-          className="social-feed-card__action"
-          disabled
+          className={post.hasKudos ? "social-feed-card__action social-feed-card__action--active" : "social-feed-card__action"}
+          disabled={post.isOwnPost}
+          onClick={() => onKudos(post)}
           aria-label={"\u041f\u0456\u0434\u0442\u0440\u0438\u043c\u0430\u0442\u0438"}
         >
           <Icon name="clap" />
-          <span>0</span>
+          <span>{post.kudosCount ?? 0}</span>
         </button>
 
         <button

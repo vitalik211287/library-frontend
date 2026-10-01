@@ -170,19 +170,21 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
     }
   }, []);
   const handleKudos = useCallback(async (activity) => {
-    if (!activity?.id || activity.isOwnActivity) {
+    if (!activity?.id || activity.isOwnActivity || activity.isOwnPost) {
       return;
     }
 
     const nextHasKudos = !activity.hasKudos;
 
+    const kudosUrl =
+      activity.kind === "post"
+        ? `/api/social/posts/${activity.id}/kudos`
+        : `/api/social/activities/${activity.id}/kudos`;
+
     try {
-      const data = await apiFetch(
-        `/api/social/activities/${activity.id}/kudos`,
-        {
-          method: nextHasKudos ? "POST" : "DELETE",
-        },
-      );
+      const data = await apiFetch(kudosUrl, {
+        method: nextHasKudos ? "POST" : "DELETE",
+      });
 
       setActivities((current) =>
         current.map((item) =>
@@ -346,7 +348,6 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
         )}
       </div>
       <SocialPostComposer onPostCreated={handlePostCreated} />
-
       <div className="social-feed__list">
         {displayedActivities.map((item) => {
           const formattedTime = activityDateFormatter.format(
@@ -362,6 +363,7 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
                 onOpenProfile={handleOpenProfile}
                 onOpenThread={handleOpenThread}
                 onOpenBook={handleOpenBook}
+                onKudos={handleKudos}
               />
             );
           }
