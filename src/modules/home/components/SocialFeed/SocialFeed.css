@@ -817,3 +817,59 @@
   opacity: 0.45;
   cursor: default;
 }
+
+/* Social post — match existing feed cards */
+
+.social-post-card .social-post-card__content {
+  padding: var(--space-14);
+}
+
+.social-post-card .social-post-card__book {
+  margin-top: var(--space-12);
+  padding: var(--space-12);
+  border: 1px solid var(--border);
+  border-radius: 15px;
+  background: var(--surface-secondary);
+}
+
+.social-post-card .social-feed-card__actions {
+  min-height: 52px;
+  margin: 0 var(--space-14);
+  grid-template-columns: 0.72fr 1.4fr 1.3fr;
+}
+
+@media (max-width: 767px) {
+  .social-post-card .social-post-card__content {
+    padding: var(--space-10) 11px;
+  }
+
+  .social-post-card .social-post-card__book {
+    margin-top: var(--space-10);
+    padding: 9px;
+    border-radius: var(--radius-lg);
+  }
+
+  .social-post-card .social-feed-card__actions {
+    min-height: 43px;
+    margin: 0 var(--space-10);
+    grid-template-columns: 0.65fr 1.4fr 1.25fr;
+  }
+}
+
+.social-post-card .social-post-card__menu-button {
+  color: var(--accent);
+}
+
+.social-post-card .social-post-card__menu-button svg {
+  color: var(--accent);
+  fill: var(--accent);
+  stroke: var(--accent);
+}
+
+.social-post-card .social-post-card__menu-button:hover,
+.social-post-card .social-post-card__menu-button:focus,
+.social-post-card .social-post-card__menu-button:active {
+  background: transparent !important;
+  box-shadow: none;
+  opacity: 1;
+}

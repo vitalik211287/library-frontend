@@ -54,3 +54,19 @@
 .community-page .social-feed-card {
   overflow: hidden;
 }
+
+/* Community header card */
+
+.community-page__header {
+  margin-bottom: var(--section-gap);
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface-secondary);
+}
+
+@media (min-width: 768px) {
+  .community-page__header {
+    padding: 16px;
+  }
+}

@@ -27,3 +27,18 @@
     font-size: 32px;
   }
 }
+
+/* Welcome card */
+
+.home-welcome {
+  padding: 14px;
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  background: var(--surface-secondary);
+}
+
+@media (min-width: 768px) {
+  .home-welcome {
+    padding: 16px;
+  }
+}
