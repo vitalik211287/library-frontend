@@ -672,3 +672,148 @@
 .social-post-card__book:hover {
   border-color: var(--accent);
 }
+
+.social-post-card .social-feed-card__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.social-post-card .social-feed-card__action > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.social-post-card .social-feed-card__action > button:disabled {
+  cursor: default;
+}
+
+.social-post-card .social-feed-card__action > button:last-child {
+  min-width: 12px;
+}
+
+.social-post-card__menu {
+  position: relative;
+  margin-left: auto;
+}
+
+.social-post-card__menu-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+  background: transparent;
+  color: inherit;
+  font-size: 18px;
+  cursor: pointer;
+  opacity: 0.7;
+}
+
+.social-post-card__menu-button:hover {
+  background: rgba(255, 255, 255, 0.08);
+  opacity: 1;
+}
+
+.social-post-card__menu-dropdown {
+  position: absolute;
+  top: calc(100% + 6px);
+  right: 0;
+  z-index: 20;
+  display: flex;
+  flex-direction: column;
+  min-width: 150px;
+  padding: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  background: var(--panel-background, #161a22);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+.social-post-card__menu-dropdown button {
+  width: 100%;
+  padding: 10px 12px;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.social-post-card__menu-dropdown button:hover {
+  background: rgba(255, 255, 255, 0.07);
+}
+
+.social-post-card__menu-dropdown .social-post-card__menu-delete {
+  color: #ef6b73;
+}
+
+.social-post-card__edit {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+.social-post-card__edit textarea {
+  width: 100%;
+  min-height: 90px;
+  padding: 12px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 12px;
+  outline: none;
+  resize: vertical;
+  box-sizing: border-box;
+  background: rgba(255, 255, 255, 0.04);
+  color: inherit;
+  font: inherit;
+  line-height: 1.45;
+}
+
+.social-post-card__edit textarea:focus {
+  border-color: var(--accent-color, #a855f7);
+  box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.12);
+}
+
+.social-post-card__edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+.social-post-card__edit-actions button {
+  padding: 8px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 9px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.social-post-card__edit-actions button:last-child {
+  border-color: transparent;
+  background: var(--accent-color, #a855f7);
+  color: #fff;
+}
+
+.social-post-card__edit-actions button:hover:not(:disabled) {
+  filter: brightness(1.08);
+}
+
+.social-post-card__edit-actions button:disabled {
+  opacity: 0.45;
+  cursor: default;
+}

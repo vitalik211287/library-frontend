@@ -3,6 +3,8 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { apiFetch } from "../../../../shared/api/apiClient.js";
 import Icon from "../../../../shared/components/Icon/Icon.jsx";
+import ConfirmDeleteModal from "../../../../shared/components/ConfirmDeleteModal/ConfirmDeleteModal.jsx";
+
 
 import SocialFeedMenu from "./components/SocialFeedMenu/SocialFeedMenu.jsx";
 import SocialFeedCard from "./components/SocialFeedCard/SocialFeedCard.jsx";
@@ -11,6 +13,7 @@ import SocialPostComposer from "./components/SocialPostComposer/SocialPostCompos
 import SocialPostThreadModal from "./components/SocialPostThreadModal/SocialPostThreadModal.jsx";
 import SocialBookModal from "./components/SocialBookModal/SocialBookModal.jsx";
 import "./SocialFeed.css";
+import KudosUsersModal from "./components/KudosUsersModal/KudosUsersModal.jsx";
 
 const activityDateFormatter = new Intl.DateTimeFormat("uk-UA", {
   day: "2-digit",
@@ -29,6 +32,9 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
   const [isLoading, setIsLoading] = useState(true);
   const [menuActivity, setMenuActivity] = useState(null);
   const [selectedBook, setSelectedBook] = useState(null);
+  const [kudosUsersItem, setKudosUsersItem] = useState(null);
+  const [postToDelete, setPostToDelete] = useState(null);
+  const [isDeletingPost, setIsDeletingPost] = useState(false);
   const [isUnfollowing, setIsUnfollowing] = useState(false);
   const [notifyActivity, setNotifyActivity] = useState(false);
   const [isUpdatingNotifications, setIsUpdatingNotifications] = useState(false);
@@ -201,7 +207,70 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
       console.error("Update feed kudos error:", error);
     }
   }, []);
+  const handleEditPost = useCallback(async (post, text) => {
+    if (!post?.id || !post.isOwnPost) {
+      return;
+    }
 
+    try {
+      const updatedPost = await apiFetch(`/api/social/posts/${post.id}`, {
+        method: "PATCH",
+        body: {
+          text,
+          bookId: post.book?.id ?? null,
+        },
+      });
+
+      setActivities((current) =>
+        current.map((item) =>
+          item.id === post.id
+            ? {
+                ...item,
+                text: updatedPost.text,
+                book: updatedPost.book,
+                updatedAt: updatedPost.updatedAt,
+              }
+            : item,
+        ),
+      );
+
+      return updatedPost;
+    } catch (error) {
+      console.error("Update social post error:", error);
+      throw error;
+    }
+  }, []);
+  const handleDeletePost = useCallback((post) => {
+    if (!post?.id || !post.isOwnPost) {
+      return;
+    }
+
+    setPostToDelete(post);
+  }, []);
+
+  const handleConfirmDeletePost = useCallback(async () => {
+    if (!postToDelete?.id) {
+      return;
+    }
+
+    try {
+      setIsDeletingPost(true);
+
+      await apiFetch(`/api/social/posts/${postToDelete.id}`, {
+        method: "DELETE",
+      });
+
+      setActivities((current) =>
+        current.filter((item) => item.id !== postToDelete.id),
+      );
+
+      setPostToDelete(null);
+    } catch (error) {
+      console.error("Delete social post error:", error);
+    } finally {
+      setIsDeletingPost(false);
+    }
+  }, [postToDelete]);
   const handleToggleNotifications = async () => {
     const userId = menuActivity?.user?.id;
 
@@ -364,6 +433,9 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
                 onOpenThread={handleOpenThread}
                 onOpenBook={handleOpenBook}
                 onKudos={handleKudos}
+                onOpenKudosUsers={setKudosUsersItem}
+                onDelete={handleDeletePost}
+                onEdit={handleEditPost}
               />
             );
           }
@@ -399,6 +471,21 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
             navigate(`/catalog?bookId=${book.id}`);
           }
         }}
+      />
+      <KudosUsersModal
+        item={kudosUsersItem}
+        onClose={() => setKudosUsersItem(null)}
+        onOpenProfile={handleOpenProfile}
+      />
+
+      <ConfirmDeleteModal
+        isOpen={Boolean(postToDelete)}
+        title="Видалити допис?"
+        description="Цю дію неможливо скасувати."
+        confirmText="Видалити"
+        isLoading={isDeletingPost}
+        onCancel={() => setPostToDelete(null)}
+        onConfirm={handleConfirmDeletePost}
       />
       <SocialFeedMenu
         activity={menuActivity}

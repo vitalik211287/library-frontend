@@ -45,6 +45,11 @@ const NotificationsPage = () => {
     if (!notification.isRead) {
       await markAsRead(notification.id);
     }
+    if (notification.type === "KUDOS_RECEIVED" && notification.postId) {
+      navigate(`/community?postId=${notification.postId}`);
+      return;
+    }
+
     if (notification.type === "KUDOS_RECEIVED" && notification.activity?.id) {
       const activityId = notification.activity.id;
       navigate(`/community?activityId=${activityId}`);
@@ -264,6 +269,10 @@ const NotificationsPage = () => {
 
     const getNotificationText = () => {
       if (notification.type === "KUDOS_RECEIVED") {
+        if (notification.postId) {
+          return "\u043f\u0456\u0434\u0442\u0440\u0438\u043c\u0430\u0432 \u0432\u0430\u0448 \u0434\u043e\u043f\u0438\u0441";
+        }
+
         switch (notification.activity?.type) {
           case "READING_STARTED":
             return "підтримав початок читання";
@@ -313,7 +322,7 @@ const NotificationsPage = () => {
     const text = getNotificationText();
 
     const kudosActivityText =
-      notification.type === "KUDOS_RECEIVED"
+      notification.type === "KUDOS_RECEIVED" && !notification.postId
         ? getKudosActivityText(notification)
         : null;
 
