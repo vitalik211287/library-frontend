@@ -610,3 +610,65 @@
   white-space: pre-wrap;
   overflow-wrap: anywhere;
 }
+
+.social-post-card__book {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+
+  width: 100%;
+  margin-top: var(--space-12);
+  padding: var(--space-10);
+
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+
+  background: var(--surface);
+  color: inherit;
+
+  text-align: left;
+  cursor: pointer;
+}
+
+.social-post-card__book > img {
+  width: 52px;
+  height: 74px;
+  flex: 0 0 52px;
+
+  border-radius: 5px;
+  object-fit: cover;
+}
+
+.social-post-card__book > span {
+  display: flex;
+  min-width: 0;
+  flex: 1;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.social-post-card__book strong {
+  overflow: hidden;
+
+  color: var(--text-h);
+
+  font-size: 13px;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.social-post-card__book small {
+  overflow: hidden;
+
+  color: var(--text);
+
+  font-size: 11px;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.social-post-card__book:hover {
+  border-color: var(--accent);
+}

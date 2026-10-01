@@ -10,9 +10,8 @@ const SocialPostCard = ({
   onOpenThread,
   onOpenBook,
 }) => {
-  const userName = post.user?.name || "Користувач";
+  const userName = post.user?.name || "\u041a\u043e\u0440\u0438\u0441\u0442\u0443\u0432\u0430\u0447";
 
-  
   return (
     <HomePanel
       as="article"
@@ -76,7 +75,7 @@ const SocialPostCard = ({
           type="button"
           className="social-feed-card__action"
           disabled
-          aria-label="ідтримати"
+          aria-label={"\u041f\u0456\u0434\u0442\u0440\u0438\u043c\u0430\u0442\u0438"}
         >
           <Icon name="clap" />
           <span>0</span>
@@ -86,7 +85,7 @@ const SocialPostCard = ({
           type="button"
           className="social-feed-card__action"
           onClick={() => onOpenThread(post)}
-          aria-label="ідповіді"
+          aria-label={"\u0412\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u0456"}
         >
           <Icon name="comment" />
           <span>{post.repliesCount ?? 0}</span>
@@ -96,10 +95,12 @@ const SocialPostCard = ({
           type="button"
           className="social-feed-card__action"
           disabled
-          aria-label="оділитися"
+          aria-label={"\u041f\u043e\u0434\u0456\u043b\u0438\u0442\u0438\u0441\u044f"}
         >
           <Icon name="share" />
-          <span>оділитися</span>
+          <span>
+            {"\u041f\u043e\u0434\u0456\u043b\u0438\u0442\u0438\u0441\u044f"}
+          </span>
         </button>
       </div>
     </HomePanel>
@@ -107,5 +108,3 @@ const SocialPostCard = ({
 };
 
 export default memo(SocialPostCard);
-
-
