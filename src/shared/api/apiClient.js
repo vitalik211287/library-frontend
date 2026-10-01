@@ -1,6 +1,6 @@
 const API_URL =
   import.meta.env.VITE_API_URL ||
-  "https://library-backend-production-5d60.up.railway.app";
+  "https://insideofyou.pp.ua";
 
 const getToken = () => localStorage.getItem("token");
 

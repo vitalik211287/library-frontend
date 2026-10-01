@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { apiFetch } from "../../../../shared/api/apiClient.js";
+import { socket } from "../../../../shared/realtime/socket.js";
 import Icon from "../../../../shared/components/Icon/Icon.jsx";
 import ConfirmDeleteModal from "../../../../shared/components/ConfirmDeleteModal/ConfirmDeleteModal.jsx";
 
@@ -68,6 +69,24 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
 
     return () => {
       isActive = false;
+    };
+  }, []);
+
+  useEffect(() => {
+    const handlePostKudosUpdated = ({ postId, kudosCount }) => {
+      setActivities((current) =>
+        current.map((item) =>
+          item.id === postId ? { ...item, kudosCount } : item,
+        ),
+      );
+    };
+
+    socket.on("post:kudos-updated", handlePostKudosUpdated);
+    socket.connect();
+
+    return () => {
+      socket.off("post:kudos-updated", handlePostKudosUpdated);
+      socket.disconnect();
     };
   }, []);
 
