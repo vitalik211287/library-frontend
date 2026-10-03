@@ -23,7 +23,7 @@ const activityDateFormatter = new Intl.DateTimeFormat("uk-UA", {
   minute: "2-digit",
 });
 
-const SocialFeed = ({ limit = null, showViewAll = false }) => {
+const SocialFeed = ({ limit = null, showViewAll = false, scope = "following", showHeader = true }) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const linkedActivityId = searchParams.get("activityId");
@@ -47,7 +47,7 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
       try {
         setIsLoading(true);
 
-        const data = await apiFetch("/api/social/feed");
+        const data = await apiFetch(`/api/social/feed?scope=${scope}`);
 
         if (isActive) {
           setActivities(Array.isArray(data?.activities) ? data.activities : []);
@@ -70,7 +70,7 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
     return () => {
       isActive = false;
     };
-  }, []);
+  }, [scope]);
 
   useEffect(() => {
     const handlePostKudosUpdated = ({ postId, kudosCount }) => {
@@ -411,30 +411,32 @@ const SocialFeed = ({ limit = null, showViewAll = false }) => {
 
   return (
     <section className="social-feed">
-      <div className="social-feed__header">
-        <h2>Активність читачів</h2>
+      {showHeader && (
+        <div className="social-feed__header">
+          <h2>Активність читачів</h2>
 
-        {showViewAll && activities.length > displayedActivities.length && (
-          <button
-            type="button"
-            className="social-feed__view-all"
-            onClick={() => {
-              navigate("/community");
+          {showViewAll && activities.length > displayedActivities.length && (
+            <button
+              type="button"
+              className="social-feed__view-all"
+              onClick={() => {
+                navigate("/community");
 
-              requestAnimationFrame(() => {
-                window.scrollTo({
-                  top: 0,
-                  left: 0,
-                  behavior: "instant",
+                requestAnimationFrame(() => {
+                  window.scrollTo({
+                    top: 0,
+                    left: 0,
+                    behavior: "instant",
+                  });
                 });
-              });
-            }}
-          >
-            Уся активність
-            <Icon name="chevron-right" />
-          </button>
-        )}
-      </div>
+              }}
+            >
+              Уся активність
+              <Icon name="chevron-right" />
+            </button>
+          )}
+        </div>
+      )}
       <SocialPostComposer onPostCreated={handlePostCreated} />
       <div className="social-feed__list">
         {displayedActivities.map((item) => {
