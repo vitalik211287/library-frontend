@@ -511,11 +511,33 @@ const SocialFeed = ({
         <div className="social-feed__state">Завантажуємо активність...</div>
       ) : displayedActivities.length === 0 ? (
         <div className="social-feed__state">
-          {userId
-            ? "У вас поки немає дописів чи активності у спільноті."
-            : scope === "following"
-              ? "Тут поки порожньо. Підпишіться на читачів, щоб бачити їхню активність."
-              : "У спільноті поки немає активності. Створіть перший допис."}
+          {userId && contentFilter === "posts" ? (
+            <>
+              <strong>У вас ще немає дописів</strong>
+              <span>
+                Поділіться думками про книгу або розкажіть, що читаєте.
+              </span>
+              <button
+                type="button"
+                className="social-feed__state-action"
+                onClick={() => navigate("/community")}
+              >
+                Створити допис
+              </button>
+            </>
+          ) : userId && contentFilter === "activity" ? (
+            <>
+              <strong>Тут поки немає читацької активності</strong>
+              <span>
+                Почніть читати, завершіть книгу або поставте оцінку — ваша
+                активність з'явиться тут.
+              </span>
+            </>
+          ) : scope === "following" ? (
+            "Тут поки порожньо. Підпишіться на читачів, щоб бачити їхню активність."
+          ) : (
+            "У спільноті поки немає активності. Створіть перший допис."
+          )}
         </div>
       ) : (
       <div className="social-feed__list">

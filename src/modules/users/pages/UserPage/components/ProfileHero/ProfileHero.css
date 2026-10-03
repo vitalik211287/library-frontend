@@ -500,14 +500,16 @@
 }
 
 .profile-hero__action {
+  position: relative;
   min-height: 40px;
   display: inline-flex;
   flex: 1;
   align-items: center;
   justify-content: center;
   gap: var(--space-8);
-  padding: 0 var(--space-14);
+  padding: 0 var(--space-8);
   border: 1px solid var(--accent);
+  white-space: nowrap;
   border-radius: var(--radius-14);
   background: var(--accent-bg);
   color: var(--text-h);
@@ -518,6 +520,8 @@
 }
 
 .profile-hero__action svg {
+  position: absolute;
+  left: var(--space-14);
   width: 17px;
   height: 17px;
   color: var(--accent);
