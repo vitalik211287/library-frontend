@@ -467,7 +467,7 @@ const SocialFeed = ({
     contentFilter === "posts"
       ? activities.filter((item) => item.kind === "post")
       : contentFilter === "activity"
-        ? activities.filter((item) => item.kind !== "post")
+        ? activities.filter((item) => item.kind === "activity")
         : activities;
 
   const displayedActivities =
