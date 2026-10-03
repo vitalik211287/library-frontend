@@ -1,0 +1,23 @@
+﻿.load-more-button {
+  align-self: center;
+  min-height: 42px;
+  padding: 0 var(--space-18);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-14);
+  background: transparent;
+  color: var(--accent);
+  font: inherit;
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    opacity 160ms ease;
+}
+
+.load-more-button:hover:not(:disabled) {
+  background: var(--surface-secondary);
+}
+
+.load-more-button:disabled {
+  cursor: default;
+  opacity: 0.6;
+}
