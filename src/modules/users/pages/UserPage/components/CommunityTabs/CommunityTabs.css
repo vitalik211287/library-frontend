@@ -1,0 +1,36 @@
+﻿.profile-community-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  width: 100%;
+  border-bottom: 1px solid var(--border);
+}
+
+.profile-community-tabs button {
+  position: relative;
+  padding: var(--space-12) var(--space-10);
+  border: 0;
+  background: transparent;
+  color: var(--text-secondary);
+  font: inherit;
+  cursor: pointer;
+  transition: color 160ms ease;
+}
+
+.profile-community-tabs button:hover {
+  color: var(--text-primary);
+}
+
+.profile-community-tabs button.is-active {
+  color: var(--accent);
+}
+
+.profile-community-tabs button.is-active::after {
+  content: "";
+  position: absolute;
+  right: 20%;
+  bottom: -1px;
+  left: 20%;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+}

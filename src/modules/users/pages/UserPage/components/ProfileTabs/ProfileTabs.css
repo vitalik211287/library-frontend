@@ -1,0 +1,56 @@
+﻿.profile-tabs {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  width: 100%;
+  border-bottom: 1px solid var(--border);
+}
+
+.profile-tabs__button {
+  position: relative;
+  min-width: 0;
+  padding: 14px 6px;
+  border: 0;
+  background: transparent;
+  color: var(--text);
+  font: inherit;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.profile-tabs__button::after {
+  position: absolute;
+  right: 12%;
+  bottom: -1px;
+  left: 12%;
+  height: 2px;
+  border-radius: 2px;
+  background: transparent;
+  content: "";
+}
+
+.profile-tabs__button--active {
+  color: var(--text-h);
+}
+
+.profile-tabs__button--active::after {
+  background: var(--accent);
+}
+
+.profile-tabs__button:hover {
+  color: var(--text-h);
+}
+
+@media (max-width: 374px) {
+  .profile-tabs__button {
+    padding-inline: 3px;
+    font-size: 10px;
+  }
+}
+
+@media (min-width: 768px) {
+  .profile-tabs__button {
+    padding: 16px 10px;
+    font-size: 13px;
+  }
+}

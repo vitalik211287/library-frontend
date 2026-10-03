@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../../../../auth/context/AuthContext.jsx";
-import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
 import { apiFetch } from "../../../../../../shared/api/apiClient.js";
 
@@ -61,93 +60,47 @@ const ProfileHero = () => {
       </div>
 
       <div className="profile-hero__social">
-        <AppPanel
-          as="button"
-          variant="secondary"
-          clickable
-          type="button"
-          className="profile-hero__social-item"
-          onClick={() => navigate("/users/following")}
-        >
-          <span className="profile-hero__social-icon">
-            <Icon name="community" />
-          </span>
-
-          <span className="profile-hero__social-content">
-            <strong>{followingCount}</strong>
-            <span>Підписки</span>
-          </span>
-
-          <span className="profile-hero__chevron">
-            <Icon name="chevron-right" />
-          </span>
-        </AppPanel>
-
-        <AppPanel
-          as="button"
-          variant="secondary"
-          clickable
-          type="button"
-          className="profile-hero__social-item"
-          onClick={() => navigate("/users/followers")}
-        >
-          <span className="profile-hero__social-icon">
-            <Icon name="community" />
-          </span>
-
-          <span className="profile-hero__social-content">
+        <div className="profile-hero__social-stats">
+          <button
+            type="button"
+            className="profile-hero__social-link"
+            onClick={() => navigate("/users/followers")}
+          >
             <strong>{followersCount}</strong>
-            <span>Підписники</span>
-          </span>
+            <span>підписників</span>
+          </button>
 
-          <span className="profile-hero__chevron">
-            <Icon name="chevron-right" />
-          </span>
-        </AppPanel>
+          <span className="profile-hero__social-separator">·</span>
 
-        <AppPanel
-          as="button"
-          variant="secondary"
-          clickable
-          type="button"
-          className="profile-hero__social-item"
-          onClick={() => navigate("/users")}
-        >
-          <span className="profile-hero__social-icon">
-            <Icon name="search" />
-          </span>
+          <button
+            type="button"
+            className="profile-hero__social-link"
+            onClick={() => navigate("/users/following")}
+          >
+            <strong>{followingCount}</strong>
+            <span>підписок</span>
+          </button>
+        </div>
 
-          <span className="profile-hero__social-content">
-            <strong className="profile-hero__social-title">Знайти</strong>
-            <span>читачів</span>
-          </span>
-
-          <span className="profile-hero__chevron">
-            <Icon name="chevron-right" />
-          </span>
-        </AppPanel>
-
-        <AppPanel
-          as="button"
-          variant="secondary"
-          clickable
-          type="button"
-          className="profile-hero__social-item"
-          onClick={() => navigate("/settings")}
-        >
-          <span className="profile-hero__social-icon">
+        <div className="profile-hero__actions">
+          <button
+            type="button"
+            className="profile-hero__action"
+            onClick={() => navigate("/settings")}
+          >
             <Icon name="edit" />
-          </span>
+            <span>Редагувати профіль</span>
+          </button>
 
-          <span className="profile-hero__social-content">
-            <strong className="profile-hero__social-title">Редагувати</strong>
-            <span>профіль</span>
-          </span>
-
-          <span className="profile-hero__chevron">
-            <Icon name="chevron-right" />
-          </span>
-        </AppPanel>
+          <button
+            type="button"
+            className="profile-hero__action profile-hero__action--secondary"
+            onClick={() => navigate("/users")}
+          >
+            <Icon name="search" />
+            <span>Знайти читачів</span>
+          </button>
+        </div>
       </div>
     </section>
   );

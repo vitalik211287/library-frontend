@@ -1,6 +1,7 @@
 import { memo, useState } from "react";
 
 import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
+import { resolveAssetUrl } from "../../../../../../shared/utils/resolveAssetUrl.js";
 import HomePanel from "../../../HomePanel/HomePanel.jsx";
 
 const SocialPostCard = ({
@@ -138,7 +139,7 @@ const SocialPostCard = ({
           >
             {post.book.coverUrl && (
               <img
-                src={post.book.coverUrl}
+                src={resolveAssetUrl(post.book.coverUrl)}
                 alt=""
                 loading="lazy"
                 decoding="async"

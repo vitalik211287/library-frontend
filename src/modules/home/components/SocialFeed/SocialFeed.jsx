@@ -27,7 +27,15 @@ const activityDateFormatter = new Intl.DateTimeFormat("uk-UA", {
 
 const FEED_PAGE_SIZE = 20;
 
-const SocialFeed = ({ limit = null, showViewAll = false, scope = "following", showHeader = true }) => {
+const SocialFeed = ({
+  limit = null,
+  showViewAll = false,
+  scope = "following",
+  showHeader = true,
+  showComposer = true,
+  userId = null,
+  contentFilter = null,
+}) => {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const linkedActivityId = searchParams.get("activityId");
@@ -54,9 +62,17 @@ const SocialFeed = ({ limit = null, showViewAll = false, scope = "following", sh
       try {
         setIsLoading(true);
 
-        const data = await apiFetch(
-          `/api/social/feed?scope=${scope}&page=1&limit=${FEED_PAGE_SIZE}`,
-        );
+        const params = new URLSearchParams({
+          scope,
+          page: "1",
+          limit: String(FEED_PAGE_SIZE),
+        });
+
+        if (userId) {
+          params.set("userId", userId);
+        }
+
+        const data = await apiFetch(`/api/social/feed?${params.toString()}`);
 
         if (isActive) {
           setActivities(Array.isArray(data?.activities) ? data.activities : []);
@@ -81,7 +97,7 @@ const SocialFeed = ({ limit = null, showViewAll = false, scope = "following", sh
     return () => {
       isActive = false;
     };
-  }, [scope]);
+  }, [scope, userId]);
 
   useEffect(() => {
     const handlePostKudosUpdated = ({ postId, kudosCount }) => {
@@ -124,9 +140,17 @@ const SocialFeed = ({ limit = null, showViewAll = false, scope = "following", sh
     try {
       setIsLoadingMore(true);
 
-      const data = await apiFetch(
-        `/api/social/feed?scope=${scope}&page=${nextPage}&limit=${FEED_PAGE_SIZE}`,
-      );
+      const params = new URLSearchParams({
+        scope,
+        page: String(nextPage),
+        limit: String(FEED_PAGE_SIZE),
+      });
+
+      if (userId) {
+        params.set("userId", userId);
+      }
+
+      const data = await apiFetch(`/api/social/feed?${params.toString()}`);
 
       const nextActivities = Array.isArray(data?.activities)
         ? data.activities
@@ -140,7 +164,7 @@ const SocialFeed = ({ limit = null, showViewAll = false, scope = "following", sh
     } finally {
       setIsLoadingMore(false);
     }
-  }, [hasMore, isLoadingMore, page, scope]);
+  }, [hasMore, isLoadingMore, page, scope, userId]);
 
   const handleOpenProfile = useCallback(
     (userId) => {
@@ -393,35 +417,35 @@ const SocialFeed = ({ limit = null, showViewAll = false, scope = "following", sh
     }
   };
   const handleShare = useCallback(async (activity) => {
-    const userName = activity.user?.name || "РљРѕСЂРёСЃС‚СѓРІР°С‡";
+    const userName = activity.user?.name || "Користувач";
 
     let text;
 
     switch (activity.type) {
       case "READING_STARTED":
-        text = `${userName} РїРѕС‡Р°РІ С‡РёС‚Р°С‚Рё РєРЅРёРіСѓ В«${activity.book?.title || "РљРЅРёРіР°"}В»`;
+        text = `${userName} почав читати книгу «${activity.book?.title || "Книга"}»`;
         break;
 
       case "BOOK_FINISHED":
-        text = `${userName} РїСЂРѕС‡РёС‚Р°РІ РєРЅРёРіСѓ В«${activity.book?.title || "РљРЅРёРіР°"}В»`;
+        text = `${userName} прочитав книгу «${activity.book?.title || "Книга"}»`;
         break;
 
       case "RATING_ADDED":
-        text = `${userName} РѕС†С–РЅРёРІ РєРЅРёРіСѓ В«${activity.book?.title || "РљРЅРёРіР°"}В» РЅР° ${activity.rating ?? 0}/5`;
+        text = `${userName} оцінив книгу «${activity.book?.title || "Книга"}» на ${activity.rating ?? 0}/5`;
         break;
 
       case "ACHIEVEMENT_UNLOCKED":
-        text = `${userName} РѕС‚СЂРёРјР°РІ РґРѕСЃСЏРіРЅРµРЅРЅСЏ В«${activity.achievement?.title || "Р”РѕСЃСЏРіРЅРµРЅРЅСЏ"}В»`;
+        text = `${userName} отримав досягнення «${activity.achievement?.title || "Досягнення"}»`;
         break;
 
       default:
-        text = `${userName} РїРѕРґС–Р»РёРІСЃСЏ РЅРѕРІРѕСЋ Р°РєС‚РёРІРЅС–СЃС‚СЋ`;
+        text = `${userName} поділився новою активністю`;
     }
 
     try {
       if (navigator.share) {
         await navigator.share({
-          title: "Р‘С–Р±Р»С–РѕС‚РµРєР°",
+          title: "Бібліотека",
           text,
           url: window.location.origin,
         });
@@ -430,7 +454,7 @@ const SocialFeed = ({ limit = null, showViewAll = false, scope = "following", sh
       }
 
       await navigator.clipboard.writeText(
-        `${text} вЂ” ${window.location.origin}`,
+        `${text} — ${window.location.origin}`,
       );
     } catch (error) {
       if (error?.name !== "AbortError") {
@@ -439,14 +463,23 @@ const SocialFeed = ({ limit = null, showViewAll = false, scope = "following", sh
     }
   }, []);
 
+  const filteredActivities =
+    contentFilter === "posts"
+      ? activities.filter((item) => item.kind === "post")
+      : contentFilter === "activity"
+        ? activities.filter((item) => item.kind !== "post")
+        : activities;
+
   const displayedActivities =
-    limit === null ? activities : activities.slice(0, limit);
+    limit === null
+      ? filteredActivities
+      : filteredActivities.slice(0, limit);
 
   return (
     <section className="social-feed">
       {showHeader && (
         <div className="social-feed__header">
-          <h2>РђРєС‚РёРІРЅС–СЃС‚СЊ С‡РёС‚Р°С‡С–РІ</h2>
+          <h2>Активність читачів</h2>
 
           {showViewAll && activities.length > displayedActivities.length && (
             <button
@@ -464,21 +497,25 @@ const SocialFeed = ({ limit = null, showViewAll = false, scope = "following", sh
                 });
               }}
             >
-              РЈСЃСЏ Р°РєС‚РёРІРЅС–СЃС‚СЊ
+              Уся активність
               <Icon name="chevron-right" />
             </button>
           )}
         </div>
       )}
-      <SocialPostComposer onPostCreated={handlePostCreated} />
+      {showComposer && (
+        <SocialPostComposer onPostCreated={handlePostCreated} />
+      )}
 
       {isLoading ? (
-        <div className="social-feed__state">Р—Р°РІР°РЅС‚Р°Р¶СѓС”РјРѕ Р°РєС‚РёРІРЅС–СЃС‚СЊ...</div>
+        <div className="social-feed__state">Завантажуємо активність...</div>
       ) : displayedActivities.length === 0 ? (
         <div className="social-feed__state">
-          {scope === "following"
-            ? "РўСѓС‚ РїРѕРєРё РїРѕСЂРѕР¶РЅСЊРѕ. РџС–РґРїРёС€С–С‚СЊСЃСЏ РЅР° С‡РёС‚Р°С‡С–РІ, С‰РѕР± Р±Р°С‡РёС‚Рё С—С…РЅСЋ Р°РєС‚РёРІРЅС–СЃС‚СЊ."
-            : "РЈ СЃРїС–Р»СЊРЅРѕС‚С– РїРѕРєРё РЅРµРјР°С” Р°РєС‚РёРІРЅРѕСЃС‚С–. РЎС‚РІРѕСЂС–С‚СЊ РїРµСЂС€РёР№ РґРѕРїРёСЃ."}
+          {userId
+            ? "У вас поки немає дописів чи активності у спільноті."
+            : scope === "following"
+              ? "Тут поки порожньо. Підпишіться на читачів, щоб бачити їхню активність."
+              : "У спільноті поки немає активності. Створіть перший допис."}
         </div>
       ) : (
       <div className="social-feed__list">
@@ -555,9 +592,9 @@ const SocialFeed = ({ limit = null, showViewAll = false, scope = "following", sh
 
       <ConfirmDeleteModal
         isOpen={Boolean(postToDelete)}
-        title="Р’РёРґР°Р»РёС‚Рё РґРѕРїРёСЃ?"
-        description="Р¦СЋ РґС–СЋ РЅРµРјРѕР¶Р»РёРІРѕ СЃРєР°СЃСѓРІР°С‚Рё."
-        confirmText="Р’РёРґР°Р»РёС‚Рё"
+        title="Видалити допис?"
+        description="Цю дію неможливо скасувати."
+        confirmText="Видалити"
         isLoading={isDeletingPost}
         onCancel={() => setPostToDelete(null)}
         onConfirm={handleConfirmDeletePost}
