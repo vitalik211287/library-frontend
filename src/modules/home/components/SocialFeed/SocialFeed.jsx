@@ -330,9 +330,11 @@ const SocialFeed = ({ limit = null, showViewAll = false, scope = "following", sh
         method: "DELETE",
       });
 
-      setActivities((current) =>
-        current.filter((activity) => activity.user?.id !== userId),
-      );
+      if (scope === "following") {
+        setActivities((current) =>
+          current.filter((activity) => activity.user?.id !== userId),
+        );
+      }
 
       setMenuActivity(null);
     } catch (error) {
@@ -398,14 +400,6 @@ const SocialFeed = ({ limit = null, showViewAll = false, scope = "following", sh
     }
   }, []);
 
-  if (isLoading) {
-    return (
-      <section className="social-feed">
-        <div className="social-feed__state">Завантажуємо активність...</div>
-      </section>
-    );
-  }
-
   const displayedActivities =
     limit === null ? activities : activities.slice(0, limit);
 
@@ -438,6 +432,16 @@ const SocialFeed = ({ limit = null, showViewAll = false, scope = "following", sh
         </div>
       )}
       <SocialPostComposer onPostCreated={handlePostCreated} />
+
+      {isLoading ? (
+        <div className="social-feed__state">Завантажуємо активність...</div>
+      ) : displayedActivities.length === 0 ? (
+        <div className="social-feed__state">
+          {scope === "following"
+            ? "Тут поки порожньо. Підпишіться на читачів, щоб бачити їхню активність."
+            : "У спільноті поки немає активності. Створіть перший допис."}
+        </div>
+      ) : (
       <div className="social-feed__list">
         {displayedActivities.map((item) => {
           const formattedTime = activityDateFormatter.format(
@@ -476,6 +480,7 @@ const SocialFeed = ({ limit = null, showViewAll = false, scope = "following", sh
           );
         })}
       </div>
+      )}
       <SocialPostThreadModal
         postId={linkedPostId}
         onClose={handleCloseThread}
