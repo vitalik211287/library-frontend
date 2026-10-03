@@ -53,8 +53,8 @@ const FinishedSection = ({
       ) : error ? (
         <div className="profile-empty">{error}</div>
       ) : books.length === 0 ? (
-        <div className="home-empty-state">
-          <div className="home-empty-state__icon">
+        <div className="home-empty-state home-info-box">
+          <div className="home-empty-state__icon home-icon-box">
             <FinishedBookIcon />
           </div>
 

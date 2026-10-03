@@ -1,4 +1,4 @@
-﻿import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { apiFetch } from "../../../../shared/api/apiClient.js";
@@ -40,6 +40,7 @@ const SocialFeed = ({
   const [searchParams] = useSearchParams();
   const linkedActivityId = searchParams.get("activityId");
   const linkedPostId = searchParams.get("postId");
+  const linkedThreadActivityId = searchParams.get("threadActivityId");
 
   const [activities, setActivities] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -195,9 +196,24 @@ const SocialFeed = ({
     [navigate, searchParams],
   );
 
+  const handleOpenActivityThread = useCallback(
+    (activity) => {
+      if (!activity?.id) {
+        return;
+      }
+
+      const params = new URLSearchParams(searchParams);
+      params.set("threadActivityId", activity.id);
+
+      navigate(`/community?${params.toString()}`);
+    },
+    [navigate, searchParams],
+  );
+
   const handleCloseThread = useCallback(() => {
     const params = new URLSearchParams(searchParams);
     params.delete("postId");
+    params.delete("threadActivityId");
 
     const query = params.toString();
 
@@ -219,16 +235,23 @@ const SocialFeed = ({
 
     setActivities((current) => [feedPost, ...current]);
   }, []);
-  const handleReplyCreated = useCallback((postId) => {
+  const handleThreadCountChange = useCallback((targetId, count) => {
     setActivities((current) =>
-      current.map((item) =>
-        item.kind === "post" && item.id === postId
-          ? {
-              ...item,
-              repliesCount: (item.repliesCount ?? 0) + 1,
-            }
-          : item,
-      ),
+      current.map((item) => {
+        if (item.id !== targetId) {
+          return item;
+        }
+
+        if (item.kind === "post") {
+          return { ...item, repliesCount: count };
+        }
+
+        if (item.kind === "activity") {
+          return { ...item, commentsCount: count };
+        }
+
+        return item;
+      }),
     );
   }, []);
 
@@ -573,6 +596,7 @@ const SocialFeed = ({
               onOpenBook={handleOpenBook}
               onOpenAchievement={handleOpenAchievement}
               onKudos={handleKudos}
+              onComment={handleOpenActivityThread}
               onShare={handleShare}
             />
           );
@@ -591,9 +615,10 @@ const SocialFeed = ({
 
       <SocialPostThreadModal
         postId={linkedPostId}
+        activityId={linkedThreadActivityId}
         onClose={handleCloseThread}
         onOpenProfile={handleOpenProfile}
-        onReplyCreated={handleReplyCreated}
+        onThreadCountChange={handleThreadCountChange}
       />
       <SocialBookModal
         book={selectedBook}

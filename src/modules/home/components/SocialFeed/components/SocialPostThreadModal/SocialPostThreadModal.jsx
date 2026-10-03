@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { apiFetch } from "../../../../../../shared/api/apiClient.js";
 import useOverlayBack from "../../../../../../shared/hooks/useOverlayBack.js";
@@ -9,9 +9,10 @@ import "./SocialPostThreadModal.css";
 
 const SocialPostThreadModal = ({
   postId,
+  activityId,
   onClose,
   onOpenProfile,
-  onReplyCreated,
+  onThreadCountChange,
 }) => {
   const [thread, setThread] = useState(null);
   const [replyText, setReplyText] = useState("");
@@ -21,11 +22,24 @@ const SocialPostThreadModal = ({
   const [isLoading, setIsLoading] = useState(true);
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState("");
+  const bodyRef = useRef(null);
 
-  useOverlayBack(Boolean(postId), onClose);
+  const scrollToBottom = useCallback((behavior = "smooth") => {
+    requestAnimationFrame(() => {
+      bodyRef.current?.scrollTo({
+        top: bodyRef.current.scrollHeight,
+        behavior,
+      });
+    });
+  }, []);
+
+  const isActivityThread = Boolean(activityId);
+  const isOpen = Boolean(postId || activityId);
+
+  useOverlayBack(isOpen, onClose);
 
   const loadThread = useCallback(async () => {
-    if (!postId) {
+    if (!isOpen) {
       return;
     }
 
@@ -33,19 +47,48 @@ const SocialPostThreadModal = ({
       setIsLoading(true);
       setError("");
 
-      const data = await apiFetch(`/api/social/posts/${postId}`);
+      const data = await apiFetch(
+        isActivityThread
+          ? `/api/social/activities/${activityId}/thread`
+          : `/api/social/posts/${postId}`,
+      );
 
-      setThread(data);
+      const replies = isActivityThread
+        ? data?.comments || []
+        : data?.replies || [];
+
+      setThread(
+        isActivityThread
+          ? {
+              activityId,
+              replies,
+            }
+          : data,
+      );
+
+      onThreadCountChange?.(
+        isActivityThread ? activityId : postId,
+        replies.length,
+      );
+
+      scrollToBottom();
     } catch (requestError) {
       console.error("Failed to load social post thread:", requestError);
       setError("Не вдалося завантажити обговорення");
     } finally {
       setIsLoading(false);
     }
-  }, [postId]);
+  }, [
+    activityId,
+    isActivityThread,
+    isOpen,
+    onThreadCountChange,
+    postId,
+    scrollToBottom,
+  ]);
 
   useEffect(() => {
-    if (!postId) {
+    if (!isOpen) {
       return;
     }
 
@@ -53,11 +96,23 @@ const SocialPostThreadModal = ({
 
     const fetchThread = async () => {
       try {
-        const data = await apiFetch(`/api/social/posts/${postId}`);
+        const data = await apiFetch(
+          isActivityThread
+            ? `/api/social/activities/${activityId}/thread`
+            : `/api/social/posts/${postId}`,
+        );
 
         if (!cancelled) {
-          setThread(data);
+          setThread(
+            isActivityThread
+              ? {
+                  activityId,
+                  replies: data?.comments || [],
+                }
+              : data,
+          );
           setError("");
+          scrollToBottom("auto");
         }
       } catch (requestError) {
         console.error("Failed to load social post thread:", requestError);
@@ -77,14 +132,14 @@ const SocialPostThreadModal = ({
     return () => {
       cancelled = true;
     };
-  }, [postId]);
+  }, [activityId, isActivityThread, isOpen, postId]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
 
     const text = replyText.trim();
 
-    if (!text || !postId || isSending) {
+    if (!text || !isOpen || isSending) {
       return;
     }
 
@@ -96,7 +151,8 @@ const SocialPostThreadModal = ({
         method: "POST",
         body: {
           text,
-          parentId: replyTarget?.id || postId,
+          parentId: replyTarget?.id || (isActivityThread ? null : postId),
+          activityId: isActivityThread ? activityId : null,
         },
       });
 
@@ -104,7 +160,6 @@ const SocialPostThreadModal = ({
       setReplyTarget(null);
 
       await loadThread();
-      onReplyCreated?.(postId);
     } catch (requestError) {
       console.error("Failed to create social post reply:", requestError);
       setError("Не вдалося надіслати відповідь");
@@ -169,7 +224,7 @@ const SocialPostThreadModal = ({
     }
   };
 
-  if (!postId) {
+  if (!isOpen) {
     return null;
   }
 
@@ -183,25 +238,55 @@ const SocialPostThreadModal = ({
       }).format(new Date(thread.createdAt))
     : "";
 
-  const replyById = new Map(
-    (thread?.replies || []).map((reply) => [reply.id, reply]),
-  );
+  const replies = thread?.replies || [];
+  const replyById = new Map(replies.map((reply) => [reply.id, reply]));
 
-  const getReplyDepth = (reply) => {
-    let depth = 0;
+  const isRootReply = (reply) =>
+    isActivityThread ? !reply.parentId : reply.parentId === postId;
+
+  const getRootReplyId = (reply) => {
     let current = reply;
 
-    while (current?.parentId && current.parentId !== postId) {
-      depth += 1;
-      current = replyById.get(current.parentId);
-
-      if (!current) {
-        break;
+    while (current?.parentId) {
+      if (!isActivityThread && current.parentId === postId) {
+        return current.id;
       }
+
+      const parent = replyById.get(current.parentId);
+
+      if (!parent) {
+        return current.id;
+      }
+
+      current = parent;
     }
 
-    return Math.min(depth, 1);
+    return current?.id;
   };
+
+  const rootReplies = replies.filter(isRootReply);
+  const groupedReplyIds = new Set();
+
+  const displayReplies = rootReplies.flatMap((rootReply) => {
+    const branch = replies.filter(
+      (reply) =>
+        reply.id === rootReply.id ||
+        getRootReplyId(reply) === rootReply.id,
+    );
+
+    branch.forEach((reply) => groupedReplyIds.add(reply.id));
+
+    return branch;
+  });
+
+  replies.forEach((reply) => {
+    if (!groupedReplyIds.has(reply.id)) {
+      displayReplies.push(reply);
+    }
+  });
+
+  const isNestedReply = (reply) =>
+    getRootReplyId(reply) !== reply.id;
 
   return (
     <div
@@ -232,7 +317,7 @@ const SocialPostThreadModal = ({
           </button>
         </header>
 
-        <div className="social-post-thread__body">
+        <div ref={bodyRef} className="social-post-thread__body">
           {isLoading && (
             <p className="social-post-thread__status">Завантаження…</p>
           )}
@@ -243,6 +328,7 @@ const SocialPostThreadModal = ({
 
           {!isLoading && thread && (
             <>
+              {!isActivityThread && (
               <article className="social-post-thread__root">
                 <div className="social-post-thread__message">
                   <button
@@ -293,16 +379,17 @@ const SocialPostThreadModal = ({
                   </div>
                 </div>
               </article>
+              )}
 
               <div className="social-post-thread__replies">
-                {thread.replies?.map((reply) => {
+                {displayReplies.map((reply) => {
                   const replyUserName = reply.author?.name || "Користувач";
 
                   return (
                     <article
                       key={reply.id}
                       className={`social-post-thread__reply ${
-                        getReplyDepth(reply) > 0
+                        isNestedReply(reply)
                           ? "social-post-thread__reply--nested"
                           : ""
                       }`}
@@ -397,7 +484,9 @@ const SocialPostThreadModal = ({
 
                 {thread.replies?.length === 0 && (
                   <p className="social-post-thread__empty">
-                    Відповідей ще немає. Будь першим.
+                    {isActivityThread
+                      ? "Коментарів ще немає. Будьте першим."
+                      : "Відповідей ще немає. Будь першим."}
                   </p>
                 )}
               </div>
@@ -426,14 +515,22 @@ const SocialPostThreadModal = ({
           <textarea
             value={replyText}
             onChange={(event) => setReplyText(event.target.value)}
-            placeholder="Написати відповідь…"
+            placeholder={
+              isActivityThread && !replyTarget
+                ? "Написати коментар…"
+                : "Написати відповідь…"
+            }
             maxLength={1000}
             rows={2}
             disabled={isSending}
           />
 
           <button type="submit" disabled={!replyText.trim() || isSending}>
-            {isSending ? "Надсилаємо…" : "Відповісти"}
+            {isSending
+              ? "Надсилаємо…"
+              : isActivityThread && !replyTarget
+                ? "Коментувати"
+                : "Відповісти"}
           </button>
         </form>
       </div>

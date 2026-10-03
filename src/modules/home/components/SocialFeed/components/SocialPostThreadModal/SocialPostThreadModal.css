@@ -162,6 +162,7 @@
 }
 
 .social-post-thread__composer textarea {
+  box-sizing: border-box;
   width: 100%;
   min-height: 42px;
   max-height: 120px;
@@ -417,4 +418,38 @@
 .social-post-thread__edit-actions button:disabled {
   opacity: 0.5;
   cursor: default;
+}
+
+@media (max-width: 767px) {
+  .social-post-thread__backdrop {
+    padding: 0;
+  }
+
+  .social-post-thread {
+    max-width: none;
+    height: 100dvh;
+    max-height: 100dvh;
+
+    border: 0;
+    border-radius: 0;
+  }
+
+  .social-post-thread__handle {
+    display: none;
+  }
+
+  .social-post-thread__header {
+    flex: 0 0 auto;
+    padding-top: max(var(--space-14), env(safe-area-inset-top));
+  }
+
+  .social-post-thread__body {
+    min-height: 0;
+    flex: 1 1 auto;
+    scroll-padding-bottom: var(--space-16);
+  }
+
+  .social-post-thread__composer {
+    padding-bottom: max(var(--space-12), env(safe-area-inset-bottom));
+  }
 }

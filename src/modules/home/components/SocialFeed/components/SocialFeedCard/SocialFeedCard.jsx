@@ -12,6 +12,7 @@ const SocialFeedCard = ({
   onOpenBook,
   onOpenAchievement,
   onKudos,
+  onComment,
   onShare,
 }) => {
   const userName = activity.user?.name || "Користувач";
@@ -85,11 +86,15 @@ const SocialFeedCard = ({
         <button
           type="button"
           className="social-feed-card__action social-feed-card__action--comment"
+          onClick={() => onComment(activity)}
           aria-label="Коментувати"
-          title="Коментарі додамо наступним кроком"
         >
           <Icon name="comment" />
-          <span>Коментувати</span>
+          <span>
+            {activity.commentsCount > 0
+              ? activity.commentsCount
+              : "Коментувати"}
+          </span>
         </button>
 
         <button
