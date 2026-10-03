@@ -13,6 +13,7 @@ const NotificationsPage = () => {
   const [selectedBook, setSelectedBook] = useState(null);
   const [isSelectionMode, setIsSelectionMode] = useState(false);
   const [selectedNotificationIds, setSelectedNotificationIds] = useState([]);
+  const [activeFilter, setActiveFilter] = useState("all");
   const navigate = useNavigate();
 
   const {
@@ -86,15 +87,45 @@ const NotificationsPage = () => {
     }
   };
 
+  const isLibraryNotification = (notification) =>
+    notification.scope === "LIBRARY" ||
+    notification.type === "LIBRARY_BOOK_ADDED";
+
+  const filteredNotifications = notifications.filter((notification) => {
+    if (activeFilter === "library") {
+      return isLibraryNotification(notification);
+    }
+
+    if (activeFilter === "community") {
+      return !isLibraryNotification(notification);
+    }
+
+    return true;
+  });
+
+  const unreadByFilter = {
+    all: notifications.filter((notification) => !notification.isRead).length,
+    community: notifications.filter(
+      (notification) =>
+        !notification.isRead && !isLibraryNotification(notification),
+    ).length,
+    library: notifications.filter(
+      (notification) =>
+        !notification.isRead && isLibraryNotification(notification),
+    ).length,
+  };
+
   const areAllNotificationsSelected =
-    notifications.length > 0 &&
-    selectedNotificationIds.length === notifications.length;
+    filteredNotifications.length > 0 &&
+    filteredNotifications.every((notification) =>
+      selectedNotificationIds.includes(notification.id),
+    );
 
   const selectAllNotifications = () => {
     setSelectedNotificationIds(
       areAllNotificationsSelected
         ? []
-        : notifications.map((notification) => notification.id),
+        : filteredNotifications.map((notification) => notification.id),
     );
   };
 
@@ -467,6 +498,34 @@ const NotificationsPage = () => {
           )}
         </header>
 
+        {notifications.length > 0 && (
+          <div className="notifications-page__tabs">
+            {[
+              ["all", "Усі"],
+              ["community", "Спільнота"],
+              ["library", "Бібліотека"],
+            ].map(([value, label]) => (
+              <button
+                key={value}
+                type="button"
+                className={`notifications-page__tab${
+                  activeFilter === value ? " notifications-page__tab--active" : ""
+                }`}
+                onClick={() => {
+                  setActiveFilter(value);
+                  setSelectedNotificationIds([]);
+                  setIsSelectionMode(false);
+                }}
+              >
+                {label}
+                {unreadByFilter[value] > 0 && (
+                  <span>{unreadByFilter[value]}</span>
+                )}
+              </button>
+            ))}
+          </div>
+        )}
+
         {isNotificationsLoading && (
           <AppPanel
             variant="secondary"
@@ -492,9 +551,9 @@ const NotificationsPage = () => {
 
         {!isNotificationsLoading &&
           !notificationsError &&
-          notifications.length > 0 && (
+          filteredNotifications.length > 0 && (
             <div className="notifications-feed">
-              {notifications.map((notification) =>
+              {filteredNotifications.map((notification) =>
                 notification.type === "LIBRARY_BOOK_ADDED"
                   ? renderLibraryBookNotification(notification)
                   : renderSocialNotification(notification),

@@ -490,3 +490,55 @@
 .activity-notification__book-content h2 {
   max-width: calc(100% - 48px);
 }
+
+/* Notification filters */
+
+.notifications-page__tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: var(--section-gap);
+  padding: 4px;
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  background: var(--surface-secondary);
+}
+
+.notifications-page__tab {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  min-height: 38px;
+  padding: 7px 10px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: var(--text);
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.notifications-page__tab:hover {
+  color: var(--accent);
+}
+
+.notifications-page__tab--active {
+  background: var(--surface);
+  color: var(--accent);
+}
+
+.notifications-page__tab span {
+  min-width: 18px;
+  height: 18px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 5px;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  color: var(--surface);
+  font-size: 9px;
+  line-height: 1;
+}
