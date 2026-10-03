@@ -22,6 +22,7 @@ const SocialPostThreadModal = ({
   const [isLoading, setIsLoading] = useState(true);
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState("");
+  const [expandedBranches, setExpandedBranches] = useState(() => new Set());
   const bodyRef = useRef(null);
 
   const scrollToBottom = useCallback((behavior = "smooth") => {
@@ -239,54 +240,73 @@ const SocialPostThreadModal = ({
     : "";
 
   const replies = thread?.replies || [];
-  const replyById = new Map(replies.map((reply) => [reply.id, reply]));
 
-  const isRootReply = (reply) =>
-    isActivityThread ? !reply.parentId : reply.parentId === postId;
-
-  const getRootReplyId = (reply) => {
-    let current = reply;
-
-    while (current?.parentId) {
-      if (!isActivityThread && current.parentId === postId) {
-        return current.id;
-      }
-
-      const parent = replyById.get(current.parentId);
-
-      if (!parent) {
-        return current.id;
-      }
-
-      current = parent;
-    }
-
-    return current?.id;
-  };
-
-  const rootReplies = replies.filter(isRootReply);
-  const groupedReplyIds = new Set();
-
-  const displayReplies = rootReplies.flatMap((rootReply) => {
-    const branch = replies.filter(
-      (reply) =>
-        reply.id === rootReply.id ||
-        getRootReplyId(reply) === rootReply.id,
-    );
-
-    branch.forEach((reply) => groupedReplyIds.add(reply.id));
-
-    return branch;
-  });
+  const childrenByParentId = new Map();
 
   replies.forEach((reply) => {
-    if (!groupedReplyIds.has(reply.id)) {
-      displayReplies.push(reply);
+    const parentId = reply.parentId || null;
+
+    if (!childrenByParentId.has(parentId)) {
+      childrenByParentId.set(parentId, []);
     }
+
+    childrenByParentId.get(parentId).push(reply);
   });
 
-  const isNestedReply = (reply) =>
-    getRootReplyId(reply) !== reply.id;
+  const rootParentId = isActivityThread ? null : postId;
+  const rootReplies = childrenByParentId.get(rootParentId) || [];
+  const displayReplies = [];
+
+  const getDescendants = (replyId) => {
+    const result = [];
+    const children = childrenByParentId.get(replyId) || [];
+
+    children.forEach((child) => {
+      result.push(child);
+      result.push(...getDescendants(child.id));
+    });
+
+    return result;
+  };
+
+  rootReplies.forEach((rootReply) => {
+    displayReplies.push({
+      ...rootReply,
+      __depth: 0,
+    });
+
+    const directReplies = childrenByParentId.get(rootReply.id) || [];
+
+    directReplies.forEach((directReply) => {
+      displayReplies.push({
+        ...directReply,
+        __depth: 1,
+      });
+
+      const descendants = getDescendants(directReply.id);
+
+      if (descendants.length > 0) {
+        if (expandedBranches.has(directReply.id)) {
+          descendants.forEach((descendant) => {
+            displayReplies.push({
+              ...descendant,
+              __depth: 2,
+            });
+          });
+        }
+
+        displayReplies.push({
+          id: `branch-toggle-${directReply.id}`,
+          __branchToggle: true,
+          branchId: directReply.id,
+          count: descendants.length,
+          isExpanded: expandedBranches.has(directReply.id),
+        });
+      }
+    });
+  });
+
+  const isNestedReply = (reply) => reply.__depth > 0;
 
   return (
     <div
@@ -383,6 +403,37 @@ const SocialPostThreadModal = ({
 
               <div className="social-post-thread__replies">
                 {displayReplies.map((reply) => {
+                  if (reply.__branchToggle) {
+                    return (
+                      <button
+                        key={reply.id}
+                        type="button"
+                        className="social-post-thread__branch-toggle"
+                        onClick={() => {
+                          setExpandedBranches((current) => {
+                            const next = new Set(current);
+
+                            if (next.has(reply.branchId)) {
+                              next.delete(reply.branchId);
+                            } else {
+                              next.add(reply.branchId);
+                            }
+
+                            return next;
+                          });
+                        }}
+                      >
+                        {reply.isExpanded
+                          ? "\u0417\u0433\u043e\u0440\u043d\u0443\u0442\u0438 \u0432\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u0456"
+                          : `\u041f\u043e\u043a\u0430\u0437\u0430\u0442\u0438 \u0449\u0435 ${reply.count} ${
+                              reply.count === 1
+                                ? "\u0432\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u044c"
+                                : "\u0432\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u0456"
+                            }`}
+                      </button>
+                    );
+                  }
+
                   const replyUserName = reply.author?.name || "Користувач";
 
                   return (
