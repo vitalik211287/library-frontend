@@ -1,6 +1,7 @@
 import { useState } from "react";
 
 import { apiFetch } from "../../../../../../shared/api/apiClient.js";
+import { resolveAssetUrl } from "../../../../../../shared/utils/resolveAssetUrl.js";
 import SocialBookSearch from "./components/SocialBookSearch/SocialBookSearch.jsx";
 
 import "./SocialPostComposer.css";
@@ -62,7 +63,7 @@ const SocialPostComposer = ({ onPostCreated }) => {
         {selectedBook ? (
           <div className="social-post-composer__selected-book">
             {selectedBook.coverUrl && (
-              <img src={selectedBook.coverUrl} alt="" />
+              <img src={resolveAssetUrl(selectedBook.coverUrl)} alt="" />
             )}
 
             <div>
