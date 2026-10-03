@@ -3,6 +3,7 @@ import { memo, useState } from "react";
 import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
 import { resolveAssetUrl } from "../../../../../../shared/utils/resolveAssetUrl.js";
 import HomePanel from "../../../HomePanel/HomePanel.jsx";
+import SocialPostActionsMenu from "../SocialPostActionsMenu/SocialPostActionsMenu.jsx";
 
 const SocialPostCard = ({
   post,
@@ -19,7 +20,6 @@ const SocialPostCard = ({
     post.user?.name ||
     "\u041a\u043e\u0440\u0438\u0441\u0442\u0443\u0432\u0430\u0447";
 
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(post.text);
 
@@ -54,43 +54,13 @@ const SocialPostCard = ({
           </div>
         </button>
         {post.isOwnPost && (
-          <div className="social-post-card__menu">
-            <button
-              type="button"
-              className="social-post-card__menu-button"
-              aria-label="Дії з дописом"
-              aria-expanded={isMenuOpen}
-              onClick={() => setIsMenuOpen((current) => !current)}
-            >
-              <span>•••</span>
-            </button>
-
-            {isMenuOpen && (
-              <div className="social-post-card__menu-dropdown">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setIsMenuOpen(false);
-                    setEditText(post.text);
-                    setIsEditing(true);
-                  }}
-                >
-                  Редагувати
-                </button>
-
-                <button
-                  type="button"
-                  className="social-post-card__menu-delete"
-                  onClick={() => {
-                    setIsMenuOpen(false);
-                    onDelete(post);
-                  }}
-                >
-                  Видалити
-                </button>
-              </div>
-            )}
-          </div>
+          <SocialPostActionsMenu
+            onEdit={() => {
+              setEditText(post.text);
+              setIsEditing(true);
+            }}
+            onDelete={() => onDelete(post)}
+          />
         )}
       </header>
 
