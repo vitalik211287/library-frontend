@@ -7,6 +7,7 @@ import "./index.css";
 import "./shared/styles/info-box.css";
 
 import App from "./app/App.jsx";
+import ScrollRestoration from "./shared/components/ScrollRestoration/ScrollRestoration.jsx";
 
 import { AuthProvider } from "./modules/auth/context/AuthContext.jsx";
 import { LibraryProvider } from "./modules/libraries/context/LibraryContext.jsx";
@@ -30,6 +31,7 @@ registerSW({
 createRoot(document.getElementById("root")).render(
   <StrictMode>
     <BrowserRouter>
+      <ScrollRestoration />
       <ThemeProvider>
         <AuthProvider>
           <ReadingGoalProvider>
