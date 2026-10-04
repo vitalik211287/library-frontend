@@ -54,6 +54,15 @@ const NotificationsPage = () => {
       return;
     }
 
+    if (
+      notification.type === "POST_COMMENT" &&
+      notification.activity?.id
+    ) {
+      const activityId = notification.activity.id;
+      navigate(`/community?threadActivityId=${activityId}`);
+      return;
+    }
+
     if (notification.type === "KUDOS_RECEIVED" && notification.activity?.id) {
       const activityId = notification.activity.id;
       navigate(`/community?activityId=${activityId}`);
