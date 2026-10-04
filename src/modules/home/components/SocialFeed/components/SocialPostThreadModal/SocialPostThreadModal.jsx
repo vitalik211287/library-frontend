@@ -253,6 +253,12 @@ const SocialPostThreadModal = ({
     childrenByParentId.get(parentId).push(reply);
   });
 
+  childrenByParentId.forEach((children) => {
+    children.sort(
+      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+    );
+  });
+
   const rootParentId = isActivityThread ? null : postId;
   const rootReplies = childrenByParentId.get(rootParentId) || [];
   const displayReplies = [];
@@ -436,6 +442,15 @@ const SocialPostThreadModal = ({
 
                   const replyUserName = reply.author?.name || "Користувач";
 
+                  const replyFormattedTime = reply.createdAt
+                    ? new Intl.DateTimeFormat("uk-UA", {
+                        day: "numeric",
+                        month: "short",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      }).format(new Date(reply.createdAt))
+                    : "";
+
                   return (
                     <article
                       key={reply.id}
@@ -479,6 +494,12 @@ const SocialPostThreadModal = ({
                               />
                             )}
                           </div>
+
+                          {replyFormattedTime && (
+                            <span className="social-post-thread__time">
+                              {replyFormattedTime}
+                            </span>
+                          )}
 
                           {editingReply?.id === reply.id ? (
                             <div className="social-post-thread__edit">
