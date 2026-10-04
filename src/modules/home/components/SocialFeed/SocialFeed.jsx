@@ -109,10 +109,22 @@ const SocialFeed = ({
       );
     };
 
+    const handlePostCommentsUpdated = ({ postId, commentsCount }) => {
+      setActivities((current) =>
+        current.map((item) =>
+          item.id === postId
+            ? { ...item, repliesCount: commentsCount }
+            : item,
+        ),
+      );
+    };
+
     socket.on("post:kudos-updated", handlePostKudosUpdated);
+    socket.on("post:comments-updated", handlePostCommentsUpdated);
 
     return () => {
       socket.off("post:kudos-updated", handlePostKudosUpdated);
+      socket.off("post:comments-updated", handlePostCommentsUpdated);
     };
   }, []);
 
