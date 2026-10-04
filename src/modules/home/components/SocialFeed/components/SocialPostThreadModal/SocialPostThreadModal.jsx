@@ -113,7 +113,13 @@ const SocialPostThreadModal = ({
               : data,
           );
           setError("");
-          scrollToBottom("auto");
+
+          requestAnimationFrame(() => {
+            bodyRef.current?.scrollTo({
+              top: 0,
+              behavior: "auto",
+            });
+          });
         }
       } catch (requestError) {
         console.error("Failed to load social post thread:", requestError);
