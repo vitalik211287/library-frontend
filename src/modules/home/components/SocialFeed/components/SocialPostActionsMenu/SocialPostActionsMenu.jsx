@@ -1,4 +1,5 @@
-﻿import { useState } from "react";
+import { useState } from "react";
+import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
 
 const SocialPostActionsMenu = ({ onEdit, onDelete }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -12,30 +13,34 @@ const SocialPostActionsMenu = ({ onEdit, onDelete }) => {
         aria-expanded={isOpen}
         onClick={() => setIsOpen((current) => !current)}
       >
-        <span>{"\u2022\u2022\u2022"}</span>
+        <Icon name="more-horizontal" size={20} />
       </button>
 
       {isOpen && (
         <div className="social-post-card__menu-dropdown">
           <button
             type="button"
+            aria-label="Редагувати допис"
+            title="Редагувати"
             onClick={() => {
               setIsOpen(false);
               onEdit();
             }}
           >
-            {"\u0420\u0435\u0434\u0430\u0433\u0443\u0432\u0430\u0442\u0438"}
+            <Icon name="edit" size={18} />
           </button>
 
           <button
             type="button"
             className="social-post-card__menu-delete"
+            aria-label="Видалити допис"
+            title="Видалити"
             onClick={() => {
               setIsOpen(false);
               onDelete();
             }}
           >
-            {"\u0412\u0438\u0434\u0430\u043b\u0438\u0442\u0438"}
+            <Icon name="trash" size={18} />
           </button>
         </div>
       )}

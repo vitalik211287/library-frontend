@@ -51,6 +51,13 @@ const isSwipeBlockedTarget = (target) => {
   return false;
 };
 
+const hasOpenSwipeBlockingOverlay = () =>
+  Boolean(
+    document.querySelector(
+      ".modal-overlay, .social-post-thread__backdrop",
+    ),
+  );
+
 const useSwipeNavigation = () => {
   const location = useLocation();
   const navigate = useNavigate();
@@ -74,7 +81,7 @@ const useSwipeNavigation = () => {
       if (
         !mediaQuery.matches ||
         event.touches.length !== 1 ||
-        document.querySelector(".modal-overlay")
+        hasOpenSwipeBlockingOverlay()
       ) {
         resetGesture();
         return;
@@ -102,7 +109,7 @@ const useSwipeNavigation = () => {
 
     const handleTouchEnd = (event) => {
       if (
-        document.querySelector(".modal-overlay") ||
+        hasOpenSwipeBlockingOverlay() ||
         blocked ||
         startX === null ||
         startY === null ||

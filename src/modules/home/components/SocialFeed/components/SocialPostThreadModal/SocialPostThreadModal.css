@@ -363,6 +363,12 @@
   height: 28px;
 }
 
+.social-post-thread__reply-header .social-post-card__menu-dropdown {
+  top: auto;
+  right: 0;
+  bottom: calc(100% + 6px);
+}
+
 .social-post-thread__edit {
   display: flex;
   flex-direction: column;

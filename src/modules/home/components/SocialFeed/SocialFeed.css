@@ -733,9 +733,9 @@
   right: 0;
   z-index: 20;
   display: flex;
-  flex-direction: column;
-  min-width: 150px;
-  padding: 6px;
+  flex-direction: row;
+  gap: 4px;
+  padding: 4px;
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   background: var(--panel-background, #161a22);
@@ -743,14 +743,15 @@
 }
 
 .social-post-card__menu-dropdown button {
-  width: 100%;
-  padding: 10px 12px;
+  display: grid;
+  place-items: center;
+  width: 34px;
+  height: 34px;
+  padding: 0;
   border: 0;
   border-radius: 8px;
   background: transparent;
   color: inherit;
-  font: inherit;
-  text-align: left;
   cursor: pointer;
 }
 

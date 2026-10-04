@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { useAuth } from "../../../../../auth/context/AuthContext.jsx";
-import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
 import { apiFetch } from "../../../../../../shared/api/apiClient.js";
 
 import "./ProfileHero.css";
@@ -88,7 +87,6 @@ const ProfileHero = () => {
             className="profile-hero__action"
             onClick={() => navigate("/settings")}
           >
-            <Icon name="edit" />
             <span>Редагувати профіль</span>
           </button>
 
@@ -97,7 +95,6 @@ const ProfileHero = () => {
             className="profile-hero__action profile-hero__action--secondary"
             onClick={() => navigate("/users")}
           >
-            <Icon name="search" />
             <span>Знайти читачів</span>
           </button>
         </div>
