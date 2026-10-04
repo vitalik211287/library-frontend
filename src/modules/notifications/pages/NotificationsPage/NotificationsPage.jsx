@@ -46,7 +46,10 @@ const NotificationsPage = () => {
     if (!notification.isRead) {
       await markAsRead(notification.id);
     }
-    if (notification.type === "KUDOS_RECEIVED" && notification.postId) {
+    if (
+      ["KUDOS_RECEIVED", "POST_COMMENT"].includes(notification.type) &&
+      notification.postId
+    ) {
       navigate(`/community?postId=${notification.postId}`);
       return;
     }
@@ -320,6 +323,10 @@ const NotificationsPage = () => {
           default:
             return "підтримав вашу активність";
         }
+      }
+
+      if (notification.type === "POST_COMMENT") {
+        return "прокоментував ваш допис";
       }
 
       if (notification.type === "NEW_FOLLOWER") {

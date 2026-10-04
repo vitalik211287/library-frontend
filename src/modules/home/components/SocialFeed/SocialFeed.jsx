@@ -110,11 +110,9 @@ const SocialFeed = ({
     };
 
     socket.on("post:kudos-updated", handlePostKudosUpdated);
-    socket.connect();
 
     return () => {
       socket.off("post:kudos-updated", handlePostKudosUpdated);
-      socket.disconnect();
     };
   }, []);
 

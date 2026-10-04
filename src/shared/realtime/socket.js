@@ -7,3 +7,16 @@ const SOCKET_URL =
 export const socket = io(SOCKET_URL, {
   autoConnect: false,
 });
+
+export const connectSocket = (token) => {
+  socket.auth = { token };
+
+  if (!socket.connected) {
+    socket.connect();
+  }
+};
+
+export const disconnectSocket = () => {
+  socket.disconnect();
+  socket.auth = {};
+};

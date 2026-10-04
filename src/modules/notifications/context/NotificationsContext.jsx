@@ -7,7 +7,16 @@ import {
   useState,
 } from "react";
 
-import { apiFetch, hasToken } from "../../../shared/api/apiClient.js";
+import {
+  apiFetch,
+  getToken,
+  hasToken,
+} from "../../../shared/api/apiClient.js";
+import {
+  connectSocket,
+  disconnectSocket,
+  socket,
+} from "../../../shared/realtime/socket.js";
 import { useAuth } from "../../auth/context/AuthContext.jsx";
 
 const NotificationsContext = createContext(null);
@@ -162,6 +171,32 @@ const NotificationsProvider = ({ children }) => {
     }
 
     refreshUnreadCount();
+  }, [isAuthenticated, isAuthLoading, refreshUnreadCount]);
+
+  useEffect(() => {
+    if (isAuthLoading || !isAuthenticated) {
+      disconnectSocket();
+      return;
+    }
+
+    const token = getToken();
+
+    if (!token) {
+      disconnectSocket();
+      return;
+    }
+
+    const handleNotificationNew = () => {
+      refreshUnreadCount();
+    };
+
+    socket.on("notification:new", handleNotificationNew);
+    connectSocket(token);
+
+    return () => {
+      socket.off("notification:new", handleNotificationNew);
+      disconnectSocket();
+    };
   }, [isAuthenticated, isAuthLoading, refreshUnreadCount]);
 
   const value = useMemo(
