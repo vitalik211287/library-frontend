@@ -912,3 +912,77 @@
     -14px 0 36px rgba(52, 27, 75, 0.12),
     inset 1px 0 0 rgba(255, 255, 255, 0.58);
 }
+
+/* LIBRARY BRAND LOGO */
+
+.library-brand-icon {
+  overflow: visible;
+  flex-shrink: 0;
+  fill: none;
+  stroke: none;
+}
+
+.library-brand-icon__head,
+.library-brand-icon__page {
+  stroke: none;
+}
+
+/* Default */
+.library-brand-icon__head--left,
+.library-brand-icon__page--left {
+  fill: #aa3bff;
+}
+
+.library-brand-icon__head--right,
+.library-brand-icon__page--right {
+  fill: #7c3aed;
+}
+
+/* Cyberpunk */
+:root[data-theme="cyberpunk"] .library-brand-icon__head--left,
+:root[data-theme="cyberpunk"] .library-brand-icon__page--left {
+  fill: #ff3dbf;
+}
+
+:root[data-theme="cyberpunk"] .library-brand-icon__head--right,
+:root[data-theme="cyberpunk"] .library-brand-icon__page--right {
+  fill: #35e7ff;
+}
+
+/* Halloween */
+:root[data-theme="halloween"] .library-brand-icon__head--left,
+:root[data-theme="halloween"] .library-brand-icon__page--left {
+  fill: #ff5a0a;
+}
+
+:root[data-theme="halloween"] .library-brand-icon__head--right,
+:root[data-theme="halloween"] .library-brand-icon__page--right {
+  fill: #ff9a32;
+}
+
+/* Override old outline icon styles */
+.mobile-header__brand .library-brand-icon,
+.mobile-drawer__brand .library-brand-icon,
+.app-brand .library-brand-icon {
+  fill: none;
+  stroke: none;
+}
+
+/* Mobile header */
+.mobile-header__brand .library-brand-icon {
+  width: 26px;
+  height: 31px;
+}
+
+/* Mobile drawer */
+.mobile-drawer__brand .library-brand-icon {
+  width: 27px;
+  height: 32px;
+}
+
+/* Desktop */
+.app-brand .library-brand-icon {
+  width: 30px;
+  height: 36px;
+}
+

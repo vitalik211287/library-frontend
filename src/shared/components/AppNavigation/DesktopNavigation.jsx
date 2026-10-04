@@ -9,6 +9,7 @@ import { useNotifications } from "../../../modules/notifications/context/Notific
 import {
   BellIcon,
   CatalogIcon,
+  LibraryBrandIcon,
   MoonIcon,
   ProfileIcon,
   SettingsIcon,
@@ -31,7 +32,7 @@ const DesktopNavigation = ({
   return (
     <aside className="app-sidebar">
       <NavLink to="/home" className="app-brand">
-        <CatalogIcon />
+        <LibraryBrandIcon />
         <span>Бібліотека</span>
       </NavLink>
 

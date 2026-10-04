@@ -10,6 +10,7 @@ import useOverlayBack from "../../hooks/useOverlayBack.js";
 import {
   BellIcon,
   CatalogIcon,
+  LibraryBrandIcon,
   MoonIcon,
   ProfileIcon,
   SettingsIcon,
@@ -48,7 +49,7 @@ const MobileNavigation = ({
     <>
       <header className="mobile-header">
         <NavLink to="/home" className="mobile-header__brand">
-          <CatalogIcon />
+          <LibraryBrandIcon />
           <span>Бібліотека</span>
         </NavLink>
 
@@ -115,7 +116,7 @@ const MobileNavigation = ({
         <aside className="mobile-drawer mobile-drawer--open">
           <div className="mobile-drawer__header">
             <div className="mobile-drawer__brand">
-              <CatalogIcon />
+              <LibraryBrandIcon />
               <span>Бібліотека</span>
             </div>
 
