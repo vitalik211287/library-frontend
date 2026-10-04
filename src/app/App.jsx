@@ -1,4 +1,4 @@
-﻿import { useEffect } from "react";
+import { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 
 import { Toaster } from "react-hot-toast";
@@ -13,6 +13,7 @@ import useSwipeNavigation from "./hooks/useSwipeNavigation.js";
 import RightSidebar from "../shared/components/RightSidebar/RightSidebar.jsx";
 import ReadingModal from "../modules/reading/components/ReadingModal/ReadingModal.jsx";
 import ReadingBookPicker from "../modules/reading/components/ReadingBookPicker/ReadingBookPicker.jsx";
+import PushPermissionModal from "../modules/notifications/components/PushPermissionModal.jsx";
 
 import MobileNavigation from "../shared/components/AppNavigation/MobileNavigation.jsx";
 import DesktopNavigation from "../shared/components/AppNavigation/DesktopNavigation.jsx";
@@ -164,6 +165,8 @@ const App = () => {
             onReadingDataChanged={handleReadingDataChanged}
           />
         )}
+
+      <PushPermissionModal />
 
       <Toaster position="top-right" />
     </div>
