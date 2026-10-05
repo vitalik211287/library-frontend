@@ -358,38 +358,6 @@
 }
 
 /* =========================
-   PEAK VALUE
-========================= */
-
-.reading-chart__peak-value {
-  position: absolute;
-  z-index: 5;
-
-  transform: translate(-50%, -100%);
-
-  padding: 3px 7px;
-
-  border-radius: 7px;
-
-  background: transparent;
-  color: var(--accent);
-
-  font-size: 15px;
-  font-weight: 800;
-  line-height: 1;
-
-  white-space: nowrap;
-  pointer-events: none;
-}
-
-.reading-chart__grid-line--current {
-  stroke: var(--accent);
-  stroke-width: 2;
-  stroke-dasharray: none;
-  opacity: 1;
-}
-
-/* =========================
    MONTHS
 ========================= */
 
@@ -426,10 +394,10 @@
   position: absolute;
 
   left: 50%;
-  top: -10px;
+  top: -8px;
 
   width: 1px;
-  height: 8px;
+  height: 5px;
 
   background: var(--border);
 
@@ -445,16 +413,6 @@
   background: var(--accent);
 }
 
-.reading-chart__html-dot--current {
-  width: 14px;
-  height: 14px;
-
-  border-color: var(--accent);
-
-  background: var(--surface);
-
-  box-shadow: 0 0 0 2px var(--accent);
-}
 /* =========================
    SMALL MOBILE
 ========================= */
@@ -555,10 +513,6 @@
 
   .reading-chart__svg {
     height: 220px !important;
-  }
-
-  .reading-chart__peak-value {
-    font-size: 14px;
   }
 
   .reading-chart__html-dot {
@@ -752,10 +706,4 @@
   .reading-chart__selection-dot {
     transition: none;
   }
-}
-
-/* Month marker must not cover the chart dot */
-.reading-chart__period::before {
-  top: -8px;
-  height: 5px;
 }

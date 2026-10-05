@@ -352,9 +352,9 @@ const ReadingActivityChart = ({
                 x2="0"
                 y2="1"
               >
-                <stop offset="0%" stopColor="#9b5cff" stopOpacity="0.38" />
+                <stop offset="0%" stopColor="var(--accent)" stopOpacity="0.38" />
 
-                <stop offset="100%" stopColor="#9b5cff" stopOpacity="0.04" />
+                <stop offset="100%" stopColor="var(--accent)" stopOpacity="0.04" />
               </linearGradient>
 
               <linearGradient
@@ -364,9 +364,9 @@ const ReadingActivityChart = ({
                 x2="1"
                 y2="0"
               >
-                <stop offset="0%" stopColor="#a56cff" />
+                <stop offset="0%" stopColor="var(--accent)" />
 
-                <stop offset="100%" stopColor="#9b5cff" />
+                <stop offset="100%" stopColor="var(--accent)" />
               </linearGradient>
             </defs>
 

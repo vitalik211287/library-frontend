@@ -57,8 +57,6 @@ const ReadingActivity = ({ onDetails }) => {
 
   const currentMonthName = monthNames[today.getMonth()];
 
-  const previousMonthName = monthNames[(today.getMonth() + 11) % 12];
-
   /* =========================
      LOADING / ERROR
   ========================= */
@@ -177,8 +175,6 @@ const ReadingActivity = ({ onDetails }) => {
         chartData={chartData}
         selectedWeekIndex={safeSelectedWeekIndex}
         onSelectWeek={setSelectedWeekIndex}
-        previousMonthName={previousMonthName}
-        currentMonthName={currentMonthName}
       />
     </AppPanel>
   );
