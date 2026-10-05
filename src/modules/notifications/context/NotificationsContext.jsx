@@ -18,6 +18,7 @@ import {
   socket,
 } from "../../../shared/realtime/socket.js";
 import { useAuth } from "../../auth/context/AuthContext.jsx";
+import { setAppBadge } from "../services/pushNotifications.js";
 
 const NotificationsContext = createContext(null);
 
@@ -30,6 +31,10 @@ const NotificationsProvider = ({ children }) => {
   const [isNotificationsLoading, setIsNotificationsLoading] = useState(false);
 
   const [notificationsError, setNotificationsError] = useState("");
+
+  useEffect(() => {
+    setAppBadge(unreadCount);
+  }, [unreadCount]);
 
   const refreshUnreadCount = useCallback(async () => {
     if (!isAuthenticated || !hasToken()) {

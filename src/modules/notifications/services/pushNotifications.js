@@ -26,6 +26,25 @@ export const getPushPermission = () => {
   return Notification.permission;
 };
 
+export const setAppBadge = async (count) => {
+  if (!("setAppBadge" in navigator)) {
+    return;
+  }
+
+  try {
+    if (count > 0) {
+      await navigator.setAppBadge(count);
+      return;
+    }
+
+    if ("clearAppBadge" in navigator) {
+      await navigator.clearAppBadge();
+    }
+  } catch (error) {
+    console.error("Update app badge error:", error);
+  }
+};
+
 export const subscribeToPushNotifications = async () => {
   if (!isPushSupported()) {
     throw new Error("Push notifications are not supported");
