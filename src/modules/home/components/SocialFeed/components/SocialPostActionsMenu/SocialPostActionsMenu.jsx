@@ -8,12 +8,12 @@ const SocialPostActionsMenu = ({ onEdit, onDelete }) => {
     <div className="social-post-card__menu">
       <button
         type="button"
-        className="social-post-card__menu-button"
+        className="social-feed-card__more"
         aria-label={"\u0414\u0456\u0457 \u0437 \u0434\u043e\u043f\u0438\u0441\u043e\u043c"}
         aria-expanded={isOpen}
         onClick={() => setIsOpen((current) => !current)}
       >
-        <Icon name="more-horizontal" size={20} />
+        <Icon name="more-horizontal" />
       </button>
 
       {isOpen && (
