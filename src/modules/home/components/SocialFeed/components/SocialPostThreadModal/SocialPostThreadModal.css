@@ -511,7 +511,6 @@
   margin: 0;
 }
 
-
 /* =========================
    COMMENT TREE
    ========================= */
@@ -524,57 +523,7 @@
   margin-left: 0;
 }
 
-.social-post-thread__branch-root .social-post-thread__reply {
-  border-bottom: 0;
-  padding-bottom: var(--space-8);
-}
-
-.social-post-thread__branch-children {
-  position: relative;
-  margin-left: 16px;
-}
-
-/* Vertical trunk shared by all replies */
-.social-post-thread__branch-children::before {
-  content: "";
-  position: absolute;
-  top: -105px;
-  bottom: calc(var(--space-14) + 30px);
-  left: 33px;
-  width: 1px;
-  background: var(--border);
-}
-
-.social-post-thread__branch-children > .social-post-thread__reply {
-  position: relative;
-  padding-left: 66px;
-}
-
-/* Horizontal curved branch to each reply */
-.social-post-thread__branch-children > .social-post-thread__reply::before {
-  content: "";
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 33px;
-  width: 33px;
-  height: 30px;
-  border-left: 0;
-  border-bottom: 1px solid var(--border);
-  border-bottom-left-radius: 12px;
-  background: transparent;
-}
-
-.social-post-thread__branch-toggle {
-  margin-left: 66px;
-}
-
-.social-post-thread__replies--branch {
-  overflow: visible;
-}
-
-
-/* Main discussion thread preview */
+/* Main discussion */
 
 .social-post-thread__tree-group {
   position: relative;
@@ -585,38 +534,264 @@
   border-bottom: 0;
 }
 
-.social-post-thread__tree-preview {
+.social-post-thread__tree-group > .social-post-thread__branch-toggle {
+  margin: 0 var(--space-16) var(--space-14) 66px;
+}
+
+/* Open thread */
+
+.social-post-thread__branch-path,
+.social-post-thread__branch-children {
   position: relative;
-  margin-left: 16px;
 }
 
-.social-post-thread__tree-preview > .social-post-thread__reply {
+.social-post-thread__branch-path {
+  margin-left: 8px;
+}
+
+.social-post-thread__branch-root,
+.social-post-thread__branch-path-node,
+.social-post-thread__branch-node {
   position: relative;
-  padding-left: 66px;
 }
 
-.social-post-thread__tree-preview > .social-post-thread__reply::before {
-  content: "";
-  display: block;
-  position: absolute;
-  top: -105px;
-  left: 33px;
-  width: 33px;
-  height: 135px;
-  border-left: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  border-bottom-left-radius: 12px;
-  background: transparent;
-}
-
-.social-post-thread__tree-preview .social-post-thread__branch-toggle {
-  margin: 0 16px 14px 66px;
-}
-
-.social-post-thread__branch-children > .social-post-thread__reply {
+.social-post-thread__branch-root .social-post-thread__reply,
+.social-post-thread__branch-path-node .social-post-thread__reply,
+.social-post-thread__branch-node .social-post-thread__reply {
   border-bottom: 0;
 }
 
-.social-post-thread__branch-children {
+/* Every opened level */
+
+.social-post-thread__branch-path-node {
+  margin-left: calc(var(--thread-depth) * 18px);
+}
+
+/* Vertical + rounded arm from parent */
+
+.social-post-thread__branch-path-node::before {
+  content: "";
+  position: absolute;
+
+  left: 24px;
+  top: -104px;
+
+  width: 42px;
+  height: 134px;
+
+  border-left: 1px solid var(--border);
   border-bottom: 1px solid var(--border);
+  border-bottom-left-radius: 12px;
+
+  pointer-events: none;
+}
+
+/* Children of deepest opened level */
+
+.social-post-thread__branch-children {
+  margin-left: calc(var(--thread-depth) * 18px);
+}
+
+.social-post-thread__branch-node {
+  position: relative;
+}
+
+.social-post-thread__branch-node::before {
+  content: "";
+  position: absolute;
+
+  left: 24px;
+  top: -104px;
+
+  width: 42px;
+  height: 134px;
+
+  border-left: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  border-bottom-left-radius: 12px;
+
+  pointer-events: none;
+}
+
+.social-post-thread__branch-node > .social-post-thread__branch-toggle {
+  margin: 0 0 var(--space-14) 50px;
+}
+
+.social-post-thread__replies--branch {
+  overflow: visible;
+}
+
+
+
+/* Smaller avatars for nested thread comments */
+.social-post-thread__branch-path-node .social-post-thread__avatar,
+.social-post-thread__branch-node .social-post-thread__avatar {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  flex: 0 0 28px;
+  font-size: 11px;
+}
+
+
+/* Real nested comment tree */
+
+.social-post-thread__nested-root,
+.social-post-thread__nested-level,
+.social-post-thread__nested-tail-node {
+  position: relative;
+}
+
+.social-post-thread__nested-root .social-post-thread__reply,
+.social-post-thread__nested-level .social-post-thread__reply,
+.social-post-thread__nested-tail-node .social-post-thread__reply {
+  border-bottom: 0;
+}
+
+.social-post-thread__nested-children {
+  position: relative;
+  margin-left: 18px;
+}
+
+.social-post-thread__nested-tail {
+  position: relative;
+}
+
+.social-post-thread__nested-level .social-post-thread__avatar,
+.social-post-thread__nested-tail-node .social-post-thread__avatar {
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  flex: 0 0 28px;
+  font-size: 11px;
+}
+
+.social-post-thread__nested-tail-node > .social-post-thread__branch-toggle {
+  margin: 0 0 var(--space-14) 50px;
+}
+
+
+/* Nested tree connectors ? based on measured avatar geometry */
+
+.social-post-thread__nested-children::before {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  z-index: 0;
+
+  /*
+   * Nested avatar:
+   * parent center relative to child container = 30px
+   * child center relative to child container = 48px
+   */
+  left: 30px;
+  top: -122px;
+
+  width: 18px;
+  height: 150px;
+
+  border-left: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  border-bottom-left-radius: 10px;
+}
+
+/* Root avatar is 32px instead of 28px */
+.social-post-thread__nested-root > .social-post-thread__nested-children::before {
+  left: 32px;
+  top: -120px;
+
+  width: 16px;
+  height: 148px;
+}
+
+.social-post-thread__nested-children > * {
+  position: relative;
+  z-index: 1;
+}
+
+
+/* Keep avatars above tree lines */
+
+.social-post-thread__nested-root .social-post-thread__avatar,
+.social-post-thread__nested-level .social-post-thread__avatar,
+.social-post-thread__nested-tail-node .social-post-thread__avatar {
+  position: relative;
+  z-index: 3;
+  background: var(--surface);
+}
+
+.social-post-thread__nested-children::before {
+  z-index: 0;
+}
+
+
+/* Thread back button */
+
+.social-post-thread__back {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+
+  display: grid;
+  place-items: center;
+
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+
+  background: transparent;
+  color: var(--text-secondary);
+
+  font: inherit;
+  font-size: 20px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.social-post-thread__back:hover,
+.social-post-thread__back:focus-visible {
+  background: var(--surface-secondary);
+  color: var(--text-h);
+}
+
+.social-post-thread__back:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 2px;
+}
+
+
+/* Thread back button */
+
+.social-post-thread__back {
+  width: 32px;
+  height: 32px;
+  flex: 0 0 32px;
+
+  display: grid;
+  place-items: center;
+
+  padding: 0;
+  border: 0;
+  border-radius: 50%;
+
+  background: transparent;
+  color: var(--text-secondary);
+
+  font: inherit;
+  font-size: 20px;
+  line-height: 1;
+
+  cursor: pointer;
+}
+
+.social-post-thread__back:hover,
+.social-post-thread__back:focus-visible {
+  background: var(--surface-secondary);
+  color: var(--text-h);
+}
+
+.social-post-thread__back:focus-visible {
+  outline: 1px solid var(--accent);
+  outline-offset: 2px;
 }

@@ -29,7 +29,7 @@ const SocialPostThreadModal = ({
   const [editReplyText, setEditReplyText] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isSending, setIsSending] = useState(false);
-  const [error, setError] = useState("");  const [activeBranchRoot, setActiveBranchRoot] = useState(null);
+  const [error, setError] = useState("");  const [branchPath, setBranchPath] = useState([]);
   const bodyRef = useRef(null);
   const pendingReplyScrollTopRef = useRef(null);
 
@@ -63,7 +63,7 @@ const SocialPostThreadModal = ({
       return;
     }
 
-    setActiveBranchRoot(null);
+    setBranchPath([]);
     setReplyTarget(null);
     setReplyText("");
     setEditingReply(null);
@@ -346,6 +346,11 @@ const handleReplyKudos = async (reply) => {
     [normalizedReplies, rootParentId],
   );
 
+  const activeBranchRoot =
+    branchPath.length > 0
+      ? branchPath[branchPath.length - 1]
+      : null;
+
   const branchReplies = useMemo(() => {
     if (!activeBranchRoot) {
       return [];
@@ -360,31 +365,28 @@ const handleReplyKudos = async (reply) => {
       );
   }, [activeBranchRoot, normalizedReplies]);
 
-  const getChildReplies = (parentId) =>
-    normalizedReplies
-      .filter((reply) => reply.parentId === parentId)
-      .sort(
-        (a, b) =>
-          new Date(a.createdAt).getTime() -
-          new Date(b.createdAt).getTime(),
-      );
-
   const getDirectRepliesCount = (commentId) =>
     normalizedReplies.filter((reply) => reply.parentId === commentId).length;
 
   const openBranch = (comment) => {
-    setActiveBranchRoot(comment);
+    setBranchPath((current) => {
+      const existingIndex = current.findIndex(
+        (item) => item.id === comment.id,
+      );
+
+      if (existingIndex !== -1) {
+        return current.slice(0, existingIndex + 1);
+      }
+
+      return [...current, comment];
+    });
+
     setReplyTarget(null);
     setReplyText("");
-
-    requestAnimationFrame(() => {
-      if (bodyRef.current) {
-        bodyRef.current.scrollTop = 0;
-      }
-    });
   };
 
-  const isBranchView = Boolean(activeBranchRoot);
+  const isBranchView = branchPath.length > 0;
+
 
   if (!isOpen) {
     return null;
@@ -413,7 +415,7 @@ const handleReplyKudos = async (reply) => {
                 type="button"
                 className="social-post-thread__back"
                 onClick={() => {
-                  setActiveBranchRoot(null);
+                  setBranchPath([]);
                   setReplyTarget(null);
                   setReplyText("");
                   requestAnimationFrame(() => {
@@ -509,93 +511,108 @@ const handleReplyKudos = async (reply) => {
               >
                 {isBranchView ? (
                   <>
-                    <div className="social-post-thread__branch-root">
-                      <ThreadComment
-                        key={activeBranchRoot.id}
-                        comment={activeBranchRoot}
-                        visualDepth={0}
-                        isEditing={editingReply?.id === activeBranchRoot.id}
-                        editText={editReplyText}
-                        onOpenProfile={onOpenProfile}
-                        onEdit={(comment) => {
-                          setEditingReply(comment);
-                          setEditReplyText(comment.text);
-                        }}
-                        onDelete={handleDeleteReply}
-                        onKudos={handleReplyKudos}
-                        onOpenKudosUsers={onOpenKudosUsers}
-                        onReply={(comment) => {
-                          pendingReplyScrollTopRef.current =
-                            bodyRef.current?.scrollTop ?? null;
-                          setReplyTarget(comment);
-                          setReplyText(
-                            `@${comment.author?.name || "\u041A\u043E\u0440\u0438\u0441\u0442\u0443\u0432\u0430\u0447"} `,
+                    {branchPath.reduceRight(
+                      (children, comment, index) => (
+                        <div
+                          key={comment.id}
+                          className={
+                            index === 0
+                              ? "social-post-thread__nested-root"
+                              : "social-post-thread__nested-level"
+                          }
+                        >
+                          <ThreadComment
+                            comment={comment}
+                            visualDepth={index}
+                            isEditing={editingReply?.id === comment.id}
+                            editText={editReplyText}
+                            onOpenProfile={onOpenProfile}
+                            onEdit={(item) => {
+                              setEditingReply(item);
+                              setEditReplyText(item.text);
+                            }}
+                            onDelete={handleDeleteReply}
+                            onKudos={handleReplyKudos}
+                            onOpenKudosUsers={onOpenKudosUsers}
+                            onReply={(item) => {
+                              pendingReplyScrollTopRef.current =
+                                bodyRef.current?.scrollTop ?? null;
+                              setReplyTarget(item);
+                              setReplyText(
+                                `@${item.author?.name || "\u041A\u043E\u0440\u0438\u0441\u0442\u0443\u0432\u0430\u0447"} `,
+                              );
+                            }}
+                            onEditTextChange={setEditReplyText}
+                            onCancelEdit={() => {
+                              setEditingReply(null);
+                              setEditReplyText("");
+                            }}
+                            onSaveEdit={handleEditReply}
+                          />
+
+                          {children && (
+                            <div className="social-post-thread__nested-children">
+                              {children}
+                            </div>
+                          )}
+                        </div>
+                      ),
+                      <div className="social-post-thread__nested-tail">
+                        {branchReplies.map((reply) => {
+                          const repliesCount = getDirectRepliesCount(reply.id);
+
+                          return (
+                            <div
+                              key={reply.id}
+                              className="social-post-thread__nested-tail-node"
+                            >
+                              <ThreadComment
+                                comment={reply}
+                                visualDepth={branchPath.length}
+                                isEditing={editingReply?.id === reply.id}
+                                editText={editReplyText}
+                                onOpenProfile={onOpenProfile}
+                                onEdit={(item) => {
+                                  setEditingReply(item);
+                                  setEditReplyText(item.text);
+                                }}
+                                onDelete={handleDeleteReply}
+                                onKudos={handleReplyKudos}
+                                onOpenKudosUsers={onOpenKudosUsers}
+                                onReply={(item) => {
+                                  pendingReplyScrollTopRef.current =
+                                    bodyRef.current?.scrollTop ?? null;
+                                  setReplyTarget(item);
+                                  setReplyText(
+                                    `@${item.author?.name || "\u041A\u043E\u0440\u0438\u0441\u0442\u0443\u0432\u0430\u0447"} `,
+                                  );
+                                }}
+                                onEditTextChange={setEditReplyText}
+                                onCancelEdit={() => {
+                                  setEditingReply(null);
+                                  setEditReplyText("");
+                                }}
+                                onSaveEdit={handleEditReply}
+                              />
+
+                              {repliesCount > 0 && (
+                                <button
+                                  type="button"
+                                  className="social-post-thread__branch-toggle"
+                                  onClick={() => openBranch(reply)}
+                                >
+                                  {`${repliesCount} ${
+                                    repliesCount === 1
+                                      ? "\u0432\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u044c"
+                                      : "\u0432\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u0456"
+                                  }`}
+                                </button>
+                              )}
+                            </div>
                           );
-                        }}
-                        onEditTextChange={setEditReplyText}
-                        onCancelEdit={() => {
-                          setEditingReply(null);
-                          setEditReplyText("");
-                        }}
-                        onSaveEdit={handleEditReply}
-                      />
-                    </div>
-
-                    <div className="social-post-thread__branch-children">
-                      {branchReplies.map((reply) => {
-                        const repliesCount = getDirectRepliesCount(reply.id);
-
-                        return (
-                          <div
-                            key={reply.id}
-                            className="social-post-thread__branch-node"
-                          >
-                            <ThreadComment
-                              comment={reply}
-                              visualDepth={1}
-                              isEditing={editingReply?.id === reply.id}
-                              editText={editReplyText}
-                              onOpenProfile={onOpenProfile}
-                              onEdit={(comment) => {
-                                setEditingReply(comment);
-                                setEditReplyText(comment.text);
-                              }}
-                              onDelete={handleDeleteReply}
-                              onKudos={handleReplyKudos}
-                              onOpenKudosUsers={onOpenKudosUsers}
-                              onReply={(comment) => {
-                                pendingReplyScrollTopRef.current =
-                                  bodyRef.current?.scrollTop ?? null;
-                                setReplyTarget(comment);
-                                setReplyText(
-                                  `@${comment.author?.name || "\u041A\u043E\u0440\u0438\u0441\u0442\u0443\u0432\u0430\u0447"} `,
-                                );
-                              }}
-                              onEditTextChange={setEditReplyText}
-                              onCancelEdit={() => {
-                                setEditingReply(null);
-                                setEditReplyText("");
-                              }}
-                              onSaveEdit={handleEditReply}
-                            />
-
-                            {repliesCount > 0 && (
-                              <button
-                                type="button"
-                                className="social-post-thread__branch-toggle"
-                                onClick={() => openBranch(reply)}
-                              >
-                                {`${repliesCount} ${
-                                  repliesCount === 1
-                                    ? "\u0432\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u044c"
-                                    : "\u0432\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u0456"
-                                }`}
-                              </button>
-                            )}
-                          </div>
-                        );
-                      })}
-                    </div>
+                        })}
+                      </div>,
+                    )}
 
                     {branchReplies.length === 0 && (
                       <p className="social-post-thread__empty">
