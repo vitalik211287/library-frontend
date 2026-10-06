@@ -681,7 +681,8 @@
   gap: 6px;
 }
 
-.social-post-card .social-feed-card__action > button {
+.social-post-card .social-feed-card__action > button,
+.social-post-thread__reply-actions .social-feed-card__action > button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -693,11 +694,13 @@
   cursor: pointer;
 }
 
-.social-post-card .social-feed-card__action > button:disabled {
+.social-post-card .social-feed-card__action > button:disabled,
+.social-post-thread__reply-actions .social-feed-card__action > button:disabled {
   cursor: default;
 }
 
-.social-post-card .social-feed-card__action > button:last-child {
+.social-post-card .social-feed-card__action > button:last-child,
+.social-post-thread__reply-actions .social-feed-card__action > button:last-child {
   min-width: 12px;
 }
 

@@ -1,9 +1,16 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import { apiFetch } from "../../../../../../shared/api/apiClient.js";
+import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
 import useOverlayBack from "../../../../../../shared/hooks/useOverlayBack.js";
 import { resolveAssetUrl } from "../../../../../../shared/utils/resolveAssetUrl.js";
 import SocialPostActionsMenu from "../SocialPostActionsMenu/SocialPostActionsMenu.jsx";
+import ThreadComment from "./components/ThreadComment/ThreadComment.jsx";
+
+import {
+  buildCommentTree,
+  normalizeThreadItems,
+} from "./utils/threadUtils.js";
 
 import "./SocialPostThreadModal.css";
 
@@ -12,6 +19,7 @@ const SocialPostThreadModal = ({
   activityId,
   onClose,
   onOpenProfile,
+  onOpenKudosUsers,
   onThreadCountChange,
 }) => {
   const [thread, setThread] = useState(null);
@@ -21,9 +29,20 @@ const SocialPostThreadModal = ({
   const [editReplyText, setEditReplyText] = useState("");
   const [isLoading, setIsLoading] = useState(true);
   const [isSending, setIsSending] = useState(false);
-  const [error, setError] = useState("");
-  const [expandedBranches, setExpandedBranches] = useState(() => new Set());
+  const [error, setError] = useState("");  const [activeBranchRoot, setActiveBranchRoot] = useState(null);
   const bodyRef = useRef(null);
+  const pendingReplyScrollTopRef = useRef(null);
+
+  useLayoutEffect(() => {
+    const pendingScrollTop = pendingReplyScrollTopRef.current;
+
+    if (pendingScrollTop == null || !bodyRef.current) {
+      return;
+    }
+
+    bodyRef.current.scrollTop = pendingScrollTop;
+    pendingReplyScrollTopRef.current = null;
+  }, [replyTarget]);
 
   const scrollToBottom = useCallback((behavior = "smooth") => {
     requestAnimationFrame(() => {
@@ -38,6 +57,19 @@ const SocialPostThreadModal = ({
   const isOpen = Boolean(postId || activityId);
 
   useOverlayBack(isOpen, onClose);
+
+  useEffect(() => {
+    if (isOpen) {
+      return;
+    }
+
+    setActiveBranchRoot(null);
+    setReplyTarget(null);
+    setReplyText("");
+    setEditingReply(null);
+    setEditReplyText("");
+    pendingReplyScrollTopRef.current = null;
+  }, [isOpen]);
 
   const loadThread = useCallback(async () => {
     if (!isOpen) {
@@ -72,7 +104,6 @@ const SocialPostThreadModal = ({
         replies.length,
       );
 
-      scrollToBottom();
     } catch (requestError) {
       console.error("Failed to load social post thread:", requestError);
       setError("Не вдалося завантажити обговорення");
@@ -85,7 +116,6 @@ const SocialPostThreadModal = ({
     isOpen,
     onThreadCountChange,
     postId,
-    scrollToBottom,
   ]);
 
   useEffect(() => {
@@ -113,13 +143,6 @@ const SocialPostThreadModal = ({
               : data,
           );
           setError("");
-
-          requestAnimationFrame(() => {
-            bodyRef.current?.scrollTo({
-              top: 0,
-              behavior: "auto",
-            });
-          });
         }
       } catch (requestError) {
         console.error("Failed to load social post thread:", requestError);
@@ -175,6 +198,59 @@ const SocialPostThreadModal = ({
     }
   };
 
+
+  const DEBUG_REPLY_SCROLL = (label) => {
+    const body = bodyRef.current;
+    const composer = document.querySelector(".social-post-thread__composer");
+
+    if (!body) {
+      console.log("[REPLY SCROLL]", label, "body not found");
+      return;
+    }
+
+    console.log("[REPLY SCROLL]", label, {
+      scrollTop: body.scrollTop,
+      scrollHeight: body.scrollHeight,
+      clientHeight: body.clientHeight,
+      composerHeight: composer?.getBoundingClientRect().height ?? null,
+    });
+  };
+
+const handleReplyKudos = async (reply) => {
+    if (!reply?.id || reply.isOwnPost) {
+      return;
+    }
+
+    const nextHasKudos = !reply.hasKudos;
+
+    try {
+      const data = await apiFetch(`/api/social/posts/${reply.id}/kudos`, {
+        method: nextHasKudos ? "POST" : "DELETE",
+      });
+
+      setThread((current) => {
+        if (!current) {
+          return current;
+        }
+
+        return {
+          ...current,
+          replies: (current.replies || []).map((item) =>
+            item.id === reply.id
+              ? {
+                  ...item,
+                  hasKudos: Boolean(data.hasKudos),
+                  kudosCount: Number(data.kudosCount) || 0,
+                }
+              : item,
+          ),
+        };
+      });
+    } catch (requestError) {
+      console.error("Failed to update reply kudos:", requestError);
+    }
+  };
+
   const handleEditReply = async (reply) => {
     const text = editReplyText.trim();
 
@@ -203,6 +279,13 @@ const SocialPostThreadModal = ({
   };
 
   const handleDeleteReply = async (reply) => {
+    console.log("DELETE_REPLY_DEBUG", {
+      id: reply?.id,
+      parentId: reply?.parentId,
+      sourceType: reply?.sourceType,
+      containerId: reply?.containerId,
+      reply,
+    });
     if (!reply?.id) {
       return;
     }
@@ -231,10 +314,6 @@ const SocialPostThreadModal = ({
     }
   };
 
-  if (!isOpen) {
-    return null;
-  }
-
   const userName = thread?.author?.name || "Користувач";
   const formattedTime = thread?.createdAt
     ? new Intl.DateTimeFormat("uk-UA", {
@@ -247,78 +326,69 @@ const SocialPostThreadModal = ({
 
   const replies = thread?.replies || [];
 
-  const childrenByParentId = new Map();
+  const rootParentId = isActivityThread ? null : postId;
+  const sourceType = isActivityThread ? "activity" : "post";
+  const containerId = isActivityThread ? activityId : postId;
 
-  replies.forEach((reply) => {
-    const parentId = reply.parentId || null;
+  const normalizedReplies = useMemo(
+    () =>
+      normalizeThreadItems({
+        items: replies,
+        sourceType,
+        containerId,
+      }),
+    [replies, sourceType, containerId],
+  );
 
-    if (!childrenByParentId.has(parentId)) {
-      childrenByParentId.set(parentId, []);
+  const displayReplies = useMemo(
+    () =>
+      buildCommentTree(normalizedReplies, rootParentId),
+    [normalizedReplies, rootParentId],
+  );
+
+  const branchReplies = useMemo(() => {
+    if (!activeBranchRoot) {
+      return [];
     }
 
-    childrenByParentId.get(parentId).push(reply);
-  });
+    return normalizedReplies
+      .filter((reply) => reply.parentId === activeBranchRoot.id)
+      .sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() -
+          new Date(b.createdAt).getTime(),
+      );
+  }, [activeBranchRoot, normalizedReplies]);
 
-  childrenByParentId.forEach((children) => {
-    children.sort(
-      (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-    );
-  });
+  const getChildReplies = (parentId) =>
+    normalizedReplies
+      .filter((reply) => reply.parentId === parentId)
+      .sort(
+        (a, b) =>
+          new Date(a.createdAt).getTime() -
+          new Date(b.createdAt).getTime(),
+      );
 
-  const rootParentId = isActivityThread ? null : postId;
-  const rootReplies = childrenByParentId.get(rootParentId) || [];
-  const displayReplies = [];
+  const getDirectRepliesCount = (commentId) =>
+    normalizedReplies.filter((reply) => reply.parentId === commentId).length;
 
-  const getDescendants = (replyId) => {
-    const result = [];
-    const children = childrenByParentId.get(replyId) || [];
+  const openBranch = (comment) => {
+    setActiveBranchRoot(comment);
+    setReplyTarget(null);
+    setReplyText("");
 
-    children.forEach((child) => {
-      result.push(child);
-      result.push(...getDescendants(child.id));
-    });
-
-    return result;
-  };
-
-  rootReplies.forEach((rootReply) => {
-    displayReplies.push({
-      ...rootReply,
-      __depth: 0,
-    });
-
-    const directReplies = childrenByParentId.get(rootReply.id) || [];
-
-    directReplies.forEach((directReply) => {
-      displayReplies.push({
-        ...directReply,
-        __depth: 1,
-      });
-
-      const descendants = getDescendants(directReply.id);
-
-      if (descendants.length > 0) {
-        if (expandedBranches.has(directReply.id)) {
-          descendants.forEach((descendant) => {
-            displayReplies.push({
-              ...descendant,
-              __depth: 2,
-            });
-          });
-        }
-
-        displayReplies.push({
-          id: `branch-toggle-${directReply.id}`,
-          __branchToggle: true,
-          branchId: directReply.id,
-          count: descendants.length,
-          isExpanded: expandedBranches.has(directReply.id),
-        });
+    requestAnimationFrame(() => {
+      if (bodyRef.current) {
+        bodyRef.current.scrollTop = 0;
       }
     });
-  });
+  };
 
-  const isNestedReply = (reply) => reply.__depth > 0;
+  const isBranchView = Boolean(activeBranchRoot);
+
+  if (!isOpen) {
+    return null;
+  }
 
   return (
     <div
@@ -337,7 +407,26 @@ const SocialPostThreadModal = ({
         <div className="social-post-thread__handle" />
 
         <header className="social-post-thread__header">
-          <h2>Обговорення</h2>
+          <div className="social-post-thread__title">
+            {isBranchView && (
+              <button
+                type="button"
+                className="social-post-thread__back"
+                onClick={() => {
+                  setActiveBranchRoot(null);
+                  setReplyTarget(null);
+                  setReplyText("");
+                  requestAnimationFrame(() => {
+                    if (bodyRef.current) bodyRef.current.scrollTop = 0;
+                  });
+                }}
+                aria-label={"\u041D\u0430\u0437\u0430\u0434 \u0434\u043E \u043E\u0431\u0433\u043E\u0432\u043E\u0440\u0435\u043D\u043D\u044F"}
+              >
+                {"\u2190"}
+              </button>
+            )}
+            <h2>{isBranchView ? "\u0412\u0456\u0434\u043F\u043E\u0432\u0456\u0434\u0456" : "\u041E\u0431\u0433\u043E\u0432\u043E\u0440\u0435\u043D\u043D\u044F"}</h2>
+          </div>
 
           <button
             type="button"
@@ -360,7 +449,7 @@ const SocialPostThreadModal = ({
 
           {!isLoading && thread && (
             <>
-              {!isActivityThread && (
+              {!isActivityThread && !isBranchView && (
               <article className="social-post-thread__root">
                 <div className="social-post-thread__message">
                   <button
@@ -413,159 +502,169 @@ const SocialPostThreadModal = ({
               </article>
               )}
 
-              <div className="social-post-thread__replies">
-                {displayReplies.map((reply) => {
-                  if (reply.__branchToggle) {
-                    return (
-                      <button
-                        key={reply.id}
-                        type="button"
-                        className="social-post-thread__branch-toggle"
-                        onClick={() => {
-                          setExpandedBranches((current) => {
-                            const next = new Set(current);
-
-                            if (next.has(reply.branchId)) {
-                              next.delete(reply.branchId);
-                            } else {
-                              next.add(reply.branchId);
-                            }
-
-                            return next;
-                          });
+              <div
+                className={`social-post-thread__replies ${
+                  isBranchView ? "social-post-thread__replies--branch" : ""
+                }`}
+              >
+                {isBranchView ? (
+                  <>
+                    <div className="social-post-thread__branch-root">
+                      <ThreadComment
+                        key={activeBranchRoot.id}
+                        comment={activeBranchRoot}
+                        visualDepth={0}
+                        isEditing={editingReply?.id === activeBranchRoot.id}
+                        editText={editReplyText}
+                        onOpenProfile={onOpenProfile}
+                        onEdit={(comment) => {
+                          setEditingReply(comment);
+                          setEditReplyText(comment.text);
                         }}
+                        onDelete={handleDeleteReply}
+                        onKudos={handleReplyKudos}
+                        onOpenKudosUsers={onOpenKudosUsers}
+                        onReply={(comment) => {
+                          pendingReplyScrollTopRef.current =
+                            bodyRef.current?.scrollTop ?? null;
+                          setReplyTarget(comment);
+                          setReplyText(
+                            `@${comment.author?.name || "\u041A\u043E\u0440\u0438\u0441\u0442\u0443\u0432\u0430\u0447"} `,
+                          );
+                        }}
+                        onEditTextChange={setEditReplyText}
+                        onCancelEdit={() => {
+                          setEditingReply(null);
+                          setEditReplyText("");
+                        }}
+                        onSaveEdit={handleEditReply}
+                      />
+                    </div>
+
+                    <div className="social-post-thread__branch-children">
+                      {branchReplies.map((reply) => {
+                        const repliesCount = getDirectRepliesCount(reply.id);
+
+                        return (
+                          <div
+                            key={reply.id}
+                            className="social-post-thread__branch-node"
+                          >
+                            <ThreadComment
+                              comment={reply}
+                              visualDepth={1}
+                              isEditing={editingReply?.id === reply.id}
+                              editText={editReplyText}
+                              onOpenProfile={onOpenProfile}
+                              onEdit={(comment) => {
+                                setEditingReply(comment);
+                                setEditReplyText(comment.text);
+                              }}
+                              onDelete={handleDeleteReply}
+                              onKudos={handleReplyKudos}
+                              onOpenKudosUsers={onOpenKudosUsers}
+                              onReply={(comment) => {
+                                pendingReplyScrollTopRef.current =
+                                  bodyRef.current?.scrollTop ?? null;
+                                setReplyTarget(comment);
+                                setReplyText(
+                                  `@${comment.author?.name || "\u041A\u043E\u0440\u0438\u0441\u0442\u0443\u0432\u0430\u0447"} `,
+                                );
+                              }}
+                              onEditTextChange={setEditReplyText}
+                              onCancelEdit={() => {
+                                setEditingReply(null);
+                                setEditReplyText("");
+                              }}
+                              onSaveEdit={handleEditReply}
+                            />
+
+                            {repliesCount > 0 && (
+                              <button
+                                type="button"
+                                className="social-post-thread__branch-toggle"
+                                onClick={() => openBranch(reply)}
+                              >
+                                {`${repliesCount} ${
+                                  repliesCount === 1
+                                    ? "\u0432\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u044c"
+                                    : "\u0432\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u0456"
+                                }`}
+                              </button>
+                            )}
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {branchReplies.length === 0 && (
+                      <p className="social-post-thread__empty">
+                        {"\u0412\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u0435\u0439 \u0449\u0435 \u043d\u0435\u043c\u0430\u0454."}
+                      </p>
+                    )}
+                  </>
+                ) : (
+                  <>
+                    {displayReplies.map((group) => (
+                      <div
+                        key={group.root.id}
+                        className="social-post-thread__tree-group"
                       >
-                        {reply.isExpanded
-                          ? "\u0417\u0433\u043e\u0440\u043d\u0443\u0442\u0438 \u0432\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u0456"
-                          : `\u041f\u043e\u043a\u0430\u0437\u0430\u0442\u0438 \u0449\u0435 ${reply.count} ${
-                              reply.count === 1
+                        <div className="social-post-thread__tree-root">
+                          <ThreadComment
+                            comment={group.root}
+                            visualDepth={0}
+                            isEditing={editingReply?.id === group.root.id}
+                            editText={editReplyText}
+                            onOpenProfile={onOpenProfile}
+                            onEdit={(comment) => {
+                              setEditingReply(comment);
+                              setEditReplyText(comment.text);
+                            }}
+                            onDelete={handleDeleteReply}
+                            onKudos={handleReplyKudos}
+                            onOpenKudosUsers={onOpenKudosUsers}
+                            onReply={(comment) => {
+                              pendingReplyScrollTopRef.current =
+                                bodyRef.current?.scrollTop ?? null;
+                              setReplyTarget(comment);
+                              setReplyText(
+                                `@${comment.author?.name || "\u041A\u043E\u0440\u0438\u0441\u0442\u0443\u0432\u0430\u0447"} `,
+                              );
+                            }}
+                            onEditTextChange={setEditReplyText}
+                            onCancelEdit={() => {
+                              setEditingReply(null);
+                              setEditReplyText("");
+                            }}
+                            onSaveEdit={handleEditReply}
+                          />
+                        </div>
+
+                        {group.repliesCount > 0 && (
+                          <button
+                            type="button"
+                            className="social-post-thread__branch-toggle"
+                            onClick={() => openBranch(group.root)}
+                          >
+                            {`${group.repliesCount} ${
+                              group.repliesCount === 1
                                 ? "\u0432\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u044c"
                                 : "\u0432\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u0456"
                             }`}
-                      </button>
-                    );
-                  }
-
-                  const replyUserName = reply.author?.name || "Користувач";
-
-                  const replyFormattedTime = reply.createdAt
-                    ? new Intl.DateTimeFormat("uk-UA", {
-                        day: "numeric",
-                        month: "short",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      }).format(new Date(reply.createdAt))
-                    : "";
-
-                  return (
-                    <article
-                      key={reply.id}
-                      className={`social-post-thread__reply ${
-                        isNestedReply(reply)
-                          ? "social-post-thread__reply--nested"
-                          : ""
-                      }`}
-                    >
-                      <div className="social-post-thread__message">
-                        <button
-                          type="button"
-                          className="social-post-thread__avatar"
-                          onClick={() => onOpenProfile?.(reply.author?.id)}
-                          aria-label={replyUserName}
-                        >
-                          {reply.author?.avatarUrl ? (
-                            <img src={reply.author.avatarUrl} alt="" />
-                          ) : (
-                            <span>{replyUserName.charAt(0).toUpperCase()}</span>
-                          )}
-                        </button>
-
-                        <div className="social-post-thread__message-content">
-                          <div className="social-post-thread__reply-header">
-                            <button
-                              type="button"
-                              className="social-post-thread__author"
-                              onClick={() => onOpenProfile?.(reply.author?.id)}
-                            >
-                              <strong>{replyUserName}</strong>
-                            </button>
-
-                            {reply.isOwnPost && (
-                              <SocialPostActionsMenu
-                                onEdit={() => {
-                                  setEditingReply(reply);
-                                  setEditReplyText(reply.text);
-                                }}
-                                onDelete={() => handleDeleteReply(reply)}
-                              />
-                            )}
-                          </div>
-
-                          {replyFormattedTime && (
-                            <span className="social-post-thread__time">
-                              {replyFormattedTime}
-                            </span>
-                          )}
-
-                          {editingReply?.id === reply.id ? (
-                            <div className="social-post-thread__edit">
-                              <textarea
-                                value={editReplyText}
-                                maxLength={1000}
-                                autoFocus
-                                onChange={(event) =>
-                                  setEditReplyText(event.target.value)
-                                }
-                              />
-
-                              <div className="social-post-thread__edit-actions">
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    setEditingReply(null);
-                                    setEditReplyText("");
-                                  }}
-                                >
-                                  {"\u0421\u043a\u0430\u0441\u0443\u0432\u0430\u0442\u0438"}
-                                </button>
-
-                                <button
-                                  type="button"
-                                  disabled={!editReplyText.trim()}
-                                  onClick={() => handleEditReply(reply)}
-                                >
-                                  {"\u0417\u0431\u0435\u0440\u0435\u0433\u0442\u0438"}
-                                </button>
-                              </div>
-                            </div>
-                          ) : (
-                            <>
-                              <p>{reply.text}</p>
-
-                              <button
-                                type="button"
-                                className="social-post-thread__reply-action"
-                                onClick={() => {
-                                  setReplyTarget(reply);
-                                  setReplyText(`@${replyUserName} `);
-                                }}
-                              >
-                                {"\u0412\u0456\u0434\u043f\u043e\u0432\u0456\u0441\u0442\u0438"}
-                              </button>
-                            </>
-                          )}
-                        </div>
+                          </button>
+                        )}
                       </div>
-                    </article>
-                  );
-                })}
+                    ))}
 
-                {thread.replies?.length === 0 && (
-                  <p className="social-post-thread__empty">
-                    {isActivityThread
-                      ? "Коментарів ще немає. Будьте першим."
-                      : "Відповідей ще немає. Будь першим."}
-                  </p>
+                    {thread.replies?.length === 0 && (
+                      <p className="social-post-thread__empty">
+                        {isActivityThread
+                          ? "\u041a\u043e\u043c\u0435\u043d\u0442\u0430\u0440\u0456\u0432 \u0449\u0435 \u043d\u0435\u043c\u0430\u0454. \u0411\u0443\u0434\u044c\u0442\u0435 \u043f\u0435\u0440\u0448\u0438\u043c."
+                          : "\u0412\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u0435\u0439 \u0449\u0435 \u043d\u0435\u043c\u0430\u0454. \u0411\u0443\u0434\u044c \u043f\u0435\u0440\u0448\u0438\u043c."}
+                      </p>
+                    )}
+                  </>
                 )}
               </div>
             </>
@@ -573,22 +672,35 @@ const SocialPostThreadModal = ({
         </div>
 
         <form className="social-post-thread__composer" onSubmit={handleSubmit}>
-          {replyTarget && (
-            <div className="social-post-thread__replying-to">
-              <span>Відповідь для {replyTarget.author?.name || "Користувач"}</span>
+          <div
+            className={`social-post-thread__replying-to ${
+              replyTarget
+                ? "social-post-thread__replying-to--visible"
+                : "social-post-thread__replying-to--empty"
+            }`}
+          >
+            {replyTarget ? (
+              <>
+                <span>
+                  {"\u0412\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u044c \u0434\u043b\u044f "}
+                  {replyTarget.author?.name || "\u041a\u043e\u0440\u0438\u0441\u0442\u0443\u0432\u0430\u0447"}
+                </span>
 
-              <button
-                type="button"
-                onClick={() => {
-                  setReplyTarget(null);
-                  setReplyText("");
-                }}
-                aria-label="Скасувати відповідь"
-              >
-                ×
-              </button>
-            </div>
-          )}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setReplyTarget(null);
+                    setReplyText("");
+                  }}
+                  aria-label={"\u0421\u043a\u0430\u0441\u0443\u0432\u0430\u0442\u0438 \u0432\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u044c"}
+                >
+                  ?
+                </button>
+              </>
+            ) : (
+              <span aria-hidden="true">&nbsp;</span>
+            )}
+          </div>
 
           <textarea
             value={replyText}

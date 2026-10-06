@@ -643,6 +643,7 @@ const SocialFeed = ({
         activityId={linkedThreadActivityId}
         onClose={handleCloseThread}
         onOpenProfile={handleOpenProfile}
+        onOpenKudosUsers={setKudosUsersItem}
         onThreadCountChange={handleThreadCountChange}
       />
       <SocialBookModal

@@ -384,9 +384,9 @@
 }
 
 .social-post-thread__reply-header .social-post-card__menu-dropdown {
-  top: auto;
+  top: calc(100% + 6px);
   right: 0;
-  bottom: calc(100% + 6px);
+  bottom: auto;
 }
 
 .social-post-thread__edit {
@@ -492,4 +492,131 @@
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
+}
+
+.social-post-thread__reply-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-16);
+}
+
+.social-post-thread__reply-actions .social-feed-card__action {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+
+.social-post-thread__reply-action {
+  flex: 0 0 auto;
+  margin: 0;
+}
+
+
+/* =========================
+   COMMENT TREE
+   ========================= */
+
+.social-post-thread__reply::before {
+  display: none;
+}
+
+.social-post-thread__reply--nested {
+  margin-left: 0;
+}
+
+.social-post-thread__branch-root .social-post-thread__reply {
+  border-bottom: 0;
+  padding-bottom: var(--space-8);
+}
+
+.social-post-thread__branch-children {
+  position: relative;
+  margin-left: 16px;
+}
+
+/* Vertical trunk shared by all replies */
+.social-post-thread__branch-children::before {
+  content: "";
+  position: absolute;
+  top: -105px;
+  bottom: calc(var(--space-14) + 30px);
+  left: 33px;
+  width: 1px;
+  background: var(--border);
+}
+
+.social-post-thread__branch-children > .social-post-thread__reply {
+  position: relative;
+  padding-left: 66px;
+}
+
+/* Horizontal curved branch to each reply */
+.social-post-thread__branch-children > .social-post-thread__reply::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 33px;
+  width: 33px;
+  height: 30px;
+  border-left: 0;
+  border-bottom: 1px solid var(--border);
+  border-bottom-left-radius: 12px;
+  background: transparent;
+}
+
+.social-post-thread__branch-toggle {
+  margin-left: 66px;
+}
+
+.social-post-thread__replies--branch {
+  overflow: visible;
+}
+
+
+/* Main discussion thread preview */
+
+.social-post-thread__tree-group {
+  position: relative;
+  border-bottom: 1px solid var(--border);
+}
+
+.social-post-thread__tree-group .social-post-thread__reply {
+  border-bottom: 0;
+}
+
+.social-post-thread__tree-preview {
+  position: relative;
+  margin-left: 16px;
+}
+
+.social-post-thread__tree-preview > .social-post-thread__reply {
+  position: relative;
+  padding-left: 66px;
+}
+
+.social-post-thread__tree-preview > .social-post-thread__reply::before {
+  content: "";
+  display: block;
+  position: absolute;
+  top: -105px;
+  left: 33px;
+  width: 33px;
+  height: 135px;
+  border-left: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  border-bottom-left-radius: 12px;
+  background: transparent;
+}
+
+.social-post-thread__tree-preview .social-post-thread__branch-toggle {
+  margin: 0 16px 14px 66px;
+}
+
+.social-post-thread__branch-children > .social-post-thread__reply {
+  border-bottom: 0;
+}
+
+.social-post-thread__branch-children {
+  border-bottom: 1px solid var(--border);
 }
