@@ -14,6 +14,10 @@ const BookPreview = ({
   const [coverPreview, setCoverPreview] = useState(null);
 
   useEffect(() => {
+    setCoverPreview(null);
+  }, [book?.isbn]);
+
+  useEffect(() => {
     return () => {
       if (coverPreview) {
         URL.revokeObjectURL(coverPreview);
