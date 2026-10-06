@@ -540,100 +540,17 @@
 
 /* Open thread */
 
-.social-post-thread__branch-path,
-.social-post-thread__branch-children {
-  position: relative;
-}
-
-.social-post-thread__branch-path {
-  margin-left: 8px;
-}
-
-.social-post-thread__branch-root,
-.social-post-thread__branch-path-node,
-.social-post-thread__branch-node {
-  position: relative;
-}
-
-.social-post-thread__branch-root .social-post-thread__reply,
-.social-post-thread__branch-path-node .social-post-thread__reply,
-.social-post-thread__branch-node .social-post-thread__reply {
-  border-bottom: 0;
-}
-
 /* Every opened level */
-
-.social-post-thread__branch-path-node {
-  margin-left: calc(var(--thread-depth) * 18px);
-}
 
 /* Vertical + rounded arm from parent */
 
-.social-post-thread__branch-path-node::before {
-  content: "";
-  position: absolute;
-
-  left: 24px;
-  top: -104px;
-
-  width: 42px;
-  height: 134px;
-
-  border-left: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  border-bottom-left-radius: 12px;
-
-  pointer-events: none;
-}
-
 /* Children of deepest opened level */
-
-.social-post-thread__branch-children {
-  margin-left: calc(var(--thread-depth) * 18px);
-}
-
-.social-post-thread__branch-node {
-  position: relative;
-}
-
-.social-post-thread__branch-node::before {
-  content: "";
-  position: absolute;
-
-  left: 24px;
-  top: -104px;
-
-  width: 42px;
-  height: 134px;
-
-  border-left: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  border-bottom-left-radius: 12px;
-
-  pointer-events: none;
-}
-
-.social-post-thread__branch-node > .social-post-thread__branch-toggle {
-  margin: 0 0 var(--space-14) 50px;
-}
 
 .social-post-thread__replies--branch {
   overflow: visible;
 }
 
-
-
 /* Smaller avatars for nested thread comments */
-.social-post-thread__branch-path-node .social-post-thread__avatar,
-.social-post-thread__branch-node .social-post-thread__avatar {
-  width: 28px;
-  height: 28px;
-  min-width: 28px;
-  flex: 0 0 28px;
-  font-size: 11px;
-}
-
-
 /* Real nested comment tree */
 
 .social-post-thread__nested-root,
@@ -669,7 +586,6 @@
 .social-post-thread__nested-tail-node > .social-post-thread__branch-toggle {
   margin: 0 0 var(--space-14) 50px;
 }
-
 
 /* Nested tree connectors ? based on measured avatar geometry */
 
@@ -709,7 +625,6 @@
   z-index: 1;
 }
 
-
 /* Keep avatars above tree lines */
 
 .social-post-thread__nested-root .social-post-thread__avatar,
@@ -723,7 +638,6 @@
 .social-post-thread__nested-children::before {
   z-index: 0;
 }
-
 
 /* Thread back button */
 
@@ -759,7 +673,6 @@
   outline: 1px solid var(--accent);
   outline-offset: 2px;
 }
-
 
 /* Thread back button */
 
