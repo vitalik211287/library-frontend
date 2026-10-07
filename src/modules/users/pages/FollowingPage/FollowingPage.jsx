@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import PageBackButton from "../../../../shared/components/PageBackButton/PageBackButton.jsx";
-import AppPanel from "../../../../shared/components/AppPanel/AppPanel.jsx";
+import Loader from "../../../../shared/components/Loader/Loader.jsx";
+import UserListItem from "../../components/UserListItem/UserListItem.jsx";
+import useFollowToggle from "../../hooks/useFollowToggle.js";
 
 import { apiFetch } from "../../../../shared/api/apiClient.js";
 
@@ -14,7 +16,6 @@ const FollowingPage = () => {
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [updatingUserId, setUpdatingUserId] = useState(null);
 
   useEffect(() => {
     const loadFollowing = async () => {
@@ -42,45 +43,35 @@ const FollowingPage = () => {
     loadFollowing();
   }, [userId]);
 
+  const { updatingUserId, toggleFollow } = useFollowToggle();
+
   const handleFollowToggle = async (user) => {
-    if (updatingUserId || user.isCurrentUser) {
+    const nextIsFollowing = await toggleFollow(user);
+
+    if (nextIsFollowing === null) {
       return;
     }
 
-    const nextIsFollowing = !user.isFollowing;
+    setUsers((currentUsers) => {
+      if (!userId && !nextIsFollowing) {
+        return currentUsers.filter((item) => item.id !== user.id);
+      }
 
-    try {
-      setUpdatingUserId(user.id);
-
-      await apiFetch(`/api/users/${user.id}/follow`, {
-        method: nextIsFollowing ? "POST" : "DELETE",
-      });
-
-      setUsers((currentUsers) => {
-        if (!userId && !nextIsFollowing) {
-          return currentUsers.filter((item) => item.id !== user.id);
+      return currentUsers.map((item) => {
+        if (item.id !== user.id) {
+          return item;
         }
 
-        return currentUsers.map((item) => {
-          if (item.id !== user.id) {
-            return item;
-          }
-
-          return {
-            ...item,
-            isFollowing: nextIsFollowing,
-            followersCount: Math.max(
-              0,
-              (item.followersCount ?? 0) + (nextIsFollowing ? 1 : -1),
-            ),
-          };
-        });
+        return {
+          ...item,
+          isFollowing: nextIsFollowing,
+          followersCount: Math.max(
+            0,
+            (item.followersCount ?? 0) + (nextIsFollowing ? 1 : -1),
+          ),
+        };
       });
-    } catch (requestError) {
-      console.error("Update follow state error:", requestError);
-    } finally {
-      setUpdatingUserId(null);
-    }
+    });
   };
 
   return (
@@ -102,9 +93,7 @@ const FollowingPage = () => {
 
         {isLoading && (
           <div className="following-page__state">
-            <div className="following-page__loader" />
-
-            <strong>Завантажуємо...</strong>
+            <Loader text="Завантажуємо..." size="small" />
           </div>
         )}
 
@@ -134,59 +123,17 @@ const FollowingPage = () => {
 
         {!isLoading && !error && users.length > 0 && (
           <div className="following-page__list">
-            {users.map((user) => {
-              const profileName = user?.name || "Користувач";
-
-              return (
-                <AppPanel as="article" key={user.id} className="following-card">
-                  <button
-                    type="button"
-                    className="following-card__profile"
-                    onClick={() => navigate(`/users/${user.id}`)}
-                  >
-                    <div className="following-card__avatar">
-                      {user.avatarUrl ? (
-                        <img src={user.avatarUrl} alt={profileName} loading="lazy" decoding="async" />
-                      ) : (
-                        <span>{profileName.charAt(0).toUpperCase()}</span>
-                      )}
-                    </div>
-
-                    <div className="following-card__content">
-                      <strong>{profileName}</strong>
-
-                      <div className="following-card__meta">
-                        <span>{user.followersCount ?? 0} підписників</span>
-
-                        <span>•</span>
-
-                        <span>{user.followingCount ?? 0} підписок</span>
-                      </div>
-                    </div>
-                  </button>
-                  {user.isCurrentUser ? (
-                    <span className="following-card__self">Ви</span>
-                  ) : (
-                    <button
-                      type="button"
-                      className={
-                        user.isFollowing
-                          ? "following-card__unfollow"
-                          : "following-card__follow"
-                      }
-                      disabled={updatingUserId === user.id}
-                      onClick={() => handleFollowToggle(user)}
-                    >
-                      {updatingUserId === user.id
-                        ? "..."
-                        : user.isFollowing
-                          ? "Відписатися"
-                          : "Підписатися"}
-                    </button>
-                  )}
-                </AppPanel>
-              );
-            })}
+            {users.map((user) => (
+              <UserListItem
+                key={user.id}
+                user={user}
+                isUpdating={updatingUserId === user.id}
+                onProfileClick={(selectedUser) =>
+                  navigate(`/users/${selectedUser.id}`)
+                }
+                onFollowToggle={handleFollowToggle}
+              />
+            ))}
           </div>
         )}
       </div>
