@@ -55,6 +55,7 @@ const Modal = ({
   subtitle,
   children,
   className = "",
+  overlayClassName = "",
   closeOnEscape = true,
   closeOnBackdrop = true,
   showHeader = true,
@@ -151,7 +152,7 @@ const Modal = ({
 
   return createPortal(
     <div
-      className="modal-overlay"
+      className={`modal-overlay ${overlayClassName}`.trim()}
       onMouseDown={handleBackdropMouseDown}
       role="presentation"
     >

@@ -1,6 +1,8 @@
-import { useEffect, useState } from "react";
+﻿import { useEffect, useState } from "react";
 
 import { apiFetch } from "../../../../../../shared/api/apiClient.js";
+import Loader from "../../../../../../shared/components/Loader/Loader.jsx";
+import Modal from "../../../../../../shared/components/Modal/Modal.jsx";
 
 import "./KudosUsersModal.css";
 
@@ -9,7 +11,9 @@ const KudosUsersModal = ({ item, onClose, onOpenProfile }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
-    if (!item?.id) return;
+    if (!item?.id) {
+      return undefined;
+    }
 
     let isActive = true;
 
@@ -47,55 +51,56 @@ const KudosUsersModal = ({ item, onClose, onOpenProfile }) => {
     };
   }, [item]);
 
-  if (!item) return null;
+  if (!item) {
+    return null;
+  }
 
   return (
-    <div className="kudos-users-modal__overlay" onClick={onClose}>
-      <div
-        className="kudos-users-modal"
-        role="dialog"
-        aria-modal="true"
-        aria-label="Підтримали"
-        onClick={(event) => event.stopPropagation()}
-      >
-        <header className="kudos-users-modal__header">
-          <h2>Підтримали</h2>
+    <Modal
+      isOpen
+      onClose={onClose}
+      title="Підтримали"
+      className="kudos-users-modal"
+      overlayClassName="kudos-users-modal__overlay"
+    >
+      <div className="kudos-users-modal__content">
+        {isLoading && <Loader text="Завантажуємо..." size="small" />}
 
-          <button type="button" onClick={onClose} aria-label="Закрити">
-            ×
-          </button>
-        </header>
+        {!isLoading &&
+          users.map((user) => (
+            <button
+              type="button"
+              className="kudos-users-modal__user"
+              key={user.id}
+              onClick={() => {
+                onClose();
+                onOpenProfile(user.id);
+              }}
+            >
+              <span className="kudos-users-modal__avatar">
+                {user.avatarUrl ? (
+                  <img
+                    src={user.avatarUrl}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                  />
+                ) : (
+                  (user.name || "К").charAt(0).toUpperCase()
+                )}
+              </span>
 
-        <div className="kudos-users-modal__content">
-          {isLoading && <p>Завантажуємо...</p>}
+              <strong>{user.name || "Користувач"}</strong>
+            </button>
+          ))}
 
-          {!isLoading &&
-            users.map((user) => (
-              <button
-                type="button"
-                className="kudos-users-modal__user"
-                key={user.id}
-                onClick={() => {
-                  onClose();
-                  onOpenProfile(user.id);
-                }}
-              >
-                <span className="kudos-users-modal__avatar">
-                  {user.avatarUrl ? (
-                    <img src={user.avatarUrl} alt="" />
-                  ) : (
-                    (user.name || "К").charAt(0).toUpperCase()
-                  )}
-                </span>
-
-                <strong>{user.name || "Користувач"}</strong>
-              </button>
-            ))}
-
-          {!isLoading && users.length === 0 && <p>Поки ніхто не підтримав.</p>}
-        </div>
+        {!isLoading && users.length === 0 && (
+          <p className="kudos-users-modal__empty">
+            Поки ніхто не підтримав.
+          </p>
+        )}
       </div>
-    </div>
+    </Modal>
   );
 };
 
