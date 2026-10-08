@@ -123,46 +123,8 @@ const SocialPostThreadModal = ({
       return;
     }
 
-    let cancelled = false;
-
-    const fetchThread = async () => {
-      try {
-        const data = await apiFetch(
-          isActivityThread
-            ? `/api/social/activities/${activityId}/thread`
-            : `/api/social/posts/${postId}`,
-        );
-
-        if (!cancelled) {
-          setThread(
-            isActivityThread
-              ? {
-                  activityId,
-                  replies: data?.comments || [],
-                }
-              : data,
-          );
-          setError("");
-        }
-      } catch (requestError) {
-        console.error("Failed to load social post thread:", requestError);
-
-        if (!cancelled) {
-          setError("Не вдалося завантажити обговорення");
-        }
-      } finally {
-        if (!cancelled) {
-          setIsLoading(false);
-        }
-      }
-    };
-
-    fetchThread();
-
-    return () => {
-      cancelled = true;
-    };
-  }, [activityId, isActivityThread, isOpen, postId]);
+    loadThread();
+  }, [isOpen, loadThread]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -196,24 +158,6 @@ const SocialPostThreadModal = ({
     } finally {
       setIsSending(false);
     }
-  };
-
-
-  const DEBUG_REPLY_SCROLL = (label) => {
-    const body = bodyRef.current;
-    const composer = document.querySelector(".social-post-thread__composer");
-
-    if (!body) {
-      console.log("[REPLY SCROLL]", label, "body not found");
-      return;
-    }
-
-    console.log("[REPLY SCROLL]", label, {
-      scrollTop: body.scrollTop,
-      scrollHeight: body.scrollHeight,
-      clientHeight: body.clientHeight,
-      composerHeight: composer?.getBoundingClientRect().height ?? null,
-    });
   };
 
 const handleReplyKudos = async (reply) => {
@@ -279,13 +223,6 @@ const handleReplyKudos = async (reply) => {
   };
 
   const handleDeleteReply = async (reply) => {
-    console.log("DELETE_REPLY_DEBUG", {
-      id: reply?.id,
-      parentId: reply?.parentId,
-      sourceType: reply?.sourceType,
-      containerId: reply?.containerId,
-      reply,
-    });
     if (!reply?.id) {
       return;
     }
@@ -387,6 +324,26 @@ const handleReplyKudos = async (reply) => {
 
   const isBranchView = branchPath.length > 0;
 
+
+  const handleStartEdit = (comment) => {
+    setEditingReply(comment);
+    setEditReplyText(comment.text);
+  };
+
+  const handleCancelEdit = () => {
+    setEditingReply(null);
+    setEditReplyText("");
+  };
+
+  const handleStartReply = (comment) => {
+    pendingReplyScrollTopRef.current =
+      bodyRef.current?.scrollTop ?? null;
+
+    setReplyTarget(comment);
+    setReplyText(
+      `@${comment.author?.name || "\u041A\u043E\u0440\u0438\u0441\u0442\u0443\u0432\u0430\u0447"} `,
+    );
+  };
 
   if (!isOpen) {
     return null;
@@ -527,26 +484,13 @@ const handleReplyKudos = async (reply) => {
                             isEditing={editingReply?.id === comment.id}
                             editText={editReplyText}
                             onOpenProfile={onOpenProfile}
-                            onEdit={(item) => {
-                              setEditingReply(item);
-                              setEditReplyText(item.text);
-                            }}
+                            onEdit={handleStartEdit}
                             onDelete={handleDeleteReply}
                             onKudos={handleReplyKudos}
                             onOpenKudosUsers={onOpenKudosUsers}
-                            onReply={(item) => {
-                              pendingReplyScrollTopRef.current =
-                                bodyRef.current?.scrollTop ?? null;
-                              setReplyTarget(item);
-                              setReplyText(
-                                `@${item.author?.name || "\u041A\u043E\u0440\u0438\u0441\u0442\u0443\u0432\u0430\u0447"} `,
-                              );
-                            }}
+                            onReply={handleStartReply}
                             onEditTextChange={setEditReplyText}
-                            onCancelEdit={() => {
-                              setEditingReply(null);
-                              setEditReplyText("");
-                            }}
+                            onCancelEdit={handleCancelEdit}
                             onSaveEdit={handleEditReply}
                           />
 
@@ -572,26 +516,13 @@ const handleReplyKudos = async (reply) => {
                                 isEditing={editingReply?.id === reply.id}
                                 editText={editReplyText}
                                 onOpenProfile={onOpenProfile}
-                                onEdit={(item) => {
-                                  setEditingReply(item);
-                                  setEditReplyText(item.text);
-                                }}
+                                onEdit={handleStartEdit}
                                 onDelete={handleDeleteReply}
                                 onKudos={handleReplyKudos}
                                 onOpenKudosUsers={onOpenKudosUsers}
-                                onReply={(item) => {
-                                  pendingReplyScrollTopRef.current =
-                                    bodyRef.current?.scrollTop ?? null;
-                                  setReplyTarget(item);
-                                  setReplyText(
-                                    `@${item.author?.name || "\u041A\u043E\u0440\u0438\u0441\u0442\u0443\u0432\u0430\u0447"} `,
-                                  );
-                                }}
+                                onReply={handleStartReply}
                                 onEditTextChange={setEditReplyText}
-                                onCancelEdit={() => {
-                                  setEditingReply(null);
-                                  setEditReplyText("");
-                                }}
+                                onCancelEdit={handleCancelEdit}
                                 onSaveEdit={handleEditReply}
                               />
 
@@ -634,26 +565,13 @@ const handleReplyKudos = async (reply) => {
                             isEditing={editingReply?.id === group.root.id}
                             editText={editReplyText}
                             onOpenProfile={onOpenProfile}
-                            onEdit={(comment) => {
-                              setEditingReply(comment);
-                              setEditReplyText(comment.text);
-                            }}
+                            onEdit={handleStartEdit}
                             onDelete={handleDeleteReply}
                             onKudos={handleReplyKudos}
                             onOpenKudosUsers={onOpenKudosUsers}
-                            onReply={(comment) => {
-                              pendingReplyScrollTopRef.current =
-                                bodyRef.current?.scrollTop ?? null;
-                              setReplyTarget(comment);
-                              setReplyText(
-                                `@${comment.author?.name || "\u041A\u043E\u0440\u0438\u0441\u0442\u0443\u0432\u0430\u0447"} `,
-                              );
-                            }}
+                            onReply={handleStartReply}
                             onEditTextChange={setEditReplyText}
-                            onCancelEdit={() => {
-                              setEditingReply(null);
-                              setEditReplyText("");
-                            }}
+                            onCancelEdit={handleCancelEdit}
                             onSaveEdit={handleEditReply}
                           />
                         </div>
