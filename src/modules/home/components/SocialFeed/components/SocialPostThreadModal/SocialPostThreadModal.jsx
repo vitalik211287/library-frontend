@@ -345,6 +345,24 @@ const handleReplyKudos = async (reply) => {
     );
   };
 
+  const renderThreadComment = (comment, visualDepth) => (
+    <ThreadComment
+      comment={comment}
+      visualDepth={visualDepth}
+      isEditing={editingReply?.id === comment.id}
+      editText={editReplyText}
+      onOpenProfile={onOpenProfile}
+      onEdit={handleStartEdit}
+      onDelete={handleDeleteReply}
+      onKudos={handleReplyKudos}
+      onOpenKudosUsers={onOpenKudosUsers}
+      onReply={handleStartReply}
+      onEditTextChange={setEditReplyText}
+      onCancelEdit={handleCancelEdit}
+      onSaveEdit={handleEditReply}
+    />
+  );
+
   if (!isOpen) {
     return null;
   }
@@ -478,21 +496,7 @@ const handleReplyKudos = async (reply) => {
                               : "social-post-thread__nested-level"
                           }
                         >
-                          <ThreadComment
-                            comment={comment}
-                            visualDepth={index}
-                            isEditing={editingReply?.id === comment.id}
-                            editText={editReplyText}
-                            onOpenProfile={onOpenProfile}
-                            onEdit={handleStartEdit}
-                            onDelete={handleDeleteReply}
-                            onKudos={handleReplyKudos}
-                            onOpenKudosUsers={onOpenKudosUsers}
-                            onReply={handleStartReply}
-                            onEditTextChange={setEditReplyText}
-                            onCancelEdit={handleCancelEdit}
-                            onSaveEdit={handleEditReply}
-                          />
+                          {renderThreadComment(comment, index)}
 
                           {children && (
                             <div className="social-post-thread__nested-children">
@@ -510,21 +514,7 @@ const handleReplyKudos = async (reply) => {
                               key={reply.id}
                               className="social-post-thread__nested-tail-node"
                             >
-                              <ThreadComment
-                                comment={reply}
-                                visualDepth={branchPath.length}
-                                isEditing={editingReply?.id === reply.id}
-                                editText={editReplyText}
-                                onOpenProfile={onOpenProfile}
-                                onEdit={handleStartEdit}
-                                onDelete={handleDeleteReply}
-                                onKudos={handleReplyKudos}
-                                onOpenKudosUsers={onOpenKudosUsers}
-                                onReply={handleStartReply}
-                                onEditTextChange={setEditReplyText}
-                                onCancelEdit={handleCancelEdit}
-                                onSaveEdit={handleEditReply}
-                              />
+                              {renderThreadComment(reply, branchPath.length)}
 
                               {repliesCount > 0 && (
                                 <button
@@ -559,21 +549,7 @@ const handleReplyKudos = async (reply) => {
                         className="social-post-thread__tree-group"
                       >
                         <div className="social-post-thread__tree-root">
-                          <ThreadComment
-                            comment={group.root}
-                            visualDepth={0}
-                            isEditing={editingReply?.id === group.root.id}
-                            editText={editReplyText}
-                            onOpenProfile={onOpenProfile}
-                            onEdit={handleStartEdit}
-                            onDelete={handleDeleteReply}
-                            onKudos={handleReplyKudos}
-                            onOpenKudosUsers={onOpenKudosUsers}
-                            onReply={handleStartReply}
-                            onEditTextChange={setEditReplyText}
-                            onCancelEdit={handleCancelEdit}
-                            onSaveEdit={handleEditReply}
-                          />
+                          {renderThreadComment(group.root, 0)}
                         </div>
 
                         {group.repliesCount > 0 && (
