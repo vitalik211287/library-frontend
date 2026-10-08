@@ -8,6 +8,7 @@ import ThreadComment from "./components/ThreadComment/ThreadComment.jsx";
 import ThreadBranchView from "./components/ThreadBranchView/ThreadBranchView.jsx";
 import ThreadRootList from "./components/ThreadRootList/ThreadRootList.jsx";
 import ThreadRootPost from "./components/ThreadRootPost/ThreadRootPost.jsx";
+import ThreadComposer from "./components/ThreadComposer/ThreadComposer.jsx";
 
 import {
   buildCommentTree,
@@ -452,58 +453,18 @@ const handleReplyKudos = async (reply) => {
           )}
         </div>
 
-        <form className="social-post-thread__composer" onSubmit={handleSubmit}>
-          <div
-            className={`social-post-thread__replying-to ${
-              replyTarget
-                ? "social-post-thread__replying-to--visible"
-                : "social-post-thread__replying-to--empty"
-            }`}
-          >
-            {replyTarget ? (
-              <>
-                <span>
-                  {"\u0412\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u044c \u0434\u043b\u044f "}
-                  {replyTarget.author?.name || "\u041a\u043e\u0440\u0438\u0441\u0442\u0443\u0432\u0430\u0447"}
-                </span>
-
-                <button
-                  type="button"
-                  onClick={() => {
-                    setReplyTarget(null);
-                    setReplyText("");
-                  }}
-                  aria-label={"\u0421\u043a\u0430\u0441\u0443\u0432\u0430\u0442\u0438 \u0432\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u044c"}
-                >
-                  ?
-                </button>
-              </>
-            ) : (
-              <span aria-hidden="true">&nbsp;</span>
-            )}
-          </div>
-
-          <textarea
-            value={replyText}
-            onChange={(event) => setReplyText(event.target.value)}
-            placeholder={
-              isActivityThread && !replyTarget
-                ? "Написати коментар…"
-                : "Написати відповідь…"
-            }
-            maxLength={1000}
-            rows={2}
-            disabled={isSending}
-          />
-
-          <button type="submit" disabled={!replyText.trim() || isSending}>
-            {isSending
-              ? "Надсилаємо…"
-              : isActivityThread && !replyTarget
-                ? "Коментувати"
-                : "Відповісти"}
-          </button>
-        </form>
+        <ThreadComposer
+          replyTarget={replyTarget}
+          replyText={replyText}
+          isSending={isSending}
+          isActivityThread={isActivityThread}
+          onReplyTextChange={setReplyText}
+          onCancelReply={() => {
+            setReplyTarget(null);
+            setReplyText("");
+          }}
+          onSubmit={handleSubmit}
+        />
       </div>
     </div>
   );
