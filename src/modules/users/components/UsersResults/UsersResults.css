@@ -56,22 +56,3 @@
   font-size: 12px;
   line-height: 1.4;
 }
-
-.users-results__loader {
-  width: 28px;
-  height: 28px;
-
-  margin-bottom: 11px;
-
-  border: 3px solid var(--border);
-  border-top-color: var(--accent);
-  border-radius: var(--radius-round);
-
-  animation: users-results-spin 0.8s linear infinite;
-}
-
-@keyframes users-results-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}

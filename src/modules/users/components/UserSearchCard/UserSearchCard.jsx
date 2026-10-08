@@ -1,34 +1,22 @@
-import { useState } from "react";
-
-import { apiFetch } from "../../../../shared/api/apiClient.js";
+import useFollowToggle from "../../hooks/useFollowToggle.js";
 
 import "./UserSearchCard.css";
 
 const UserSearchCard = ({ user, onFollowingChange }) => {
-  const [isUpdating, setIsUpdating] = useState(false);
+  const { updatingUserId, toggleFollow } = useFollowToggle();
+
+  const isUpdating = updatingUserId === user.id;
 
   const profileName = user?.name || "Користувач";
 
   const handleFollow = async () => {
-    if (isUpdating) {
+    const nextIsFollowing = await toggleFollow(user);
+
+    if (nextIsFollowing === null) {
       return;
     }
 
-    const nextIsFollowing = !user.isFollowing;
-
-    try {
-      setIsUpdating(true);
-
-      await apiFetch(`/api/users/${user.id}/follow`, {
-        method: nextIsFollowing ? "POST" : "DELETE",
-      });
-
-      onFollowingChange?.(user.id, nextIsFollowing);
-    } catch (error) {
-      console.error("Update following error:", error);
-    } finally {
-      setIsUpdating(false);
-    }
+    onFollowingChange?.(user.id, nextIsFollowing);
   };
 
   return (
