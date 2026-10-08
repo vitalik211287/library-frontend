@@ -3,11 +3,11 @@ import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } fr
 import { apiFetch } from "../../../../../../shared/api/apiClient.js";
 import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
 import useOverlayBack from "../../../../../../shared/hooks/useOverlayBack.js";
-import { resolveAssetUrl } from "../../../../../../shared/utils/resolveAssetUrl.js";
 import SocialPostActionsMenu from "../SocialPostActionsMenu/SocialPostActionsMenu.jsx";
 import ThreadComment from "./components/ThreadComment/ThreadComment.jsx";
 import ThreadBranchView from "./components/ThreadBranchView/ThreadBranchView.jsx";
 import ThreadRootList from "./components/ThreadRootList/ThreadRootList.jsx";
+import ThreadRootPost from "./components/ThreadRootPost/ThreadRootPost.jsx";
 
 import {
   buildCommentTree,
@@ -253,16 +253,6 @@ const handleReplyKudos = async (reply) => {
     }
   };
 
-  const userName = thread?.author?.name || "Користувач";
-  const formattedTime = thread?.createdAt
-    ? new Intl.DateTimeFormat("uk-UA", {
-        day: "numeric",
-        month: "short",
-        hour: "2-digit",
-        minute: "2-digit",
-      }).format(new Date(thread.createdAt))
-    : "";
-
   const replies = thread?.replies || [];
 
   const rootParentId = isActivityThread ? null : postId;
@@ -429,56 +419,10 @@ const handleReplyKudos = async (reply) => {
           {!isLoading && thread && (
             <>
               {!isActivityThread && !isBranchView && (
-              <article className="social-post-thread__root">
-                <div className="social-post-thread__message">
-                  <button
-                    type="button"
-                    className="social-post-thread__avatar"
-                    onClick={() => onOpenProfile?.(thread.author?.id)}
-                    aria-label={userName}
-                  >
-                    {thread.author?.avatarUrl ? (
-                      <img src={thread.author.avatarUrl} alt="" />
-                    ) : (
-                      <span>{userName.charAt(0).toUpperCase()}</span>
-                    )}
-                  </button>
-
-                  <div className="social-post-thread__message-content">
-                    <button
-                      type="button"
-                      className="social-post-thread__author"
-                      onClick={() => onOpenProfile?.(thread.author?.id)}
-                    >
-                      <strong>{userName}</strong>
-                    </button>
-
-                    {formattedTime && (
-                      <span className="social-post-thread__time">
-                        {formattedTime}
-                      </span>
-                    )}
-
-                    <p>{thread.text}</p>
-
-                    {thread.book && (
-                      <div className="social-post-thread__book">
-                        {thread.book.coverUrl && (
-                          <img
-                            src={resolveAssetUrl(thread.book.coverUrl)}
-                            alt=""
-                          />
-                        )}
-
-                        <span>
-                          <strong>{thread.book.title}</strong>
-                          <small>{thread.book.author}</small>
-                        </span>
-                      </div>
-                    )}
-                  </div>
-                </div>
-              </article>
+                <ThreadRootPost
+                  thread={thread}
+                  onOpenProfile={onOpenProfile}
+                />
               )}
 
               <div
