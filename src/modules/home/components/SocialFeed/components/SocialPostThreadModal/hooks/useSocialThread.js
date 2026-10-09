@@ -12,6 +12,7 @@ const useSocialThread = ({
   const [isSending, setIsSending] = useState(false);
   const sendingRef = useRef(false);
   const pendingKudosRef = useRef(new Set());
+  const pendingReplyMutationsRef = useRef(new Set());
   const [error, setError] = useState("");
   const requestIdRef = useRef(0);
 
@@ -188,9 +189,11 @@ const useSocialThread = ({
   const updateReply = async (reply, text) => {
     const normalizedText = text.trim();
 
-    if (!normalizedText || !reply?.id) {
+    if (!normalizedText || !reply?.id || pendingReplyMutationsRef.current.has(reply.id)) {
       return false;
     }
+
+    pendingReplyMutationsRef.current.add(reply.id);
 
     try {
       setError("");
@@ -217,13 +220,17 @@ const useSocialThread = ({
       );
 
       return false;
+    } finally {
+      pendingReplyMutationsRef.current.delete(reply.id);
     }
   };
 
   const deleteReply = async (reply) => {
-    if (!reply?.id) {
+    if (!reply?.id || pendingReplyMutationsRef.current.has(reply.id)) {
       return false;
     }
+
+    pendingReplyMutationsRef.current.add(reply.id);
 
     try {
       setError("");
@@ -246,6 +253,8 @@ const useSocialThread = ({
       );
 
       return false;
+    } finally {
+      pendingReplyMutationsRef.current.delete(reply.id);
     }
   };
 
