@@ -621,6 +621,7 @@ const SocialFeed = ({
               onOpenBook={handleOpenBook}
               onOpenAchievement={handleOpenAchievement}
               onKudos={handleKudos}
+              onOpenKudosUsers={setKudosUsersItem}
               onComment={handleOpenActivityThread}
               onShare={handleShare}
             />

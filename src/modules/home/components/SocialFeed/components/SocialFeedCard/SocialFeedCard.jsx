@@ -12,6 +12,7 @@ const SocialFeedCard = ({
   onOpenBook,
   onOpenAchievement,
   onKudos,
+  onOpenKudosUsers,
   onComment,
   onShare,
 }) => {
@@ -65,23 +66,33 @@ const SocialFeedCard = ({
       />
 
       <div className="social-feed-card__actions">
-        <button
-          type="button"
+        <div
           className={
             activity.hasKudos
               ? "social-feed-card__action social-feed-card__action--active"
               : "social-feed-card__action"
           }
-          disabled={activity.isOwnActivity}
-          onClick={() => onKudos(activity)}
-          aria-label="Підтримати"
         >
-          <span className="social-feed-card__clap">
-            <Icon name="clap" />
-          </span>
+          <button
+            type="button"
+            disabled={activity.isOwnActivity}
+            onClick={() => onKudos(activity)}
+            aria-label="??????????"
+          >
+            <span className="social-feed-card__clap">
+              <Icon name="clap" />
+            </span>
+          </button>
 
-          <span>{activity.kudosCount ?? 0}</span>
-        </button>
+          <button
+            type="button"
+            disabled={(activity.kudosCount ?? 0) === 0}
+            onClick={() => onOpenKudosUsers(activity)}
+            aria-label="??? ????????? ??????????"
+          >
+            {activity.kudosCount ?? 0}
+          </button>
+        </div>
 
         <button
           type="button"
