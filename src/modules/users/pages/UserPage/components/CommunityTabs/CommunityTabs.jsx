@@ -1,6 +1,6 @@
 import "./CommunityTabs.css";
 
-﻿const CommunityTabs = ({ activeTab, onChange }) => (
+const CommunityTabs = ({ activeTab, onChange }) => (
   <div className="profile-community-tabs">
     <button
       type="button"

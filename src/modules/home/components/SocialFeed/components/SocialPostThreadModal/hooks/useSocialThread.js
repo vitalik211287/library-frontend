@@ -88,9 +88,16 @@ const useSocialThread = ({
       return;
     }
 
-    loadThread();
+    const controller = new AbortController();
+
+    Promise.resolve().then(() => {
+      if (!controller.signal.aborted) {
+        loadThread();
+      }
+    });
 
     return () => {
+      controller.abort();
       requestIdRef.current += 1;
     };
   }, [isOpen, loadThread]);

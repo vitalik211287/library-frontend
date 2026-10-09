@@ -100,7 +100,7 @@ const SocialFeed = ({
       socket.off("post:comments-updated", handlePostCommentsUpdated);
       socket.off("activity:comments-updated", handleActivityCommentsUpdated);
     };
-  }, []);
+  }, [setActivities]);
 
   useEffect(() => {
     if (!linkedActivityId || isLoading) {
@@ -182,7 +182,7 @@ const SocialFeed = ({
     };
 
     setActivities((current) => [feedPost, ...current]);
-  }, []);
+  }, [setActivities]);
   const handleThreadCountChange = useCallback((targetId, count) => {
     setActivities((current) =>
       current.map((item) => {
@@ -201,7 +201,7 @@ const SocialFeed = ({
         return item;
       }),
     );
-  }, []);
+  }, [setActivities]);
 
   const handleOpenAchievement = useCallback(
     (activity) => {
@@ -259,7 +259,7 @@ const SocialFeed = ({
     } catch (error) {
       console.error("Update feed kudos error:", error);
     }
-  }, []);
+  }, [setActivities]);
   const handleEditPost = useCallback(async (post, text) => {
     if (!post?.id || !post.isOwnPost) {
       return;
@@ -292,7 +292,7 @@ const SocialFeed = ({
       console.error("Update social post error:", error);
       throw error;
     }
-  }, []);
+  }, [setActivities]);
   const handleDeletePost = useCallback((post) => {
     if (!post?.id || !post.isOwnPost) {
       return;
@@ -324,7 +324,7 @@ const SocialFeed = ({
     } finally {
       setIsDeletingPost(false);
     }
-  }, [postToDelete]);
+  }, [postToDelete, setActivities]);
   const handleToggleNotifications = async () => {
     const userId = menuActivity?.user?.id;
 
@@ -502,7 +502,7 @@ const SocialFeed = ({
               <strong>Тут поки немає читацької активності</strong>
               <span>
                 Почніть читати, завершіть книгу або поставте оцінку — ваша
-                активність з'явиться тут.
+                активність з&apos;явиться тут.
               </span>
             </>
           ) : scope === "following" ? (

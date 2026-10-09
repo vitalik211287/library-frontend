@@ -122,6 +122,7 @@ const AddBookPage = () => {
       {isSearching && <Loader text="Шукаємо книгу…" />}
 
       <BookPreview
+        key={book?.isbn}
         book={book}
         setBook={setBook}
         setCoverFile={setCoverFile}

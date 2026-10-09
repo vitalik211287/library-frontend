@@ -13,8 +13,6 @@ const SocialBookSearch = ({ onSelect }) => {
     const normalizedQuery = query.trim();
 
     if (normalizedQuery.length < 2) {
-      setBooks([]);
-      setIsSearching(false);
       return;
     }
 
@@ -29,9 +27,11 @@ const SocialBookSearch = ({ onSelect }) => {
           { signal: controller.signal },
         );
 
-        setBooks(Array.isArray(result) ? result : []);
+        if (!controller.signal.aborted) {
+          setBooks(Array.isArray(result) ? result : []);
+        }
       } catch (error) {
-        if (error?.name !== "AbortError") {
+        if (error?.name !== "AbortError" && !controller.signal.aborted) {
           console.error("Failed to search books:", error);
           setBooks([]);
         }
@@ -53,7 +53,11 @@ const SocialBookSearch = ({ onSelect }) => {
       <input
         type="search"
         value={query}
-        onChange={(event) => setQuery(event.target.value)}
+        onChange={(event) => {
+          setQuery(event.target.value);
+          setBooks([]);
+          setIsSearching(event.target.value.trim().length >= 2);
+        }}
         placeholder={"\u041f\u043e\u0448\u0443\u043a \u0437\u0430 \u043d\u0430\u0437\u0432\u043e\u044e \u0430\u0431\u043e \u0430\u0432\u0442\u043e\u0440\u043e\u043c"}
         autoFocus
       />

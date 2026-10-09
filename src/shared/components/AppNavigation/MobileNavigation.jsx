@@ -9,7 +9,6 @@ import useOverlayBack from "../../hooks/useOverlayBack.js";
 
 import {
   BellIcon,
-  CatalogIcon,
   LibraryBrandIcon,
   MoonIcon,
   ProfileIcon,

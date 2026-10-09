@@ -1,5 +1,4 @@
 import Icon from "../../../../shared/components/Icon/Icon.jsx";
-import Loader from "../../../../shared/components/Loader/Loader.jsx";
 import UserSearchCard from "../UserSearchCard/UserSearchCard.jsx";
 
 import "./UsersResults.css";

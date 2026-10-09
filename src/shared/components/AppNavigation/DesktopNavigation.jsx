@@ -8,7 +8,6 @@ import { useNotifications } from "../../../modules/notifications/context/Notific
 
 import {
   BellIcon,
-  CatalogIcon,
   LibraryBrandIcon,
   MoonIcon,
   ProfileIcon,
