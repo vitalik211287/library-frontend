@@ -1,4 +1,4 @@
-import Icon from "../../../../../../../../shared/components/Icon/Icon.jsx";
+import KudosAction from "../../../KudosAction/KudosAction.jsx";
 import SocialPostActionsMenu from "../../../SocialPostActionsMenu/SocialPostActionsMenu.jsx";
 
 const ThreadComment = ({
@@ -110,36 +110,12 @@ const ThreadComment = ({
               <p>{comment.text}</p>
 
               <div className="social-post-thread__reply-actions">
-                <div
-                  className={
-                    comment.hasKudos
-                      ? "social-feed-card__action social-feed-card__action--active"
-                      : "social-feed-card__action"
-                  }
-                >
-                  <button
-                    type="button"
-                    disabled={comment.isOwnPost}
-                    onClick={() => onKudos?.(comment)}
-                    aria-label={"\u041F\u0456\u0434\u0442\u0440\u0438\u043C\u0430\u0442\u0438"}
-                  >
-                    <Icon name="clap" />
-                  </button>
-
-                  <button
-                    type="button"
-                    disabled={(comment.kudosCount ?? 0) === 0}
-                    onClick={() =>
-                      onOpenKudosUsers?.({
-                        ...comment,
-                        kind: "post",
-                      })
-                    }
-                    aria-label={"\u0425\u0442\u043E \u043F\u0456\u0434\u0442\u0440\u0438\u043C\u0430\u0432"}
-                  >
-                    {comment.kudosCount ?? 0}
-                  </button>
-                </div>
+                <KudosAction
+                  item={{ ...comment, kind: "post" }}
+                  onKudos={onKudos}
+                  onOpenKudosUsers={onOpenKudosUsers}
+                  isOwn={comment.isOwnPost}
+                />
 
                 <button
                   type="button"
