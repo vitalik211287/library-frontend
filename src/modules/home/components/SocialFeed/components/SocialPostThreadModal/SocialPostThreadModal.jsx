@@ -24,14 +24,29 @@ const SocialPostThreadModal = ({
   onOpenKudosUsers,
   onThreadCountChange,
 }) => {
-  const [thread, setThread] = useState(null);
   const [replyText, setReplyText] = useState("");
   const [replyTarget, setReplyTarget] = useState(null);
   const [editingReply, setEditingReply] = useState(null);
   const [editReplyText, setEditReplyText] = useState("");
-  const [isLoading, setIsLoading] = useState(true);
-  const [isSending, setIsSending] = useState(false);
-  const [error, setError] = useState("");  const [branchPath, setBranchPath] = useState([]);
+  const [branchPath, setBranchPath] = useState([]);
+
+  const {
+    thread,
+    isLoading,
+    isSending,
+    error,
+    isActivityThread,
+    isOpen,
+    createReply,
+    toggleReplyKudos,
+    updateReply,
+    deleteReply,
+  } = useSocialThread({
+    postId,
+    activityId,
+    onThreadCountChange,
+  });
+
   const bodyRef = useRef(null);
   const pendingReplyScrollTopRef = useRef(null);
 
@@ -46,8 +61,7 @@ const SocialPostThreadModal = ({
     pendingReplyScrollTopRef.current = null;
   }, [replyTarget]);
 
-  const isActivityThread = Boolean(activityId);
-  const isOpen = Boolean(postId || activityId);
+
 
   useOverlayBack(isOpen, onClose);
 
