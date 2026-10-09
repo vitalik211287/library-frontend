@@ -11,6 +11,7 @@ const useSocialThread = ({
   const [isLoading, setIsLoading] = useState(true);
   const [isSending, setIsSending] = useState(false);
   const sendingRef = useRef(false);
+  const pendingKudosRef = useRef(new Set());
   const [error, setError] = useState("");
   const requestIdRef = useRef(0);
 
@@ -136,9 +137,11 @@ const useSocialThread = ({
   };
 
   const toggleReplyKudos = async (reply) => {
-    if (!reply?.id || reply.isOwnPost) {
+    if (!reply?.id || reply.isOwnPost || pendingKudosRef.current.has(reply.id)) {
       return false;
     }
+
+    pendingKudosRef.current.add(reply.id);
 
     const nextHasKudos = !reply.hasKudos;
 
@@ -177,6 +180,8 @@ const useSocialThread = ({
       );
 
       return false;
+    } finally {
+      pendingKudosRef.current.delete(reply.id);
     }
   };
 
