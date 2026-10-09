@@ -1,6 +1,7 @@
 import { memo } from "react";
 
 import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
+import KudosAction from "../KudosAction/KudosAction.jsx";
 import HomePanel from "../../../HomePanel/HomePanel.jsx";
 import SocialFeedEvent from "../SocialFeedEvent/SocialFeedEvent.jsx";
 
@@ -66,36 +67,14 @@ const SocialFeedCard = ({
       />
 
       <div className="social-feed-card__actions">
-        <div
-          className={
-            activity.hasKudos
-              ? "social-feed-card__action social-feed-card__action--active"
-              : "social-feed-card__action"
-          }
-        >
-          <button
-            type="button"
-            onClick={() =>
-              activity.isOwnActivity
-                ? onOpenKudosUsers(activity)
-                : onKudos(activity)
-            }
-            aria-label="Підтримати"
-          >
-            <span className="social-feed-card__clap">
-              <Icon name="clap" />
-            </span>
-          </button>
-
-          <button
-            type="button"
-            disabled={(activity.kudosCount ?? 0) === 0}
-            onClick={() => onOpenKudosUsers(activity)}
-            aria-label="Хто підтримав активність"
-          >
-            {activity.kudosCount ?? 0}
-          </button>
-        </div>
+        <KudosAction
+          item={activity}
+          onKudos={onKudos}
+          onOpenKudosUsers={onOpenKudosUsers}
+          isOwn={activity.isOwnActivity}
+          openOnOwnClick
+          iconWrapper
+        />
 
         <button
           type="button"
