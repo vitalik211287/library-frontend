@@ -75,9 +75,12 @@ const SocialFeedCard = ({
         >
           <button
             type="button"
-            disabled={activity.isOwnActivity}
-            onClick={() => onKudos(activity)}
-            aria-label="??????????"
+            onClick={() =>
+              activity.isOwnActivity
+                ? onOpenKudosUsers(activity)
+                : onKudos(activity)
+            }
+            aria-label="Підтримати"
           >
             <span className="social-feed-card__clap">
               <Icon name="clap" />
@@ -88,7 +91,7 @@ const SocialFeedCard = ({
             type="button"
             disabled={(activity.kudosCount ?? 0) === 0}
             onClick={() => onOpenKudosUsers(activity)}
-            aria-label="??? ????????? ??????????"
+            aria-label="Хто підтримав активність"
           >
             {activity.kudosCount ?? 0}
           </button>

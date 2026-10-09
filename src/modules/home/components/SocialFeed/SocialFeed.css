@@ -312,6 +312,22 @@
   line-height: 1;
 }
 
+.social-feed-card__actions > .social-feed-card__action > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.social-feed-card__actions > .social-feed-card__action > button:disabled {
+  cursor: default;
+}
+
 .social-feed-card__action--active {
   color: var(--accent);
 }
