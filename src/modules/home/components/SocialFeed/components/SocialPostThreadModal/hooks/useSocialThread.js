@@ -10,6 +10,7 @@ const useSocialThread = ({
   const [thread, setThread] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isSending, setIsSending] = useState(false);
+  const sendingRef = useRef(false);
   const [error, setError] = useState("");
   const requestIdRef = useRef(0);
 
@@ -95,9 +96,11 @@ const useSocialThread = ({
   const createReply = async ({ text, parentId }) => {
     const normalizedText = text.trim();
 
-    if (!normalizedText || !isOpen || isSending) {
+    if (!normalizedText || !isOpen || sendingRef.current) {
       return false;
     }
+
+    sendingRef.current = true;
 
     try {
       setIsSending(true);
@@ -127,6 +130,7 @@ const useSocialThread = ({
 
       return false;
     } finally {
+      sendingRef.current = false;
       setIsSending(false);
     }
   };
