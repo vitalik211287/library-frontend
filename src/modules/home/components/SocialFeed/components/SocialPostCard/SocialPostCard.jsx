@@ -1,6 +1,7 @@
 import { memo, useState } from "react";
 
 import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
+import KudosAction from "../KudosAction/KudosAction.jsx";
 import { resolveAssetUrl } from "../../../../../../shared/utils/resolveAssetUrl.js";
 import HomePanel from "../../../HomePanel/HomePanel.jsx";
 import SocialPostActionsMenu from "../SocialPostActionsMenu/SocialPostActionsMenu.jsx";
@@ -125,35 +126,12 @@ const SocialPostCard = ({
       </div>
 
       <div className="social-feed-card__actions">
-        <div
-          className={
-            post.hasKudos
-              ? "social-feed-card__action social-feed-card__action--active"
-              : "social-feed-card__action"
-          }
-        >
-          <button
-            type="button"
-            disabled={post.isOwnPost}
-            onClick={() => onKudos(post)}
-            aria-label={
-              "\u041f\u0456\u0434\u0442\u0440\u0438\u043c\u0430\u0442\u0438"
-            }
-          >
-            <Icon name="clap" />
-          </button>
-
-          <button
-            type="button"
-            disabled={(post.kudosCount ?? 0) === 0}
-            onClick={() => onOpenKudosUsers(post)}
-            aria-label={
-              "\u0425\u0442\u043e \u043f\u0456\u0434\u0442\u0440\u0438\u043c\u0430\u0432 \u0434\u043e\u043f\u0438\u0441"
-            }
-          >
-            {post.kudosCount ?? 0}
-          </button>
-        </div>
+        <KudosAction
+          item={post}
+          onKudos={onKudos}
+          onOpenKudosUsers={onOpenKudosUsers}
+          isOwn={post.isOwnPost}
+        />
 
         <button
           type="button"
