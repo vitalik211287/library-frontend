@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { apiFetch } from "../../../../shared/api/apiClient.js";
@@ -43,6 +43,8 @@ const SocialFeed = ({
   const linkedThreadActivityId = searchParams.get("threadActivityId");
 
   const [activities, setActivities] = useState([]);
+  const feedVersionRef = useRef(0);
+  const loadingMoreRef = useRef(false);
   const [isLoading, setIsLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(false);
@@ -58,6 +60,13 @@ const SocialFeed = ({
 
   useEffect(() => {
     let isActive = true;
+    const feedVersion = ++feedVersionRef.current;
+
+    loadingMoreRef.current = false;
+    setActivities([]);
+    setPage(1);
+    setHasMore(false);
+    setIsLoadingMore(false);
 
     const loadFeed = async () => {
       try {
@@ -97,6 +106,7 @@ const SocialFeed = ({
 
     return () => {
       isActive = false;
+      feedVersionRef.current += 1;
     };
   }, [scope, userId]);
 
@@ -157,11 +167,14 @@ const SocialFeed = ({
   }, [linkedActivityId, isLoading, activities]);
 
   const handleLoadMore = useCallback(async () => {
-    if (isLoadingMore || !hasMore) {
+    if (loadingMoreRef.current || isLoadingMore || !hasMore || isLoading) {
       return;
     }
 
+    loadingMoreRef.current = true;
+
     const nextPage = page + 1;
+    const feedVersion = feedVersionRef.current;
 
     try {
       setIsLoadingMore(true);
@@ -182,15 +195,24 @@ const SocialFeed = ({
         ? data.activities
         : [];
 
+      if (feedVersion !== feedVersionRef.current) {
+        return;
+      }
+
       setActivities((current) => [...current, ...nextActivities]);
       setPage(nextPage);
       setHasMore(Boolean(data?.hasMore));
     } catch (error) {
-      console.error("Load more social feed error:", error);
+      if (feedVersion === feedVersionRef.current) {
+        console.error("Load more social feed error:", error);
+      }
     } finally {
-      setIsLoadingMore(false);
+      if (feedVersion === feedVersionRef.current) {
+        loadingMoreRef.current = false;
+        setIsLoadingMore(false);
+      }
     }
-  }, [hasMore, isLoadingMore, page, scope, userId]);
+  }, [hasMore, isLoadingMore, isLoading, page, scope, userId]);
 
   const handleOpenProfile = useCallback(
     (userId) => {
