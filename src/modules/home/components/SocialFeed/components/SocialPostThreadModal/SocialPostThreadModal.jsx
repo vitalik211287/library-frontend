@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import useOverlayBack from "../../../../../../shared/hooks/useOverlayBack.js";
 import ThreadComment from "./components/ThreadComment/ThreadComment.jsx";
@@ -65,18 +65,7 @@ const SocialPostThreadModal = ({
 
   useOverlayBack(isOpen, onClose);
 
-  useEffect(() => {
-    if (isOpen) {
-      return;
-    }
 
-    setBranchPath([]);
-    setReplyTarget(null);
-    setReplyText("");
-    setEditingReply(null);
-    setEditReplyText("");
-    pendingReplyScrollTopRef.current = null;
-  }, [isOpen]);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -128,7 +117,7 @@ const SocialPostThreadModal = ({
     }
   };
 
-  const replies = thread?.replies || [];
+  const replies = useMemo(() => thread?.replies ?? [], [thread?.replies]);
 
   const rootParentId = isActivityThread ? null : postId;
   const sourceType = isActivityThread ? "activity" : "post";
