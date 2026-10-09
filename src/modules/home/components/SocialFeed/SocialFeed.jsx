@@ -1,3 +1,4 @@
+import toast from "react-hot-toast";
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
@@ -319,6 +320,7 @@ const SocialFeed = ({
       setPostToDelete(null);
     } catch (error) {
       console.error("Delete social post error:", error);
+      toast.error("\u041d\u0435 \u0432\u0434\u0430\u043b\u043e\u0441\u044f \u0432\u0438\u0434\u0430\u043b\u0438\u0442\u0438 \u0434\u043e\u043f\u0438\u0441. \u0421\u043f\u0440\u043e\u0431\u0443\u0439\u0442\u0435 \u0449\u0435 \u0440\u0430\u0437.");
     } finally {
       setIsDeletingPost(false);
     }
