@@ -1,38 +1,24 @@
-.social-book-modal__backdrop {
-  position: fixed;
-  inset: 0;
-  z-index: 3000;
-
-  display: flex;
-  align-items: flex-end;
-  justify-content: center;
-
+.modal-overlay.social-book-modal__overlay {
+  align-items: center;
   padding: var(--space-16);
   background: var(--overlay-bg);
 }
 
-.social-book-modal {
+.modal.social-book-modal {
   position: relative;
 
   width: 100%;
   max-width: 430px;
 
-  padding: var(--space-16);
-  border: 1px solid var(--border);
-  border-radius: 22px 22px 16px 16px;
-
   background: var(--surface);
   color: var(--text);
+
+  border-radius: var(--radius-2xl);
 }
 
-.social-book-modal__handle {
-  width: 42px;
-  height: 4px;
-
-  margin: 0 auto var(--space-18);
-
-  border-radius: var(--radius-pill);
-  background: var(--border);
+.social-book-modal .modal__content {
+  padding: var(--space-16);
+  overflow: visible;
 }
 
 .social-book-modal__close {
@@ -154,11 +140,11 @@
 }
 
 @media (min-width: 768px) {
-  .social-book-modal__backdrop {
+  .modal-overlay.social-book-modal__overlay {
     align-items: center;
   }
 
-  .social-book-modal {
+  .modal.social-book-modal {
     border-radius: var(--radius-2xl);
   }
 }

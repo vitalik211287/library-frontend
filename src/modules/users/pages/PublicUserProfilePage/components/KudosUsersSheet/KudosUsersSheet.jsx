@@ -55,7 +55,6 @@ const KudosUsersSheet = ({
         tabIndex={-1}
         onClick={(event) => event.stopPropagation()}
       >
-        <div className="kudos-sheet__handle" />
 
         <header className="kudos-sheet__header">
           <div>

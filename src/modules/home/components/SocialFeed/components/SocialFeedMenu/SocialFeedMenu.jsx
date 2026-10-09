@@ -57,7 +57,6 @@ const SocialFeedMenu = ({
         tabIndex={-1}
         onClick={(event) => event.stopPropagation()}
       >
-        <div className="social-feed-menu__handle" />
 
         <button
           type="button"

@@ -3,27 +3,22 @@
   inset: 0;
   z-index: 2200;
   display: flex;
-  align-items: flex-end;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-16);
   background: var(--overlay-bg);
 }
 
 .social-feed-menu {
   width: 100%;
+  max-width: 420px;
   max-height: 82dvh;
   padding: var(--space-8) var(--space-14) max(14px, env(safe-area-inset-bottom));
   overflow-y: auto;
   border: 1px solid var(--border);
-  border-radius: 22px 22px 0 0;
+  border-radius: var(--radius-2xl);
   background: var(--surface);
   color: var(--text);
-}
-
-.social-feed-menu__handle {
-  width: 42px;
-  height: 4px;
-  margin: 2px auto var(--space-12);
-  border-radius: var(--radius-pill);
-  background: var(--border);
 }
 
 .social-feed-menu__item {
