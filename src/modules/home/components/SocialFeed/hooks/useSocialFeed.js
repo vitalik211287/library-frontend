@@ -29,17 +29,14 @@ const useSocialFeed = ({ scope, userId }) => {
   const [isLoadingMore, setIsLoadingMore] = useState(false);
 
   const feedKey = JSON.stringify([scope, userId]);
-  currentFeedKeyRef.current = feedKey;
+
+  useEffect(() => {
+    currentFeedKeyRef.current = feedKey;
+  }, [feedKey]);
 
   useEffect(() => {
     let isActive = true;
-    const feedVersion = ++feedVersionRef.current;
-
-    loadingMoreRef.current = false;
-    setActivities([]);
-    setPage(1);
-    setHasMore(false);
-    setIsLoadingMore(false);
+    feedVersionRef.current += 1;
 
     const loadFeed = async () => {
       try {

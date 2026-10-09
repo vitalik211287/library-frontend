@@ -136,6 +136,7 @@ const UserPage = ({ onOpenReading }) => {
             />
 
             <SocialFeed
+              key={user.id}
               userId={user.id}
               showComposer={false}
               showHeader={false}

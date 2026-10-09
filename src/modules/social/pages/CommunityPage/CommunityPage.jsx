@@ -42,7 +42,7 @@ const CommunityPage = () => {
         </button>
       </AppPanel>
 
-      <SocialFeed scope={feedScope} showHeader={false} />
+      <SocialFeed key={feedScope} scope={feedScope} showHeader={false} />
     </main>
   );
 };
