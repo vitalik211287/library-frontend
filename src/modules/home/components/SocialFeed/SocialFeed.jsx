@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { apiFetch } from "../../../../shared/api/apiClient.js";
@@ -17,6 +17,7 @@ import SocialPostThreadModal from "./components/SocialPostThreadModal/SocialPost
 import SocialBookModal from "./components/SocialBookModal/SocialBookModal.jsx";
 import "./SocialFeed.css";
 import KudosUsersModal from "./components/KudosUsersModal/KudosUsersModal.jsx";
+import useSocialFeed from "./hooks/useSocialFeed.js";
 
 const activityDateFormatter = new Intl.DateTimeFormat("uk-UA", {
   day: "2-digit",
@@ -24,8 +25,6 @@ const activityDateFormatter = new Intl.DateTimeFormat("uk-UA", {
   hour: "2-digit",
   minute: "2-digit",
 });
-
-const FEED_PAGE_SIZE = 20;
 
 const SocialFeed = ({
   limit = null,
@@ -42,13 +41,14 @@ const SocialFeed = ({
   const linkedPostId = searchParams.get("postId");
   const linkedThreadActivityId = searchParams.get("threadActivityId");
 
-  const [activities, setActivities] = useState([]);
-  const feedVersionRef = useRef(0);
-  const loadingMoreRef = useRef(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [page, setPage] = useState(1);
-  const [hasMore, setHasMore] = useState(false);
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
+  const {
+    activities,
+    setActivities,
+    isLoading,
+    isLoadingMore,
+    hasMore,
+    handleLoadMore,
+  } = useSocialFeed({ scope, userId });
   const [menuActivity, setMenuActivity] = useState(null);
   const [selectedBook, setSelectedBook] = useState(null);
   const [kudosUsersItem, setKudosUsersItem] = useState(null);
@@ -57,58 +57,6 @@ const SocialFeed = ({
   const [isUnfollowing, setIsUnfollowing] = useState(false);
   const [notifyActivity, setNotifyActivity] = useState(false);
   const [isUpdatingNotifications, setIsUpdatingNotifications] = useState(false);
-
-  useEffect(() => {
-    let isActive = true;
-    const feedVersion = ++feedVersionRef.current;
-
-    loadingMoreRef.current = false;
-    setActivities([]);
-    setPage(1);
-    setHasMore(false);
-    setIsLoadingMore(false);
-
-    const loadFeed = async () => {
-      try {
-        setIsLoading(true);
-
-        const params = new URLSearchParams({
-          scope,
-          page: "1",
-          limit: String(FEED_PAGE_SIZE),
-        });
-
-        if (userId) {
-          params.set("userId", userId);
-        }
-
-        const data = await apiFetch(`/api/social/feed?${params.toString()}`);
-
-        if (isActive) {
-          setActivities(Array.isArray(data?.activities) ? data.activities : []);
-          setPage(1);
-          setHasMore(Boolean(data?.hasMore));
-        }
-      } catch (error) {
-        console.error("Load social feed error:", error);
-
-        if (isActive) {
-          setActivities([]);
-        }
-      } finally {
-        if (isActive) {
-          setIsLoading(false);
-        }
-      }
-    };
-
-    loadFeed();
-
-    return () => {
-      isActive = false;
-      feedVersionRef.current += 1;
-    };
-  }, [scope, userId]);
 
   useEffect(() => {
     const handlePostKudosUpdated = ({ postId, kudosCount }) => {
@@ -165,54 +113,6 @@ const SocialFeed = ({
       });
     });
   }, [linkedActivityId, isLoading, activities]);
-
-  const handleLoadMore = useCallback(async () => {
-    if (loadingMoreRef.current || isLoadingMore || !hasMore || isLoading) {
-      return;
-    }
-
-    loadingMoreRef.current = true;
-
-    const nextPage = page + 1;
-    const feedVersion = feedVersionRef.current;
-
-    try {
-      setIsLoadingMore(true);
-
-      const params = new URLSearchParams({
-        scope,
-        page: String(nextPage),
-        limit: String(FEED_PAGE_SIZE),
-      });
-
-      if (userId) {
-        params.set("userId", userId);
-      }
-
-      const data = await apiFetch(`/api/social/feed?${params.toString()}`);
-
-      const nextActivities = Array.isArray(data?.activities)
-        ? data.activities
-        : [];
-
-      if (feedVersion !== feedVersionRef.current) {
-        return;
-      }
-
-      setActivities((current) => [...current, ...nextActivities]);
-      setPage(nextPage);
-      setHasMore(Boolean(data?.hasMore));
-    } catch (error) {
-      if (feedVersion === feedVersionRef.current) {
-        console.error("Load more social feed error:", error);
-      }
-    } finally {
-      if (feedVersion === feedVersionRef.current) {
-        loadingMoreRef.current = false;
-        setIsLoadingMore(false);
-      }
-    }
-  }, [hasMore, isLoadingMore, isLoading, page, scope, userId]);
 
   const handleOpenProfile = useCallback(
     (userId) => {
