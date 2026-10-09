@@ -564,6 +564,13 @@ const SocialFeed = ({
       <ScrollToTopButton />
 
       <SocialPostThreadModal
+        key={
+          linkedThreadActivityId
+            ? `activity:${linkedThreadActivityId}`
+            : linkedPostId
+              ? `post:${linkedPostId}`
+              : "closed"
+        }
         postId={linkedPostId}
         activityId={linkedThreadActivityId}
         onClose={handleCloseThread}
