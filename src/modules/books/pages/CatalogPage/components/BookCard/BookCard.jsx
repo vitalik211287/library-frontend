@@ -17,6 +17,7 @@ const BookCard = ({
   onWishlistToggle,
   onEdit,
   onRead,
+  onOpenEbook,
   recommendationMeta,
 }) => {
   return (
@@ -110,6 +111,15 @@ const BookCard = ({
       </div>
 
       <div className="book-card__actions">
+        {onOpenEbook && (
+          <button
+            type="button"
+            className="book-card__button book-card__button--ebook"
+            onClick={() => onOpenEbook(book)}
+          >
+            Електронна версія
+          </button>
+        )}
         {canEdit && (
           <button
             type="button"

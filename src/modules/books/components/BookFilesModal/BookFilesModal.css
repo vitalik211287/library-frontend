@@ -1,0 +1,159 @@
+﻿.book-files-modal__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-16);
+}
+
+.book-files-modal__message {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 14px;
+}
+
+.book-files-modal__list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-10);
+}
+
+.book-files-modal__file {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-12);
+  min-width: 0;
+  padding: var(--space-14);
+}
+
+.book-files-modal__file-info {
+  display: flex;
+  align-items: center;
+  gap: var(--space-12);
+  flex: 1 1 180px;
+  min-width: 0;
+}
+
+.book-files-modal__file-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex: 0 0 42px;
+  width: 42px;
+  height: 42px;
+  border-radius: var(--radius-sm);
+  background: var(--accent-bg);
+  color: var(--accent);
+}
+
+.book-files-modal__file-icon svg {
+  width: 24px;
+  height: 24px;
+}
+
+.book-files-modal__file-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  min-width: 0;
+}
+
+.book-files-modal__file-details strong {
+  color: var(--text-h);
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+
+.book-files-modal__file-details span {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.book-files-modal__download {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-8);
+  padding: var(--space-10) var(--space-14);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: var(--text-on-accent);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.book-files-modal__download svg {
+  width: 16px;
+  height: 16px;
+}
+
+.book-files-modal__download:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.book-files-modal__upload {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-8);
+  padding: var(--space-20);
+  text-align: center;
+}
+
+.book-files-modal__upload > svg {
+  width: 32px;
+  height: 32px;
+  color: var(--accent);
+}
+
+.book-files-modal__upload strong {
+  color: var(--text-h);
+  font-size: 15px;
+}
+
+.book-files-modal__upload > span {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.book-files-modal__upload-button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: var(--space-8);
+  padding: var(--space-10) var(--space-16);
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  background: var(--accent-bg);
+  color: var(--text-h);
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.book-files-modal__upload-button input {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+  overflow: hidden;
+}
+
+.book-files-modal__upload-button:focus-within {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+}
+
+@media (max-width: 420px) {
+  .book-files-modal__file {
+    align-items: stretch;
+  }
+
+  .book-files-modal__download {
+    width: 100%;
+  }
+}

@@ -10,6 +10,7 @@ import {
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import EditBookModal from "../../components/EditBookModal/EditBookModal";
+import BookFilesModal from "../../components/BookFilesModal/BookFilesModal.jsx";
 const BarcodeScanner = lazy(
   () => import("../../components/BarcodeScanner/BarcodeScanner"),
 );
@@ -32,6 +33,7 @@ const CatalogPage = ({ onOpenReading }) => {
   const [search, setSearch] = useState("");
   const [searchBy, setSearchBy] = useState("all");
   const [editingBook, setEditingBook] = useState(null);
+  const [ebookBook, setEbookBook] = useState(null);
   const [scannerOpen, setScannerOpen] = useState(false);
 
   const [searchParams, setSearchParams] = useSearchParams();
@@ -288,6 +290,7 @@ const CatalogPage = ({ onOpenReading }) => {
                 onWishlistToggle={handleWishlistToggle}
                 onEdit={setEditingBook}
                 onRead={handleOpenReading}
+                onOpenEbook={setEbookBook}
                 canEdit={canEditLibrary}
               />
             ))}
@@ -301,6 +304,15 @@ const CatalogPage = ({ onOpenReading }) => {
           activeLibraryId={activeLibraryId}
           onClose={() => setEditingBook(null)}
           onUpdated={handleBookUpdated}
+        />
+      )}
+
+      {ebookBook && activeLibraryId && (
+        <BookFilesModal
+          book={ebookBook}
+          libraryId={activeLibraryId}
+          canEdit={canEditLibrary}
+          onClose={() => setEbookBook(null)}
         />
       )}
 

@@ -11,6 +11,7 @@ const apiFetch = async (path, options = {}) => {
     auth = true,
     headers: customHeaders = {},
     body,
+    responseType = "auto",
     ...fetchOptions
   } = options;
 
@@ -50,6 +51,8 @@ const apiFetch = async (path, options = {}) => {
   if (response.status !== 204) {
     if (contentType?.includes("application/json")) {
       data = await response.json();
+    } else if (response.ok && responseType === "blob") {
+      data = await response.blob();
     } else {
       data = await response.text();
     }

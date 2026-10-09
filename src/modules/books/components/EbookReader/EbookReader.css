@@ -1,0 +1,24 @@
+﻿.ebook-reader-modal {
+  width: min(100%, 960px);
+  max-width: 960px;
+  height: calc(100dvh - 32px);
+}
+
+.ebook-reader-modal .modal__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.ebook-reader__content {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+  flex-direction: column;
+}
+
+.ebook-reader__content > div {
+  flex: 1;
+  min-height: 0;
+}
