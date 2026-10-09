@@ -1,14 +1,13 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
 import { apiFetch } from "../../../../../../shared/api/apiClient.js";
-import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
 import useOverlayBack from "../../../../../../shared/hooks/useOverlayBack.js";
-import SocialPostActionsMenu from "../SocialPostActionsMenu/SocialPostActionsMenu.jsx";
 import ThreadComment from "./components/ThreadComment/ThreadComment.jsx";
 import ThreadBranchView from "./components/ThreadBranchView/ThreadBranchView.jsx";
 import ThreadRootList from "./components/ThreadRootList/ThreadRootList.jsx";
 import ThreadRootPost from "./components/ThreadRootPost/ThreadRootPost.jsx";
 import ThreadComposer from "./components/ThreadComposer/ThreadComposer.jsx";
+import ThreadHeader from "./components/ThreadHeader/ThreadHeader.jsx";
 
 import {
   buildCommentTree,
@@ -317,6 +316,18 @@ const handleReplyKudos = async (reply) => {
 
   const isBranchView = branchPath.length > 0;
 
+  const handleBackToThread = () => {
+    setBranchPath([]);
+    setReplyTarget(null);
+    setReplyText("");
+
+    requestAnimationFrame(() => {
+      if (bodyRef.current) {
+        bodyRef.current.scrollTop = 0;
+      }
+    });
+  };
+
 
   const handleStartEdit = (comment) => {
     setEditingReply(comment);
@@ -376,37 +387,11 @@ const handleReplyKudos = async (reply) => {
       >
         <div className="social-post-thread__handle" />
 
-        <header className="social-post-thread__header">
-          <div className="social-post-thread__title">
-            {isBranchView && (
-              <button
-                type="button"
-                className="social-post-thread__back"
-                onClick={() => {
-                  setBranchPath([]);
-                  setReplyTarget(null);
-                  setReplyText("");
-                  requestAnimationFrame(() => {
-                    if (bodyRef.current) bodyRef.current.scrollTop = 0;
-                  });
-                }}
-                aria-label={"\u041D\u0430\u0437\u0430\u0434 \u0434\u043E \u043E\u0431\u0433\u043E\u0432\u043E\u0440\u0435\u043D\u043D\u044F"}
-              >
-                {"\u2190"}
-              </button>
-            )}
-            <h2>{isBranchView ? "\u0412\u0456\u0434\u043F\u043E\u0432\u0456\u0434\u0456" : "\u041E\u0431\u0433\u043E\u0432\u043E\u0440\u0435\u043D\u043D\u044F"}</h2>
-          </div>
-
-          <button
-            type="button"
-            className="social-post-thread__close"
-            onClick={onClose}
-            aria-label="Закрити"
-          >
-            ×
-          </button>
-        </header>
+        <ThreadHeader
+          isBranchView={isBranchView}
+          onBack={handleBackToThread}
+          onClose={onClose}
+        />
 
         <div ref={bodyRef} className="social-post-thread__body">
           {isLoading && (
