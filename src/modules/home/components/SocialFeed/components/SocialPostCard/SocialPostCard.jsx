@@ -1,4 +1,4 @@
-import { memo, useState } from "react";
+import { memo, useRef, useState } from "react";
 
 import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
 import KudosAction from "../KudosAction/KudosAction.jsx";
@@ -23,6 +23,29 @@ const SocialPostCard = ({
 
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(post.text);
+  const [isSaving, setIsSaving] = useState(false);
+  const [editError, setEditError] = useState("");
+  const savingRef = useRef(false);
+
+  const handleSaveEdit = async () => {
+    const text = editText.trim();
+    if (!text || savingRef.current) return;
+
+    savingRef.current = true;
+    setIsSaving(true);
+    setEditError("");
+
+    try {
+      await onEdit(post, text);
+      setIsEditing(false);
+    } catch (error) {
+      console.error("Save social post error:", error);
+      setEditError("\u041d\u0435 \u0432\u0434\u0430\u043b\u043e\u0441\u044f \u0437\u0431\u0435\u0440\u0435\u0433\u0442\u0438 \u0434\u043e\u043f\u0438\u0441.");
+    } finally {
+      savingRef.current = false;
+      setIsSaving(false);
+    }
+  };
 
   return (
     <HomePanel
@@ -72,14 +95,25 @@ const SocialPostCard = ({
               value={editText}
               maxLength={1000}
               autoFocus
-              onChange={(event) => setEditText(event.target.value)}
+              disabled={isSaving}
+              onChange={(event) => {
+                setEditText(event.target.value);
+                setEditError("");
+              }}
             />
+            {editError && (
+              <p className="social-post-card__edit-error" role="alert">
+                {editError}
+              </p>
+            )}
 
             <div className="social-post-card__edit-actions">
               <button
                 type="button"
+                disabled={isSaving}
                 onClick={() => {
                   setEditText(post.text);
+                  setEditError("");
                   setIsEditing(false);
                 }}
               >
@@ -88,13 +122,10 @@ const SocialPostCard = ({
 
               <button
                 type="button"
-                disabled={!editText.trim()}
-                onClick={async () => {
-                  await onEdit(post, editText.trim());
-                  setIsEditing(false);
-                }}
+                disabled={!editText.trim() || isSaving}
+                onClick={handleSaveEdit}
               >
-                Зберегти
+                {isSaving ? "\u0417\u0431\u0435\u0440\u0456\u0433\u0430\u0454\u043c\u043e\u2026" : "\u0417\u0431\u0435\u0440\u0435\u0433\u0442\u0438"}
               </button>
             </div>
           </div>

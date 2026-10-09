@@ -817,6 +817,13 @@
   box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.12);
 }
 
+.social-post-card__edit-error {
+  margin: 0;
+  color: var(--color-danger, #e35b68);
+  font-size: 0.875rem;
+  line-height: 1.4;
+}
+
 .social-post-card__edit-actions {
   display: flex;
   justify-content: flex-end;
