@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import toast from "react-hot-toast";
 
@@ -19,6 +19,7 @@ const useAddBook = ({
   activeLibraryId,
 }) => {
   const [isAdding, setIsAdding] = useState(false);
+  const addingRef = useRef(false);
   const { refreshBooks } = useLibraryBooks();
 
   const resetAfterAdd = () => {
@@ -44,7 +45,7 @@ const useAddBook = ({
   const getSuccessMessage = () => "Книгу успішно додано до бібліотеки";
 
   const addFoundBook = async () => {
-    if (!book || isAdding) {
+    if (!book || addingRef.current) {
       return;
     }
 
@@ -76,6 +77,7 @@ const useAddBook = ({
       requestBody = formData;
     }
 
+    addingRef.current = true;
     setIsAdding(true);
 
     try {
@@ -100,6 +102,7 @@ const useAddBook = ({
 
       toast.error(error.message || "Не вдалося з'єднатися із сервером");
     } finally {
+      addingRef.current = false;
       setIsAdding(false);
     }
   };
@@ -107,7 +110,7 @@ const useAddBook = ({
   const addManualBook = async (event) => {
     event.preventDefault();
 
-    if (isAdding) {
+    if (addingRef.current) {
       return;
     }
 
@@ -155,6 +158,7 @@ const useAddBook = ({
       requestData.append("cover", cover);
     }
 
+    addingRef.current = true;
     setIsAdding(true);
 
     try {
@@ -183,6 +187,7 @@ const useAddBook = ({
 
       toast.error(error.message || "Не вдалося з'єднатися із сервером");
     } finally {
+      addingRef.current = false;
       setIsAdding(false);
     }
   };
