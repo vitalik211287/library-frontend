@@ -1,6 +1,5 @@
-import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 
-import { apiFetch } from "../../../../../../shared/api/apiClient.js";
 import useOverlayBack from "../../../../../../shared/hooks/useOverlayBack.js";
 import ThreadComment from "./components/ThreadComment/ThreadComment.jsx";
 import ThreadBranchView from "./components/ThreadBranchView/ThreadBranchView.jsx";
@@ -8,6 +7,7 @@ import ThreadRootList from "./components/ThreadRootList/ThreadRootList.jsx";
 import ThreadRootPost from "./components/ThreadRootPost/ThreadRootPost.jsx";
 import ThreadComposer from "./components/ThreadComposer/ThreadComposer.jsx";
 import ThreadHeader from "./components/ThreadHeader/ThreadHeader.jsx";
+import useSocialThread from "./hooks/useSocialThread.js";
 
 import {
   buildCommentTree,
@@ -46,15 +46,6 @@ const SocialPostThreadModal = ({
     pendingReplyScrollTopRef.current = null;
   }, [replyTarget]);
 
-  const scrollToBottom = useCallback((behavior = "smooth") => {
-    requestAnimationFrame(() => {
-      bodyRef.current?.scrollTo({
-        top: bodyRef.current.scrollHeight,
-        behavior,
-      });
-    });
-  }, []);
-
   const isActivityThread = Boolean(activityId);
   const isOpen = Boolean(postId || activityId);
 
@@ -73,183 +64,53 @@ const SocialPostThreadModal = ({
     pendingReplyScrollTopRef.current = null;
   }, [isOpen]);
 
-  const loadThread = useCallback(async () => {
-    if (!isOpen) {
-      return;
-    }
-
-    try {
-      setIsLoading(true);
-      setError("");
-
-      const data = await apiFetch(
-        isActivityThread
-          ? `/api/social/activities/${activityId}/thread`
-          : `/api/social/posts/${postId}`,
-      );
-
-      const replies = isActivityThread
-        ? data?.comments || []
-        : data?.replies || [];
-
-      setThread(
-        isActivityThread
-          ? {
-              activityId,
-              replies,
-            }
-          : data,
-      );
-
-      onThreadCountChange?.(
-        isActivityThread ? activityId : postId,
-        replies.length,
-      );
-
-    } catch (requestError) {
-      console.error("Failed to load social post thread:", requestError);
-      setError("Не вдалося завантажити обговорення");
-    } finally {
-      setIsLoading(false);
-    }
-  }, [
-    activityId,
-    isActivityThread,
-    isOpen,
-    onThreadCountChange,
-    postId,
-  ]);
-
-  useEffect(() => {
-    if (!isOpen) {
-      return;
-    }
-
-    loadThread();
-  }, [isOpen, loadThread]);
-
   const handleSubmit = async (event) => {
     event.preventDefault();
 
-    const text = replyText.trim();
+    const success = await createReply({
+      text: replyText,
+      parentId:
+        replyTarget?.id ||
+        (isActivityThread ? null : postId),
+    });
 
-    if (!text || !isOpen || isSending) {
-      return;
-    }
-
-    try {
-      setIsSending(true);
-      setError("");
-
-      await apiFetch("/api/social/posts", {
-        method: "POST",
-        body: {
-          text,
-          parentId: replyTarget?.id || (isActivityThread ? null : postId),
-          activityId: isActivityThread ? activityId : null,
-        },
-      });
-
+    if (success) {
       setReplyText("");
       setReplyTarget(null);
-
-      await loadThread();
-    } catch (requestError) {
-      console.error("Failed to create social post reply:", requestError);
-      setError("Не вдалося надіслати відповідь");
-    } finally {
-      setIsSending(false);
     }
   };
 
-const handleReplyKudos = async (reply) => {
-    if (!reply?.id || reply.isOwnPost) {
-      return;
-    }
-
-    const nextHasKudos = !reply.hasKudos;
-
-    try {
-      const data = await apiFetch(`/api/social/posts/${reply.id}/kudos`, {
-        method: nextHasKudos ? "POST" : "DELETE",
-      });
-
-      setThread((current) => {
-        if (!current) {
-          return current;
-        }
-
-        return {
-          ...current,
-          replies: (current.replies || []).map((item) =>
-            item.id === reply.id
-              ? {
-                  ...item,
-                  hasKudos: Boolean(data.hasKudos),
-                  kudosCount: Number(data.kudosCount) || 0,
-                }
-              : item,
-          ),
-        };
-      });
-    } catch (requestError) {
-      console.error("Failed to update reply kudos:", requestError);
-    }
+  const handleReplyKudos = async (reply) => {
+    await toggleReplyKudos(reply);
   };
 
   const handleEditReply = async (reply) => {
-    const text = editReplyText.trim();
+    const success = await updateReply(
+      reply,
+      editReplyText,
+    );
 
-    if (!text || !reply?.id) {
-      return;
-    }
-
-    try {
-      setError("");
-
-      await apiFetch(`/api/social/posts/${reply.id}`, {
-        method: "PATCH",
-        body: {
-          text,
-          bookId: reply.book?.id || null,
-        },
-      });
-
+    if (success) {
       setEditingReply(null);
       setEditReplyText("");
-      await loadThread();
-    } catch (requestError) {
-      console.error("Failed to update social post reply:", requestError);
-      setError("\u041d\u0435 \u0432\u0434\u0430\u043b\u043e\u0441\u044f \u0432\u0456\u0434\u0440\u0435\u0434\u0430\u0433\u0443\u0432\u0430\u0442\u0438 \u0432\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u044c");
     }
   };
 
   const handleDeleteReply = async (reply) => {
-    if (!reply?.id) {
+    const success = await deleteReply(reply);
+
+    if (!success) {
       return;
     }
 
-    try {
-      setError("");
+    if (replyTarget?.id === reply.id) {
+      setReplyTarget(null);
+      setReplyText("");
+    }
 
-      await apiFetch(`/api/social/posts/${reply.id}`, {
-        method: "DELETE",
-      });
-
-      if (replyTarget?.id === reply.id) {
-        setReplyTarget(null);
-        setReplyText("");
-      }
-
-      if (editingReply?.id === reply.id) {
-        setEditingReply(null);
-        setEditReplyText("");
-      }
-
-      await loadThread();
-    } catch (requestError) {
-      console.error("Failed to delete social post reply:", requestError);
-      setError("\u041d\u0435 \u0432\u0434\u0430\u043b\u043e\u0441\u044f \u0432\u0438\u0434\u0430\u043b\u0438\u0442\u0438 \u0432\u0456\u0434\u043f\u043e\u0432\u0456\u0434\u044c");
+    if (editingReply?.id === reply.id) {
+      setEditingReply(null);
+      setEditReplyText("");
     }
   };
 
