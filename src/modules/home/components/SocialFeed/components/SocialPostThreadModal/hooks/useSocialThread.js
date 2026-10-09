@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 import { apiFetch } from "../../../../../../../shared/api/apiClient.js";
 
@@ -11,6 +11,7 @@ const useSocialThread = ({
   const [isLoading, setIsLoading] = useState(true);
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState("");
+  const requestIdRef = useRef(0);
 
   const isActivityThread = Boolean(activityId);
   const isOpen = Boolean(postId || activityId);
@@ -19,6 +20,8 @@ const useSocialThread = ({
     if (!isOpen) {
       return;
     }
+
+    const requestId = ++requestIdRef.current;
 
     try {
       setIsLoading(true);
@@ -29,6 +32,10 @@ const useSocialThread = ({
           ? `/api/social/activities/${activityId}/thread`
           : `/api/social/posts/${postId}`,
       );
+
+      if (requestId !== requestIdRef.current) {
+        return;
+      }
 
       const replies = isActivityThread
         ? data?.comments || []
@@ -48,6 +55,10 @@ const useSocialThread = ({
         replies.length,
       );
     } catch (requestError) {
+      if (requestId !== requestIdRef.current) {
+        return;
+      }
+
       console.error(
         "Failed to load social post thread:",
         requestError,
@@ -57,7 +68,9 @@ const useSocialThread = ({
         "\u041d\u0435 \u0432\u0434\u0430\u043b\u043e\u0441\u044f \u0437\u0430\u0432\u0430\u043d\u0442\u0430\u0436\u0438\u0442\u0438 \u043e\u0431\u0433\u043e\u0432\u043e\u0440\u0435\u043d\u043d\u044f",
       );
     } finally {
-      setIsLoading(false);
+      if (requestId === requestIdRef.current) {
+        setIsLoading(false);
+      }
     }
   }, [
     activityId,
@@ -73,6 +86,10 @@ const useSocialThread = ({
     }
 
     loadThread();
+
+    return () => {
+      requestIdRef.current += 1;
+    };
   }, [isOpen, loadThread]);
 
   const createReply = async ({ text, parentId }) => {
