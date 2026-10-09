@@ -33,14 +33,23 @@ const getSearchWordRank = (value, word) => {
   const tokens = value.match(/[\p{L}\p{N}]+/gu) ?? [];
 
   if (tokens.includes(word)) {
-    return 0;
+    return { rank: 0, extraLength: 0 };
   }
 
-  if (tokens.some((token) => token.startsWith(word))) {
-    return 1;
+  const prefixLengths = tokens
+    .filter((token) => token.startsWith(word))
+    .map((token) => token.length - word.length);
+
+  if (prefixLengths.length) {
+    return {
+      rank: 1,
+      extraLength: Math.min(...prefixLengths),
+    };
   }
 
-  return value.includes(word) ? 2 : null;
+  return value.includes(word)
+    ? { rank: 2, extraLength: 0 }
+    : null;
 };
 
 export const filterCatalogBooks = ({ books, search, searchBy }) => {
@@ -52,36 +61,46 @@ export const filterCatalogBooks = ({ books, search, searchBy }) => {
 
   return books
     .map((book, index) => {
-      const values = searchBy === "all"
-        ? [
-            book.title,
-            book.author,
-            book.year,
-            book.genre,
-            book.isbn,
-            book.publisher,
-          ]
-        : [book[searchBy]];
+      const values =
+        searchBy === "all"
+          ? [
+              book.title,
+              book.author,
+              book.year,
+              book.genre,
+              book.isbn,
+              book.publisher,
+            ]
+          : [book[searchBy]];
 
       const normalizedValues = values.map(normalizeSearchText);
 
-      const ranks = words.map((word) => {
-        const matches = normalizedValues
+      const matches = words.map((word) => {
+        const candidates = normalizedValues
           .map((value) => getSearchWordRank(value, word))
-          .filter((rank) => rank !== null);
+          .filter(Boolean);
 
-        return matches.length ? Math.min(...matches) : null;
+        candidates.sort(
+          (a, b) =>
+            a.rank - b.rank || a.extraLength - b.extraLength,
+        );
+
+        return candidates[0] ?? null;
       });
 
-      if (ranks.some((rank) => rank === null)) {
+      if (matches.some((match) => match === null)) {
         return null;
       }
 
       return {
         book,
         index,
-        worstRank: Math.max(...ranks),
-        totalRank: ranks.reduce((sum, rank) => sum + rank, 0),
+        worstRank: Math.max(...matches.map((match) => match.rank)),
+        totalRank: matches.reduce((sum, match) => sum + match.rank, 0),
+        extraLength: matches.reduce(
+          (sum, match) => sum + match.extraLength,
+          0,
+        ),
       };
     })
     .filter(Boolean)
@@ -89,6 +108,7 @@ export const filterCatalogBooks = ({ books, search, searchBy }) => {
       (a, b) =>
         a.worstRank - b.worstRank ||
         a.totalRank - b.totalRank ||
+        a.extraLength - b.extraLength ||
         a.index - b.index,
     )
     .map(({ book }) => book);
