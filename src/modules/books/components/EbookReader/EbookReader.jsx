@@ -1,4 +1,4 @@
-﻿import { lazy, Suspense, useCallback, useEffect, useState } from "react";
+﻿import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 
 import Modal from "../../../../shared/components/Modal/Modal.jsx";
 import Loader from "../../../../shared/components/Loader/Loader.jsx";
@@ -24,6 +24,46 @@ const EbookReader = ({ file, book, libraryId, onClose, locationKey, onLocationCh
   const [statusOpen, setStatusOpen] = useState(false);
   const [statusLoading, setStatusLoading] = useState(false);
   const [epubPercent, setEpubPercent] = useState(null);
+  const [chromeVisible, setChromeVisible] = useState(true);
+
+  const chromeVisibleRef = useRef(true);
+  const hideAtRef = useRef(Date.now() + 6000);
+  const autoHiddenRef = useRef(false);
+  const overlaysRef = useRef(false);
+
+  overlaysRef.current = statsOpen || historyOpen || statusOpen;
+
+  useEffect(() => {
+    const timer = window.setInterval(() => {
+      if (
+        overlaysRef.current ||
+        autoHiddenRef.current ||
+        Date.now() < hideAtRef.current
+      ) {
+        return;
+      }
+
+      autoHiddenRef.current = true;
+      chromeVisibleRef.current = false;
+      setChromeVisible(false);
+    }, 250);
+
+    return () => window.clearInterval(timer);
+  }, []);
+
+  const handlePageTap = useCallback(() => {
+    if (overlaysRef.current) return;
+
+    const next = !chromeVisibleRef.current;
+    chromeVisibleRef.current = next;
+    autoHiddenRef.current = !next;
+
+    if (next) {
+      hideAtRef.current = Date.now() + 6000;
+    }
+
+    setChromeVisible(next);
+  }, []);
   const refreshReadingData = useRefreshReadingData();
 
   const handleCloseReader = useCallback(() => {
@@ -80,11 +120,14 @@ const EbookReader = ({ file, book, libraryId, onClose, locationKey, onLocationCh
       onClose={handleCloseReader}
       showHeader={false}
       ariaLabel={`Читалка: ${book.title}`}
-      className="ebook-reader-modal"
+      overlayClassName="ebook-reader-overlay"
+      className={chromeVisible
+        ? "ebook-reader-modal"
+        : "ebook-reader-modal ebook-reader-modal--chrome-hidden"}
       closeOnEscape={!historyOpen && !statusOpen}
       closeOnBackdrop={!historyOpen && !statusOpen}
     >
-      <div className="ebook-reader__toolbar">
+      <div className="ebook-reader__toolbar" inert={!chromeVisible}>
         <button
           type="button"
           className="ebook-reader__stats-toggle"
@@ -143,6 +186,8 @@ const EbookReader = ({ file, book, libraryId, onClose, locationKey, onLocationCh
               }}
               onReadingAdvance={onReadingAdvance}
               onReachedEnd={onReachedEnd}
+              onToggleChrome={handlePageTap}
+              chromeVisible={chromeVisible}
               onReady={onReady}
             />
           </Suspense>

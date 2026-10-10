@@ -13,7 +13,7 @@ const readNumber = (key, fallback, min, max) => {
   return Number.isFinite(parsed) ? clamp(parsed, min, max) : fallback;
 };
 
-const EpubReader = ({ blob, readerTheme, locationKey, onLocationChange, onReadingAdvance, onReady, onReachedEnd }) => {
+const EpubReader = ({ blob, readerTheme, locationKey, onLocationChange, onReadingAdvance, onReady, onReachedEnd, onToggleChrome, chromeVisible }) => {
   const containerRef = useRef(null);
   const renditionRef = useRef(null);
   const seekBookRef = useRef(null);
@@ -23,6 +23,8 @@ const EpubReader = ({ blob, readerTheme, locationKey, onLocationChange, onReadin
   onReadingAdvanceRef.current = onReadingAdvance;
   const onReachedEndRef = useRef(onReachedEnd);
   onReachedEndRef.current = onReachedEnd;
+  const onToggleChromeRef = useRef(onToggleChrome);
+  onToggleChromeRef.current = onToggleChrome;
   const seekValueRef = useRef(null);
   const seekBusyRef = useRef(false);
   const onLocationChangeRef = useRef(onLocationChange);
@@ -45,6 +47,61 @@ const EpubReader = ({ blob, readerTheme, locationKey, onLocationChange, onReadin
   );
   const brightnessRef = useRef(brightness);
   const [gestureHint, setGestureHint] = useState("");
+  const brightnessDragRef = useRef(null);
+
+  const applyBrightness = (value) => {
+    const next = clamp(Math.round(value * 100) / 100, 0.45, 1.3);
+    brightnessRef.current = next;
+    setBrightness(next);
+    localStorage.setItem(READER_BRIGHTNESS_KEY, String(next));
+    setGestureHint("\u042f\u0441\u043a\u0440\u0430\u0432\u0456\u0441\u0442\u044c " + Math.round(next * 100) + "%");
+  };
+
+  const startBrightnessDrag = (event) => {
+    if (event.pointerType === "mouse" && event.button !== 0) return;
+
+    brightnessDragRef.current = {
+      id: event.pointerId,
+      y: event.clientY,
+      value: brightnessRef.current,
+    };
+
+    event.currentTarget.setPointerCapture(event.pointerId);
+    setGestureHint("\u042f\u0441\u043a\u0440\u0430\u0432\u0456\u0441\u0442\u044c " + Math.round(brightnessRef.current * 100) + "%");
+  };
+
+  const moveBrightnessDrag = (event) => {
+    const drag = brightnessDragRef.current;
+    if (!drag || drag.id !== event.pointerId) return;
+
+    const height = containerRef.current?.getBoundingClientRect().height || 600;
+    applyBrightness(drag.value + ((drag.y - event.clientY) / height) * 1.2);
+  };
+
+  const endBrightnessDrag = (event) => {
+    if (brightnessDragRef.current?.id === event.pointerId) {
+      brightnessDragRef.current = null;
+    }
+  };
+
+  const handleBrightnessKey = (event) => {
+    let next;
+
+    if (event.key === "ArrowUp") next = brightnessRef.current + 0.05;
+    else if (event.key === "ArrowDown") next = brightnessRef.current - 0.05;
+    else if (event.key === "Home") next = 0.45;
+    else if (event.key === "End") next = 1.3;
+    else return;
+
+    event.preventDefault();
+    applyBrightness(next);
+  };
+
+  useEffect(() => {
+    if (!gestureHint) return undefined;
+    const timeout = window.setTimeout(() => setGestureHint(""), 1600);
+    return () => window.clearTimeout(timeout);
+  }, [gestureHint]);
 
   // The progress panel disappears after a few seconds, without affecting EPUB layout.
   useEffect(() => {
@@ -185,6 +242,48 @@ const EpubReader = ({ blob, readerTheme, locationKey, onLocationChange, onReadin
         rendition.hooks.content.register((contents) => {
           const doc = contents.document;
           let gesture = null;
+          let tapCandidate = null;
+
+          doc.addEventListener("pointerdown", (event) => {
+            if (!event.isPrimary ||
+                (event.pointerType === "mouse" && event.button !== 0)) {
+              tapCandidate = null;
+              return;
+            }
+
+            tapCandidate = {
+              id: event.pointerId,
+              x: event.clientX,
+              y: event.clientY,
+              time: Date.now(),
+            };
+          });
+
+          doc.addEventListener("pointerup", (event) => {
+            const tap = tapCandidate;
+            tapCandidate = null;
+            if (!tap || tap.id !== event.pointerId) return;
+
+            const dx = event.clientX - tap.x;
+            const dy = event.clientY - tap.y;
+
+            // Movement and long presses are not taps.
+            if (Math.hypot(dx, dy) > 12 ||
+                Date.now() - tap.time > 450) return;
+
+            // Keep links and text selection independent.
+            if (event.target?.closest?.(
+              "a, button, input, textarea, select, label"
+            )) return;
+
+            if (doc.getSelection?.()?.toString()) return;
+
+            onToggleChromeRef.current?.();
+          });
+
+          doc.addEventListener("pointercancel", () => {
+            tapCandidate = null;
+          });
           const distance = (first, second) => Math.hypot(
             first.clientX - second.clientX,
             first.clientY - second.clientY,
@@ -192,6 +291,7 @@ const EpubReader = ({ blob, readerTheme, locationKey, onLocationChange, onReadin
 
           doc.addEventListener("touchstart", (event) => {
             if (event.touches.length === 2) {
+              tapCandidate = null;
               gesture = {
                 kind: "pinch",
                 distance: distance(event.touches[0], event.touches[1]),
@@ -426,6 +526,24 @@ const EpubReader = ({ blob, readerTheme, locationKey, onLocationChange, onReadin
               ref={containerRef}
               style={{ "--ebook-page-brightness": brightness }}
             />
+            <div
+              className="epub-reader__brightness-edge"
+              role="slider"
+              tabIndex={0}
+              aria-label="?????????? ????????"
+              aria-orientation="vertical"
+              aria-valuemin={45}
+              aria-valuemax={130}
+              aria-valuenow={Math.round(brightness * 100)}
+              onPointerDown={startBrightnessDrag}
+              onPointerMove={moveBrightnessDrag}
+              onPointerUp={endBrightnessDrag}
+              onPointerCancel={endBrightnessDrag}
+              onLostPointerCapture={endBrightnessDrag}
+              onKeyDown={handleBrightnessKey}
+            >
+              <span className="epub-reader__brightness-grip" aria-hidden="true" />
+            </div>
             {progressVisible && (
               <div className="epub-reader__progress-panel" role="status">
                 <div className="epub-reader__progress-label">
@@ -481,6 +599,7 @@ const EpubReader = ({ blob, readerTheme, locationKey, onLocationChange, onReadin
             <button
               type="button"
               className="epub-reader__progress-toggle"
+              inert={!chromeVisible}
               onClick={() => setProgressVisible((visible) => !visible)}
               aria-label={progressVisible ? "Приховати прогрес книги" : "Показати прогрес книги"}
               aria-expanded={progressVisible}
@@ -490,7 +609,7 @@ const EpubReader = ({ blob, readerTheme, locationKey, onLocationChange, onReadin
             </button>
           </div>
 
-          <div className="epub-reader__controls">
+          <div className="epub-reader__controls" inert={!chromeVisible}>
             <button
               type="button"
               onClick={() => renditionRef.current?.prev()}
