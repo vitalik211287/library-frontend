@@ -22,6 +22,7 @@ const EbookReaderPage = () => {
   const [ready, setReady] = useState(false);
   const [readAdvance, setReadAdvance] = useState(0);
   const epubPositionRef = useRef({ start: null, end: null });
+  const epubReachedEndRef = useRef(false);
 
   useEffect(() => {
     let current = true;
@@ -50,6 +51,7 @@ const EbookReaderPage = () => {
   // These are EPUB locations, NOT the accumulated reading percentage.
   useEffect(() => {
     epubPositionRef.current = { start: null, end: null };
+    epubReachedEndRef.current = false;
   }, [positionKey]);
 
   const handlePositionChange = useCallback((value) => {
@@ -63,6 +65,10 @@ const EbookReaderPage = () => {
   // Count only portions traversed by ordinary forward page turns.
   // Seeking, restoring a bookmark and changing font size affect position,
   // not statistics. Preserve the backend's previously recorded percentage.
+  const handleReachedEnd = useCallback(() => {
+    epubReachedEndRef.current = true;
+  }, []);
+
   const handleReadingAdvance = useCallback((delta) => {
     if (Number.isFinite(delta) && delta > 0) {
       setReadAdvance((current) => Math.min(100, current + delta));
@@ -87,6 +93,7 @@ const EbookReaderPage = () => {
     const saved = await session.finish({
       epubStartPositionPercent: epubPositionRef.current.start ?? undefined,
       epubEndPositionPercent: epubPositionRef.current.end ?? undefined,
+      epubReachedEnd: epubReachedEndRef.current,
     });
     if (!saved) return;
     const from = location.state?.ebookFrom;
@@ -110,6 +117,7 @@ const EbookReaderPage = () => {
     const saved = await session.finish({
       epubStartPositionPercent: epubPositionRef.current.start ?? undefined,
       epubEndPositionPercent: epubPositionRef.current.end ?? undefined,
+      epubReachedEnd: epubReachedEndRef.current,
     });
 
     if (!saved) return false;
@@ -159,6 +167,7 @@ const EbookReaderPage = () => {
         onReady={() => setReady(true)}
         onLocationChange={handlePositionChange}
         onReadingAdvance={handleReadingAdvance}
+        onReachedEnd={handleReachedEnd}
         onClose={handleClose}
         onChangeStatus={handleChangeStatus}
       />

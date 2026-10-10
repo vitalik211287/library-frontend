@@ -13,7 +13,7 @@ const readNumber = (key, fallback, min, max) => {
   return Number.isFinite(parsed) ? clamp(parsed, min, max) : fallback;
 };
 
-const EpubReader = ({ blob, readerTheme, locationKey, onLocationChange, onReadingAdvance, onReady }) => {
+const EpubReader = ({ blob, readerTheme, locationKey, onLocationChange, onReadingAdvance, onReady, onReachedEnd }) => {
   const containerRef = useRef(null);
   const renditionRef = useRef(null);
   const seekBookRef = useRef(null);
@@ -21,6 +21,8 @@ const EpubReader = ({ blob, readerTheme, locationKey, onLocationChange, onReadin
   const turningRef = useRef(false);
   const onReadingAdvanceRef = useRef(onReadingAdvance);
   onReadingAdvanceRef.current = onReadingAdvance;
+  const onReachedEndRef = useRef(onReachedEnd);
+  onReachedEndRef.current = onReachedEnd;
   const seekValueRef = useRef(null);
   const seekBusyRef = useRef(false);
   const onLocationChangeRef = useRef(onLocationChange);
@@ -58,10 +60,24 @@ const EpubReader = ({ blob, readerTheme, locationKey, onLocationChange, onReadin
     const book = seekBookRef.current;
     if (!rendition || turningRef.current || seekBusyRef.current) return;
     turningRef.current = true;
-    const beforeCfi = rendition.currentLocation()?.start?.cfi;
+    const beforeLocation = rendition.currentLocation();
+    const beforeCfi = beforeLocation?.start?.cfi;
     try {
       await rendition.next();
-      const afterCfi = rendition.currentLocation()?.start?.cfi;
+      const afterLocation = rendition.currentLocation();
+      const afterCfi = afterLocation?.start?.cfi;
+
+      // Only a real forward page turn can complete the EPUB.
+      // Seeking to 100% or reopening the last page cannot.
+      if (
+        beforeLocation?.atEnd !== true &&
+        afterLocation?.atEnd === true &&
+        beforeCfi &&
+        afterCfi &&
+        beforeCfi !== afterCfi
+      ) {
+        onReachedEndRef.current?.();
+      }
       if (!book || !beforeCfi || !afterCfi) return;
       const from = book.locations.percentageFromCfi(beforeCfi);
       const to = book.locations.percentageFromCfi(afterCfi);

@@ -154,6 +154,9 @@ const useEbookAutoSession = ({ bookId, fileId, userId, ready, initialPercent, fi
           ...(position.epubEndPositionPercent !== undefined && {
             epubEndPositionPercent: position.epubEndPositionPercent,
           }),
+          ...(position.epubReachedEnd === true && {
+            epubReachedEnd: true,
+          }),
         });
         ownedRef.current = false;
         sessionRef.current = null;

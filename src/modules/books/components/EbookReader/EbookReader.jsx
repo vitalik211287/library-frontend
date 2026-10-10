@@ -6,6 +6,7 @@ import { downloadBookFile } from "../../api/bookFilesApi.js";
 
 import Icon from "../../../../shared/components/Icon/Icon.jsx";
 import ReadingSessionsModal from "../../../reading/components/ReadingModal/components/ReadingSessionsModal/ReadingSessionsModal.jsx";
+import ReadingStatusModal from "../../../reading/components/ReadingModal/components/ReadingStatusModal/ReadingStatusModal.jsx";
 import useRefreshReadingData from "../../../reading/hooks/useRefreshReadingData.js";
 import EbookReaderStatsPanel from "./EbookReaderStatsPanel.jsx";
 
@@ -15,22 +16,34 @@ const EpubReader = lazy(() =>
   import("./EpubReader/EpubReader.jsx")
 );
 
-const EbookReader = ({ file, book, libraryId, onClose, locationKey, onLocationChange, onReadingAdvance, onReady }) => {
+const EbookReader = ({ file, book, libraryId, onClose, locationKey, onLocationChange, onReadingAdvance, onReady, onChangeStatus, onReachedEnd }) => {
   const [blob, setBlob] = useState(null);
   const [error, setError] = useState("");
   const [statsOpen, setStatsOpen] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
+  const [statusOpen, setStatusOpen] = useState(false);
+  const [statusLoading, setStatusLoading] = useState(false);
   const [epubPercent, setEpubPercent] = useState(null);
   const refreshReadingData = useRefreshReadingData();
 
   const handleCloseReader = useCallback(() => {
-    if (historyOpen) return;
+    if (historyOpen || statusOpen) return;
     if (statsOpen) {
       setStatsOpen(false);
       return;
     }
     onClose();
-  }, [historyOpen, statsOpen, onClose]);
+  }, [historyOpen, statusOpen, statsOpen, onClose]);
+  const handleStatusChange = async (status) => {
+    if (statusLoading) return false;
+    setStatusLoading(true);
+    try {
+      return Boolean(await onChangeStatus(status));
+    } finally {
+      setStatusLoading(false);
+    }
+  };
+
   const [readerTheme, setReaderTheme] = useState(
     () => localStorage.getItem("ebook-reader-theme") === "dark" ? "dark" : "light"
   );
@@ -68,8 +81,8 @@ const EbookReader = ({ file, book, libraryId, onClose, locationKey, onLocationCh
       showHeader={false}
       ariaLabel={`Читалка: ${book.title}`}
       className="ebook-reader-modal"
-      closeOnEscape={!historyOpen}
-      closeOnBackdrop={!historyOpen}
+      closeOnEscape={!historyOpen && !statusOpen}
+      closeOnBackdrop={!historyOpen && !statusOpen}
     >
       <div className="ebook-reader__toolbar">
         <button
@@ -129,6 +142,7 @@ const EbookReader = ({ file, book, libraryId, onClose, locationKey, onLocationCh
                 onLocationChange?.(nextPercent);
               }}
               onReadingAdvance={onReadingAdvance}
+              onReachedEnd={onReachedEnd}
               onReady={onReady}
             />
           </Suspense>
@@ -140,6 +154,8 @@ const EbookReader = ({ file, book, libraryId, onClose, locationKey, onLocationCh
         <EbookReaderStatsPanel
           bookId={book.id}
           bookTitle={book.title}
+          currentStatus={book.status}
+          onOpenStatus={() => setStatusOpen(true)}
           currentPercent={epubPercent}
           onClose={() => setStatsOpen(false)}
           onOpenHistory={() => {
@@ -149,6 +165,17 @@ const EbookReader = ({ file, book, libraryId, onClose, locationKey, onLocationCh
         />
       )}
     </Modal>
+    {statusOpen && (
+      <ReadingStatusModal
+        currentStatus={book.status}
+        activeSession={null}
+        loading={statusLoading}
+        onChange={handleStatusChange}
+        onClose={() => {
+          if (!statusLoading) setStatusOpen(false);
+        }}
+      />
+    )}
     {historyOpen && (
       <ReadingSessionsModal
         bookId={book.id}
