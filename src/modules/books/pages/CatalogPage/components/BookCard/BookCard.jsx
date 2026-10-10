@@ -20,6 +20,10 @@ const BookCard = ({
   onOpenEbook,
   recommendationMeta,
 }) => {
+  const ebookFiles = Array.isArray(book.ebookFiles) ? book.ebookFiles : [];
+  const hasEbookFiles = ebookFiles.length > 0;
+  const hasReadableEbook = ebookFiles.some((file) => file.format === "EPUB");
+
   return (
     <AppPanel
       as="article"
@@ -111,13 +115,26 @@ const BookCard = ({
       </div>
 
       <div className="book-card__actions">
-        {onOpenEbook && (
+        {onOpenEbook && (canEdit || hasEbookFiles) && (
           <button
             type="button"
-            className="book-card__button book-card__button--ebook"
+            className={`book-card__button book-card__button--ebook ${
+              hasReadableEbook
+                ? "book-card__button--ebook-available"
+                : "book-card__button--ebook-pending"
+            }`}
             onClick={() => onOpenEbook(book)}
+            disabled={isAuthLoading}
+            title={hasReadableEbook ? "Читати е-книгу" : hasEbookFiles ? "Файли е-книги" : "Додати е-книгу"}
           >
-            Електронна версія
+            <Icon name={hasEbookFiles ? "ebook" : "upload"} />
+            <span>
+              {hasReadableEbook
+                ? "Читати е-книгу"
+                : hasEbookFiles
+                  ? "Файли е-книги"
+                  : "Додати е-книгу"}
+            </span>
           </button>
         )}
         {canEdit && (
@@ -125,8 +142,11 @@ const BookCard = ({
             type="button"
             className="book-card__button book-card__button--edit"
             onClick={() => onEdit(book)}
+            aria-label="Редагувати книгу"
+            title="Редагувати книгу"
           >
-            Редагувати
+            <Icon name="edit" />
+            <span>Редагувати</span>
           </button>
         )}
 
@@ -135,8 +155,11 @@ const BookCard = ({
           className="book-card__button book-card__button--read"
           onClick={() => onRead(book)}
           disabled={isAuthLoading}
+          aria-label="Ручна сесія читання"
+          title="Ручна сесія читання"
         >
-          Читати
+          <Icon name="book-open" />
+          <span>Читати</span>
         </button>
       </div>
     </AppPanel>

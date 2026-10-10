@@ -14,6 +14,9 @@ const CommunityPage = lazy(
 const CatalogPage = lazy(
   () => import("../../modules/books/pages/CatalogPage/CatalogPage.jsx"),
 );
+const EbookReaderPage = lazy(
+  () => import("../../modules/books/pages/EbookReaderPage/EbookReaderPage.jsx"),
+);
 const AddBookPage = lazy(
   () => import("../../modules/books/pages/AddBookPage/AddBookPage.jsx"),
 );
@@ -123,6 +126,14 @@ export const PrivateRoutes = ({ onOpenReading }) => {
           element={
             <ProtectedRoute>
               <CommunityPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/reader/:libraryId/:bookId/:fileId"
+          element={
+            <ProtectedRoute>
+              <EbookReaderPage />
             </ProtectedRoute>
           }
         />

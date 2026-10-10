@@ -13,6 +13,7 @@ import useSwipeNavigation from "./hooks/useSwipeNavigation.js";
 import RightSidebar from "../shared/components/RightSidebar/RightSidebar.jsx";
 import ReadingModal from "../modules/reading/components/ReadingModal/ReadingModal.jsx";
 import ReadingBookPicker from "../modules/reading/components/ReadingBookPicker/ReadingBookPicker.jsx";
+import BookFilesModal from "../modules/books/components/BookFilesModal/BookFilesModal.jsx";
 import PushPermissionModal from "../modules/notifications/components/PushPermissionModal.jsx";
 
 import MobileNavigation from "../shared/components/AppNavigation/MobileNavigation.jsx";
@@ -60,6 +61,9 @@ const App = () => {
     readingBook,
     isReadingBookLoading,
     isReadingBookPickerOpen,
+    isSelectingBook,
+    readerMethodChoice,
+    readerFilePicker,
     readingBookPickerBooks,
     isBooksLoading,
     handleOpenReader,
@@ -68,6 +72,11 @@ const App = () => {
     handleReadingBookUpdated,
     handleReadingDataChanged,
     handleSelectReadingBook,
+    handleSelectManualReadingBook,
+    handleReadSelectedEbook,
+    handleBackToReadingBooks,
+    handleSelectReaderFile,
+    handleCloseReaderFilePicker,
     handleCloseReadingBookPicker,
   } = useReadingRouter({
     closeMobileMenu,
@@ -161,7 +170,22 @@ const App = () => {
           books={readingBookPickerBooks}
           isLoading={isBooksLoading}
           onSelect={handleSelectReadingBook}
+          onSelectManual={handleSelectManualReadingBook}
+          onSelectEbook={handleReadSelectedEbook}
+          onBackToList={handleBackToReadingBooks}
+          selectedChoice={readerMethodChoice}
+          isSelecting={isSelectingBook}
           onClose={handleCloseReadingBookPicker}
+        />
+      )}
+
+      {readerFilePicker && (
+        <BookFilesModal
+          book={readerFilePicker.book}
+          libraryId={readerFilePicker.libraryId}
+          canEdit={false}
+          onClose={handleCloseReaderFilePicker}
+          onReadFile={handleSelectReaderFile}
         />
       )}
 

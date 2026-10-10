@@ -23,7 +23,12 @@ const ReadingBookPicker = ({
   books = [],
   isLoading = false,
   onSelect,
+  onSelectManual,
+  onSelectEbook,
+  onBackToList,
+  selectedChoice = null,
   onClose,
+  isSelecting = false,
 }) => {
   const [search, setSearch] = useState("");
 
@@ -125,10 +130,43 @@ const ReadingBookPicker = ({
       isOpen
       onClose={onClose}
       eyebrow="Читалка"
-      title="Оберіть книгу"
-      subtitle="Яку книгу хочете відкрити для читання?"
+      title={selectedChoice ? "Як читати?" : "Оберіть книгу"}
+      subtitle={selectedChoice ? selectedChoice.book.title : "Яку книгу хочете відкрити для читання?"}
       className="reading-book-picker-modal"
     >
+      {selectedChoice ? (
+        <div className="reading-book-picker__choice">
+          <div className="reading-book-picker__choice-options">
+            <button
+              type="button"
+              className="reading-book-picker__choice-button reading-book-picker__choice-button--ebook"
+              onClick={onSelectEbook}
+              disabled={isSelecting}
+            >
+              <Icon name="ebook" />
+              <strong>Читати EPUB</strong>
+            </button>
+            <button
+              type="button"
+              className="reading-book-picker__choice-button"
+              onClick={() => onSelectManual(selectedChoice.book)}
+              disabled={isSelecting}
+            >
+              <Icon name="book" />
+              <strong>Ручна сесія</strong>
+            </button>
+          </div>
+          <button
+            type="button"
+            className="reading-book-picker__choice-back"
+            onClick={onBackToList}
+            disabled={isSelecting}
+          >
+            ← До списку книг
+          </button>
+        </div>
+      ) : (
+        <>
       {!isLoading && books.length > 0 && (
         <label className="reading-book-picker__search">
           <Icon name="search" />
@@ -186,6 +224,7 @@ const ReadingBookPicker = ({
                     isReading ? "reading-book-picker__book--reading" : ""
                   } ${isPaused ? "reading-book-picker__book--paused" : ""}`}
                   onClick={() => onSelect(book)}
+                  disabled={isSelecting}
                 >
                   <div className="reading-book-picker__cover">
                     {book.coverUrl ? (
@@ -213,6 +252,9 @@ const ReadingBookPicker = ({
                       {book.title}
                     </strong>
 
+                    {Array.isArray(book.ebookFiles) && book.ebookFiles.some((file) => file.format === "EPUB") && (
+                      <span className="reading-book-picker__ebook-badge">Доступна е-книга</span>
+                    )}
                     {book.author && (
                       <span className="reading-book-picker__author">
                         {book.author}
@@ -248,6 +290,8 @@ const ReadingBookPicker = ({
           </div>
         )}
       </div>
+        </>
+      )}
     </Modal>
   );
 };

@@ -8,18 +8,13 @@ import Icon from "../../../../shared/components/Icon/Icon.jsx";
 import {
   getBookFiles,
   uploadBookFile,
-  downloadBookFile,
 } from "../../api/bookFilesApi.js";
-
-import EbookReader from "../EbookReader/EbookReader.jsx";
 import "./BookFilesModal.css";
 
-const BookFilesModal = ({ book, libraryId, canEdit, onClose }) => {
+const BookFilesModal = ({ book, libraryId, canEdit, onClose, onReadFile, onFilesChanged }) => {
   const [files, setFiles] = useState([]);
-  const [readingFile, setReadingFile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
-  const [downloadingId, setСкачатиingId] = useState(null);
 
   useEffect(() => {
     let active = true;
@@ -50,34 +45,13 @@ const BookFilesModal = ({ book, libraryId, canEdit, onClose }) => {
       await uploadBookFile(libraryId, book.id, file);
       const updated = await getBookFiles(libraryId, book.id);
       setFiles(updated);
-      toast.success("File uploaded");
+      onFilesChanged?.(updated);
+      toast.success("Е-книгу додано");
     } catch (error) {
       toast.error(error.message || "Upload failed");
     } finally {
       setUploading(false);
       event.target.value = "";
-    }
-  };
-
-  const handleСкачати = async (file) => {
-    setСкачатиingId(file.id);
-
-    try {
-      const blob = await downloadBookFile(libraryId, book.id, file.id);
-      const url = URL.createObjectURL(blob);
-      const link = document.createElement("a");
-
-      link.href = url;
-      link.download = file.fileName;
-      document.body.appendChild(link);
-      link.click();
-      link.remove();
-
-      setTimeout(() => URL.revokeObjectURL(url), 60000);
-    } catch (error) {
-      toast.error(error.message || "Скачати failed");
-    } finally {
-      setСкачатиingId(null);
     }
   };
 
@@ -118,7 +92,7 @@ const BookFilesModal = ({ book, libraryId, canEdit, onClose }) => {
                 <button
                   type="button"
                   className="book-files-modal__download"
-                  onClick={() => setReadingFile(file)}
+                  onClick={() => onReadFile?.(file)}
                   disabled={file.format !== "EPUB"}
                 >
                   <Icon name="book" />
@@ -136,7 +110,7 @@ const BookFilesModal = ({ book, libraryId, canEdit, onClose }) => {
             variant="secondary"
             className="book-files-modal__upload"
           >
-            <Icon name="download" />
+            <Icon name="upload" />
             <strong>Додати електронну книгу</strong>
             <span>EPUB, FB2, PDF · до 50 МБ</span>
 
@@ -153,14 +127,6 @@ const BookFilesModal = ({ book, libraryId, canEdit, onClose }) => {
         )}
       </div>
 
-      {readingFile && (
-        <EbookReader
-          file={readingFile}
-          book={book}
-          libraryId={libraryId}
-          onClose={() => setReadingFile(null)}
-        />
-      )}
     </Modal>
   );
 };

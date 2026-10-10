@@ -1,0 +1,163 @@
+/* Lightweight statistics layer inside the existing reader modal.
+   The EPUB iframe stays mounted, so the reading position is preserved. */
+.ebook-reader-modal {
+  position: relative;
+}
+
+.ebook-reader-stats {
+  position: absolute;
+  z-index: 8;
+  top: 56px;
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  overflow-x: hidden;
+  overflow-y: auto;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--bg);
+  color: var(--text);
+  box-shadow: 0 10px 35px rgba(0, 0, 0, 0.25);
+  overscroll-behavior: contain;
+}
+
+.ebook-reader-stats__header,
+.ebook-reader-stats__position-label {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.ebook-reader-stats__heading {
+  min-width: 0;
+}
+
+.ebook-reader-stats__heading h2 {
+  margin: 0 0 5px;
+  color: var(--text-h);
+  font-size: 17px;
+}
+
+.ebook-reader-stats__heading p {
+  margin: 0;
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.45;
+  overflow-wrap: anywhere;
+}
+
+.ebook-reader-stats__close {
+  flex: 0 0 36px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-secondary);
+  color: var(--text-h);
+  font-size: 24px;
+  cursor: pointer;
+}
+
+.ebook-reader-stats__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.ebook-reader-stats__metric {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+  min-height: 90px;
+  padding: 12px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface-secondary);
+}
+
+.ebook-reader-stats__metric > span {
+  color: var(--text-secondary);
+  font-size: 12px;
+  line-height: 1.3;
+}
+
+.ebook-reader-stats__metric > strong {
+  color: var(--text-h);
+  font-size: clamp(14px, 3.8vw, 20px);
+  font-variant-numeric: tabular-nums;
+  overflow-wrap: anywhere;
+}
+
+.ebook-reader-stats__metric small {
+  color: var(--text-secondary);
+  font-size: 10px;
+}
+
+.ebook-reader-stats__position {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+}
+
+.ebook-reader-stats__position-label {
+  color: var(--text-secondary);
+  font-size: 12px;
+}
+
+.ebook-reader-stats__position-label strong {
+  color: var(--accent);
+}
+
+.ebook-reader-stats__track {
+  height: 6px;
+  border-radius: 10px;
+  background: var(--border);
+  overflow: hidden;
+}
+
+.ebook-reader-stats__track > span {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--accent);
+}
+
+.ebook-reader-stats__history {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  width: 100%;
+  margin-top: auto;
+  padding: 14px;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-md);
+  background: var(--accent-bg);
+  color: var(--text-h);
+  font-weight: 600;
+  font-size: 13px;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ebook-reader-stats__close:focus-visible,
+.ebook-reader-stats__history:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+@media (max-width: 767px) {
+  .ebook-reader-stats {
+    top: 54px;
+    bottom: calc(10px + env(safe-area-inset-bottom));
+    padding: 14px;
+    gap: 14px;
+  }
+}

@@ -5,6 +5,7 @@ import { toast } from "react-hot-toast";
 import useRefreshReadingData from "../../modules/reading/hooks/useRefreshReadingData.js";
 
 import { apiFetch, hasToken } from "../../shared/api/apiClient.js";
+import { getBookFiles } from "../../modules/books/api/bookFilesApi.js";
 
 import { useAuth } from "../../modules/auth/context/AuthContext.jsx";
 import { useLibrary } from "../../modules/libraries/context/LibraryContext.jsx";
@@ -39,6 +40,9 @@ const useReadingRouter = ({ closeMobileMenu }) => {
 
   const [isReadingBookLoading, setIsReadingBookLoading] =
     useState(false);
+  const [isSelectingBook, setIsSelectingBook] = useState(false);
+  const [readerFilePicker, setReaderFilePicker] = useState(null);
+  const [readerMethodChoice, setReaderMethodChoice] = useState(null);
 
   const isReadingBookPickerOpen =
     searchParams.get("readerPicker") === "1";
@@ -244,6 +248,7 @@ const useReadingRouter = ({ closeMobileMenu }) => {
 
   const handleOpenReader = async () => {
     closeMobileMenu();
+    setReaderMethodChoice(null);
 
     if (isAuthLoading) {
       return;
@@ -317,27 +322,85 @@ const useReadingRouter = ({ closeMobileMenu }) => {
     }
   };
 
-  const handleSelectReadingBook = (
-    book,
-  ) => {
-    if (!book?.id) {
-      return;
-    }
-
-    const params =
-      new URLSearchParams(searchParams);
-
+  const handleSelectManualReadingBook = (book) => {
+    if (!book?.id) return;
+    setReaderMethodChoice(null);
+    setReaderFilePicker(null);
+    const params = new URLSearchParams(searchParams);
     params.delete("readerPicker");
     params.delete("readingLibrary");
     params.set("reading", book.id);
+    setSearchParams(params, { replace: true, state: location.state });
+  };
 
-    setSearchParams(params, {
-      replace: true,
-      state: location.state,
-    });
+  const openEbookFile = (book, file, libraryId) => {
+    if (!book?.id || !file?.id || !libraryId) return;
+    const params = new URLSearchParams(searchParams);
+    params.delete("readerPicker");
+    params.delete("reading");
+    params.delete("readingLibrary");
+    const query = params.toString();
+    const ebookFrom = location.pathname + (query ? "?" + query : "");
+    setReaderFilePicker(null);
+    setReaderMethodChoice(null);
+    navigate(
+      "/reader/" + encodeURIComponent(libraryId) + "/" + encodeURIComponent(book.id) + "/" + encodeURIComponent(file.id),
+      { state: { ebookFrom } },
+    );
+  };
+
+  // One file query per selected book; no per-card requests.
+  const handleSelectReadingBook = async (book) => {
+    if (!book?.id || !activeLibraryId || isSelectingBook) return;
+    setIsSelectingBook(true);
+    try {
+      const files = await getBookFiles(activeLibraryId, book.id);
+      const epubs = Array.isArray(files)
+        ? files.filter((file) => file.format === "EPUB")
+        : [];
+      if (epubs.length > 0) {
+        setReaderMethodChoice({ book, epubs, libraryId: activeLibraryId });
+      } else {
+        handleSelectManualReadingBook(book);
+      }
+    } catch (error) {
+      console.error("Failed to check EPUB files:", error);
+      toast.error("Не вдалося перевірити файли книги");
+    } finally {
+      setIsSelectingBook(false);
+    }
+  };
+
+  const handleReadSelectedEbook = () => {
+    const choice = readerMethodChoice;
+    if (!choice) return;
+    if (choice.epubs.length === 1) {
+      openEbookFile(choice.book, choice.epubs[0], choice.libraryId);
+      return;
+    }
+    setReaderFilePicker({ book: choice.book, libraryId: choice.libraryId });
+    const params = new URLSearchParams(searchParams);
+    params.delete("readerPicker");
+    setSearchParams(params, { replace: true, state: location.state });
+  };
+
+  const handleBackToReadingBooks = () => setReaderMethodChoice(null);
+
+  const handleSelectReaderFile = (file) => {
+    if (readerFilePicker && file?.format === "EPUB") {
+      openEbookFile(readerFilePicker.book, file, readerFilePicker.libraryId);
+    }
+  };
+
+  const handleCloseReaderFilePicker = () => {
+    setReaderFilePicker(null);
+    const params = new URLSearchParams(searchParams);
+    params.set("readerPicker", "1");
+    setSearchParams(params, { replace: true, state: location.state });
   };
 
   const handleCloseReadingBookPicker = () => {
+    setReaderMethodChoice(null);
     navigate(-1);
   };
 
@@ -345,6 +408,9 @@ const useReadingRouter = ({ closeMobileMenu }) => {
     readingBook,
     isReadingBookLoading,
     isReadingBookPickerOpen,
+    isSelectingBook,
+    readerMethodChoice,
+    readerFilePicker,
     readingBookPickerBooks,
     isBooksLoading,
     handleOpenReader,
@@ -353,6 +419,11 @@ const useReadingRouter = ({ closeMobileMenu }) => {
     handleReadingBookUpdated,
     handleReadingDataChanged,
     handleSelectReadingBook,
+    handleSelectManualReadingBook,
+    handleReadSelectedEbook,
+    handleBackToReadingBooks,
+    handleSelectReaderFile,
+    handleCloseReaderFilePicker,
     handleCloseReadingBookPicker,
   };
 };

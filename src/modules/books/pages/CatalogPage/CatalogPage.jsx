@@ -7,7 +7,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { useNavigate, useSearchParams } from "react-router-dom";
+import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
 import EditBookModal from "../../components/EditBookModal/EditBookModal";
 import BookFilesModal from "../../components/BookFilesModal/BookFilesModal.jsx";
@@ -38,6 +38,7 @@ const CatalogPage = ({ onOpenReading }) => {
 
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const searchInputRef = useRef(null);
   const catalogTopRef = useRef(null);
@@ -188,6 +189,41 @@ const CatalogPage = ({ onOpenReading }) => {
     [activeLibraryId, isAuthLoading, isAuthenticated, navigate, onOpenReading],
   );
 
+  const openEpubRoute = useCallback((book, file) => {
+    if (!activeLibraryId || !book?.id || !file?.id) return;
+    navigate(
+      `/reader/${encodeURIComponent(activeLibraryId)}/${encodeURIComponent(book.id)}/${encodeURIComponent(file.id)}`,
+      { state: { ebookFrom: location.pathname + location.search } },
+    );
+  }, [activeLibraryId, location.pathname, location.search, navigate]);
+
+  const handleOpenEbook = useCallback((book) => {
+    if (isAuthLoading || !book?.id) return;
+    if (!isAuthenticated) {
+      navigate("/login");
+      return;
+    }
+
+    const files = Array.isArray(book.ebookFiles) ? book.ebookFiles : [];
+    if (files.length === 1 && files[0].format === "EPUB") {
+      openEpubRoute(book, files[0]);
+    } else {
+      setEbookBook(book);
+    }
+  }, [isAuthLoading, isAuthenticated, navigate, openEpubRoute]);
+
+  const handleReadEbookFile = useCallback((book, file) => {
+    setEbookBook(null);
+    openEpubRoute(book, file);
+  }, [openEpubRoute]);
+
+  const handleEbookFilesChanged = useCallback((bookId, files) => {
+    updateBook({
+      id: bookId,
+      ebookFiles: files.map(({ id, format, fileName }) => ({ id, format, fileName })),
+    });
+  }, [updateBook]);
+
   const showShelves =
     viewMode === "shelves" && !selectedShelf && !search.trim() && !linkedBookId;
 
@@ -290,7 +326,7 @@ const CatalogPage = ({ onOpenReading }) => {
                 onWishlistToggle={handleWishlistToggle}
                 onEdit={setEditingBook}
                 onRead={handleOpenReading}
-                onOpenEbook={setEbookBook}
+                onOpenEbook={handleOpenEbook}
                 canEdit={canEditLibrary}
               />
             ))}
@@ -313,6 +349,8 @@ const CatalogPage = ({ onOpenReading }) => {
           libraryId={activeLibraryId}
           canEdit={canEditLibrary}
           onClose={() => setEbookBook(null)}
+          onReadFile={(file) => handleReadEbookFile(ebookBook, file)}
+          onFilesChanged={(files) => handleEbookFilesChanged(ebookBook.id, files)}
         />
       )}
 

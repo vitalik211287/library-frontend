@@ -19,7 +19,7 @@ const Icon = ({
     aria-label={ariaLabel}
     {...props}
   >
-    <use href={`/icons.svg?v=6#icon-${name}`} />
+    <use href={`/icons.svg?v=8#icon-${name}`} />
   </svg>
 );
 

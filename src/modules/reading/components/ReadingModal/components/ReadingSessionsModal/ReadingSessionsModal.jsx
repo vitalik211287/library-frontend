@@ -1,6 +1,7 @@
 import Modal from "../../../../../../shared/components/Modal/Modal.jsx";
 import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx";
 import ConfirmDeleteModal from "../../../../../../shared/components/ConfirmDeleteModal/ConfirmDeleteModal.jsx";
+import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
 
 import useReadingSessions from "./hooks/useReadingSessions.js";
 
@@ -89,6 +90,13 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
                 ? (session.endPercent ?? 0)
                 : (session.endPage ?? 0);
 
+              const hasEpubPosition =
+                session.source === "EBOOK" &&
+                Number.isInteger(session.epubStartPositionPercent) &&
+                Number.isInteger(session.epubEndPositionPercent);
+
+              const shownStart = hasEpubPosition ? session.epubStartPositionPercent : start;
+              const shownEnd = hasEpubPosition ? session.epubEndPositionPercent : end;
               const delta = Math.max(end - start, 0);
 
               const durationSeconds = Math.max(session.durationSeconds ?? 0, 0);
@@ -125,6 +133,18 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
                     </span>
                   </div>
 
+                  <div className={
+                    "reading-sessions-modal__source reading-sessions-modal__source--" +
+                    (session.source === "EBOOK" ? "ebook" : session.source === "MANUAL" ? "manual" : "unknown")
+                  }>
+                    {session.source === "EBOOK" ? (
+                      <Icon name="book" />
+                    ) : session.source === "MANUAL" ? (
+                      <Icon name="edit" />
+                    ) : null}
+                    <span>{session.source === "EBOOK" ? "Е-книга" : session.source === "MANUAL" ? "Вручну" : "Без позначки"}</span>
+                  </div>
+
                   <div className="reading-sessions-modal__time">
                     {formatClockTime(session.startedAt)}
 
@@ -133,9 +153,15 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
                     {formatClockTime(session.finishedAt)}
                   </div>
 
+                  {hasEpubPosition && (
+                    <div className="reading-sessions-modal__meta">
+                      <span>Позиція в EPUB</span>
+                    </div>
+                  )}
+
                   <div className="reading-sessions-modal__progress">
                     <span>
-                      {start}
+                      {shownStart}
                       {isPercent ? "%" : " стор."}
                     </span>
 
@@ -144,14 +170,14 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
                     </span>
 
                     <strong>
-                      {end}
+                      {shownEnd}
                       {isPercent ? "%" : " стор."}
                     </strong>
                   </div>
 
                   <div className="reading-sessions-modal__meta">
                     <span>
-                      +{delta}
+                      {hasEpubPosition ? "Прочитано: +" : "+"}{delta}
                       {isPercent ? "%" : " стор."}
                     </span>
 
@@ -163,6 +189,12 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
                         : "—"}
                     </span>
                   </div>
+
+                  {hasEpubPosition && (
+                    <div className="reading-sessions-modal__meta">
+                      <span>Облік прочитаного: {start}% → {end}%</span>
+                    </div>
+                  )}
 
                   <div className="reading-sessions-modal__actions">
                     <button type="button" onClick={() => handleEdit(session)}>

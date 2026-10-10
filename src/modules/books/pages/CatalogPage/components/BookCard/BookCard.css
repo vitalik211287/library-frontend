@@ -560,3 +560,131 @@
   line-height: 1.2;
   font-weight: 700;
 }
+
+/* Ebook action: intentionally different from the paper-reading action. */
+.book-card__button--ebook {
+  --ebook-action-color: var(--ebook-accent, #22c9d4);
+  order: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  border: 1px solid var(--ebook-action-color);
+  background: color-mix(in srgb, var(--ebook-action-color) 11%, transparent);
+  color: var(--ebook-action-color);
+  white-space: normal;
+  text-align: center;
+}
+
+.book-card__button--ebook svg {
+  width: 18px;
+  height: 18px;
+  flex: 0 0 18px;
+  fill: none;
+  stroke: currentColor;
+}
+
+.book-card__button--ebook:hover {
+  background: color-mix(in srgb, var(--ebook-action-color) 19%, transparent);
+  box-shadow: 0 0 12px color-mix(in srgb, var(--ebook-action-color) 20%, transparent);
+}
+
+.book-card__button--ebook-available {
+  background: var(--ebook-active-bg, #087e9a);
+  color: #fff;
+  border-color: var(--ebook-active-bg, #087e9a);
+  box-shadow: 0 4px 15px color-mix(in srgb, var(--ebook-action-color) 23%, transparent);
+}
+
+.book-card__button--ebook-available:hover {
+  background: color-mix(in srgb, var(--ebook-active-bg, #087e9a) 85%, #fff);
+  border-color: var(--ebook-action-color);
+}
+
+.book-card__button--ebook:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+@media (min-width: 768px) {
+  .book-card__button--ebook {
+    grid-column: 1 / -1;
+  }
+}
+
+
+/* BOOK CARD: THREE ICON ACTIONS (regular catalog cards only) */
+.book-card:not(.book-card--compact) .book-card__actions {
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  gap: 7px;
+}
+
+.book-card:not(.book-card--compact) .book-card__button {
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  justify-content: center;
+  min-width: 0;
+  width: auto;
+  min-height: 42px;
+  padding: 8px 4px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-secondary);
+  color: var(--text-h);
+  box-shadow: none;
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+}
+
+/* Same outline treatment for each action; the color communicates its role. */
+.book-card:not(.book-card--compact) .book-card__button--ebook {
+  order: 1;
+  grid-column: auto;
+  background: color-mix(in srgb, var(--ebook-action-color, #22c9d4) 9%, var(--surface));
+  border-color: color-mix(in srgb, var(--ebook-action-color, #22c9d4) 55%, var(--border));
+  color: var(--ebook-action-color, #22c9d4);
+}
+
+.book-card:not(.book-card--compact) .book-card__button--read {
+  order: 2;
+  background: color-mix(in srgb, var(--accent) 9%, var(--surface));
+  border-color: color-mix(in srgb, var(--accent) 55%, var(--border));
+  color: var(--accent);
+}
+
+.book-card:not(.book-card--compact) .book-card__button--edit {
+  order: 3;
+}
+
+.book-card:not(.book-card--compact) .book-card__button:hover:not(:disabled) {
+  background: var(--accent-bg);
+  border-color: var(--accent);
+  box-shadow: none;
+}
+
+.book-card:not(.book-card--compact) .book-card__button > svg {
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.book-card:not(.book-card--compact) .book-card__button > span {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+/* Keep the compact recommendation card's text action. */
+.book-card--compact .book-card__button--read > svg {
+  display: none;
+}

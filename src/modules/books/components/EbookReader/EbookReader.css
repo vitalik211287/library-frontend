@@ -1,4 +1,5 @@
-﻿.ebook-reader-modal {
+/* Minimal reader chrome: book title belongs to the EPUB, not a fixed modal header. */
+.ebook-reader-modal {
   width: min(100%, 960px);
   max-width: 960px;
   height: calc(100dvh - 32px);
@@ -9,6 +10,47 @@
   display: flex;
   flex-direction: column;
   min-height: 0;
+  overflow: hidden;
+  padding: 0 16px 16px;
+}
+
+.ebook-reader__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 8px;
+  flex: 0 0 auto;
+  padding: 8px 0;
+}
+
+.ebook-reader__toolbar button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  padding: 0;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-secondary);
+  color: var(--text-h);
+  font-size: 24px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.ebook-reader__toolbar button:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.ebook-reader__toolbar button:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+.ebook-reader__toolbar .ebook-reader__theme-toggle {
+  color: var(--accent);
 }
 
 .ebook-reader__content {
@@ -21,4 +63,34 @@
 .ebook-reader__content > div {
   flex: 1;
   min-height: 0;
+}
+
+@media (max-width: 767px) {
+  .ebook-reader-modal .modal__content {
+    padding: 0 12px calc(12px + env(safe-area-inset-bottom));
+  }
+}
+
+/* Toolbar symbols must use explicit SVG strokes. The old text × was not optically centered. */
+.ebook-reader__toolbar .ebook-reader__stats-toggle svg {
+  display: block;
+  width: 20px;
+  height: 20px;
+  flex: 0 0 20px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ebook-reader__toolbar .ebook-reader__close-icon {
+  display: block;
+  width: 19px;
+  height: 19px;
+  flex: 0 0 19px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
 }
