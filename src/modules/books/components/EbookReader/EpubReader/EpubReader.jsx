@@ -6,6 +6,10 @@ const READER_FONT_SIZE_KEY = "ebook-reader-font-size";
 const READER_BRIGHTNESS_KEY = "ebook-reader-brightness";
 const clamp = (number, min, max) => Math.min(max, Math.max(min, number));
 
+// Show brightness as 0-100%, preserving the existing CSS filter range.
+const brightnessToPercent = (value) =>
+  Math.round(((clamp(value, 0.45, 1.3) - 0.45) / 0.85) * 100);
+
 const readNumber = (key, fallback, min, max) => {
   const saved = localStorage.getItem(key);
   if (saved === null) return fallback;
@@ -54,7 +58,7 @@ const EpubReader = ({ blob, readerTheme, locationKey, onLocationChange, onReadin
     brightnessRef.current = next;
     setBrightness(next);
     localStorage.setItem(READER_BRIGHTNESS_KEY, String(next));
-    setGestureHint("\u042f\u0441\u043a\u0440\u0430\u0432\u0456\u0441\u0442\u044c " + Math.round(next * 100) + "%");
+    setGestureHint("\u042f\u0441\u043a\u0440\u0430\u0432\u0456\u0441\u0442\u044c " + brightnessToPercent(next) + "%");
   };
 
   const startBrightnessDrag = (event) => {
@@ -67,7 +71,7 @@ const EpubReader = ({ blob, readerTheme, locationKey, onLocationChange, onReadin
     };
 
     event.currentTarget.setPointerCapture(event.pointerId);
-    setGestureHint("\u042f\u0441\u043a\u0440\u0430\u0432\u0456\u0441\u0442\u044c " + Math.round(brightnessRef.current * 100) + "%");
+    setGestureHint("\u042f\u0441\u043a\u0440\u0430\u0432\u0456\u0441\u0442\u044c " + brightnessToPercent(brightnessRef.current) + "%");
   };
 
   const moveBrightnessDrag = (event) => {
@@ -355,7 +359,7 @@ const EpubReader = ({ blob, readerTheme, locationKey, onLocationChange, onReadin
               brightnessRef.current = next;
               setBrightness(next);
               localStorage.setItem(READER_BRIGHTNESS_KEY, String(next));
-              setGestureHint(`Яскравість ${Math.round(next * 100)}%`);
+              setGestureHint(`Яскравість ${brightnessToPercent(next)}%`);
             }
           }, { passive: false });
 
@@ -530,11 +534,11 @@ const EpubReader = ({ blob, readerTheme, locationKey, onLocationChange, onReadin
               className="epub-reader__brightness-edge"
               role="slider"
               tabIndex={0}
-              aria-label="?????????? ????????"
+              aria-label={"\u042f\u0441\u043a\u0440\u0430\u0432\u0456\u0441\u0442\u044c \u0441\u0442\u043e\u0440\u0456\u043d\u043a\u0438"}
               aria-orientation="vertical"
-              aria-valuemin={45}
-              aria-valuemax={130}
-              aria-valuenow={Math.round(brightness * 100)}
+              aria-valuemin={0}
+              aria-valuemax={100}
+              aria-valuenow={brightnessToPercent(brightness)}
               onPointerDown={startBrightnessDrag}
               onPointerMove={moveBrightnessDrag}
               onPointerUp={endBrightnessDrag}
