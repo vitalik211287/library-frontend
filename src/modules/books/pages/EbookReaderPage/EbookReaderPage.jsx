@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
+import toast from "react-hot-toast";
 
 import { apiFetch } from "../../../../shared/api/apiClient.js";
 import { useAuth } from "../../../auth/context/AuthContext.jsx";
@@ -101,6 +102,42 @@ const EbookReaderPage = () => {
     }
   }, [session.finish, location.state, navigate]);
 
+  const handleChangeStatus = useCallback(async (status) => {
+    if (!["NOT_STARTED", "READING", "PAUSED", "FINISHED"].includes(status)) {
+      return false;
+    }
+
+    const saved = await session.finish({
+      epubStartPositionPercent: epubPositionRef.current.start ?? undefined,
+      epubEndPositionPercent: epubPositionRef.current.end ?? undefined,
+    });
+
+    if (!saved) return false;
+
+    try {
+      await apiFetch(`/api/user-books/${encodeURIComponent(bookId)}`, {
+        method: "PATCH",
+        body: { status },
+      });
+
+      try {
+        await refreshReadingData();
+      } catch (refreshError) {
+        console.warn("Не вдалося оновити кеш після зміни статусу", refreshError);
+      }
+
+      const from = location.state?.ebookFrom;
+      const safeFrom = typeof from === "string" &&
+        from.startsWith("/") && !from.startsWith("//");
+
+      navigate(safeFrom ? from : "/catalog", { replace: true });
+      return true;
+    } catch (error) {
+      toast.error(error?.message || "Не вдалося змінити статус книги");
+      return false;
+    }
+  }, [bookId, session.finish, refreshReadingData, location.state, navigate]);
+
   if (error) {
     return (
       <main style={{ padding: 24 }}>
@@ -123,6 +160,7 @@ const EbookReaderPage = () => {
         onLocationChange={handlePositionChange}
         onReadingAdvance={handleReadingAdvance}
         onClose={handleClose}
+        onChangeStatus={handleChangeStatus}
       />
       {session.notice && (
         <div role="status" style={{ position: "fixed", left: 16, right: 16, top: 76, zIndex: 11000, padding: "10px 14px", borderRadius: 10, background: "var(--surface-secondary)", color: "var(--text-h)", border: "1px solid var(--border)" }}>

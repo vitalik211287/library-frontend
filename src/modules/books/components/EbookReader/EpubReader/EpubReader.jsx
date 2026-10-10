@@ -318,71 +318,45 @@ const EpubReader = ({ blob, readerTheme, locationKey, onLocationChange, onReadin
         };
 
         rendition.on("relocated", (location) => publishLocation(location?.start?.cfi));
-        // Wait for EPUB metadata before restoring. Some EPUBs have no
-        // linear/default first chapter, so display() without a target rejects
-        // with "No Section Found" even though the book has readable chapters.
-        await book.ready;
-        if (disposed) return;
-
         const savedCfi = locationKey ? localStorage.getItem(locationKey) : null;
         let savedSection = null;
+
         if (savedCfi) {
+          // EPUB metadata/spine may not have loaded when the renderer is created.
+          // Validate before display() to avoid epub.js "No Section Found".
           try {
+            await book.ready;
             savedSection = book.spine.get(savedCfi) || null;
           } catch (error) {
-            console.warn("Invalid saved EPUB CFI", error);
+            console.warn("Invalid EPUB bookmark", error);
           }
+
           if (!savedSection) {
-            console.warn("Saved EPUB position does not map to a chapter; trying book start");
+            console.warn("EPUB bookmark points to a missing chapter; opening start");
+            if (locationKey) localStorage.removeItem(locationKey);
           }
         }
 
-        // Use numeric spine indices for fallback: unlike display() with no
-        // target, this also supports books whose chapters are all non-linear.
-        // Keep the old CFI until another location has actually opened.
-        const firstSection = book.spine.first?.() || book.spine.get(0);
-        const restoreTargets = [];
-        const addRestoreTarget = (value, description) => {
-          if (value === null || value === undefined) return;
-          if (!restoreTargets.some((entry) => entry.value === value)) {
-            restoreTargets.push({ value, description });
-          }
-        };
-
+        let restored = false;
         if (savedSection) {
-          addRestoreTarget(savedCfi, "saved position");
-          addRestoreTarget(savedSection.index, "saved chapter");
-        }
-        if (firstSection) {
-          addRestoreTarget(firstSection.index, "first chapter");
-        }
-
-        let opened = false;
-        let lastOpenError = null;
-        let openedTarget = null;
-        for (const candidate of restoreTargets) {
           try {
-            await rendition.display(candidate.value);
-            opened = true;
-            openedTarget = candidate.value;
-            break;
+            await rendition.display(savedCfi);
+            restored = true;
           } catch (error) {
-            lastOpenError = error;
-            console.warn("Cannot open EPUB " + candidate.description + "; trying fallback", error);
+            console.warn("Cannot restore exact EPUB position; trying chapter", error);
+            // Clear the obsolete position BEFORE displaying a fallback: the
+            // relocated event may already be writing the replacement CFI.
+            if (locationKey) localStorage.removeItem(locationKey);
+            try {
+              await rendition.display(savedSection.href);
+              restored = true;
+            } catch (chapterError) {
+              console.warn("Cannot restore EPUB chapter; opening start", chapterError);
+            }
           }
         }
-        if (!opened) {
-          throw lastOpenError || new Error("EPUB has no readable chapter in its spine");
-        }
 
-        // Only discard the previous failed CFI if no new position has been
-        // published by the relocated handler during successful fallback.
-        if (
-          locationKey && savedCfi && openedTarget !== savedCfi &&
-          localStorage.getItem(locationKey) === savedCfi
-        ) {
-          localStorage.removeItem(locationKey);
-        }
+        if (!restored) await rendition.display();
         if (disposed) return;
         onReadyRef.current?.();
 

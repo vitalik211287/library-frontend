@@ -5,6 +5,7 @@ import {
   getReadingStats,
 } from "../../../reading/components/ReadingModal/api/readingSessionApi.js";
 import { formatDuration } from "../../../reading/components/ReadingModal/components/ReadingSessionsModal/utils/readingSessionHelpers.js";
+import { getReadingStatusLabel } from "../../../reading/components/ReadingModal/utils/readingModalHelpers.js";
 
 import "./EbookReaderStatsPanel.css";
 
@@ -12,7 +13,7 @@ const clampPercent = (value) =>
   Math.min(100, Math.max(0, Math.round(Number(value) || 0)));
 
 // Displays the existing reading metrics; does not create a new session or tally.
-const EbookReaderStatsPanel = ({ bookId, bookTitle, currentPercent, onClose, onOpenHistory }) => {
+const EbookReaderStatsPanel = ({ bookId, bookTitle, currentPercent, currentStatus, onClose, onOpenHistory, onOpenStatus }) => {
   const [stats, setStats] = useState(null);
   const [active, setActive] = useState(null);
   const [elapsedSeconds, setElapsedSeconds] = useState(0);
@@ -67,6 +68,15 @@ const EbookReaderStatsPanel = ({ bookId, bookTitle, currentPercent, onClose, onO
         </button>
       </div>
 
+      <button
+        type="button"
+        className="ebook-reader-stats__status"
+        onClick={onOpenStatus}
+      >
+        <span>Статус книги</span>
+        <strong>{getReadingStatusLabel(currentStatus)}</strong>
+        <span>Змінити →</span>
+      </button>
       {loading ? (
         <p className="ebook-reader-stats__message" role="status">Отримуємо статистику…</p>
       ) : error ? (

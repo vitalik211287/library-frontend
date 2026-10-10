@@ -129,6 +129,30 @@
   background: var(--accent);
 }
 
+.ebook-reader-stats__status {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-md);
+  background: var(--surface-secondary);
+  color: var(--text-h);
+  cursor: pointer;
+  text-align: left;
+}
+
+.ebook-reader-stats__status strong {
+  color: var(--accent);
+}
+
+.ebook-reader-stats__status > span:last-child {
+  margin-left: auto;
+  font-size: 12px;
+}
+
 .ebook-reader-stats__history {
   display: flex;
   align-items: center;
