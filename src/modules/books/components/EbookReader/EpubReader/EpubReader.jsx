@@ -298,14 +298,14 @@ const EpubReader = ({ blob, readerTheme, locationKey, onLocationChange, onReadin
         });
 
         rendition.themes.register("ebook-reader-light", {
-          body: {
+          "body.ebook-reader-light": {
             background: "#faf7f0 !important",
             color: "#302b26 !important",
           },
         });
 
         rendition.themes.register("ebook-reader-dark", {
-          body: {
+          "body.ebook-reader-dark": {
             background: "#1b1b22 !important",
             color: "#e8e2ec !important",
           },

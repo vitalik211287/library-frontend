@@ -155,9 +155,48 @@ const useReadingRouter = ({ closeMobileMenu }) => {
     setSearchParams,
   ]);
 
-  const handleOpenReadingBook = (bookId, libraryId = null) => {
+  const handleOpenReadingBook = async (bookId, libraryId = null, options = {}) => {
     if (!bookId) {
       return;
+    }
+
+    if (options.preferEpub) {
+      const targetLibraryId = libraryId || activeLibraryId;
+
+      if (!targetLibraryId) {
+        toast.error("???????? ??????? ??????????");
+        return;
+      }
+
+      try {
+        const files = await getBookFiles(targetLibraryId, bookId);
+        const epubs = Array.isArray(files)
+          ? files.filter((file) => file.format === "EPUB")
+          : [];
+
+        if (epubs.length === 1) {
+          openEbookFile({ id: bookId }, epubs[0], targetLibraryId);
+          return;
+        }
+
+        if (epubs.length > 1) {
+          const book =
+            currentBooks.find((item) => item.id === bookId) ||
+            libraryBooks.find((item) => item.id === bookId) ||
+            { id: bookId, title: "?????" };
+
+          setReaderFilePicker({
+            book,
+            libraryId: targetLibraryId,
+            returnToPicker: false,
+          });
+          return;
+        }
+      } catch (error) {
+        console.error("Cannot check EPUB files:", error);
+        toast.error("?? ??????? ?????????? ?????????? ?????");
+        return;
+      }
     }
 
     const params =
@@ -393,7 +432,9 @@ const useReadingRouter = ({ closeMobileMenu }) => {
   };
 
   const handleCloseReaderFilePicker = () => {
+    const returnToPicker = readerFilePicker?.returnToPicker !== false;
     setReaderFilePicker(null);
+    if (!returnToPicker) return;
     const params = new URLSearchParams(searchParams);
     params.set("readerPicker", "1");
     setSearchParams(params, { replace: true, state: location.state });
