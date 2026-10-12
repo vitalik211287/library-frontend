@@ -600,14 +600,21 @@ const EpubReader = ({ blob, readerTheme, locationKey, onLocationChange, onReadin
                 </div>
               </div>
             )}
+
+
+
             <button
               type="button"
               className="epub-reader__progress-toggle"
               inert={!chromeVisible}
               onClick={() => setProgressVisible((visible) => !visible)}
-              aria-label={progressVisible ? "Приховати прогрес книги" : "Показати прогрес книги"}
+              aria-label={progressVisible
+                ? "\u041f\u0440\u0438\u0445\u043e\u0432\u0430\u0442\u0438 \u043f\u0440\u043e\u0433\u0440\u0435\u0441 \u043a\u043d\u0438\u0433\u0438"
+                : "\u041f\u043e\u043a\u0430\u0437\u0430\u0442\u0438 \u043f\u0440\u043e\u0433\u0440\u0435\u0441 \u043a\u043d\u0438\u0433\u0438"}
+              title={progressVisible
+                ? "\u041f\u0440\u0438\u0445\u043e\u0432\u0430\u0442\u0438 \u043f\u0440\u043e\u0433\u0440\u0435\u0441"
+                : "\u041f\u043e\u043a\u0430\u0437\u0430\u0442\u0438 \u043f\u0440\u043e\u0433\u0440\u0435\u0441"}
               aria-expanded={progressVisible}
-              title={progressVisible ? "Приховати прогрес" : "Показати прогрес"}
             >
               <span className="epub-reader__progress-grip" aria-hidden="true" />
             </button>
@@ -617,6 +624,8 @@ const EpubReader = ({ blob, readerTheme, locationKey, onLocationChange, onReadin
             <button
               type="button"
               onClick={() => renditionRef.current?.prev()}
+              title={"\u041d\u0430\u0437\u0430\u0434"}
+              aria-label={"\u041f\u043e\u043f\u0435\u0440\u0435\u0434\u043d\u044f \u0441\u0442\u043e\u0440\u0456\u043d\u043a\u0430"}
             >
               <span aria-hidden="true">&larr;</span>
             </button>
@@ -624,6 +633,8 @@ const EpubReader = ({ blob, readerTheme, locationKey, onLocationChange, onReadin
             <button
               type="button"
               onClick={() => void advancePage()}
+              title={"\u0414\u0430\u043b\u0456"}
+              aria-label={"\u041d\u0430\u0441\u0442\u0443\u043f\u043d\u0430 \u0441\u0442\u043e\u0440\u0456\u043d\u043a\u0430"}
             >
               <span aria-hidden="true">&rarr;</span>
             </button>

@@ -10,7 +10,31 @@ export default defineConfig({
       registerType: "autoUpdate",
 
       workbox: {
+        globPatterns: [
+          "**/*.{js,css,html}",
+          "icons.svg",
+          "favicon.svg",
+        ],
+        ignoreURLParametersMatching: [/^v$/],
         importScripts: ["/push-sw.js"],
+        runtimeCaching: [
+          {
+            urlPattern: ({ request }) =>
+              request.destination === "image",
+            handler: "StaleWhileRevalidate",
+            options: {
+              cacheName: "library-images-v1",
+              cacheableResponse: {
+                statuses: [0, 200],
+              },
+              expiration: {
+                maxEntries: 120,
+                maxAgeSeconds: 30 * 24 * 60 * 60,
+                purgeOnQuotaError: true,
+              },
+            },
+          },
+        ],
       },
 
       manifest: {

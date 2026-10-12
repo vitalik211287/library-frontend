@@ -14,8 +14,54 @@ import { useAuth } from "../../auth/context/AuthContext.jsx";
 
 const ReadingGoalContext = createContext(null);
 
+const offlineGoalKey = (userId, year) =>
+  "library-offline-goal-v1:" + JSON.stringify([userId, year]);
+
+const readOfflineGoal = (userId, year) => {
+  if (!userId) return null;
+
+  try {
+    const record = JSON.parse(
+      localStorage.getItem(offlineGoalKey(userId, year)) || "null"
+    );
+
+    if (!record || !Object.prototype.hasOwnProperty.call(record, "value")) {
+      return null;
+    }
+
+    if (
+      record.value !== null &&
+      (typeof record.value !== "object" || Array.isArray(record.value))
+    ) {
+      return null;
+    }
+
+    return { value: record.value };
+  } catch {
+    return null;
+  }
+};
+
+const writeOfflineGoal = (userId, year, value) => {
+  if (!userId) return;
+
+  try {
+    const data = JSON.stringify({ value, savedAt: Date.now() });
+
+    if (new Blob([data]).size > 64 * 1024) {
+      console.warn("Offline goal exceeds cache budget");
+      return;
+    }
+
+    localStorage.setItem(offlineGoalKey(userId, year), data);
+  } catch (error) {
+    console.warn("Cannot cache reading goal", error);
+  }
+};
+
+
 const ReadingGoalProvider = ({ children }) => {
-  const { isAuthenticated, isAuthLoading } = useAuth();
+  const { user, isAuthenticated, isAuthLoading } = useAuth();
 
   const currentYear = new Date().getFullYear();
 
@@ -108,10 +154,29 @@ const ReadingGoalProvider = ({ children }) => {
           const goalData = data?.goal ?? null;
 
           saveGoalData(year, goalData);
+          writeOfflineGoal(user?.id, year, goalData);
 
           return goalData;
         } catch (error) {
           console.error("Load reading goal error:", error);
+
+          const temporaryFailure =
+            typeof error?.status !== "number" || error.status >= 500;
+
+          const cached = temporaryFailure
+            ? Object.prototype.hasOwnProperty.call(goalCacheRef.current, year)
+              ? { value: goalCacheRef.current[year] }
+              : readOfflineGoal(user?.id, year)
+            : null;
+
+          if (cached) {
+            saveGoalData(year, cached.value);
+            setErrorByYear((current) => ({
+              ...current,
+              [year]: "",
+            }));
+            return cached.value;
+          }
 
           saveGoalData(year, null);
 
@@ -135,7 +200,7 @@ const ReadingGoalProvider = ({ children }) => {
 
       return request;
     },
-    [currentYear, isAuthenticated, saveGoalData],
+    [currentYear, isAuthenticated, saveGoalData, user?.id],
   );
 
   const refreshReadingGoal = useCallback(
@@ -175,6 +240,17 @@ const ReadingGoalProvider = ({ children }) => {
     ensureReadingGoal(currentYear);
   }, [currentYear, isAuthenticated, isAuthLoading, ensureReadingGoal]);
 
+  useEffect(() => {
+    if (!isAuthenticated || !user?.id) return undefined;
+
+    const handleOnline = () => {
+      void refreshReadingGoal(currentYear);
+    };
+
+    window.addEventListener("online", handleOnline);
+    return () => window.removeEventListener("online", handleOnline);
+  }, [isAuthenticated, user?.id, currentYear, refreshReadingGoal]);
+
   /* =========================
      SAVE GOAL
   ========================= */
@@ -204,6 +280,7 @@ const ReadingGoalProvider = ({ children }) => {
         const goalData = data?.goal ?? null;
 
         saveGoalData(year, goalData);
+        writeOfflineGoal(user?.id, year, goalData);
 
         return true;
       } catch (error) {
@@ -218,7 +295,7 @@ const ReadingGoalProvider = ({ children }) => {
         setIsGoalSaving(false);
       }
     },
-    [currentYear, isAuthenticated, saveGoalData],
+    [currentYear, isAuthenticated, saveGoalData, user?.id],
   );
 
   /* =========================

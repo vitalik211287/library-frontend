@@ -6,6 +6,7 @@ import { apiFetch } from "../../../../shared/api/apiClient.js";
 import { useAuth } from "../../../auth/context/AuthContext.jsx";
 import useRefreshReadingData from "../../../reading/hooks/useRefreshReadingData.js";
 import { getBookFiles } from "../../api/bookFilesApi.js";
+import { getOfflineEpub } from "../../offline/offlineEpubStorage.js";
 import EbookReader from "../../components/EbookReader/EbookReader.jsx";
 import useEbookAutoSession from "./useEbookAutoSession.js";
 
@@ -18,6 +19,20 @@ const EbookReaderPage = () => {
 
   const [book, setBook] = useState(null);
   const [file, setFile] = useState(null);
+  const [offlineMode, setOfflineMode] = useState(false);
+  const [showOfflineNotice, setShowOfflineNotice] = useState(true);
+
+  useEffect(() => {
+    if (!offlineMode) return undefined;
+
+    setShowOfflineNotice(true);
+
+    const timer = window.setTimeout(() => {
+      setShowOfflineNotice(false);
+    }, 5000);
+
+    return () => window.clearTimeout(timer);
+  }, [offlineMode]);
   const [error, setError] = useState("");
   const [ready, setReady] = useState(false);
   const [readAdvance, setReadAdvance] = useState(0);
@@ -26,25 +41,92 @@ const EbookReaderPage = () => {
 
   useEffect(() => {
     let current = true;
-    Promise.all([
-      apiFetch(`/api/libraries/${encodeURIComponent(libraryId)}/books/${encodeURIComponent(bookId)}`),
-      getBookFiles(libraryId, bookId),
-    ])
-      .then(([nextBook, files]) => {
+
+    setBook(null);
+    setFile(null);
+    setError("");
+    setOfflineMode(false);
+
+    const loadBook = async () => {
+      try {
+        const [nextBook, files] = await Promise.all([
+          apiFetch(
+            "/api/libraries/" + encodeURIComponent(libraryId) +
+            "/books/" + encodeURIComponent(bookId)
+          ),
+          getBookFiles(libraryId, bookId),
+        ]);
+
         if (!current) return;
+
         const nextFile = files.find((item) => item.id === fileId);
+
         if (!nextFile || nextFile.format !== "EPUB") {
-          setError("Цей EPUB-файл недоступний для читання");
+          setError("\u0426\u0435\u0439 EPUB-\u0444\u0430\u0439\u043b \u043d\u0435\u0434\u043e\u0441\u0442\u0443\u043f\u043d\u0438\u0439");
           return;
         }
+
         setBook(nextBook);
         setFile(nextFile);
-      })
-      .catch((reason) => {
-        if (current) setError(reason?.message || "Не вдалося відкрити е-книгу");
-      });
-    return () => { current = false; };
-  }, [libraryId, bookId, fileId]);
+      } catch (reason) {
+        if (!current) return;
+
+        // Never bypass an explicit server rejection.
+        if (typeof reason?.status === "number") {
+          setError(reason.message || "Server rejected book access");
+          return;
+        }
+
+        if (!user?.id) {
+          setError("Offline reader requires an authenticated user");
+          return;
+        }
+
+        try {
+          const cached = await getOfflineEpub({
+            userId: user.id,
+            libraryId,
+            bookId,
+            fileId,
+          });
+
+          if (!current) return;
+
+          const valid =
+            cached?.blob instanceof Blob &&
+            cached.blob.size > 0 &&
+            cached.book?.id === bookId &&
+            cached.file?.id === fileId &&
+            cached.file?.format === "EPUB";
+
+          if (valid) {
+            setOfflineMode(true);
+            setBook(cached.book);
+            setFile(cached.file);
+            return;
+          }
+
+          setError(
+            "\u041a\u043d\u0438\u0433\u0430 \u043d\u0435\u0434\u043e\u0441\u0442\u0443\u043f\u043d\u0430 \u043e\u0444\u043b\u0430\u0439\u043d. \u0412\u0456\u0434\u043a\u0440\u0438\u0439 \u0457\u0457 \u043e\u043d\u043b\u0430\u0439\u043d \u0456 \u0437\u0431\u0435\u0440\u0435\u0436\u0438."
+          );
+        } catch (cacheError) {
+          console.warn("Offline EPUB lookup failed", cacheError);
+
+          if (current) {
+            setError(
+              "\u041f\u043e\u043c\u0438\u043b\u043a\u0430 \u0447\u0438\u0442\u0430\u043d\u043d\u044f \u043e\u0444\u043b\u0430\u0439\u043d-\u043a\u043e\u043f\u0456\u0457."
+            );
+          }
+        }
+      }
+    };
+
+    void loadBook();
+
+    return () => {
+      current = false;
+    };
+  }, [libraryId, bookId, fileId, user?.id]);
 
   const positionKey = `ebook-position:${user?.id || "unknown"}:${libraryId}:${fileId}`;
 
@@ -82,20 +164,33 @@ const EbookReaderPage = () => {
     bookId,
     fileId,
     userId: user?.id,
-    ready: ready && Boolean(book),
+    ready: ready && Boolean(book) && !offlineMode,
     initialPercent: book?.currentPercent ?? 0,
     finished: book?.status === "FINISHED",
     percent,
     onSaved: refreshReadingData,
   });
 
-  const handleClose = useCallback(async () => {
-    const saved = await session.finish({
-      epubStartPositionPercent: epubPositionRef.current.start ?? undefined,
-      epubEndPositionPercent: epubPositionRef.current.end ?? undefined,
-      epubReachedEnd: epubReachedEndRef.current,
+  useEffect(() => {
+    if (offlineMode || !session.notice) return;
+
+    toast.error(session.notice, {
+      id: `ebook-session-warning:${bookId}`,
+      duration: 5000,
     });
-    if (!saved) return;
+  }, [session.notice, offlineMode, bookId]);
+
+  const handleClose = useCallback(async () => {
+    // Offline exit must not depend on a server response.
+    // Keep the server session and lease for recovery.
+    if (navigator.onLine !== false) {
+      const saved = await session.finish({
+        epubStartPositionPercent: epubPositionRef.current.start ?? undefined,
+        epubEndPositionPercent: epubPositionRef.current.end ?? undefined,
+        epubReachedEnd: epubReachedEndRef.current,
+      });
+      if (!saved) return;
+    }
     const from = location.state?.ebookFrom;
     const safeFrom =
       typeof from === "string" &&
@@ -146,6 +241,10 @@ const EbookReaderPage = () => {
     }
   }, [bookId, session.finish, refreshReadingData, location.state, navigate]);
 
+  const readerNotice = offlineMode
+    ? (showOfflineNotice ? "\u041e\u0444\u043b\u0430\u0439\u043d: \u043a\u043d\u0438\u0433\u0430 \u0432\u0456\u0434\u043a\u0440\u0438\u0442\u0430 \u0437 \u043f\u0440\u0438\u0441\u0442\u0440\u043e\u044e. \u0427\u0430\u0441 \u0456 \u0441\u0442\u0430\u0442\u0438\u0441\u0442\u0438\u043a\u0430 \u043f\u043e\u043a\u0438 \u043d\u0435 \u0437\u0431\u0435\u0440\u0456\u0433\u0430\u044e\u0442\u044c\u0441\u044f." : "")
+    : "";
+
   if (error) {
     return (
       <main style={{ padding: 24 }}>
@@ -171,9 +270,47 @@ const EbookReaderPage = () => {
         onClose={handleClose}
         onChangeStatus={handleChangeStatus}
       />
-      {session.notice && (
+      {session.recoveryCandidate && (
+        <div
+          role="dialog"
+          aria-label="Відновлення сесії"
+          style={{
+            position: "fixed",
+            bottom: 85,
+            left: 16,
+            right: 16,
+            maxWidth: 480,
+            margin: "0 auto",
+            zIndex: 11050,
+            padding: 16,
+            borderRadius: 12,
+            background: "var(--surface-secondary, #fff)",
+            color: "var(--text-h, #222)",
+            border: "1px solid var(--border, #ccc)",
+            boxShadow: "0 8px 30px rgba(0,0,0,.2)",
+          }}
+        >
+          <p style={{ margin: "0 0 12px" }}>
+            Знайдено попередню EPUB-сесію цієї книги. Якщо читання перервалося, її можна відновити без створення нової.
+          </p>
+          <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
+            <button
+              type="button"
+              disabled={session.isRecovering}
+              onClick={() => void session.recover()}
+            >
+              Відновити сесію
+            </button>
+            <button type="button" onClick={session.dismissRecovery}>
+              Не зараз
+            </button>
+          </div>
+        </div>
+      )}
+
+      {readerNotice && (
         <div role="status" style={{ position: "fixed", left: 16, right: 16, top: 76, zIndex: 11000, padding: "10px 14px", borderRadius: 10, background: "var(--surface-secondary)", color: "var(--text-h)", border: "1px solid var(--border)" }}>
-          {session.notice}
+          {readerNotice}
         </div>
       )}
     </>

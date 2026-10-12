@@ -18,11 +18,15 @@ import {
 import { useAuth } from "../../auth/context/AuthContext.jsx";
 import { useLibrary } from "../../libraries/context/LibraryContext.jsx";
 import { useLibraryBooks } from "../../libraries/context/LibraryBooksContext.jsx";
+import {
+  getOfflineCurrentBooks,
+  saveOfflineCurrentBooks,
+} from "../../libraries/offline/offlineLibraryBooksStorage.js";
 
 const UserBooksContext = createContext(null);
 
 export const UserBooksProvider = ({ children }) => {
-  const { isAuthenticated, isAuthLoading } = useAuth();
+  const { user, isAuthenticated, isAuthLoading } = useAuth();
 
   const { activeLibraryId, isLibrariesLoading } = useLibrary();
 
@@ -82,9 +86,41 @@ export const UserBooksProvider = ({ children }) => {
 
       setCurrentBooks(books);
 
+      if (user?.id) {
+        try {
+          await saveOfflineCurrentBooks(
+            user.id,
+            activeLibraryId,
+            books
+          );
+        } catch (cacheError) {
+          console.warn("Cannot cache current books", cacheError);
+        }
+      }
+
       return books;
     } catch (error) {
       console.error("Load current reading error:", error);
+
+      const temporaryFailure =
+        typeof error?.status !== "number" || error.status >= 500;
+
+      if (temporaryFailure && user?.id) {
+        try {
+          const snapshot = await getOfflineCurrentBooks(
+            user.id,
+            activeLibraryId
+          );
+
+          if (snapshot) {
+            setCurrentBooks(snapshot.books);
+            setCurrentBooksError("");
+            return snapshot.books;
+          }
+        } catch (cacheError) {
+          console.warn("Cannot restore current books", cacheError);
+        }
+      }
 
       setCurrentBooks([]);
 
@@ -94,7 +130,7 @@ export const UserBooksProvider = ({ children }) => {
     } finally {
       setIsCurrentBooksLoading(false);
     }
-  }, [activeLibraryId, isAuthenticated, isAuthLoading, isLibrariesLoading]);
+  }, [activeLibraryId, isAuthenticated, isAuthLoading, isLibrariesLoading, user?.id]);
 
   const refreshWishlist = useCallback(async () => {
     if (isAuthLoading || isLibrariesLoading || !activeLibraryId) {

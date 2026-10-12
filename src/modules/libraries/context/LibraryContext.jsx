@@ -13,8 +13,38 @@ import { useAuth } from "../../auth/context/AuthContext.jsx";
 
 const LibraryContext = createContext(null);
 
+const offlineLibrariesKey = (userId) =>
+  "library-offline-libraries:" + userId;
+
+const readOfflineLibraries = (userId) => {
+  if (!userId) return null;
+
+  try {
+    const data = JSON.parse(
+      localStorage.getItem(offlineLibrariesKey(userId))
+    );
+
+    return Array.isArray(data) ? data : null;
+  } catch {
+    return null;
+  }
+};
+
+const saveOfflineLibraries = (userId, libraries) => {
+  if (!userId) return;
+
+  try {
+    localStorage.setItem(
+      offlineLibrariesKey(userId),
+      JSON.stringify(libraries)
+    );
+  } catch (error) {
+    console.warn("Cannot cache libraries", error);
+  }
+};
+
 const LibraryProvider = ({ children }) => {
-  const { isAuthenticated, isAuthLoading } = useAuth();
+  const { user, isAuthenticated, isAuthLoading } = useAuth();
 
   const [libraries, setLibraries] = useState([]);
 
@@ -32,6 +62,7 @@ const LibraryProvider = ({ children }) => {
 
   const applyLibraries = useCallback((loadedLibraries) => {
     setLibraries(loadedLibraries);
+    saveOfflineLibraries(user?.id, loadedLibraries);
 
     setActiveLibraryIdState((currentLibraryId) => {
       const existingLibrary = loadedLibraries.find(
@@ -56,7 +87,7 @@ const LibraryProvider = ({ children }) => {
 
       return firstLibrary.id;
     });
-  }, []);
+  }, [user?.id]);
 
   /* =========================
      INITIAL LOAD
@@ -93,20 +124,33 @@ const LibraryProvider = ({ children }) => {
       } catch (error) {
         console.error("Load libraries error:", error);
 
-        setLibraries([]);
+        const temporaryFailure =
+          typeof error?.status !== "number" ||
+          error.status >= 500;
 
-        setLibrariesError(
-          error instanceof Error
-            ? error.message
-            : "Не вдалося завантажити бібліотеки",
-        );
+        const cachedLibraries = temporaryFailure
+          ? readOfflineLibraries(user?.id)
+          : null;
+
+        if (cachedLibraries !== null) {
+          applyLibraries(cachedLibraries);
+          setLibrariesError("");
+        } else {
+          setLibraries([]);
+
+          setLibrariesError(
+            error instanceof Error
+              ? error.message
+              : "Не вдалося завантажити бібліотеки",
+          );
+        }
       } finally {
         setIsLibrariesLoading(false);
       }
     };
 
     loadLibraries();
-  }, [isAuthenticated, isAuthLoading, applyLibraries]);
+  }, [isAuthenticated, isAuthLoading, applyLibraries, user?.id]);
 
   /* =========================
      ACTIVE LIBRARY

@@ -8,8 +8,35 @@ export const updateUserBook = (bookId, body) => apiFetch(`/api/user-books/${book
 
 export const startReadingSession = (bookId, body) => apiFetch(`/api/user-books/${bookId}/reading/start`, { method: "POST", body });
 
-export const pauseReadingSession = (bookId) => apiFetch(`/api/user-books/${bookId}/reading/pause`, { method: "POST" });
+export const pauseReadingSession = (bookId, readerLeaseId) =>
+  apiFetch(`/api/user-books/${encodeURIComponent(bookId)}/reading/pause`, {
+    method: "POST",
+    ...(readerLeaseId && { body: { readerLeaseId } }),
+  });
 
-export const resumeReadingSession = (bookId) => apiFetch(`/api/user-books/${bookId}/reading/resume`, { method: "POST" });
+export const resumeReadingSession = (bookId, readerLeaseId) =>
+  apiFetch(`/api/user-books/${encodeURIComponent(bookId)}/reading/resume`, {
+    method: "POST",
+    ...(readerLeaseId && { body: { readerLeaseId } }),
+  });
 
-export const finishReadingSession = (bookId, body) => apiFetch(`/api/user-books/${bookId}/reading/finish`, { method: "POST", body });
+export const heartbeatReadingSession = (bookId, sessionId, readerLeaseId) =>
+  apiFetch(`/api/user-books/${encodeURIComponent(bookId)}/reading/heartbeat`, {
+    method: "POST",
+    body: { sessionId, readerLeaseId },
+  });
+
+export const claimEbookReadingSession = (bookId, sessionId) =>
+  apiFetch(`/api/user-books/${encodeURIComponent(bookId)}/reading/claim`, {
+    method: "POST",
+    body: { sessionId },
+  });
+
+export const finishReadingSession = (bookId, body, readerLeaseId) =>
+  apiFetch(`/api/user-books/${encodeURIComponent(bookId)}/reading/finish`, {
+    method: "POST",
+    body: {
+      ...body,
+      ...(readerLeaseId && { readerLeaseId }),
+    },
+  });

@@ -11,11 +11,12 @@ import { apiFetch } from "../../../shared/api/apiClient.js";
 
 import { useAuth } from "../../auth/context/AuthContext.jsx";
 import { useLibrary } from "./LibraryContext.jsx";
+import { getOfflineLibraryBooks, saveOfflineLibraryBooks } from "../offline/offlineLibraryBooksStorage.js";
 
 const LibraryBooksContext = createContext(null);
 
 export const LibraryBooksProvider = ({ children }) => {
-  const { isAuthenticated, isAuthLoading } = useAuth();
+  const { user, isAuthenticated, isAuthLoading } = useAuth();
 
   const { activeLibraryId, isLibrariesLoading } = useLibrary();
 
@@ -49,9 +50,37 @@ export const LibraryBooksProvider = ({ children }) => {
 
       setBooks(nextBooks);
 
+      if (user?.id) {
+        try {
+          await saveOfflineLibraryBooks(user.id, activeLibraryId, nextBooks);
+        } catch (cacheError) {
+          console.warn("Cannot cache library books", cacheError);
+        }
+      }
+
       return nextBooks;
     } catch (error) {
       console.error("Load library books error:", error);
+
+      const temporaryFailure =
+        typeof error?.status !== "number" || error.status >= 500;
+
+      if (temporaryFailure && user?.id) {
+        try {
+          const snapshot = await getOfflineLibraryBooks(
+            user.id,
+            activeLibraryId
+          );
+
+          if (snapshot) {
+            setBooks(snapshot.books);
+            setBooksError("");
+            return snapshot.books;
+          }
+        } catch (cacheError) {
+          console.warn("Cannot read cached library books", cacheError);
+        }
+      }
 
       setBooks([]);
       setBooksError("Не вдалося завантажити книги бібліотеки");
@@ -60,7 +89,7 @@ export const LibraryBooksProvider = ({ children }) => {
     } finally {
       setIsBooksLoading(false);
     }
-  }, [activeLibraryId, isAuthenticated, isAuthLoading, isLibrariesLoading]);
+  }, [activeLibraryId, isAuthenticated, isAuthLoading, isLibrariesLoading, user?.id]);
 
   useEffect(() => {
     if (isAuthLoading || isLibrariesLoading) {

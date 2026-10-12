@@ -6,6 +6,7 @@ import useRefreshReadingData from "../../modules/reading/hooks/useRefreshReading
 
 import { apiFetch, hasToken } from "../../shared/api/apiClient.js";
 import { getBookFiles } from "../../modules/books/api/bookFilesApi.js";
+import { getOfflineEpubsForBook } from "../../modules/books/offline/offlineEpubStorage.js";
 
 import { useAuth } from "../../modules/auth/context/AuthContext.jsx";
 import { useLibrary } from "../../modules/libraries/context/LibraryContext.jsx";
@@ -13,7 +14,7 @@ import { useLibraryBooks } from "../../modules/libraries/context/LibraryBooksCon
 import { useUserBooks } from "../../modules/user-books/context/UserBooksContext.jsx";
 
 const useReadingRouter = ({ closeMobileMenu }) => {
-  const { isAuthenticated, isAuthLoading } = useAuth();
+  const { user, isAuthenticated, isAuthLoading } = useAuth();
 
   const { activeLibraryId } = useLibrary();
 
@@ -194,7 +195,39 @@ const useReadingRouter = ({ closeMobileMenu }) => {
         }
       } catch (error) {
         console.error("Cannot check EPUB files:", error);
-        toast.error("?? ??????? ?????????? ?????????? ?????");
+
+        // Fall back only on network failures, not HTTP rejection.
+        if (typeof error?.status !== "number" && user?.id) {
+          try {
+            const cached = await getOfflineEpubsForBook({
+              userId: user.id,
+              libraryId: targetLibraryId,
+              bookId,
+            });
+
+            if (cached.length === 1) {
+              openEbookFile(
+                { id: bookId },
+                { id: cached[0].fileId },
+                targetLibraryId
+              );
+              return;
+            }
+
+            if (cached.length > 1) {
+              toast.error("\u0417\u043d\u0430\u0439\u0434\u0435\u043d\u043e \u043a\u0456\u043b\u044c\u043a\u0430 EPUB \u043e\u0444\u043b\u0430\u0439\u043d. \u041f\u043e\u0442\u0440\u0456\u0431\u043d\u043e \u0432\u0438\u0431\u0440\u0430\u0442\u0438 \u0444\u0430\u0439\u043b \u043e\u043d\u043b\u0430\u0439\u043d.");
+              return;
+            }
+          } catch (cacheError) {
+            console.warn("Offline EPUB lookup failed", cacheError);
+          }
+        }
+
+        toast.error(
+          typeof error?.status === "number"
+            ? "\u041d\u0435 \u0432\u0434\u0430\u043b\u043e\u0441\u044f \u043f\u0435\u0440\u0435\u0432\u0456\u0440\u0438\u0442\u0438 \u0444\u0430\u0439\u043b\u0438 \u043a\u043d\u0438\u0433\u0438."
+            : "\u0426\u044e \u043a\u043d\u0438\u0433\u0443 \u043d\u0435 \u0437\u0431\u0435\u0440\u0435\u0436\u0435\u043d\u043e \u043e\u0444\u043b\u0430\u0439\u043d. \u0412\u0456\u0434\u043a\u0440\u0438\u0439 \u0457\u0457 \u043e\u043d\u043b\u0430\u0439\u043d \u0456 \u0437\u0431\u0435\u0440\u0435\u0436\u0438."
+        );
         return;
       }
     }

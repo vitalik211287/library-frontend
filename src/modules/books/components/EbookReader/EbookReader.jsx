@@ -3,6 +3,9 @@
 import Modal from "../../../../shared/components/Modal/Modal.jsx";
 import Loader from "../../../../shared/components/Loader/Loader.jsx";
 import { downloadBookFile } from "../../api/bookFilesApi.js";
+import { useAuth } from "../../../auth/context/AuthContext.jsx";
+import { getOfflineEpub, saveOfflineEpub } from "../../offline/offlineEpubStorage.js";
+import toast from "react-hot-toast";
 
 import Icon from "../../../../shared/components/Icon/Icon.jsx";
 import ReadingSessionsModal from "../../../reading/components/ReadingModal/components/ReadingSessionsModal/ReadingSessionsModal.jsx";
@@ -12,12 +15,26 @@ import EbookReaderStatsPanel from "./EbookReaderStatsPanel.jsx";
 
 import "./EbookReader.css";
 
+
+const READER_TIPS = {
+  stats: "\u0421\u0442\u0430\u0442\u0438\u0441\u0442\u0438\u043a\u0430 \u0447\u0438\u0442\u0430\u043d\u043d\u044f",
+  dark: "\u0422\u0435\u043c\u043d\u0430 \u0442\u0435\u043c\u0430",
+  light: "\u0421\u0432\u0456\u0442\u043b\u0430 \u0442\u0435\u043c\u0430",
+  save: "\u0417\u0431\u0435\u0440\u0435\u0433\u0442\u0438 \u043e\u0444\u043b\u0430\u0439\u043d",
+  saved: "\u0414\u043e\u0441\u0442\u0443\u043f\u043d\u0430 \u043e\u0444\u043b\u0430\u0439\u043d",
+  close: "\u0417\u0430\u043a\u0440\u0438\u0442\u0438 \u0447\u0438\u0442\u0430\u043b\u043a\u0443",
+  toolbar: "\u041a\u0435\u0440\u0443\u0432\u0430\u043d\u043d\u044f \u0447\u0438\u0442\u0430\u043b\u043a\u043e\u044e",
+};
+
 const EpubReader = lazy(() =>
   import("./EpubReader/EpubReader.jsx")
 );
 
 const EbookReader = ({ file, book, libraryId, onClose, locationKey, onLocationChange, onReadingAdvance, onReady, onChangeStatus, onReachedEnd }) => {
+  const { user } = useAuth();
   const [blob, setBlob] = useState(null);
+  const [offlineSaved, setOfflineSaved] = useState(false);
+  const [offlineSaving, setOfflineSaving] = useState(false);
   const [error, setError] = useState("");
   const [statsOpen, setStatsOpen] = useState(false);
   const [historyOpen, setHistoryOpen] = useState(false);
@@ -25,6 +42,7 @@ const EbookReader = ({ file, book, libraryId, onClose, locationKey, onLocationCh
   const [statusLoading, setStatusLoading] = useState(false);
   const [epubPercent, setEpubPercent] = useState(null);
   const [chromeVisible, setChromeVisible] = useState(true);
+  const toolbarHoverRef = useRef(false);
 
   const chromeVisibleRef = useRef(true);
   const hideAtRef = useRef(Date.now() + 6000);
@@ -37,6 +55,7 @@ const EbookReader = ({ file, book, libraryId, onClose, locationKey, onLocationCh
     const timer = window.setInterval(() => {
       if (
         overlaysRef.current ||
+        toolbarHoverRef.current ||
         autoHiddenRef.current ||
         Date.now() < hideAtRef.current
       ) {
@@ -97,21 +116,97 @@ const EbookReader = ({ file, book, libraryId, onClose, locationKey, onLocationCh
 
     setBlob(null);
     setError("");
+    setOfflineSaved(false);
 
-    downloadBookFile(libraryId, book.id, file.id)
-      .then((data) => {
-        if (active) setBlob(data);
-      })
-      .catch((err) => {
-        if (active) {
-          setError(err.message || "Не вдалося завантажити книгу");
+    const loadBook = async () => {
+      try {
+        if (file.format === "EPUB" && user?.id) {
+          try {
+            const cached = await getOfflineEpub({
+              userId: user.id,
+              libraryId,
+              bookId: book.id,
+              fileId: file.id,
+            });
+
+            if (!active) return;
+
+            if (cached?.blob instanceof Blob && cached.blob.size > 0) {
+              if (!cached.book || !cached.file) {
+                void saveOfflineEpub({
+                  userId: user.id,
+                  libraryId,
+                  bookId: book.id,
+                  fileId: file.id,
+                  title: book.title,
+                  book,
+                  file,
+                  blob: cached.blob,
+                  savedAt: cached.savedAt,
+                }).catch((error) => {
+                  console.warn("Offline EPUB metadata update failed", error);
+                });
+              }
+              setOfflineSaved(true);
+              setBlob(cached.blob);
+              return;
+            }
+          } catch (cacheError) {
+            console.warn("Offline EPUB cache unavailable", cacheError);
+          }
         }
-      });
+
+        const data = await downloadBookFile(libraryId, book.id, file.id);
+
+        if (active) setBlob(data);
+      } catch (error) {
+        if (active) {
+          setError(error.message || "Failed to load EPUB");
+        }
+      }
+    };
+
+    void loadBook();
 
     return () => {
       active = false;
     };
-  }, [libraryId, book.id, file.id]);
+  }, [libraryId, book.id, file.id, file.format, user?.id]);
+
+  const handleSaveOffline = async () => {
+    if (
+      offlineSaving ||
+      offlineSaved ||
+      !blob ||
+      !user?.id ||
+      file.format !== "EPUB"
+    ) {
+      return;
+    }
+
+    setOfflineSaving(true);
+
+    try {
+      await saveOfflineEpub({
+        userId: user.id,
+        libraryId,
+        bookId: book.id,
+        fileId: file.id,
+        title: book.title,
+        book,
+        file,
+        blob,
+      });
+
+      setOfflineSaved(true);
+      toast.success("\u041a\u043d\u0438\u0433\u0443 \u0437\u0431\u0435\u0440\u0435\u0436\u0435\u043d\u043e \u043d\u0430 \u0446\u044c\u043e\u043c\u0443 \u043f\u0440\u0438\u0441\u0442\u0440\u043e\u0457");
+    } catch (error) {
+      console.error("Offline EPUB save failed", error);
+      toast.error("Cannot save EPUB offline");
+    } finally {
+      setOfflineSaving(false);
+    }
+  };
 
   return (
     <>
@@ -127,44 +222,82 @@ const EbookReader = ({ file, book, libraryId, onClose, locationKey, onLocationCh
       closeOnEscape={!historyOpen && !statusOpen}
       closeOnBackdrop={!historyOpen && !statusOpen}
     >
-      <div className="ebook-reader__toolbar" inert={!chromeVisible}>
+
+      <div
+        className="ebook-reader__toolbar"
+        role="toolbar"
+        aria-label={READER_TIPS.toolbar}
+        inert={!chromeVisible}
+        onPointerEnter={(event) => {
+          if (event.pointerType === "mouse") {
+            toolbarHoverRef.current = true;
+          }
+        }}
+        onPointerLeave={(event) => {
+          if (event.pointerType === "mouse") {
+            toolbarHoverRef.current = false;
+            hideAtRef.current = Date.now() + 6000;
+          }
+        }}
+        onPointerDown={() => {
+          hideAtRef.current = Date.now() + 6000;
+        }}
+      >
+
         <button
           type="button"
           className="ebook-reader__stats-toggle"
-          onClick={() => setStatsOpen((open) => !open)}
-          aria-label="Статистика читання"
-          title="Статистика читання"
+          onClick={() => setStatsOpen((value) => !value)}
+          title={READER_TIPS.stats}
+          aria-label={READER_TIPS.stats}
           aria-expanded={statsOpen}
         >
           <Icon name="stats" />
         </button>
+
         {file.format === "EPUB" && (
-          <button
-            type="button"
-            className="ebook-reader__theme-toggle"
-            onClick={() =>
-              setReaderTheme((current) =>
-                current === "light" ? "dark" : "light"
-              )
-            }
-            aria-label={
-              readerTheme === "light" ? "Увімкнути темну тему" : "Увімкнути світлу тему"
-            }
-            title={
-              readerTheme === "light" ? "Темна тема" : "Світла тема"
-            }
-          >
-            <span aria-hidden="true">{readerTheme === "light" ? "☾" : "☀"}</span>
-          </button>
+          <>
+            <button
+              type="button"
+              className="ebook-reader__theme-toggle"
+              onClick={() =>
+                setReaderTheme((value) =>
+                  value === "light" ? "dark" : "light"
+                )
+              }
+              title={readerTheme === "light" ? READER_TIPS.dark : READER_TIPS.light}
+              aria-label={readerTheme === "light" ? READER_TIPS.dark : READER_TIPS.light}
+            >
+              <span aria-hidden="true">{readerTheme === "light" ? "\u263e" : "\u2600"}</span>
+            </button>
+
+            <button
+              type="button"
+              className="ebook-reader__offline-toggle"
+              onClick={() => void handleSaveOffline()}
+              disabled={!blob || !user?.id || offlineSaving}
+              title={offlineSaved ? READER_TIPS.saved : READER_TIPS.save}
+              aria-label={offlineSaved ? READER_TIPS.saved : READER_TIPS.save}
+            >
+              {offlineSaved ? (
+                <Icon name="check" />
+              ) : (
+                <svg className="ebook-reader__line-icon" viewBox="0 0 24 24" aria-hidden="true">
+                  <path d="M12 3v12m-5-5 5 5 5-5M4 18v3h16v-3" />
+                </svg>
+              )}
+            </button>
+          </>
         )}
+
         <button
           type="button"
           className="ebook-reader__close"
           onClick={handleCloseReader}
-          aria-label="Закрити читалку"
-          title="Закрити"
+          title={READER_TIPS.close}
+          aria-label={READER_TIPS.close}
         >
-          <svg className="ebook-reader__close-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+          <svg className="ebook-reader__close-icon" viewBox="0 0 24 24" aria-hidden="true">
             <path d="M6 6l12 12M18 6L6 18" />
           </svg>
         </button>

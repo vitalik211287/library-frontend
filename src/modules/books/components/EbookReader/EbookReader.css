@@ -103,17 +103,28 @@
 
 .ebook-reader-modal .ebook-reader__toolbar {
   position: absolute;
-  top: 0;
-  right: 0;
+  top: max(8px, env(safe-area-inset-top));
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
   z-index: 12;
-  padding: 10px 12px;
-  background: rgba(15, 15, 24, 0.85);
-  border-radius: 0 0 0 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: max-content;
+  max-width: calc(100% - 16px);
+  box-sizing: border-box;
+  padding: 6px 8px;
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 999px;
+  background: rgba(15, 15, 24, 0.92);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.25);
 }
 
 .ebook-reader-modal--chrome-hidden .ebook-reader__toolbar,
-.ebook-reader-modal--chrome-hidden .epub-reader__controls,
 .ebook-reader-modal--chrome-hidden .epub-reader__progress-toggle,
+.ebook-reader-modal--chrome-hidden .epub-reader__controls,
 .ebook-reader-modal--chrome-hidden .epub-reader__progress-panel {
   visibility: hidden;
   opacity: 0;
@@ -137,4 +148,46 @@
   .ebook-reader-modal .modal__content {
     padding: 0;
   }
+}
+
+/* EPUB offline save button */
+
+
+
+
+/* Compact EPUB icon toolbar */
+
+.ebook-reader-modal .ebook-reader__toolbar button {
+  width: 38px;
+  height: 38px;
+  min-width: 38px;
+  flex: 0 0 38px;
+  padding: 0;
+}
+
+.ebook-reader-modal .ebook-reader__toolbar button > svg {
+  width: 20px;
+  height: 20px;
+}
+
+.ebook-reader-modal .ebook-reader__toolbar .ebook-reader__line-icon {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+.ebook-reader-modal .ebook-reader__toolbar button:disabled {
+  opacity: 0.55;
+  cursor: default;
+}
+
+/* EPUB offline icon stroke fix */
+.ebook-reader-modal .ebook-reader__toolbar .ebook-reader__offline-toggle svg {
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
 }

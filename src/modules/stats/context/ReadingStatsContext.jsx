@@ -14,8 +14,59 @@ import { useAuth } from "../../auth/context/AuthContext.jsx";
 
 const ReadingStatsContext = createContext(null);
 
+const OFFLINE_STATS_PREFIX = "library-reading-stats-v1";
+
+const statsKey = (userId, year, timeZone) =>
+  JSON.stringify([OFFLINE_STATS_PREFIX, userId, year, timeZone]);
+
+const readOfflineStats = (userId, year, timeZone) => {
+  if (!userId) return null;
+
+  try {
+    const record = JSON.parse(
+      localStorage.getItem(statsKey(userId, year, timeZone)) || "null"
+    );
+
+    return record?.stats &&
+      typeof record.stats === "object" &&
+      !Array.isArray(record.stats)
+      ? record.stats
+      : null;
+  } catch {
+    return null;
+  }
+};
+
+const writeOfflineStats = (userId, year, timeZone, stats) => {
+  if (!userId) return;
+
+  try {
+    const key = statsKey(userId, year, timeZone);
+
+    if (stats == null) {
+      localStorage.removeItem(key);
+      return;
+    }
+
+    const data = JSON.stringify({
+      stats,
+      savedAt: Date.now(),
+    });
+
+    if (new Blob([data]).size > 128 * 1024) {
+      console.warn("Offline stats snapshot exceeds budget");
+      return;
+    }
+
+    localStorage.setItem(key, data);
+  } catch (error) {
+    console.warn("Cannot cache reading stats", error);
+  }
+};
+
+
 const ReadingStatsProvider = ({ children }) => {
-  const { isAuthenticated, isAuthLoading } = useAuth();
+  const { user, isAuthenticated, isAuthLoading } = useAuth();
 
   const currentYear = new Date().getFullYear();
 
@@ -73,6 +124,8 @@ const ReadingStatsProvider = ({ children }) => {
         return existingRequest;
       }
 
+      const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+
       const request = (async () => {
         try {
           setLoadingByYear((current) => ({
@@ -85,8 +138,6 @@ const ReadingStatsProvider = ({ children }) => {
             [year]: "",
           }));
 
-          const timeZone = Intl.DateTimeFormat().resolvedOptions().timeZone;
-
           const data = await apiFetch(
             `/api/user-books/stats?year=${year}&timeZone=${encodeURIComponent(
               timeZone,
@@ -96,10 +147,25 @@ const ReadingStatsProvider = ({ children }) => {
           const stats = data?.stats ?? null;
 
           saveStats(year, stats);
+          writeOfflineStats(user?.id, year, timeZone, stats);
 
           return stats;
         } catch (error) {
           console.error("Load reading stats error:", error);
+
+          const temporaryFailure =
+            typeof error?.status !== "number" ||
+            error.status >= 500;
+
+          const cachedStats = temporaryFailure
+            ? statsCacheRef.current[year] ??
+              readOfflineStats(user?.id, year, timeZone)
+            : null;
+
+          if (cachedStats) {
+            saveStats(year, cachedStats);
+            return cachedStats;
+          }
 
           saveStats(year, null);
 
@@ -127,7 +193,7 @@ const ReadingStatsProvider = ({ children }) => {
 
       return request;
     },
-    [currentYear, isAuthenticated, saveStats],
+    [currentYear, isAuthenticated, saveStats, user?.id],
   );
 
   const refreshReadingStats = useCallback(
@@ -163,6 +229,20 @@ const ReadingStatsProvider = ({ children }) => {
 
     ensureReadingStats(currentYear);
   }, [currentYear, isAuthenticated, isAuthLoading, ensureReadingStats]);
+
+  useEffect(() => {
+    if (!isAuthenticated || !user?.id) return undefined;
+
+    const handleOnline = () => {
+      void refreshReadingStats(currentYear);
+    };
+
+    window.addEventListener("online", handleOnline);
+
+    return () => {
+      window.removeEventListener("online", handleOnline);
+    };
+  }, [isAuthenticated, user?.id, currentYear, refreshReadingStats]);
 
   /* =========================
      HELPERS
