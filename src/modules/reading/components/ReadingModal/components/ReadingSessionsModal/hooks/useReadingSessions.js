@@ -240,6 +240,7 @@ const useReadingSessions = ({ bookId, totalPages, onChanged }) => {
     sessions,
     loading,
     message,
+    loadSessions,
 
     editingSession,
     editValue,

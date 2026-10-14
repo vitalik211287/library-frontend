@@ -3,6 +3,9 @@ import AppPanel from "../../../../../../shared/components/AppPanel/AppPanel.jsx"
 import ConfirmDeleteModal from "../../../../../../shared/components/ConfirmDeleteModal/ConfirmDeleteModal.jsx";
 import Icon from "../../../../../../shared/components/Icon/Icon.jsx";
 
+import { useState } from "react";
+import ManualReadingSessionForm from "../ManualReadingSessionForm/ManualReadingSessionForm.jsx";
+import { importManualReadingSession } from "../../api/readingSessionApi.js";
 import useReadingSessions from "./hooks/useReadingSessions.js";
 
 import {
@@ -18,6 +21,7 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
     sessions,
     loading,
     message,
+    loadSessions,
 
     editingSession,
     editValue,
@@ -40,6 +44,31 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
     onChanged,
   });
 
+  const [manualFormOpen, setManualFormOpen] = useState(false);
+  const [manualSaving, setManualSaving] = useState(false);
+
+  const handleManualSubmit = async (data) => {
+    if (!bookId || manualSaving) {
+      throw new Error("Не вдалося визначити книгу.");
+    }
+
+    setManualSaving(true);
+
+    try {
+      await importManualReadingSession(bookId, data);
+      await loadSessions();
+      await onChanged?.();
+      setManualFormOpen(false);
+    } finally {
+      setManualSaving(false);
+    }
+  };
+
+  const closeManualForm = () => {
+    if (!manualSaving) {
+      setManualFormOpen(false);
+    }
+  };
   const handleClose = () => {
     if (editingSession || deletingSession || saving || deleting) {
       return;
@@ -57,7 +86,7 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
   return (
     <>
       <Modal
-        isOpen
+        isOpen={!manualFormOpen}
         onClose={handleClose}
         title="Історія сесій"
         subtitle={`${sessions.length} ${
@@ -67,6 +96,16 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
         closeOnEscape={!isCloseBlocked}
         closeOnBackdrop={!isCloseBlocked}
       >
+        {bookId && (
+          <div className="reading-sessions-modal__add">
+            <button
+              type="button"
+              onClick={() => setManualFormOpen(true)}
+            >
+              + Додати сесію вручну
+            </button>
+          </div>
+        )}
         {message && (
           <p className="reading-sessions-modal__message">{message}</p>
         )}
@@ -292,6 +331,23 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
         )}
       </Modal>
 
+      <Modal
+        isOpen={manualFormOpen}
+        onClose={closeManualForm}
+        title="Додати сесію вручну"
+        className="reading-sessions-edit-modal"
+        closeOnEscape={!manualSaving}
+        closeOnBackdrop={!manualSaving}
+      >
+        {manualFormOpen && (
+          <ManualReadingSessionForm
+            totalPages={totalPages}
+            onSubmit={handleManualSubmit}
+            onCancel={closeManualForm}
+            saving={manualSaving}
+          />
+        )}
+      </Modal>
       <ConfirmDeleteModal
         isOpen={Boolean(deletingSession)}
         title="Видалити сесію?"

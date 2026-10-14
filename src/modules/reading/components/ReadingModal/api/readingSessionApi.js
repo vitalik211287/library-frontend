@@ -47,3 +47,9 @@ export const syncOfflineManualSession = (bookId, body) =>
     method: "POST",
     body,
   });
+
+export const importManualReadingSession = (bookId, body) =>
+  apiFetch(`/api/user-books/${encodeURIComponent(bookId)}/reading/import`, {
+    method: "POST",
+    body,
+  });
