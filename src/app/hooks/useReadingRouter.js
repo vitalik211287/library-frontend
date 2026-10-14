@@ -3,6 +3,7 @@ import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
 
 import useRefreshReadingData from "../../modules/reading/hooks/useRefreshReadingData.js";
+import { listOfflineManualSessions } from "../../modules/reading/offline/offlineReadingQueue.js";
 
 import { apiFetch, hasToken } from "../../shared/api/apiClient.js";
 import { getBookFiles } from "../../modules/books/api/bookFilesApi.js";
@@ -12,6 +13,29 @@ import { useAuth } from "../../modules/auth/context/AuthContext.jsx";
 import { useLibrary } from "../../modules/libraries/context/LibraryContext.jsx";
 import { useLibraryBooks } from "../../modules/libraries/context/LibraryBooksContext.jsx";
 import { useUserBooks } from "../../modules/user-books/context/UserBooksContext.jsx";
+
+// Derive a temporary on-device page from completed, not-yet-synced sessions.
+// The queue remains the only durable source of the offline overlay.
+const withPendingOfflineProgress = async (book, userId) => {
+  if (!book || !userId || book.progressMode === "PERCENT") return book;
+
+  try {
+    const queued = await listOfflineManualSessions(userId);
+    const pendingPage = queued.reduce((maximum, record) => {
+      if (record.bookId !== book.id) return maximum;
+      const page = record.session?.endPage;
+      return Number.isSafeInteger(page) && page >= 0
+        ? Math.max(maximum, page)
+        : maximum;
+    }, book.currentPage ?? 0);
+
+    if (pendingPage <= (book.currentPage ?? 0)) return book;
+    return { ...book, progressMode: "PAGES", currentPage: pendingPage };
+  } catch (error) {
+    console.warn("Cannot read pending offline book progress", error);
+    return book;
+  }
+};
 
 const useReadingRouter = ({ closeMobileMenu }) => {
   const { user, isAuthenticated, isAuthLoading } = useAuth();
@@ -110,15 +134,34 @@ const useReadingRouter = ({ closeMobileMenu }) => {
         return;
       }
 
+      // Reuse the existing library snapshot only for the selected library.
+      // Never treat another library's book as a match.
+      const offlineBook = libraryId === activeLibraryId
+        ? libraryBooks.find((book) => book.id === readingBookId)
+        : null;
+
       try {
         setIsReadingBookLoading(true);
+
+        // An offline draft must remain accessible even without an API response.
+        if (typeof navigator !== "undefined" && !navigator.onLine && offlineBook) {
+          setReadingBook(await withPendingOfflineProgress(offlineBook, user?.id));
+          return;
+        }
 
         const book = await apiFetch(
           `/api/libraries/${libraryId}/books/${readingBookId}`,
         );
 
-        setReadingBook(book);
+        setReadingBook(await withPendingOfflineProgress(book, user?.id));
       } catch (error) {
+        // Network failures can use the already-cached library listing.
+        // Do not mask HTTP errors (e.g. 401/403/404).
+        if (typeof error?.status !== "number" && offlineBook) {
+          setReadingBook(await withPendingOfflineProgress(offlineBook, user?.id));
+          return;
+        }
+
         console.error(
           "Load reading book error:",
           error,
@@ -149,8 +192,10 @@ const useReadingRouter = ({ closeMobileMenu }) => {
     readingBookId,
     readingLibraryId,
     activeLibraryId,
+    libraryBooks,
     isAuthenticated,
     isAuthLoading,
+    user?.id,
     navigate,
     searchParams,
     setSearchParams,
@@ -437,7 +482,11 @@ const useReadingRouter = ({ closeMobileMenu }) => {
       }
     } catch (error) {
       console.error("Failed to check EPUB files:", error);
-      toast.error("Не вдалося перевірити файли книги");
+      if (typeof error?.status !== "number") {
+        handleSelectManualReadingBook(book);
+      } else {
+        toast.error("Не вдалося перевірити файли книги");
+      }
     } finally {
       setIsSelectingBook(false);
     }

@@ -23,6 +23,7 @@ import MobileBottomNavigation from "../shared/components/MobileBottomNavigation/
 import { API_URL } from "../shared/api/apiClient.js";
 
 import { useAuth } from "../modules/auth/context/AuthContext.jsx";
+import { useOfflineReadingSync } from "../modules/reading/offline/useOfflineReadingSync.js";
 
 import { useTheme } from "../shared/context/ThemeContext.jsx";
 
@@ -32,6 +33,7 @@ import { useTheme } from "../shared/context/ThemeContext.jsx";
 
 const App = () => {
   const { user, isAuthenticated, isAuthLoading } = useAuth();
+  useOfflineReadingSync(isAuthLoading || !isAuthenticated ? null : user?.id);
 
   const { themeMode, setThemeMode } = useTheme();
 

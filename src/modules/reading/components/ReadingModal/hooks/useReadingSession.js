@@ -1,4 +1,12 @@
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { useAuth } from "../../../../auth/context/AuthContext.jsx";
+import {
+  checkpointOfflineManualDraft, clearOfflineManualDraft,
+  completeOfflineManualDraft, getOfflineManualElapsed,
+  readOfflineManualDraft, recoverOfflineManualDraft,
+  setOfflineManualPaused, startOfflineManualDraft,
+} from "../../../offline/offlineManualDraft.js";
+import { enqueueOfflineManualSession } from "../../../offline/offlineReadingQueue.js";
 
 import { finishReadingSession, getActiveReadingSession, getReadingStats, pauseReadingSession, resumeReadingSession, startReadingSession, updateUserBook } from "../api/readingSessionApi.js";
 import { validateEndProgress as validateEndProgressValue, validateStartProgress as validateStartProgressValue } from "./utils/readingSessionValidation.js";
@@ -15,6 +23,8 @@ const getProgressInputValue = (value) => {
 };
 
 const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
+  const { user } = useAuth();
+  const userId = user?.id;
   const [activeSession, setActiveSession] = useState(null);
 
   const [currentBook, setCurrentBook] = useState(book);
@@ -120,6 +130,19 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
   }, [book.id]);
 
   const fetchActiveSession = useCallback(async () => {
+    // Never overwrite an unfinished offline draft with an unrelated server response.
+    if (userId) {
+      const draft = readOfflineManualDraft(userId, book.id);
+      if (draft) {
+        const recovered = recoverOfflineManualDraft(userId, book.id);
+        setActiveSession({ ...recovered, id: recovered.clientSessionId, source: "OFFLINE_MANUAL", pausedAt: recovered.runningSince ? null : new Date().toISOString() });
+        setElapsedSeconds(getOfflineManualElapsed(recovered));
+        setProgressMode(PROGRESS_MODES.PAGES);
+        setStartProgress(String(recovered.startPage));
+        return;
+      }
+    }
+    if (navigator.onLine === false) return;
     try {
       const data = await getActiveReadingSession(book.id);
 
@@ -149,7 +172,7 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
     } catch (error) {
       console.error("Помилка отримання активної сесії:", error);
     }
-  }, [book.id]);
+  }, [book.id, userId]);
 
   const changeProgressMode = (mode) => {
     if (activeSession) {
@@ -243,6 +266,24 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
 
     const value = Number(startProgress);
 
+    if (navigator.onLine === false) {
+      if (!userId || progressMode !== PROGRESS_MODES.PAGES) {
+        setMessage("Офлайн-облік наразі доступний лише для читання за сторінками.");
+        return;
+      }
+      try {
+        const draft = startOfflineManualDraft(userId, book.id, value);
+        setActiveSession({ ...draft, id: draft.clientSessionId, source: "OFFLINE_MANUAL", pausedAt: null });
+        setElapsedSeconds(0);
+        setEndProgress("");
+        setCurrentBook((current) => ({ ...current, status: "READING", progressMode: "PAGES" }));
+        setMessage("Офлайн-сесію збережено на цьому пристрої.");
+      } catch (error) {
+        setMessage(error.message || "Не вдалося створити офлайн-сесію");
+      }
+      return;
+    }
+
     try {
       setLoading(true);
       setMessage("");
@@ -284,6 +325,40 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
     } catch (error) {
       console.error("Помилка запуску читання:", error);
 
+      if (
+        typeof error?.status !== "number" &&
+        userId &&
+        progressMode === PROGRESS_MODES.PAGES
+      ) {
+        const confirmed = window.confirm(
+          "Сервер недоступний. Почати локальну сесію читання?"
+        );
+
+        if (confirmed) {
+          try {
+            const draft = startOfflineManualDraft(userId, book.id, value);
+            setActiveSession({
+              ...draft,
+              id: draft.clientSessionId,
+              source: "OFFLINE_MANUAL",
+              pausedAt: null,
+            });
+            setElapsedSeconds(0);
+            setEndProgress("");
+            setCurrentBook((current) => ({
+              ...current,
+              status: "READING",
+              progressMode: "PAGES",
+            }));
+            setMessage("Локальну сесію збережено на пристрої.");
+            return;
+          } catch (draftError) {
+            setMessage(draftError.message || "Не вдалося створити локальну сесію");
+            return;
+          }
+        }
+      }
+
       setMessage(
         error instanceof Error ? error.message : "Не вдалося почати читання",
       );
@@ -293,6 +368,14 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
   };
 
   const pauseReading = async () => {
+    if (activeSession?.source === "OFFLINE_MANUAL") {
+      try {
+        const draft = setOfflineManualPaused(userId, book.id, true);
+        setActiveSession({ ...draft, id: draft.clientSessionId, source: "OFFLINE_MANUAL", pausedAt: new Date().toISOString() });
+        setElapsedSeconds(getOfflineManualElapsed(draft));
+      } catch (error) { setMessage(error.message); }
+      return;
+    }
     try {
       setPauseLoading(true);
       setMessage("");
@@ -323,6 +406,14 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
   };
 
   const resumeReading = async () => {
+    if (activeSession?.source === "OFFLINE_MANUAL") {
+      try {
+        const draft = setOfflineManualPaused(userId, book.id, false);
+        setActiveSession({ ...draft, id: draft.clientSessionId, source: "OFFLINE_MANUAL", pausedAt: null });
+        setElapsedSeconds(getOfflineManualElapsed(draft));
+      } catch (error) { setMessage(error.message); }
+      return;
+    }
     try {
       setPauseLoading(true);
       setMessage("");
@@ -402,6 +493,35 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
 
     const value = Number(endProgress);
 
+    if (activeSession?.source === "OFFLINE_MANUAL") {
+      try {
+        setFinishing(true);
+        // The draft is deleted ONLY after its finished payload is durable in IndexedDB.
+        const session = completeOfflineManualDraft(userId, book.id, value);
+        await enqueueOfflineManualSession({ userId, bookId: book.id, session });
+        clearOfflineManualDraft(userId, book.id, session.clientSessionId);
+        setActiveSession(null);
+        setElapsedSeconds(0);
+        setEndProgress("");
+setStartProgress(String(value));
+onBookUpdated?.({
+  ...currentBook,
+  progressMode: "PAGES",
+  currentPage: Math.max(currentBook.currentPage ?? 0, value),
+});
+                  setCurrentBook((current) => ({
+                    ...current,
+                    progressMode: "PAGES",
+                    currentPage: Math.max(current.currentPage ?? 0, value),
+                  }));
+        setMessage("Сесію збережено. Вона синхронізується після відновлення зв'язку.");
+        // Server book progress is NOT advanced until a conflict is resolved.
+      } catch (error) {
+        setMessage(error.message || "Не вдалося зберегти офлайн-сесію");
+      } finally { setFinishing(false); }
+      return;
+    }
+
     try {
       setFinishing(true);
       setMessage("");
@@ -471,14 +591,39 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
       return undefined;
     }
 
+    let ticks = 0;
     const intervalId = setInterval(() => {
+      if (activeSession.source === "OFFLINE_MANUAL") {
+        if (!userId || document.hidden) return;
+        try {
+          ticks += 1;
+          const draft = ticks % 10 === 0
+            ? checkpointOfflineManualDraft(userId, book.id)
+            : readOfflineManualDraft(userId, book.id);
+
+          if (!draft) return;
+
+          setElapsedSeconds(getOfflineManualElapsed(draft));
+
+          if (!draft.runningSince) {
+            setActiveSession((previous) => ({
+              ...previous,
+              pausedAt: new Date().toISOString(),
+            }));
+            setMessage("Читання призупинено після перерви в активності.");
+          }
+        } catch (error) {
+          console.warn("Offline timer failed", error);
+        }
+        return;
+      }
       setElapsedSeconds((seconds) => seconds + 1);
     }, 1000);
 
     return () => {
       clearInterval(intervalId);
     };
-  }, [activeSession]);
+  }, [activeSession, userId, book.id]);
 
   // При відкритті книги отримуємо канонічний
   // час активної сесії з бекенда.
