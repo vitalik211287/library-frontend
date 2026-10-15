@@ -26,6 +26,13 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
     editingSession,
     editValue,
     setEditValue,
+    editDate,
+    setEditDate,
+    editTime,
+    setEditTime,
+    editMinutes,
+    setEditMinutes,
+    canEditSessionTime,
     saving,
 
     deletingSession,
@@ -309,6 +316,48 @@ const ReadingSessionsModal = ({ bookId, totalPages, onClose, onChanged }) => {
               </div>
             </label>
 
+            {canEditSessionTime(editingSession) && (
+              <>
+                <label className="reading-sessions-edit__label">
+                  <span>Дата читання</span>
+                  <div className="reading-sessions-edit__input-wrap">
+                    <input
+                    type="date"
+                    value={editDate}
+                    onChange={(event) => setEditDate(event.target.value)}
+                    disabled={saving}
+                  />
+                </div>
+                </label>
+
+                <label className="reading-sessions-edit__label">
+                  <span>Час початку</span>
+                  <div className="reading-sessions-edit__input-wrap">
+                    <input
+                    type="time"
+                    value={editTime}
+                    onChange={(event) => setEditTime(event.target.value)}
+                    disabled={saving}
+                  />
+                </div>
+                </label>
+
+                <label className="reading-sessions-edit__label">
+                  <span>Тривалість (хвилини)</span>
+                  <div className="reading-sessions-edit__input-wrap">
+                    <input
+                    type="number"
+                    min="1"
+                    step="1"
+                    inputMode="numeric"
+                    value={editMinutes}
+                    onChange={(event) => setEditMinutes(event.target.value)}
+                    disabled={saving}
+                  />
+                </div>
+                </label>
+              </>
+            )}
             <div className="reading-sessions-edit__actions">
               <button
                 type="button"

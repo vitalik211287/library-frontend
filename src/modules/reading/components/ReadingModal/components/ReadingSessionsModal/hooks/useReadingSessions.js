@@ -9,6 +9,9 @@ const useReadingSessions = ({ bookId, totalPages, onChanged }) => {
 
   const [editingSession, setEditingSession] = useState(null);
   const [editValue, setEditValue] = useState("");
+  const [editDate, setEditDate] = useState("");
+  const [editTime, setEditTime] = useState("");
+  const [editMinutes, setEditMinutes] = useState("");
   const [saving, setSaving] = useState(false);
 
   const [deletingSession, setDeletingSession] = useState(null);
@@ -50,7 +53,35 @@ const useReadingSessions = ({ bookId, totalPages, onChanged }) => {
   const getSessionTotalPages = (session) =>
     totalPages ?? session?.book?.pages ?? null;
 
+  const canEditSessionTime = (session) =>
+    session?.source === "MANUAL" &&
+    session?.finishedAt != null &&
+    session?.pausedSeconds === 0;
+
+  const toLocalDateTimeFields = (value) => {
+    const date = new Date(value);
+
+    if (Number.isNaN(date.getTime())) {
+      return { date: "", time: "" };
+    }
+
+    const pad = (number) => String(number).padStart(2, "0");
+
+    return {
+      date: `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}`,
+      time: `${pad(date.getHours())}:${pad(date.getMinutes())}`,
+    };
+  };
   const handleEdit = (session) => {
+    const fields = toLocalDateTimeFields(session.startedAt);
+
+    setEditDate(fields.date);
+    setEditTime(fields.time);
+    setEditMinutes(
+      session.durationSeconds == null
+        ? ""
+        : String(Math.round(session.durationSeconds / 60)),
+    );
     setMessage("");
     setEditingSession(session);
 
@@ -245,6 +276,13 @@ const useReadingSessions = ({ bookId, totalPages, onChanged }) => {
     editingSession,
     editValue,
     setEditValue,
+    editDate,
+    setEditDate,
+    editTime,
+    setEditTime,
+    editMinutes,
+    setEditMinutes,
+    canEditSessionTime,
     saving,
 
     deletingSession,
