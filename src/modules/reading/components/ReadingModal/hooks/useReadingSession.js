@@ -255,6 +255,28 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
     }
   };
 
+  const startOfflineSession = (page) => {
+    try {
+      const draft = startOfflineManualDraft(userId, book.id, page);
+      setActiveSession({
+        ...draft,
+        id: draft.clientSessionId,
+        source: "OFFLINE_MANUAL",
+        pausedAt: null,
+      });
+      setElapsedSeconds(0);
+      setEndProgress("");
+      setCurrentBook((current) => ({
+        ...current,
+        status: "READING",
+        progressMode: "PAGES",
+      }));
+      setMessage("Ви читаєте офлайн. Сесія зберігається на цьому пристрої. Після завершення читання вона синхронізується, коли зв’язок із сервером відновиться.");
+    } catch (error) {
+      setMessage(error?.message || "Не вдалося створити локальну сесію");
+    }
+  };
+
   const startReading = async () => {
     const validationMessage = validateStartProgressValue({ startProgress, progressMode, currentBook });
 
@@ -271,16 +293,7 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
         setMessage("Офлайн-облік наразі доступний лише для читання за сторінками.");
         return;
       }
-      try {
-        const draft = startOfflineManualDraft(userId, book.id, value);
-        setActiveSession({ ...draft, id: draft.clientSessionId, source: "OFFLINE_MANUAL", pausedAt: null });
-        setElapsedSeconds(0);
-        setEndProgress("");
-        setCurrentBook((current) => ({ ...current, status: "READING", progressMode: "PAGES" }));
-        setMessage("Офлайн-сесію збережено на цьому пристрої.");
-      } catch (error) {
-        setMessage(error.message || "Не вдалося створити офлайн-сесію");
-      }
+      startOfflineSession(value);
       return;
     }
 
@@ -330,33 +343,8 @@ const useReadingSession = (book, onBookUpdated, onReadingDataChanged) => {
         userId &&
         progressMode === PROGRESS_MODES.PAGES
       ) {
-        const confirmed = window.confirm(
-          "Сервер недоступний. Почати локальну сесію читання?"
-        );
-
-        if (confirmed) {
-          try {
-            const draft = startOfflineManualDraft(userId, book.id, value);
-            setActiveSession({
-              ...draft,
-              id: draft.clientSessionId,
-              source: "OFFLINE_MANUAL",
-              pausedAt: null,
-            });
-            setElapsedSeconds(0);
-            setEndProgress("");
-            setCurrentBook((current) => ({
-              ...current,
-              status: "READING",
-              progressMode: "PAGES",
-            }));
-            setMessage("Локальну сесію збережено на пристрої.");
-            return;
-          } catch (draftError) {
-            setMessage(draftError.message || "Не вдалося створити локальну сесію");
-            return;
-          }
-        }
+        startOfflineSession(value);
+        return;
       }
 
       setMessage(
@@ -514,7 +502,7 @@ onBookUpdated?.({
                     progressMode: "PAGES",
                     currentPage: Math.max(current.currentPage ?? 0, value),
                   }));
-        setMessage("Сесію збережено. Вона синхронізується після відновлення зв'язку.");
+        setMessage("Сесію завершено та збережено на цьому пристрої. Вона синхронізується, коли сервер стане доступним.");
         // Server book progress is NOT advanced until a conflict is resolved.
       } catch (error) {
         setMessage(error.message || "Не вдалося зберегти офлайн-сесію");

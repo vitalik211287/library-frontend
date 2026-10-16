@@ -268,12 +268,12 @@ const useReadingRouter = ({ closeMobileMenu }) => {
           }
         }
 
-        toast.error(
-          typeof error?.status === "number"
-            ? "\u041d\u0435 \u0432\u0434\u0430\u043b\u043e\u0441\u044f \u043f\u0435\u0440\u0435\u0432\u0456\u0440\u0438\u0442\u0438 \u0444\u0430\u0439\u043b\u0438 \u043a\u043d\u0438\u0433\u0438."
-            : "\u0426\u044e \u043a\u043d\u0438\u0433\u0443 \u043d\u0435 \u0437\u0431\u0435\u0440\u0435\u0436\u0435\u043d\u043e \u043e\u0444\u043b\u0430\u0439\u043d. \u0412\u0456\u0434\u043a\u0440\u0438\u0439 \u0457\u0457 \u043e\u043d\u043b\u0430\u0439\u043d \u0456 \u0437\u0431\u0435\u0440\u0435\u0436\u0438."
-        );
-        return;
+        // HTTP rejections must not be bypassed.
+        if (typeof error?.status === "number") {
+          toast.error("Не вдалося перевірити файли книги.");
+          return;
+        }
+        // No cached EPUB on network failure: continue to manual reading.
       }
     }
 

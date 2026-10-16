@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useMemo, useState } from "react";
+import { createContext, useContext, useEffect, useLayoutEffect, useMemo, useState } from "react";
 
 import { apiFetch } from "../api/apiClient.js";
 import {
@@ -21,10 +21,22 @@ const getInitialTheme = () => {
   return THEME_MODES.SYSTEM;
 };
 
+const GLOBAL_THEME_CACHE_KEY = "library-global-theme";
+
+const getInitialGlobalTheme = () => {
+  try {
+    const cachedTheme = localStorage.getItem(GLOBAL_THEME_CACHE_KEY);
+    return isGlobalThemeMode(cachedTheme)
+      ? cachedTheme
+      : GLOBAL_THEME_MODES.DEFAULT;
+  } catch {
+    return GLOBAL_THEME_MODES.DEFAULT;
+  }
+};
+
 export const ThemeProvider = ({ children }) => {
   const [themeMode, setThemeMode] = useState(getInitialTheme);
-  const [globalTheme, setGlobalTheme] = useState(GLOBAL_THEME_MODES.DEFAULT);
-  const [isGlobalThemeLoading, setIsGlobalThemeLoading] = useState(true);
+  const [globalTheme, setGlobalTheme] = useState(getInitialGlobalTheme);
 
   useEffect(() => {
     let isActive = true;
@@ -42,10 +54,6 @@ export const ThemeProvider = ({ children }) => {
         }
       } catch (error) {
         console.error("Failed to load global theme:", error);
-      } finally {
-        if (isActive) {
-          setIsGlobalThemeLoading(false);
-        }
       }
     };
 
@@ -56,11 +64,7 @@ export const ThemeProvider = ({ children }) => {
     };
   }, []);
 
-  useEffect(() => {
-    if (isGlobalThemeLoading) {
-      return;
-    }
-
+  useLayoutEffect(() => {
     const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
 
     const applyTheme = () => {
@@ -75,6 +79,11 @@ export const ThemeProvider = ({ children }) => {
       document.documentElement.dataset.colorScheme = colorScheme;
 
       localStorage.setItem("theme", themeMode);
+      try {
+        localStorage.setItem(GLOBAL_THEME_CACHE_KEY, globalTheme);
+      } catch {
+        // Private mode or storage quota: theme still works in memory.
+      }
     };
 
     applyTheme();
@@ -90,7 +99,7 @@ export const ThemeProvider = ({ children }) => {
     return () => {
       mediaQuery.removeEventListener("change", handleSystemChange);
     };
-  }, [themeMode, globalTheme, isGlobalThemeLoading]);
+  }, [themeMode, globalTheme]);
 
   const value = useMemo(
     () => ({
@@ -101,10 +110,6 @@ export const ThemeProvider = ({ children }) => {
     }),
     [themeMode, globalTheme],
   );
-
-  if (isGlobalThemeLoading) {
-    return null;
-  }
 
   return (
     <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>
