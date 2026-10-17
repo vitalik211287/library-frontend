@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 
 import Modal from "../../../../shared/components/Modal/Modal.jsx";
@@ -11,14 +11,20 @@ import {
 } from "../../api/bookFilesApi.js";
 import "./BookFilesModal.css";
 
-const BookFilesModal = ({ book, libraryId, canEdit, onClose, onReadFile, onFilesChanged }) => {
+const BookFilesModal = ({ book, libraryId, canEdit, onClose, onReadFile, onFilesChanged, offlineFiles = null }) => {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
-    let active = true;
+    if (Array.isArray(offlineFiles)) {
+      setFiles(offlineFiles);
+      setLoading(false);
+      return;
+    }
 
+    let active = true;
+    setLoading(true);
     getBookFiles(libraryId, book.id)
       .then((data) => {
         if (active) setFiles(data);
@@ -33,7 +39,7 @@ const BookFilesModal = ({ book, libraryId, canEdit, onClose, onReadFile, onFiles
     return () => {
       active = false;
     };
-  }, [libraryId, book.id]);
+  }, [libraryId, book.id, offlineFiles]);
 
   const handleUpload = async (event) => {
     const file = event.target.files?.[0];

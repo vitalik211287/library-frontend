@@ -1,4 +1,4 @@
-﻿import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
+import { lazy, Suspense, useCallback, useEffect, useRef, useState } from "react";
 
 import Modal from "../../../../shared/components/Modal/Modal.jsx";
 import Loader from "../../../../shared/components/Loader/Loader.jsx";
@@ -198,11 +198,23 @@ const EbookReader = ({ file, book, libraryId, onClose, locationKey, onLocationCh
         blob,
       });
 
+      const saved = await getOfflineEpub({
+        userId: user.id,
+        libraryId,
+        bookId: book.id,
+        fileId: file.id,
+      });
+      if (!(saved?.blob instanceof Blob) ||
+          saved.blob.size !== blob.size ||
+          saved.book?.id !== book.id ||
+          saved.file?.id !== file.id) {
+        throw new Error("EPUB was not fully saved to offline storage");
+      }
       setOfflineSaved(true);
-      toast.success("\u041a\u043d\u0438\u0433\u0443 \u0437\u0431\u0435\u0440\u0435\u0436\u0435\u043d\u043e \u043d\u0430 \u0446\u044c\u043e\u043c\u0443 \u043f\u0440\u0438\u0441\u0442\u0440\u043e\u0457");
+      toast.success("EPUB збережено на цьому пристрої");
     } catch (error) {
       console.error("Offline EPUB save failed", error);
-      toast.error("Cannot save EPUB offline");
+      toast.error("Не вдалося зберегти EPUB офлайн. Спробуй ще раз.");
     } finally {
       setOfflineSaving(false);
     }
@@ -273,13 +285,15 @@ const EbookReader = ({ file, book, libraryId, onClose, locationKey, onLocationCh
 
             <button
               type="button"
-              className="ebook-reader__offline-toggle"
+              className={`ebook-reader__offline-toggle${offlineSaved ? " ebook-reader__offline-toggle--saved" : ""}`}
               onClick={() => void handleSaveOffline()}
-              disabled={!blob || !user?.id || offlineSaving}
-              title={offlineSaved ? READER_TIPS.saved : READER_TIPS.save}
-              aria-label={offlineSaved ? READER_TIPS.saved : READER_TIPS.save}
+              disabled={!blob || !user?.id || offlineSaving || offlineSaved}
+              title={offlineSaving ? "Зберігаємо офлайн…" : offlineSaved ? READER_TIPS.saved : READER_TIPS.save}
+              aria-label={offlineSaving ? "Зберігаємо офлайн…" : offlineSaved ? READER_TIPS.saved : READER_TIPS.save}
             >
-              {offlineSaved ? (
+              {offlineSaving ? (
+                <span className="ebook-reader__offline-spinner" aria-hidden="true" />
+              ) : offlineSaved ? (
                 <Icon name="check" />
               ) : (
                 <svg className="ebook-reader__line-icon" viewBox="0 0 24 24" aria-hidden="true">
@@ -287,6 +301,11 @@ const EbookReader = ({ file, book, libraryId, onClose, locationKey, onLocationCh
                 </svg>
               )}
             </button>
+            {offlineSaved && (
+              <span className="ebook-reader__offline-saved-label" role="status">
+                Збережено
+              </span>
+            )}
           </>
         )}
 

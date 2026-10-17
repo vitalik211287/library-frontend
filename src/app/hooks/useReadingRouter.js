@@ -37,6 +37,38 @@ const withPendingOfflineProgress = async (book, userId) => {
   }
 };
 
+// A saved EPUB must be discoverable without calling the server.
+// HTTP permission errors are never bypassed with offline storage.
+const getAvailableEpubs = async ({ userId, libraryId, bookId }) => {
+  if (navigator.onLine !== false) {
+    try {
+      const files = await getBookFiles(libraryId, bookId);
+      return {
+        epubs: Array.isArray(files)
+          ? files.filter((file) => file.format === "EPUB")
+          : [],
+        offline: false,
+      };
+    } catch (error) {
+      if (typeof error?.status === "number") throw error;
+      console.warn("Using offline EPUB list after network failure", error);
+    }
+  }
+
+  if (!userId) return { epubs: [], offline: true };
+
+  const cached = await getOfflineEpubsForBook({ userId, libraryId, bookId });
+  return {
+    epubs: cached.map((record) => ({
+      id: record.fileId,
+      format: "EPUB",
+      fileName: record.file?.fileName || "EPUB",
+      sizeBytes: record.blob.size,
+    })),
+    offline: true,
+  };
+};
+
 const useReadingRouter = ({ closeMobileMenu }) => {
   const { user, isAuthenticated, isAuthLoading } = useAuth();
 
@@ -202,23 +234,21 @@ const useReadingRouter = ({ closeMobileMenu }) => {
   ]);
 
   const handleOpenReadingBook = async (bookId, libraryId = null, options = {}) => {
-    if (!bookId) {
-      return;
-    }
+    if (!bookId) return;
 
     if (options.preferEpub) {
       const targetLibraryId = libraryId || activeLibraryId;
-
       if (!targetLibraryId) {
-        toast.error("???????? ??????? ??????????");
+        toast.error("Спочатку оберіть бібліотеку.");
         return;
       }
 
       try {
-        const files = await getBookFiles(targetLibraryId, bookId);
-        const epubs = Array.isArray(files)
-          ? files.filter((file) => file.format === "EPUB")
-          : [];
+        const { epubs, offline } = await getAvailableEpubs({
+          userId: user?.id,
+          libraryId: targetLibraryId,
+          bookId,
+        });
 
         if (epubs.length === 1) {
           openEbookFile({ id: bookId }, epubs[0], targetLibraryId);
@@ -229,71 +259,35 @@ const useReadingRouter = ({ closeMobileMenu }) => {
           const book =
             currentBooks.find((item) => item.id === bookId) ||
             libraryBooks.find((item) => item.id === bookId) ||
-            { id: bookId, title: "?????" };
-
+            { id: bookId, title: "Книга" };
           setReaderFilePicker({
             book,
             libraryId: targetLibraryId,
             returnToPicker: false,
+            offlineFiles: offline ? epubs : null,
           });
           return;
         }
       } catch (error) {
-        console.error("Cannot check EPUB files:", error);
-
-        // Fall back only on network failures, not HTTP rejection.
-        if (typeof error?.status !== "number" && user?.id) {
-          try {
-            const cached = await getOfflineEpubsForBook({
-              userId: user.id,
-              libraryId: targetLibraryId,
-              bookId,
-            });
-
-            if (cached.length === 1) {
-              openEbookFile(
-                { id: bookId },
-                { id: cached[0].fileId },
-                targetLibraryId
-              );
-              return;
-            }
-
-            if (cached.length > 1) {
-              toast.error("\u0417\u043d\u0430\u0439\u0434\u0435\u043d\u043e \u043a\u0456\u043b\u044c\u043a\u0430 EPUB \u043e\u0444\u043b\u0430\u0439\u043d. \u041f\u043e\u0442\u0440\u0456\u0431\u043d\u043e \u0432\u0438\u0431\u0440\u0430\u0442\u0438 \u0444\u0430\u0439\u043b \u043e\u043d\u043b\u0430\u0439\u043d.");
-              return;
-            }
-          } catch (cacheError) {
-            console.warn("Offline EPUB lookup failed", cacheError);
-          }
-        }
-
-        // HTTP rejections must not be bypassed.
+        console.error("Cannot check available EPUB files:", error);
         if (typeof error?.status === "number") {
           toast.error("Не вдалося перевірити файли книги.");
           return;
         }
-        // No cached EPUB on network failure: continue to manual reading.
+        // Local storage unavailable: manual reading remains accessible.
       }
     }
 
-    const params =
-      new URLSearchParams(searchParams);
-
+    const params = new URLSearchParams(searchParams);
     params.delete("readerPicker");
     params.set("reading", bookId);
-
     if (libraryId) {
       params.set("readingLibrary", libraryId);
     } else {
       params.delete("readingLibrary");
     }
-
     setSearchParams(params, {
-      state: {
-        ...location.state,
-        readingOverlay: true,
-      },
+      state: { ...location.state, readingOverlay: true },
     });
   };
 
@@ -466,26 +460,33 @@ const useReadingRouter = ({ closeMobileMenu }) => {
     );
   };
 
-  // One file query per selected book; no per-card requests.
+  // The same EPUB lookup is used online and offline; a cached EPUB still
+  // presents the existing "EPUB / manual session" chooser.
   const handleSelectReadingBook = async (book) => {
     if (!book?.id || !activeLibraryId || isSelectingBook) return;
     setIsSelectingBook(true);
     try {
-      const files = await getBookFiles(activeLibraryId, book.id);
-      const epubs = Array.isArray(files)
-        ? files.filter((file) => file.format === "EPUB")
-        : [];
+      const { epubs, offline } = await getAvailableEpubs({
+        userId: user?.id,
+        libraryId: activeLibraryId,
+        bookId: book.id,
+      });
       if (epubs.length > 0) {
-        setReaderMethodChoice({ book, epubs, libraryId: activeLibraryId });
+        setReaderMethodChoice({
+          book,
+          epubs,
+          libraryId: activeLibraryId,
+          offline,
+        });
       } else {
         handleSelectManualReadingBook(book);
       }
     } catch (error) {
-      console.error("Failed to check EPUB files:", error);
-      if (typeof error?.status !== "number") {
-        handleSelectManualReadingBook(book);
-      } else {
+      console.error("Failed to check available EPUB files:", error);
+      if (typeof error?.status === "number") {
         toast.error("Не вдалося перевірити файли книги");
+      } else {
+        handleSelectManualReadingBook(book);
       }
     } finally {
       setIsSelectingBook(false);
@@ -499,7 +500,11 @@ const useReadingRouter = ({ closeMobileMenu }) => {
       openEbookFile(choice.book, choice.epubs[0], choice.libraryId);
       return;
     }
-    setReaderFilePicker({ book: choice.book, libraryId: choice.libraryId });
+    setReaderFilePicker({
+      book: choice.book,
+      libraryId: choice.libraryId,
+      offlineFiles: choice.offline ? choice.epubs : null,
+    });
     const params = new URLSearchParams(searchParams);
     params.delete("readerPicker");
     setSearchParams(params, { replace: true, state: location.state });

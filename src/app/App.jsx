@@ -188,6 +188,7 @@ const App = () => {
           canEdit={false}
           onClose={handleCloseReaderFilePicker}
           onReadFile={handleSelectReaderFile}
+          offlineFiles={readerFilePicker.offlineFiles}
         />
       )}
 
