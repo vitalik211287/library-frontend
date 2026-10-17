@@ -301,11 +301,6 @@ const EbookReader = ({ file, book, libraryId, onClose, locationKey, onLocationCh
                 </svg>
               )}
             </button>
-            {offlineSaved && (
-              <span className="ebook-reader__offline-saved-label" role="status">
-                Збережено
-              </span>
-            )}
           </>
         )}
 
