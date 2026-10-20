@@ -1,13 +1,19 @@
 import { useEffect, useRef } from "react";
 import { decodeEan13FromVideo } from "../utils/decodeEan13FromVideo.js";
+import {
+  captureBarcodeRegion,
+  decodeEan13FromPixels,
+  normalizeIsbn,
+} from "../utils/decodeEan13FromFrame.js";
 
-// Keep the existing WASM scanner as the primary path. Try the independently
-// implemented JS ZXing decoder only when the camera has been scanning for a while.
 const FALLBACK_START_DELAY_MS = 1200;
 const FALLBACK_INTERVAL_MS = 900;
+const isExpectedDecodeError = (error) =>
+  /NotFound|Checksum|FormatException/.test(error?.name ?? "");
 
 const useEan13Fallback = ({ videoRef, enabled, scanLockRef, onScan }) => {
   const onScanRef = useRef(onScan);
+
   useEffect(() => {
     onScanRef.current = onScan;
   }, [onScan]);
@@ -17,47 +23,106 @@ const useEan13Fallback = ({ videoRef, enabled, scanLockRef, onScan }) => {
 
     let cancelled = false;
     let intervalId = null;
+    let busy = false;
     let warned = false;
+
+    const reportError = (error) => {
+      if (isExpectedDecodeError(error) || warned || cancelled) return;
+      warned = true;
+      console.warn("EAN-13 fallback decoder error", error);
+    };
 
     const start = async () => {
       try {
-        // Loaded only while scanning. The existing @zxing/library dependency
-        // does not require a second camera stream or another package.
-        const {
-          BarcodeFormat,
-          BrowserMultiFormatReader,
-          DecodeHintType,
-        } = await import("@zxing/library");
+        // No additional package or camera stream: both paths read the video
+        // element managed by react-zxing.
+        const zxing = await import("@zxing/library");
         if (cancelled) return;
 
         const hints = new Map([
-          [DecodeHintType.POSSIBLE_FORMATS, [BarcodeFormat.EAN_13]],
-          [DecodeHintType.TRY_HARDER, true],
+          [zxing.DecodeHintType.POSSIBLE_FORMATS, [zxing.BarcodeFormat.EAN_13]],
+          [zxing.DecodeHintType.TRY_HARDER, true],
         ]);
-        const reader = new BrowserMultiFormatReader(hints);
+        const browserReader = new zxing.BrowserMultiFormatReader(hints);
+        const pixelReader = new zxing.MultiFormatReader();
+        pixelReader.setHints(hints);
+        const canvas = document.createElement("canvas");
 
-        const scan = () => {
-          if (cancelled || scanLockRef.current || document.hidden) return;
-
+        // BarcodeDetector is optional (and unsupported in some browsers).
+        let nativeReader = null;
+        if (typeof window.BarcodeDetector === "function") {
           try {
-            decodeEan13FromVideo({
-              reader,
-              video: videoRef.current,
-              onScan: (isbn) => onScanRef.current(isbn),
-            });
-          } catch (error) {
-            // ZXing reports empty frames as decode exceptions; those are
-            // normal and should not be shown to the user on every frame.
-            if (/NotFound|Checksum|FormatException/.test(error?.name ?? "")) return;
-            if (!warned) {
-              warned = true;
-              console.warn("EAN-13 fallback decoder error", error);
+            nativeReader = new window.BarcodeDetector({ formats: ["ean_13"] });
+          } catch {
+            // Keep the JS fallback available when the format is unsupported.
+          }
+        }
+
+        const scan = async () => {
+          if (cancelled || busy || scanLockRef.current || document.hidden) return;
+          const video = videoRef.current;
+          if (!video || video.readyState < 2 || !video.videoWidth) return;
+
+          busy = true;
+          try {
+            // Preserve the original full-frame fallback first.
+            try {
+              if (decodeEan13FromVideo({
+                reader: browserReader,
+                video,
+                onScan: (isbn) => onScanRef.current(isbn),
+              })) return;
+            } catch (error) {
+              reportError(error);
             }
+
+            // A crop around the on-screen scan frame improves the barcode's
+            // share of pixels and avoids background text/other barcodes.
+            const frame = captureBarcodeRegion({ video, canvas });
+            if (!frame || cancelled || scanLockRef.current) return;
+
+            if (nativeReader) {
+              try {
+                const codes = await nativeReader.detect(canvas);
+                if (cancelled || scanLockRef.current) return;
+                for (const code of codes) {
+                  const isbn = normalizeIsbn(code.rawValue);
+                  if (isbn) {
+                    onScanRef.current(isbn);
+                    return;
+                  }
+                }
+              } catch (error) {
+                // Unsupported native APIs must not disable JS decoding.
+                reportError(error);
+                nativeReader = null;
+              }
+            }
+
+            const rgba = frame.context.getImageData(
+              0, 0, frame.width, frame.height,
+            ).data;
+            const isbn = decodeEan13FromPixels({
+              rgba,
+              width: frame.width,
+              height: frame.height,
+              zxing,
+              reader: pixelReader,
+            });
+            if (isbn && !cancelled && !scanLockRef.current) {
+              onScanRef.current(isbn);
+            }
+          } catch (error) {
+            reportError(error);
+          } finally {
+            busy = false;
           }
         };
 
-        intervalId = window.setInterval(scan, FALLBACK_INTERVAL_MS);
-        scan();
+        intervalId = window.setInterval(() => {
+          void scan();
+        }, FALLBACK_INTERVAL_MS);
+        void scan();
       } catch (error) {
         if (!cancelled) console.warn("EAN-13 fallback unavailable", error);
       }
