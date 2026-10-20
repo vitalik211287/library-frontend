@@ -13,6 +13,7 @@ import "./BarcodeScanner.css";
 
 import useScannerCameras from "./hooks/useScannerCameras.js";
 import useBarcodeScan from "./hooks/useBarcodeScan.js";
+import useEan13Fallback from "./hooks/useEan13Fallback.js";
 import useOverlayBack from "../../../../shared/hooks/useOverlayBack.js";
 
 const BarcodeScanner = ({
@@ -154,6 +155,13 @@ const BarcodeScanner = ({
         "Не вдалося запустити сканер",
       );
     },
+  });
+
+  useEan13Fallback({
+    videoRef: ref,
+    enabled: Boolean(selectedCamera) && !isScanned,
+    scanLockRef,
+    onScan: handleScanResult,
   });
 
   /* =========================

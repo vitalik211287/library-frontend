@@ -16,6 +16,9 @@ const useScannerCameras = ({
 
   useEffect(() => {
     let cancelled = false;
+    // StrictMode can run effect cleanup and setup again while mounted.
+    // Re-arm scanning when the camera initialization starts.
+    scanLockRef.current = false;
 
     const loadCameras = async () => {
       try {
