@@ -41,9 +41,16 @@ export const finishReadingSession = (bookId, body, readerLeaseId) =>
     },
   });
 
-// Server endpoint currently accepts MANUAL/PAGES sessions only (not EPUB).
+// Existing manual reading endpoint accepts MANUAL/PAGES sessions only.
 export const syncOfflineManualSession = (bookId, body) =>
   apiFetch(`/api/user-books/${encodeURIComponent(bookId)}/reading/offline-sync`, {
+    method: "POST",
+    body,
+  });
+
+// EPUB uses a separate EBOOK/PERCENT endpoint with its own validation.
+export const syncOfflineEbookSession = (bookId, body) =>
+  apiFetch(`/api/user-books/${encodeURIComponent(bookId)}/reading/offline-epub-sync`, {
     method: "POST",
     body,
   });

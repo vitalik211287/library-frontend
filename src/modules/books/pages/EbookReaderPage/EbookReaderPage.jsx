@@ -9,8 +9,9 @@ import { getBookFiles } from "../../api/bookFilesApi.js";
 import { getOfflineEpub } from "../../offline/offlineEpubStorage.js";
 import EbookReader from "../../components/EbookReader/EbookReader.jsx";
 import useEbookAutoSession from "./useEbookAutoSession.js";
+import useOfflineEbookSession from "./useOfflineEbookSession.js";
 
-const EbookReaderPage = () => {
+const EbookReaderPageContent = () => {
   const { libraryId, bookId, fileId } = useParams();
   const { user } = useAuth();
   const navigate = useNavigate();
@@ -25,7 +26,6 @@ const EbookReaderPage = () => {
   useEffect(() => {
     if (!offlineMode) return undefined;
 
-    setShowOfflineNotice(true);
 
     const timer = window.setTimeout(() => {
       setShowOfflineNotice(false);
@@ -42,10 +42,6 @@ const EbookReaderPage = () => {
   useEffect(() => {
     let current = true;
 
-    setBook(null);
-    setFile(null);
-    setError("");
-    setOfflineMode(false);
 
     const loadBook = async () => {
       try {
@@ -100,6 +96,7 @@ const EbookReaderPage = () => {
             cached.file?.format === "EPUB";
 
           if (valid) {
+            setShowOfflineNotice(true);
             setOfflineMode(true);
             setBook(cached.book);
             setFile(cached.file);
@@ -136,6 +133,18 @@ const EbookReaderPage = () => {
     epubReachedEndRef.current = false;
   }, [positionKey]);
 
+  // The online hook exclusively owns server sessions. Cached offline books
+  // use an independent local draft; never run both timers together.
+  const offlineSession = useOfflineEbookSession({
+    enabled: ready && Boolean(book) && offlineMode && book?.status !== "FINISHED",
+    userId: user?.id,
+    bookId,
+    fileId,
+    startPercent: book?.currentPercent ?? 0,
+  });
+
+  const { position: offlinePosition, advance: offlineAdvance, finish: finishOfflineSession } = offlineSession;
+
   const handlePositionChange = useCallback((value) => {
     if (!Number.isFinite(value)) return;
     const next = Math.max(0, Math.min(100, Math.round(value)));
@@ -143,7 +152,8 @@ const EbookReaderPage = () => {
       epubPositionRef.current.start = next;
     }
     epubPositionRef.current.end = next;
-  }, []);
+    if (offlineMode) offlinePosition(next);
+  }, [offlineMode, offlinePosition]);
   // Count only portions traversed by ordinary forward page turns.
   // Seeking, restoring a bookmark and changing font size affect position,
   // not statistics. Preserve the backend's previously recorded percentage.
@@ -154,8 +164,9 @@ const EbookReaderPage = () => {
   const handleReadingAdvance = useCallback((delta) => {
     if (Number.isFinite(delta) && delta > 0) {
       setReadAdvance((current) => Math.min(100, current + delta));
+      if (offlineMode) offlineAdvance(delta);
     }
-  }, []);
+  }, [offlineMode, offlineAdvance]);
   const percent = book
     ? Math.min(100, (Number(book.currentPercent) || 0) + readAdvance)
     : null;
@@ -171,6 +182,8 @@ const EbookReaderPage = () => {
     onSaved: refreshReadingData,
   });
 
+  const finishOnlineSession = session.finish;
+
   useEffect(() => {
     if (offlineMode || !session.notice) return;
 
@@ -181,16 +194,20 @@ const EbookReaderPage = () => {
   }, [session.notice, offlineMode, bookId]);
 
   const handleClose = useCallback(async () => {
-    // Offline exit must not depend on a server response.
-    // Keep the server session and lease for recovery.
-    if (navigator.onLine !== false) {
-      const saved = await session.finish({
+    if (offlineMode) {
+      // Offline EPUB drafts must be queued BEFORE leaving the reader.
+      const saved = await finishOfflineSession(epubPositionRef.current.end);
+      if (!saved) return;
+    } else if (navigator.onLine !== false) {
+      const saved = await finishOnlineSession({
         epubStartPositionPercent: epubPositionRef.current.start ?? undefined,
         epubEndPositionPercent: epubPositionRef.current.end ?? undefined,
         epubReachedEnd: epubReachedEndRef.current,
       });
       if (!saved) return;
     }
+    // When a live online session loses connectivity, do not create a local
+    // overlapping session: preserve its server lease for later recovery.
     const from = location.state?.ebookFrom;
     const safeFrom =
       typeof from === "string" &&
@@ -202,14 +219,18 @@ const EbookReaderPage = () => {
     } else {
       navigate(safeFrom ? from : "/catalog", { replace: true });
     }
-  }, [session.finish, location.state, navigate]);
+  }, [offlineMode, finishOfflineSession, finishOnlineSession, location.state, navigate]);
 
   const handleChangeStatus = useCallback(async (status) => {
     if (!["NOT_STARTED", "READING", "PAUSED", "FINISHED"].includes(status)) {
       return false;
     }
+    if (offlineMode || navigator.onLine === false) {
+      toast.error("Змінювати статус книги можна після відновлення зв'язку.");
+      return false;
+    }
 
-    const saved = await session.finish({
+    const saved = await finishOnlineSession({
       epubStartPositionPercent: epubPositionRef.current.start ?? undefined,
       epubEndPositionPercent: epubPositionRef.current.end ?? undefined,
       epubReachedEnd: epubReachedEndRef.current,
@@ -239,10 +260,14 @@ const EbookReaderPage = () => {
       toast.error(error?.message || "Не вдалося змінити статус книги");
       return false;
     }
-  }, [bookId, session.finish, refreshReadingData, location.state, navigate]);
+  }, [bookId, finishOnlineSession, refreshReadingData, location.state, navigate, offlineMode]);
 
   const readerNotice = offlineMode
-    ? (showOfflineNotice ? "\u041e\u0444\u043b\u0430\u0439\u043d: \u043a\u043d\u0438\u0433\u0430 \u0432\u0456\u0434\u043a\u0440\u0438\u0442\u0430 \u0437 \u043f\u0440\u0438\u0441\u0442\u0440\u043e\u044e. \u0427\u0430\u0441 \u0456 \u0441\u0442\u0430\u0442\u0438\u0441\u0442\u0438\u043a\u0430 \u043f\u043e\u043a\u0438 \u043d\u0435 \u0437\u0431\u0435\u0440\u0456\u0433\u0430\u044e\u0442\u044c\u0441\u044f." : "")
+    ? offlineSession.notice || (showOfflineNotice
+      ? (offlineSession.tracking
+        ? "Офлайн: час і прогрес зберігаються на пристрої та синхронізуються після відновлення зв'язку."
+        : "Офлайн: запускаємо локальний облік читання…")
+      : "")
     : "";
 
   if (error) {
@@ -315,6 +340,14 @@ const EbookReaderPage = () => {
       )}
     </>
   );
+};
+
+const EbookReaderPage = () => {
+  const { libraryId, bookId, fileId } = useParams();
+  const { user } = useAuth();
+  const readerKey = `${user?.id ?? "anonymous"}:${libraryId}:${bookId}:${fileId}`;
+
+  return <EbookReaderPageContent key={readerKey} />;
 };
 
 export default EbookReaderPage;
