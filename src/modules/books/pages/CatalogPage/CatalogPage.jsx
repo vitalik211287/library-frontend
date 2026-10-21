@@ -184,7 +184,7 @@ const CatalogPage = ({ onOpenReading }) => {
         return;
       }
 
-      onOpenReading?.(book.id, activeLibraryId);
+      onOpenReading?.(book.id, activeLibraryId, { intent: "manual" });
     },
     [activeLibraryId, isAuthLoading, isAuthenticated, navigate, onOpenReading],
   );

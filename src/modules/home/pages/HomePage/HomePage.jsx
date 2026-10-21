@@ -117,7 +117,7 @@ const HomePage = ({ onOpenReading }) => {
       return;
     }
 
-    onOpenReading?.(book.id, activeLibraryId, { preferEpub: true });
+    onOpenReading?.(book.id, activeLibraryId);
   };
 
   const firstName = getFirstName(user?.name);

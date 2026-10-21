@@ -236,7 +236,7 @@ const useReadingRouter = ({ closeMobileMenu }) => {
   const handleOpenReadingBook = async (bookId, libraryId = null, options = {}) => {
     if (!bookId) return;
 
-    if (options.preferEpub) {
+    if (options.intent !== "manual") {
       const targetLibraryId = libraryId || activeLibraryId;
       if (!targetLibraryId) {
         toast.error("Спочатку оберіть бібліотеку.");
